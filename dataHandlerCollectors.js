@@ -19,7 +19,6 @@ function Data() {
   this.rooms = {};
 }
 
-
 /***********************************************
 For performance reasons, methods are added to the
 prototype of the Data object/class
