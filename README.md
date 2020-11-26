@@ -6,9 +6,6 @@
 4. Type ``` git fetch ``` and press enter
 5. Type ``` git pull origin main ``` and press enter.
 
-Following step 5 you should see all the files appear in your directory and then you can make changes to the files, commit and push. I would suggest creating a new branch and working on
-your own branch and pushing to it. To create a new branch type ``` git checkout -b branch_name ``` you should see that you automatically switched to it. And then to switch from one existing branch to the another type ``` git checkout branch_name```
-
 
 # wavelength
 
