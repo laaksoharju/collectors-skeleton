@@ -1,15 +1,39 @@
 <template>
   <div>
     <main>
-      <div class="my-cards">
-        <CollectorsCard v-for="(card, index) in myCards" :card="card" :key="index"/>
+    <div class="table">
+      <div class="board">
+        <div class = "skillPool">
+          Gain Skill
+        </div>
+        <div class = "itemPool">
+          Gain Item
+        </div>
+        <div class = "marketPool">
+          Raise Value
+        </div>
+        <div class = "workPool">
+          Work
+        </div>
+        <div class = "auctionPool">
+          Auction
+        </div>
+
+        <div class="my-cards">
+          <CollectorsCard v-for="(card, index) in myCards" :card="card" :key="index"/>
+        </div>
+
+        <div class="buttons">
+          <button @click="drawCard">
+            {{ labels.draw }}
+          </button>
+        </div>
+
       </div>
-      <div class="buttons">
-        <button @click="drawCard">
-          {{ labels.draw }} 
-        </button>
-      </div>
+    </div>
+
     </main>
+
     <footer>
         <p>
           {{ labels.invite }}
@@ -34,7 +58,7 @@ export default {
       publicPath: "localhost:8080/#", //"collectors-groupxx.herokuapp.com/#",
       touchScreen: false,
       myCards: [],
-      maxSizes: { x: 0, 
+      maxSizes: { x: 0,
                   y: 0 },
       labels: {},
       points: {}
@@ -47,17 +71,17 @@ export default {
     const newRoute = this.$route.params.id + "?id=" + this.$store.state.playerId;
     if (this.$route.params.id + "?id=" + this.$route.query.id !== newRoute)
       this.$router.push(newRoute);
-    this.$store.state.socket.emit('collectorsLoaded', 
-      { roomId: this.$route.params.id, 
+    this.$store.state.socket.emit('collectorsLoaded',
+      { roomId: this.$route.params.id,
         playerId: this.$store.state.playerId } );
-    this.$store.state.socket.on('collectorsInitialize', 
+    this.$store.state.socket.on('collectorsInitialize',
       function(d) {
         this.labels = d.labels;
         this.myCards = d.hand;
       }.bind(this));
     this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
 
-    this.$store.state.socket.on('collectorsCardDrawn', 
+    this.$store.state.socket.on('collectorsCardDrawn',
       function(d) {
         console.log(d);
         if(d.playerId === this.$route.query.id) {
@@ -74,7 +98,7 @@ export default {
       n.target.select();
     },
     drawCard: function () {
-      this.$store.state.socket.emit('collectorsDrawCard', { roomId: this.$route.params.id, 
+      this.$store.state.socket.emit('collectorsDrawCard', { roomId: this.$route.params.id,
            playerId: this.$store.state.playerId });
     }
   },
@@ -89,6 +113,78 @@ export default {
   }
   main {
     user-select: none;
+    background-color: lightgreen;
+  }
+  .table {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+  .board {
+	display: grid;
+	grid-template-columns: 90px 90px 90px 90px 90px;
+	grid-template-rows: 90px 90px 90px 90px;
+	grid-gap: 20px;
+	margin: 50px auto;
+	width: 994px;
+	height: 994px;
+	background: $black;
+	border: 2px solid $black;
+}
+  .skillPool{
+    grid-column: 1;
+    grid-row: 2/span 4 ;
+    width: auto;
+		height: auto;
+    grid-template-columns: repeat(100, 12px);
+    grid-template-rows: repeat(100,150px);
+    background-color: green;
+    color: black;
+
+  }
+  .itemPool{
+    grid-column: 2/span 3 ;
+    grid-row: 2;
+    width: auto;
+    height: auto;
+    grid-template-columns: repeat(100, 12px);
+    grid-template-rows: repeat(100,150px);
+    background-color: red ;
+    color: black;
+  }
+  .marketPool{
+    grid-column: 2/span 3;
+    grid-row: 4;
+    width: auto;
+    height: auto;
+    grid-template-columns: repeat(100, 12px);
+    grid-template-rows: repeat(100,150px);
+    background-color: lightblue;
+    color: black;
+  }
+  .workPool{
+    grid-column: 2/span 3;
+    grid-row: 3;
+    width: auto;
+    height: auto;
+    grid-template-columns: repeat(100, 12px);
+    grid-template-rows: repeat(100,150px);
+    background-color: yellow;
+    color: black;
+  }
+  .auctionPool{
+    grid-column: 5;
+    grid-row: 2/span 4;
+    width: auto;
+    height: auto;
+    grid-template-columns: repeat(100, 12px);
+    grid-template-rows: repeat(100,150px);
+    background-color: beige;
+    color: black;
+  }
+
+  .buttons{
+    grid-column: 1;
+    grid-row: 10;
   }
   footer {
     margin-top: 5em auto;
@@ -100,10 +196,18 @@ export default {
   footer a:visited {
     color:ivory;
   }
+
   .my-cards {
-    display: grid;
+    /*display: grid;
     grid-template-columns: repeat(auto-fill, 130px);
-    grid-template-rows: repeat(auto-fill, 180px);
+    grid-template-rows: repeat(auto-fill, 18px); */
+    grid-column: 4/span 2;
+    grid-row: 10 ;
+    display: grid;
+    grid-template-columns: repeat(10, 12px);
+    grid-template-rows: repeat(10,150px);
+  /*  justify-content: center;
+    align-items: center; */
   }
   .my-cards div {
     transform: scale(0.5)translate(-50%,-50%);
