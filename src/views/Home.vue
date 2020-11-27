@@ -43,7 +43,7 @@ export default {
 </script>
 <style scoped>
   .center {
-    background-color: #11707D;
+    background-color: #5A99A1;
     display: flex;
     align-items: center;
     justify-content: center;
