@@ -3,10 +3,9 @@
     <div>
       <h1>COLLECTORS</h1>
       <div>
-          <div> First time player? </div>
-          <div class="popup" onclick="myFunction()">Click me!
-            <span class="popuptext" id="myPopup">Popup text...</span>
-          </div>
+        <p >Welcome to play Collectors, please choose a setup for the game.<nav>
+        </nav>In the next step you will get a link to send to the other players. </p>
+          <div> First time player? Click me!</div>
 
         <button id='firstButton'><img src='https://website-bamedag.netdna-ssl.com/fileadmin/media/_processed_/8/8/csm_7-9-months-introtext_7588a3bb0c.jpg' alt="Span" title="Click for rules!" width="200"> </button>
       </div>
