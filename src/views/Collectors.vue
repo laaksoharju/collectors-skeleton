@@ -113,7 +113,7 @@ export default {
   }
   main {
     user-select: none;
-    background-color: lightgreen;
+    background-color: #5A99A1;
   }
   .table {
     padding-left: 50px;
@@ -121,59 +121,59 @@ export default {
   }
   .board {
 	display: grid;
-	grid-template-columns: 90px 90px 90px 90px 90px;
-	grid-template-rows: 90px 90px 90px 90px;
-	grid-gap: 20px;
-	margin: 50px auto;
+	grid-template-columns: 90px 90px 90px 90px 90px 90px 90px;
+	grid-template-rows: 45px 45px 45px 45px 45px 45px  45px  45px  45px  45px  45px  45px  45px  ;
+	grid-gap: 0px;
+	margin: 20px ;
 	width: 994px;
 	height: 994px;
 	background: $black;
 	border: 2px solid $black;
 }
   .skillPool{
-    grid-column: 1;
-    grid-row: 2/span 4 ;
+    grid-column: 1 / span 2;
+    grid-row: 2/span 8 ;
     width: auto;
 		height: auto;
     grid-template-columns: repeat(100, 12px);
     grid-template-rows: repeat(100,150px);
-    background-color: green;
+    background-color: #dce5cc;
     color: black;
 
   }
   .itemPool{
-    grid-column: 2/span 3 ;
-    grid-row: 2;
+    grid-column: 3/span 3 ;
+    grid-row: 2/span 4;
     width: auto;
     height: auto;
     grid-template-columns: repeat(100, 12px);
     grid-template-rows: repeat(100,150px);
-    background-color: red ;
+    background-color: #f0d9cc ;
     color: black;
   }
   .marketPool{
-    grid-column: 2/span 3;
-    grid-row: 4;
+    grid-column: 3/span 3;
+    grid-row: 10/span 4;
     width: auto;
     height: auto;
     grid-template-columns: repeat(100, 12px);
     grid-template-rows: repeat(100,150px);
-    background-color: lightblue;
+    background-color: #c9d5e1;
     color: black;
   }
   .workPool{
-    grid-column: 2/span 3;
-    grid-row: 3;
+    grid-column: 3/span 3;
+    grid-row: 6/span 4;
     width: auto;
     height: auto;
     grid-template-columns: repeat(100, 12px);
     grid-template-rows: repeat(100,150px);
-    background-color: yellow;
+    background-color: #f5f2cc;
     color: black;
   }
   .auctionPool{
-    grid-column: 5;
-    grid-row: 2/span 4;
+    grid-column: 6/span 2;
+    grid-row: 2/span 12;
     width: auto;
     height: auto;
     grid-template-columns: repeat(100, 12px);
@@ -201,11 +201,11 @@ export default {
     /*display: grid;
     grid-template-columns: repeat(auto-fill, 130px);
     grid-template-rows: repeat(auto-fill, 18px); */
-    grid-column: 4/span 2;
-    grid-row: 10 ;
+    grid-column: 1;
+    grid-row: 11 ;
     display: grid;
-    grid-template-columns: repeat(10, 12px);
-    grid-template-rows: repeat(10,150px);
+    grid-template-columns: repeat(100, 2px);
+    grid-template-rows: repeat(1,150px);
   /*  justify-content: center;
     align-items: center; */
   }
