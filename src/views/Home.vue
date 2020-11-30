@@ -6,21 +6,22 @@
         <p >Welcome to play Collectors, please choose a setup for the game.<nav>
         </nav>In the next step you will get a link to send to the other players. </p>
           <div> First time player? Click me!</div>
+          <a id='firstButton' href="#identifier"><img src='https://website-bamedag.netdna-ssl.com/fileadmin/media/_processed_/8/8/csm_7-9-months-introtext_7588a3bb0c.jpg' alt="Span" title="Click for rules!" width="200"></a>
 
-        <button id='firstButton'><img src='https://website-bamedag.netdna-ssl.com/fileadmin/media/_processed_/8/8/csm_7-9-months-introtext_7588a3bb0c.jpg' alt="Span" title="Click for rules!" width="200"> </button>
       </div>
       <ul>
         <div v-for="i in 3" :key="i">
           <button id=startButton @click="setupCollectors(i+1, 'en')">Set up a game of Collectors for {{i+1}} players</button>
         </div>
       </ul>
-    <!--  <ul>
-        <li v-for="i in 3" :key="i">
-          <a @click="setupCollectors(i+1, 'se')">Spela Collectors med {{i+1}} spelare</a>.
-        </li>
-      </ul> -->
+      <p>
+        <!--- sorry riktigt dålig lösning:)--><br><br><br><br><br><br><br><br> 
+          <a name="identifier">RULES</a>
+      </p>
     </div>
+
   </div>
+
 </template>
 
 <script>
@@ -43,7 +44,6 @@ export default {
 </script>
 <style scoped>
   .center {
-    background-color: #5A99A1;
     display: flex;
     align-items: center;
     justify-content: center;
