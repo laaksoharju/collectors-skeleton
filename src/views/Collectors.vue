@@ -2,7 +2,7 @@
   <div>
     <main>
       <div class="table">
-     <div class="board">
+      <div class="board">
        <div class = "skillPool">
          Skill Pool
          <div class="cardslots">
@@ -27,6 +27,9 @@
            <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
          </div>
        </div>
+       <div class="playerBoard">
+          Player Board
+      </div>
      </div>
   </div>
 
@@ -236,9 +239,9 @@ export default {
   }
   .board {
 	display: grid;
-	grid-template-columns: repeat(9,90px);
-	grid-template-rows: repeat(13, 45px);
-	grid-gap: 10px;
+	grid-template-columns: repeat(13,90px);
+	grid-template-rows: repeat(13, 45px)  ;
+	grid-gap: 0px;
 	margin: 20px ;
 	width: 994px;
 	height: 994px;
@@ -296,6 +299,16 @@ export default {
     background-color: beige;
     color: black;
   }
+  .playerBoard {
+    grid-column: 9/span 4;
+    grid-row: 2/span 4;
+    width: auto;
+    height: auto;
+    grid-template-columns: repeat(100, 12px);
+    grid-template-rows: repeat(100,150px);
+    background-color: pink ;
+    color: black;
+  }
 
   .buttons{
     grid-column: 1;
@@ -324,7 +337,7 @@ export default {
     align-items: center; */
   }
   .cardslots div {
-    transform: scale(0.3)translate(-50%,-50%);
+    transform: scale(0.3)translate(-50%,-50%); /* scale - minska kortens strl*/
     transition:0.2s;
     transition-timing-function: ease-out;
     z-index: 0;
