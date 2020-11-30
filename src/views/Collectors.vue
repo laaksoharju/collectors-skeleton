@@ -2,7 +2,7 @@
   <div>
     <main>
       <div class="table">
-     <div class="board">
+      <div class="board">
        <div class = "skillPool">
          Gain Skill
        </div>
@@ -18,9 +18,12 @@
        <div class = "auctionPool">
          Auction
        </div>
+       <div class="playerBoard">
+          Player Board
+      </div>
      </div>
-  </div>
-        
+   </div>
+
       {{buyPlacement}} {{chosenPlacementCost}}
       <CollectorsBuyActions v-if="players[playerId]"
         :labels="labels"
@@ -51,6 +54,7 @@
       <div class="cardslots" v-if="players[playerId]">
         <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
       </div>
+
     </main>
     {{players}}
     {{marketValues}}
@@ -227,8 +231,8 @@ export default {
   }
   .board {
 	display: grid;
-	grid-template-columns: 90px 90px 90px 90px 90px 90px 90px;
-	grid-template-rows: 45px 45px 45px 45px 45px 45px  45px  45px  45px  45px  45px  45px  45px  ;
+	grid-template-columns: repeat(13,90px);
+	grid-template-rows: repeat(13, 45px)  ;
 	grid-gap: 0px;
 	margin: 20px ;
 	width: 994px;
@@ -287,6 +291,16 @@ export default {
     background-color: beige;
     color: black;
   }
+  .playerBoard {
+    grid-column: 9/span 4;
+    grid-row: 2/span 4;
+    width: auto;
+    height: auto;
+    grid-template-columns: repeat(100, 12px);
+    grid-template-rows: repeat(100,150px);
+    background-color: pink ;
+    color: black;
+  }
 
   .buttons{
     grid-column: 1;
@@ -315,7 +329,7 @@ export default {
     align-items: center; */
   }
   .cardslots div {
-    transform: scale(0.5)translate(-50%,-50%);
+    transform: scale(0.3)translate(-50%,-50%); /* scale - minska kortens strl*/
     transition:0.2s;
     transition-timing-function: ease-out;
     z-index: 0;
