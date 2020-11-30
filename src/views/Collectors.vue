@@ -4,23 +4,32 @@
       <div class="table">
      <div class="board">
        <div class = "skillPool">
-         Gain Skill
+         Skill Pool
+         <div class="cardslots">
+             <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
+           </div>
        </div>
        <div class = "itemPool">
-         Gain Item
+        Item Pool
+         <div class="cardslots" v-if="players[playerId]">
+           <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
+         </div>
        </div>
        <div class = "marketPool">
-         Raise Value
+         Market Pool
        </div>
        <div class = "workPool">
-         Work
+         Work Pool
        </div>
        <div class = "auctionPool">
-         Auction
+         Auction Pool
+         <div class="cardslots">
+           <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
+         </div>
        </div>
      </div>
   </div>
-        
+
       {{buyPlacement}} {{chosenPlacementCost}}
       <CollectorsBuyActions v-if="players[playerId]"
         :labels="labels"
@@ -35,22 +44,22 @@
           {{ labels.draw }}
         </button>
       </div>
-      Skills
-      <div class="cardslots">
+
+    <!--  <div class="cardslots">
         <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
-      </div>
-      Auction
-      <div class="cardslots">
+      </div> -->
+
+      <!--<div class="cardslots">
         <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
-      </div>
+      </div>-->
       Hand
       <div class="cardslots" v-if="players[playerId]">
         <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="buyCard(card)" :key="index"/>
       </div>
-      Items
-      <div class="cardslots" v-if="players[playerId]">
+
+      <!-- <div class="cardslots" v-if="players[playerId]">
         <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
-      </div>
+      </div> -->
     </main>
     {{players}}
     {{marketValues}}
@@ -227,9 +236,9 @@ export default {
   }
   .board {
 	display: grid;
-	grid-template-columns: 90px 90px 90px 90px 90px 90px 90px;
-	grid-template-rows: 45px 45px 45px 45px 45px 45px  45px  45px  45px  45px  45px  45px  45px  ;
-	grid-gap: 0px;
+	grid-template-columns: repeat(9,90px);
+	grid-template-rows: repeat(13, 45px);
+	grid-gap: 10px;
 	margin: 20px ;
 	width: 994px;
 	height: 994px;
@@ -309,13 +318,13 @@ export default {
     grid-column: 1;
     grid-row: 11 ;
     display: grid;
-    grid-template-columns: repeat(100, 2px);
+    grid-template-columns: repeat(100, 15px);
     grid-template-rows: repeat(1,150px);
   /*  justify-content: center;
     align-items: center; */
   }
   .cardslots div {
-    transform: scale(0.5)translate(-50%,-50%);
+    transform: scale(0.3)translate(-50%,-50%);
     transition:0.2s;
     transition-timing-function: ease-out;
     z-index: 0;
