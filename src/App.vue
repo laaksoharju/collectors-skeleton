@@ -11,8 +11,8 @@ html {
 }
 body {
     font-family: 'Gill Sans', Helvetica, Arial, sans-serif;
-	background: #ddd;
-	background: radial-gradient(dimgray, black);
+    background: rgb(144,215,223);
+    background: radial-gradient(circle, rgba(144,215,223,1) 0%, rgba(22,56,105,1) 100%);
 	color: ivory;
 	font-size: 100%;
 	margin:0;
