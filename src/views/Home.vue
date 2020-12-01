@@ -3,19 +3,19 @@
     <div>
       <h1>COLLECTORS</h1>
       <div>
-        <p >Welcome to play Collectors, please choose a setup for the game.<nav>
-        </nav>In the next step you will get a link to send to the other players. </p>
-          <div> First time player? Click me!</div>
+        <h2 >Welcome to play Collectors, please choose a setup for the game.<nav>
+        </nav>In the next step you will get a link to send to the other players. </h2>
+          <h3> First time player? Click me!</h3>
           <a id='firstButton' href="#identifier"><img src='https://website-bamedag.netdna-ssl.com/fileadmin/media/_processed_/8/8/csm_7-9-months-introtext_7588a3bb0c.jpg' alt="Span" title="Click for rules!" width="200"></a>
 
       </div>
       <ul>
         <div v-for="i in 3" :key="i">
-          <button id=startButton @click="setupCollectors(i+1, 'en')">Set up a game of Collectors for {{i+1}} players</button>
+          <button id=startButton @click="setupCollectors(i+1, 'en')"> <h3>Set up a game of Collectors for {{i+1}} players </h3> </button>
         </div>
       </ul>
       <p>
-        <!--- sorry riktigt dålig lösning:)--><br><br><br><br><br><br><br><br> 
+        <!--- sorry riktigt dålig lösning:)--><br><br><br><br><br><br><br><br>
           <a name="identifier">RULES</a>
       </p>
     </div>
@@ -53,6 +53,8 @@ export default {
   #startButton {
 cursor:pointer;
 transition-duration: 0.4s;
+background-color: #3B737A ;
+color:white;
 }
 
 #firstButton{
