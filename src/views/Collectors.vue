@@ -17,6 +17,11 @@
        </div>
        <div class = "marketPool">
          Market Pool
+         <div class = "marketPool iconBird"></div>
+         <div class = "marketPool iconRobot"></div>
+         <div class = "marketPool iconMusic"></div>
+         <div class = "marketPool iconFilm"></div>
+         <div class = "marketPool iconTech"></div>
        </div>
        <div class = "workPool">
          Work Pool
@@ -231,7 +236,6 @@ export default {
   }
   main {
     user-select: none;
-    background-color: #5A99A1;
   }
   .table {
     padding-left: 50px;
@@ -274,11 +278,14 @@ export default {
     grid-row: 10/span 4;
     width: auto;
     height: auto;
-    grid-template-columns: repeat(100, 12px);
-    grid-template-rows: repeat(100,150px);
+  /*  grid-template-columns: repeat(100, 12px);
+    grid-template-rows: repeat(100,150px);*/
     background-color: #c9d5e1;
     color: black;
-  }
+    display: grid;
+    grid-template-columns: repeat(5, 60px);
+    grid-template-rows: repeat(10, 10px);
+    }
   .workPool{
     grid-column: 3/span 3;
     grid-row: 6/span 4;
@@ -341,10 +348,52 @@ export default {
     transition:0.2s;
     transition-timing-function: ease-out;
     z-index: 0;
-  }
+      }
   .cardslots div:hover {
     transform: scale(1)translate(-25%,0);
     z-index: 1;
+  }
+  .iconBird {
+    width: 30px;
+    height: 40px;
+    background-image: url('/images/iconBird.PNG');
+    background-size: cover;
+    grid-column: 1;
+    grid-row: 10;
+
+  }
+  .iconRobot {
+    width: 30px;
+    height: 40px;
+    background-image: url('/images/iconRobot.PNG');
+    background-size: cover;
+    grid-column: 2;
+    grid-row: 10;
+
+  }
+  .iconMusic {
+    width: 30px;
+    height: 40px;
+    background-image: url('/images/iconMusic.PNG');
+    background-size: cover;
+    grid-column: 3;
+    grid-row: 10;
+  }
+  .iconFilm {
+    width: 30px;
+    height: 40px;
+    background-image: url('/images/iconFilm.PNG');
+    background-size: cover;
+    grid-column: 4;
+    grid-row: 10;
+  }
+  .iconTech {
+    width: 30px;
+    height: 40px;
+    background-image: url('/images/iconTech.PNG');
+    background-size: cover;
+    grid-column: 5;
+    grid-row: 10;
   }
 
   @media screen and (max-width: 800px) {
