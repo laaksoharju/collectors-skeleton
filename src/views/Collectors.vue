@@ -53,6 +53,7 @@
       </div>
 
       <div id="PlayerBoardDiv">
+        <h2>PlayerBoard</h2>
         {{players}}
         {{marketValues}}
         <button v-if="players[playerId]" @click="players[playerId].money += 1">
