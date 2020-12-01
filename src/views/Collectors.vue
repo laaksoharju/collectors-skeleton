@@ -5,9 +5,22 @@
       <div class="board">
        <div class = "skillPool">
          Skill Pool
-         <div class="cardslots">
+         <div class = "skillPool EnergyBottles">
+         </div>
+         <div class = "skillPool EnergyBottles">
+         </div>
+         <div class = "skillPool EnergyBottles">
+         </div>
+
+         <div class = "skillPool EnergyBottleCoin">
+         </div>
+         <div class = "skillPool EnergyBottleCoin">
+         </div>
+
+         <div class="cardslots skillcard">
              <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
            </div>
+
        </div>
        <div class = "itemPool">
         Item Pool
@@ -268,6 +281,27 @@ export default {
     background-color: #dce5cc;
     color: black;
 
+
+  }
+
+  .EnergyBottles{
+    grid-column: 1;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    width:50px;
+    height:50px;
+    background-image:  url('/images/Gain-skill-bottle.png');
+    background-size: cover;
+  }
+
+  .EnergyBottleCoin{
+    grid-column: 1;
+    grid-row-start:4;
+    grid-row-end:5;
+    width:50px;
+    height:50px;
+    background-image:  url('/images/Gain-skill-bottle-coin.png');
+    background-size: cover;
   }
   .itemPool{
     grid-column: 3/span 3 ;
@@ -352,9 +386,9 @@ export default {
     grid-template-rows: repeat(auto-fill, 18px);
     grid-column: 1;
     grid-row: 11 ;
-    display: grid;
+  /*  display: grid;
     grid-template-columns: repeat(100, 15px);
-    grid-template-rows: repeat(1,150px);
+    grid-template-rows: repeat(1,150px);*/
   /*  justify-content: center;
     align-items: center; */
   }
@@ -363,6 +397,16 @@ export default {
     transition:0.2s;
     transition-timing-function: ease-out;
     z-index: 0;
+  }
+
+  .skillcard {
+    grid-column: 2;
+    grid-row-start:1;
+    grid-row-end:5;
+    display: grid;
+    grid-template-columns: repeat(1, 15px);
+    grid-template-rows: repeat(5,150px);
+
   }
   .cardslots div:hover {
     transform: scale(1)translate(-25%,0);
