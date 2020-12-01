@@ -30,6 +30,12 @@
        <div class="playerBoard">
           Player {{playerId}}'s Board
       </div>
+      <div class="playerHand">
+        Hand
+        <div class="cardslots" v-if="players[playerId]">
+          <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="buyCard(card)" :key="index"/>
+        </div>
+      </div>
       <div class="turnCounter">
         <h3> Who's turn? </h3>
         <h2> Player {{playerId}} </h2>
@@ -59,10 +65,10 @@
       <!--<div class="cardslots">
         <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
       </div>-->
-      Hand
+    <!--  Hand
       <div class="cardslots" v-if="players[playerId]">
         <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="buyCard(card)" :key="index"/>
-      </div>
+      </div> -->
 
       <!-- <div class="cardslots" v-if="players[playerId]">
         <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
@@ -312,6 +318,10 @@ export default {
     grid-template-rows: repeat(100,150px);
     background-color: pink ;
     color: black;
+  }
+  .playerHand {
+    grid-column: 9/span 5;
+    grid-row: 6/span 4;
   }
 
   .turnCounter {
