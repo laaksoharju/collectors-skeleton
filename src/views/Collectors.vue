@@ -167,7 +167,7 @@ export default {
     );
     this.$store.state.socket.on('collectorsSkillAcquired',
       function(d) {
-        console.log(d.playerId, "acquired a card");
+        console.log(d.playerId, "acquired a skill");
         this.players = d.players;
         this.skillsOnSale = d.skillsOnSale;
       }.bind(this)
