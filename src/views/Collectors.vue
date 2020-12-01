@@ -39,7 +39,7 @@
 
       <div id = 'HandDiv' class="cardslots" v-if="players[playerId]">
         <h2>Hand</h2>
-        <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="buyCard(card)" :key="index"/>
+        <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="handleAction(card)" :key="index"/>
       </div>
 
       <div id = 'PlayerItemsDiv' class="cardslots" v-if="players[playerId]">
@@ -109,6 +109,7 @@ export default {
         auctionPlacement: [],
         marketPlacement: [],
         chosenPlacementCost: null,
+        chosenAction: "",
         marketValues: { fastaval: 0,
           movie: 0,
           technology: 0,
@@ -193,6 +194,7 @@ export default {
     },
     placeBottle: function (action, cost) {
       this.chosenPlacementCost = cost;
+      this.chosenAction = action;
       this.$store.state.socket.emit('collectorsPlaceBottle', {
         roomId: this.$route.params.id,
         playerId: this.playerId,
@@ -227,6 +229,15 @@ getSkill: function (card) {
     cost: this.chosenPlacementCost
   }
 );
+},
+handleAction: function (card) {
+  console.log("handleAction", card);
+  if (this.chosenAction === "buyItem") {
+    this.buyCard(card);
+  }
+  if (this.chosenAction === "buySkill") {
+    this.getSkill(card);
+  }
 }
 },
 }
