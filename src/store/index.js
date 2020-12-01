@@ -43,6 +43,7 @@ export default new Vuex.Store({
     },
     SET_PLAYER_ID(state, d = makeId(4)) {
       state.playerId = d;
+      console.log("playerid and playercount ",state.playerId,state.playerCount)
     }
   },
   actions: {
