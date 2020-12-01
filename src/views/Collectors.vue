@@ -226,32 +226,41 @@ footer a:visited {
 
 #BuyCardDiv {
   grid-area: BuyCardDiv;
+  align-self: center;
 }
 
 #BuySkillDiv {
   grid-area: BuySkillDiv;
+  align-self: center;
 }
 
 #AuctionDiv {
   grid-area: AuctionDiv;
+  align-self: center;
 }
 
 #HandDiv {
   grid-area: HandDiv;
+  align-self: center;
 }
 
 #PlayerItemsDiv {
   grid-area: PlayerItemsDiv;
+  align-self: center;
 }
 
 #PlayerBoardDiv {
   grid-area: PlayerBoardDiv;
+  align-self: center;
 }
 
 #container {
+  height: 100%;
   display: grid;
   grid-template-columns: 33% 33% 33%;
   grid-template-rows: 50% 50%;
+  column-gap: 40px;
+  row-gap: 40px;
   grid-template-areas:
   "BuyCardDiv BuySkillDiv AuctionDiv"
   "HandDiv PlayerItemsDiv PlayerBoardDiv"
