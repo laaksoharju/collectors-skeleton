@@ -74,8 +74,14 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .get-skills, .buttons {
+  .get-skills {
     display: grid;
+    grid-template-columns: repeat(auto-fill, 130px);
+  }
+
+  .buttons {
+    display: grid;
+    float:left;
     grid-template-columns: repeat(auto-fill, 130px);
   }
 </style>

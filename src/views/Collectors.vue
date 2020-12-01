@@ -17,14 +17,20 @@
 
       <div id ='BuySkillDiv' >
         <CollectorsSkillActions v-if="players[playerId]"
-       :labels="labels"
-       :player="players[playerId]"
-       :skillsOnSale="skillsOnSale"
-       :placement="skillPlacement"
-       @getSkill="getSkill($event)"
-       @placeBottle="placeBottle('buySkill', $event)"/>
+        :labels="labels"
+        :player="players[playerId]"
+        :skillsOnSale="skillsOnSale"
+        :placement="skillPlacement"
+        @getSkill="getSkill($event)"
+        @placeBottle="placeBottle('buySkill', $event)"/>
 
-    </div>
+      </div>
+
+
+      <div id ='WorkDiv' class="cardslots">
+        <h2>Work</h2>
+        <!-- <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/> -->
+      </div>
 
       <div id ='AuctionDiv' class="cardslots">
         <h2>Auction</h2>
@@ -41,6 +47,11 @@
         <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
       </div>
 
+      <div id = 'PlayerSkillsDiv' class="cardslots" v-if="players[playerId]">
+        <h2>Skills</h2>
+        <CollectorsCard v-for="(card, index) in players[playerId].skills" :card="card" :key="index"/>
+      </div>
+
       <div id="PlayerBoardDiv">
         {{players}}
         {{marketValues}}
@@ -48,9 +59,9 @@
           fake more money
         </button>
         <div class="buttons">
-         <button @click="drawCard">
-           {{ labels.draw }}
-         </button>
+          <button @click="drawCard">
+            {{ labels.draw }}
+          </button>
         </div>
         <footer>
           <p>
@@ -81,94 +92,94 @@ export default {
       publicPath: "localhost:8080/#", //"collectors-groupxx.herokuapp.com/#",
       touchScreen: false,
       maxSizes: { x: 0,
-                  y: 0 },
-      labels: {},
-      players: {},
-      // playerId: {
-      //   hand: [],
-      //   money: 1,
-      //   points: 0,
-      //   skills: [],
-      //   items: [],
-      //   income: [],
-      //   secret: []
-      // }
-      buyPlacement: [],
-      skillPlacement: [],
-      auctionPlacement: [],
-      marketPlacement: [],
-      chosenPlacementCost: null,
-      marketValues: { fastaval: 0,
-                     movie: 0,
-                     technology: 0,
-                     figures: 0,
-                     music: 0 },
-      itemsOnSale: [],
-      skillsOnSale: [],
-      auctionCards: [],
-      playerid: 0
-    }
-  },
-  computed: {
-    playerId: function() { return this.$store.state.playerId}
-  },
-  watch: {
-    players: function(newP, oldP) {
-      console.log(newP, oldP)
-      for (let p in this.players) {
-        for(let c = 0; c < this.players[p].hand.length; c += 1) {
-          if (typeof this.players[p].hand[c].item !== "undefined")
-          this.$set(this.players[p].hand[c], "available", false);
+        y: 0 },
+        labels: {},
+        players: {},
+        // playerId: {
+        //   hand: [],
+        //   money: 1,
+        //   points: 0,
+        //   skills: [],
+        //   items: [],
+        //   income: [],
+        //   secret: []
+        // }
+        buyPlacement: [],
+        skillPlacement: [],
+        auctionPlacement: [],
+        marketPlacement: [],
+        chosenPlacementCost: null,
+        marketValues: { fastaval: 0,
+          movie: 0,
+          technology: 0,
+          figures: 0,
+          music: 0 },
+          itemsOnSale: [],
+          skillsOnSale: [],
+          auctionCards: [],
+          playerid: 0
         }
-      }
-    }
-  },
-  created: function () {
-    this.$store.commit('SET_PLAYER_ID', this.$route.query.id)
-    //TODO! Fix this ugly hack
-    //background: https://github.com/quasarframework/quasar/issues/5672
-    const newRoute = this.$route.params.id + "?id=" + this.playerId;
-    if (this.$route.params.id + "?id=" + this.$route.query.id !== newRoute)
-      this.$router.push(newRoute);
-    this.$store.state.socket.emit('collectorsLoaded',
-      { roomId: this.$route.params.id,
-        playerId: this.playerId } );
-    this.$store.state.socket.on('collectorsInitialize',
-      function(d) {
-        this.labels = d.labels;
-        this.players = d.players;
-        this.itemsOnSale = d.itemsOnSale;
-        this.marketValues = d.marketValues;
-        this.skillsOnSale = d.skillsOnSale;
-        this.auctionCards = d.auctionCards;
-        this.buyPlacement = d.placements.buyPlacement;
-        this.skillPlacement = d.placements.skillPlacement;
-        this.marketPlacement = d.placements.marketPlacement;
-        this.auctionPlacement = d.placements.auctionPlacement;
-      }.bind(this));
-    this.$store.state.socket.on('collectorsBottlePlaced',
-      function(d) {
-        this.buyPlacement = d.buyPlacement;
-        this.skillPlacement = d.skillPlacement;
-        this.marketPlacement = d.marketPlacement;
-        this.auctionPlacement = d.auctionPlacement;
-      }.bind(this));
-    this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
-    this.$store.state.socket.on('collectorsCardDrawn',
-      function(d) {
-          //this has been refactored to not single out one player's cards
-          //better to update the state of all cards
-          this.players = d;
-      }.bind(this)
-    );
-    this.$store.state.socket.on('collectorsCardBought',
-      function(d) {
-        console.log(d.playerId, "bought a card");
-        this.players = d.players;
-        this.itemsOnSale = d.itemsOnSale;
-      }.bind(this)
-    );
-    this.$store.state.socket.on('collectorsSkillAcquired',
+      },
+      computed: {
+        playerId: function() { return this.$store.state.playerId}
+      },
+      watch: {
+        players: function(newP, oldP) {
+          console.log(newP, oldP)
+          for (let p in this.players) {
+            for(let c = 0; c < this.players[p].hand.length; c += 1) {
+              if (typeof this.players[p].hand[c].item !== "undefined")
+              this.$set(this.players[p].hand[c], "available", false);
+            }
+          }
+        }
+      },
+      created: function () {
+        this.$store.commit('SET_PLAYER_ID', this.$route.query.id)
+        //TODO! Fix this ugly hack
+        //background: https://github.com/quasarframework/quasar/issues/5672
+        const newRoute = this.$route.params.id + "?id=" + this.playerId;
+        if (this.$route.params.id + "?id=" + this.$route.query.id !== newRoute)
+        this.$router.push(newRoute);
+        this.$store.state.socket.emit('collectorsLoaded',
+        { roomId: this.$route.params.id,
+          playerId: this.playerId } );
+          this.$store.state.socket.on('collectorsInitialize',
+          function(d) {
+            this.labels = d.labels;
+            this.players = d.players;
+            this.itemsOnSale = d.itemsOnSale;
+            this.marketValues = d.marketValues;
+            this.skillsOnSale = d.skillsOnSale;
+            this.auctionCards = d.auctionCards;
+            this.buyPlacement = d.placements.buyPlacement;
+            this.skillPlacement = d.placements.skillPlacement;
+            this.marketPlacement = d.placements.marketPlacement;
+            this.auctionPlacement = d.placements.auctionPlacement;
+          }.bind(this));
+          this.$store.state.socket.on('collectorsBottlePlaced',
+          function(d) {
+            this.buyPlacement = d.buyPlacement;
+            this.skillPlacement = d.skillPlacement;
+            this.marketPlacement = d.marketPlacement;
+            this.auctionPlacement = d.auctionPlacement;
+          }.bind(this));
+          this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
+          this.$store.state.socket.on('collectorsCardDrawn',
+          function(d) {
+            //this has been refactored to not single out one player's cards
+            //better to update the state of all cards
+            this.players = d;
+          }.bind(this)
+        );
+        this.$store.state.socket.on('collectorsCardBought',
+        function(d) {
+          console.log(d.playerId, "bought a card");
+          this.players = d.players;
+          this.itemsOnSale = d.itemsOnSale;
+        }.bind(this)
+      );
+      this.$store.state.socket.on('collectorsSkillAcquired',
       function(d) {
         console.log(d.playerId, "acquired a skill");
         this.players = d.players;
@@ -183,41 +194,41 @@ export default {
     placeBottle: function (action, cost) {
       this.chosenPlacementCost = cost;
       this.$store.state.socket.emit('collectorsPlaceBottle', {
-          roomId: this.$route.params.id,
-          playerId: this.playerId,
-          action: action,
-          cost: cost,
-        }
-      );
-    },
-    drawCard: function () {
-      this.$store.state.socket.emit('collectorsDrawCard', {
-          roomId: this.$route.params.id,
-          playerId: this.playerId
-        }
-      );
-    },
-    buyCard: function (card) {
-      console.log("buyCard", card);
-      this.$store.state.socket.emit('collectorsBuyCard', {
-          roomId: this.$route.params.id,
-          playerId: this.playerId,
-          card: card,
-          cost: this.marketValues[card.market] + this.chosenPlacementCost
-        }
-      );
-    },
-    getSkill: function (card) {
-      console.log("getSkill", card);
-      this.$store.state.socket.emit('collectorsGetSkill', {
-          roomId: this.$route.params.id,
-          playerId: this.playerId,
-          card: card,
-          cost: this.chosenPlacementCost
-        }
-      );
-    }
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        action: action,
+        cost: cost,
+      }
+    );
   },
+  drawCard: function () {
+    this.$store.state.socket.emit('collectorsDrawCard', {
+      roomId: this.$route.params.id,
+      playerId: this.playerId
+    }
+  );
+},
+buyCard: function (card) {
+  console.log("buyCard", card);
+  this.$store.state.socket.emit('collectorsBuyCard', {
+    roomId: this.$route.params.id,
+    playerId: this.playerId,
+    card: card,
+    cost: this.marketValues[card.market] + this.chosenPlacementCost
+  }
+);
+},
+getSkill: function (card) {
+  console.log("getSkill", card);
+  this.$store.state.socket.emit('collectorsGetSkill', {
+    roomId: this.$route.params.id,
+    playerId: this.playerId,
+    card: card,
+    cost: this.chosenPlacementCost
+  }
+);
+}
+},
 }
 </script>
 
@@ -268,6 +279,16 @@ footer a:visited {
   align-self: center;
 }
 
+#PlayerSkillsDiv {
+  grid-area: PlayerSkillsDiv;
+  align-self: center;
+}
+
+#WorkDiv {
+  grid-area: WorkDiv;
+  align-self: center;
+}
+
 #PlayerBoardDiv {
   grid-area: PlayerBoardDiv;
   align-self: center;
@@ -276,13 +297,16 @@ footer a:visited {
 #container {
   height: 100%;
   display: grid;
-  grid-template-columns: 33% 33% 33%;
-  grid-template-rows: 50% 50%;
+  grid-template-columns: 50% 50% ;
+  grid-template-rows: 33% 33% 33%;
   column-gap: 40px;
   row-gap: 40px;
   grid-template-areas:
-  "BuyCardDiv BuySkillDiv AuctionDiv"
-  "HandDiv PlayerItemsDiv PlayerBoardDiv"
+  "BuyCardDiv PlayerItemsDiv"
+  "BuySkillDiv PlayerSkillsDiv"
+  "WorkDiv HandDiv"
+  "AuctionDiv PlayerBoardDiv"
+
 }
 
 .cardslots {
