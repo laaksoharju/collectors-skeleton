@@ -28,7 +28,11 @@
          </div>
        </div>
        <div class="playerBoard">
-          Player Board
+          Player {{playerId}}'s Board
+      </div>
+      <div class="turnCounter">
+        <h3> Who's turn? </h3>
+        <h2> Player {{playerId}} </h2>
       </div>
      </div>
   </div>
@@ -239,8 +243,8 @@ export default {
   }
   .board {
 	display: grid;
-	grid-template-columns: repeat(13,90px);
-	grid-template-rows: repeat(13, 45px)  ;
+	grid-template-columns: repeat(15,90px);
+	grid-template-rows: repeat(16, 45px)  ;
 	grid-gap: 0px;
 	margin: 20px ;
 	width: 994px;
@@ -300,7 +304,7 @@ export default {
     color: black;
   }
   .playerBoard {
-    grid-column: 9/span 4;
+    grid-column: 9/span 5;
     grid-row: 2/span 4;
     width: auto;
     height: auto;
@@ -308,6 +312,14 @@ export default {
     grid-template-rows: repeat(100,150px);
     background-color: pink ;
     color: black;
+  }
+
+  .turnCounter {
+    background-color: green;
+    color:white;
+    grid-column: 6/ span 2;
+    grid-row: 15/span 2;
+    text-align: center;
   }
 
   .buttons{
