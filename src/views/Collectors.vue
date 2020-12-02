@@ -1,7 +1,6 @@
 <template>
   <div>
     <main>
-
       {{buyPlacement}} {{chosenPlacementCost}}
       <CollectorsBuyActions v-if="players[playerId]"
         :labels="labels"
