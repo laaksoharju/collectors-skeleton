@@ -5,7 +5,11 @@
       <div>
         <h2 >Welcome to play Collectors, please choose a setup for the game.<nav>
         </nav>In the next step you will get a link to send to the other players. </h2>
-          <h3> First time player? Click me!</h3>
+
+          <div class="popup" onclick="ruleFunction()"> First time player? Click me!<span class="popupText" id="myPopup">
+          HÄr kommer reglerna stå sedan</span>
+        </div>
+
           <a id='firstButton' href="#identifier"><img src='https://website-bamedag.netdna-ssl.com/fileadmin/media/_processed_/8/8/csm_7-9-months-introtext_7588a3bb0c.jpg' alt="Span" title="Click for rules!" width="200"></a>
 
       </div>
@@ -39,10 +43,30 @@ export default {
         lang: lang });
       this.$router.push("/room/" + this.$store.state.roomId);
     },
+    ruleFunction: function() {
+      var popup = document.getElementById('myPopup');
+      popup.classList.toggle('show');
+    }
   }
 }
+
+
 </script>
 <style scoped>
+.popup {
+  position: relative;
+  display:inline-block;
+  cursor: pointer;
+}
+.popup .popupText{
+  visibility: hidden;
+  width: 200px;
+  background-color: #555;
+  text-align: center;
+}
+
+
+
   .center {
     display: flex;
     align-items: center;
