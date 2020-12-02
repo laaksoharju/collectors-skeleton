@@ -1,6 +1,7 @@
 <template>
   <div>
     <main>
+      <OtherPlayerboards/>
       {{buyPlacement}} {{chosenPlacementCost}}
       <CollectorsBuyActions v-if="players[playerId]"
         :labels="labels"
@@ -66,12 +67,14 @@
 
 import CollectorsCard from '@/components/CollectorsCard.vue'
 import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
+import OtherPlayerboards from '@/components/OtherPlayerboards.vue'
 
 export default {
   name: "Collectors",
   components: {
     CollectorsCard,
-    CollectorsBuyActions
+    CollectorsBuyActions,
+    OtherPlayerboards
   },
   data: function () {
     return {
