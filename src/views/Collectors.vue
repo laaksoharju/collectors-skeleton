@@ -71,7 +71,8 @@ export default {
   name: "Collectors",
   components: {
     CollectorsCard,
-    CollectorsBuyActions
+    CollectorsBuyActions,
+
   },
   data: function () {
     return {
