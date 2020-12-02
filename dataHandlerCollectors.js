@@ -79,7 +79,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
                             {cost:0, playerId: null},
                             {cost:0, playerId: null} ];
   room.marketPlacement = [ {cost:0, playerId: null},
-                           {cost:-2, playerId: null},
+                           {cost:2, playerId: null},
                            {cost:0, playerId: null} ];
   this.rooms[roomId] = room;
 }
@@ -208,27 +208,30 @@ Data.prototype.raiseValue = function (roomId, playerId, card, cost) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     let c = null;
-    /// check first if the card is among the items on sale
-    for (let i = 0; i < room.market.length; i += 1) {
-      // since card comes from the client, it is NOT the same object (reference)
-      // so we need to compare properties for determining equality
-      if (room.market[i].x === card.x &&
-          room.market[i].y === card.y) {
-        c = room.market.splice(i,1, {});
+    for (let i = 0; i < room.skillsOnSale.length; i += 1) {
+      if (room.skillsOnSale[i].x === card.x &&
+          room.skillsOnSale[i].y === card.y) {
+        c = room.skillsOnSale.splice(i,1, {});
         break;
       }
     }
-    // ...then check if it is in the hand. It cannot be in both so it's safe
+    for (let i = 0; i < room.auctionCards.length; i += 1) {
+      console.log(card);
+      if (room.auctionCards[i].x === card.x &&
+          room.auctionCards[i].y === card.y) {
+        c = room.auctionCards.splice(i,1, {});
+        console.log(c);
+        break;
+      }
+    }
     for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
-      // since card comes from the client, it is NOT the same object (reference)
-      // so we need to compare properties for determining equality
       if (room.players[playerId].hand[i].x === card.x &&
           room.players[playerId].hand[i].y === card.y) {
         c = room.players[playerId].hand.splice(i,1);
         break;
       }
     }
-    room.players[playerId].marketValues.push(...c); //vet ej om det ska vara marketValues
+    room.market.push(...c); //vet ej om det ska vara marketValues
     room.players[playerId].money -= cost;
 
   }
@@ -302,14 +305,15 @@ Data.prototype.getItemsOnSale = function(roomId){
 Data.prototype.getMarketValues = function(roomId){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
-    return room.market.reduce(function(acc, curr) {
-      acc[curr.market] += 1;
-    },
-    { fastaval: 0,
-      movie: 0,
-      technology: 0,
-      figures: 0,
-      music: 0 });
+    let mv = {fastaval: 0,
+              movie: 0,
+              technology: 0,
+              figures: 0,
+              music: 0 };
+    for (let cardindex in room.market) {
+      mv[room.market[cardindex].market] += 1;
+    }
+    return mv;
   }
   else return [];
 }

@@ -1,12 +1,9 @@
 <template>
     <div>
-      <h1>{{ labels.getSkill }}</h1>
+      <h1>{{ labels.raiseValue }}</h1>
       <div class="raise-value">
-        <div v-for="(card, index) in market" :key="index">
-          <CollectorsCard
-            :card="card"
-            :availableAction="card.available"
-            @doAction="raiseValue(card)"/>
+        <div v-for="(type, index) in marketValues" :key="index">
+          {{ type }}
         </div>
       </div>
       <div>
@@ -26,17 +23,18 @@
 </template>
 
 <script>
-import CollectorsCard from '@/components/CollectorsCard.vue'
+// import CollectorsCard from '@/components/CollectorsCard.vue'
 
 export default {
   name: 'CollectorsRaiseValueActions',
   components: {
-    CollectorsCard
+    // CollectorsCard
   },
   props: {
     labels: Object,
     player: Object,
     skillsOnSale: Array,
+    auctionCards: Array,
     marketValues: Object,
     placement: Array
   },
@@ -44,20 +42,24 @@ export default {
     cannotAfford: function (cost) {
       return (this.player.money < cost);
     },
+
     placeBottle: function (p) {
       this.$emit('placeBottle', p.cost);
-      this.highlightAvailableCards(p.cost);
+      this.highlightAvailableCards();
     },
 
-
-
-    raiseValue: function (card) {
-      if (card.available) {
-        this.$emit('raiseValue', card)
+    highlightAvailableCards: function () {
+      if (this.skillsOnSale[4].item !== undefined) {
+          this.$set(this.skillsOnSale[4], "available", true);
       }
-    }
-
-  }
+      if (this.auctionCards[3].item !== undefined) {
+        this.$set(this.auctionCards[3], "available", true);
+      }
+      for (let i = 0; i < this.player.hand.length; i += 1) {
+          this.$set(this.player.hand[i], "available", true);
+      }
+    },
+  },
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->

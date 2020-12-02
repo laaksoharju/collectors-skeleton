@@ -21,10 +21,23 @@
         :player="players[playerId]"
         :skillsOnSale="skillsOnSale"
         :placement="skillPlacement"
-        @getSkill="getSkill($event)"
+        @getSkill="handleAction($event)"
         @placeBottle="placeBottle('buySkill', $event)"/>
-
       </div>
+
+      <!-- lägger in RaiseValue div här -->
+      <div id ='RaiseValueDiv' >
+        <CollectorsRaiseValueActions v-if="players[playerId]"
+        :labels="labels"
+        :player="players[playerId]"
+        :marketValues="marketValues"
+        :skillsOnSale="skillsOnSale"
+        :auctionCards="auctionCards"
+        :placement="marketPlacement"
+        @raiseValue="raiseValue($event)"
+        @placeBottle="placeBottle('market', $event)"/>
+      </div>
+      <!-- slutar RaiseValue div här -->
 
 
       <div id ='WorkDiv' class="cardslots">
@@ -34,25 +47,9 @@
 
       <div id ='AuctionDiv' class="cardslots">
         <h2>Auction</h2>
-        <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
+        <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :availableAction="card.available" @doAction="handleAction(card)" :key="index"/>
       </div>
 
-
-      <!-- lägger in RaiseValue div här -->
-      <div id ='RaiseValueDiv' class="cardslots">
-
-        <h2>Raise value</h2>
-
-        <CollectorsRaiseValueActions v-if="players[playerId]"
-        :labels="labels"
-        :player="players[playerId]"
-        :market="market"
-        :placement="marketPlacement"
-        @raiseValue="raiseValue($event)"
-        @placeBottle="placeBottle('raiseValue', $event)"/>
-
-      </div>
-      <!-- slutar RaiseValue div här -->
 
       <div id = 'HandDiv' class="cardslots" v-if="players[playerId]">
         <h2>Hand</h2>
@@ -84,6 +81,15 @@
             {{ labels.draw }}
           </button>
         </div>
+
+        <div id = 'Test' class="cardslots">
+          <h2>All players hands</h2>
+          <div v-for="(player, key) in players" :key="key">
+            <CollectorsCard v-for="(card, index) in player.hand" :card="card" :key="index"/>
+          </div>
+        </div>
+
+
         <footer>
           <p>
             {{ labels.invite }}
@@ -210,13 +216,11 @@ export default {
         this.skillsOnSale = d.skillsOnSale;
       }.bind(this)
     );
-
-
     this.$store.state.socket.on('collectorsValueRaised',
     function(d) {
       console.log(d.playerId, "raised a value");
       this.players = d.players;
-      this.market = d.market;
+      this.marketValues = d.market;
     }.bind(this)
   );
 
@@ -244,6 +248,7 @@ methods: {
     });
   },
   drawCard: function () {
+    console.log(this.market)
     this.$store.state.socket.emit('collectorsDrawCard', {
       roomId: this.$route.params.id,
       playerId: this.playerId
@@ -275,6 +280,9 @@ methods: {
     if (this.chosenAction === "buySkill") {
       this.getSkill(card);
     }
+    if (this.chosenAction === "market") {
+      this.raiseValue(card);
+    }
   },
   fakeMoreMoney: function () {
     this.$store.state.socket.emit('collectorsFakeMoreMoney', {
@@ -283,8 +291,7 @@ methods: {
     });
   },
   raiseValue: function (card) {
-    console.log("raiseValue", card);
-    this.$store.state.socket.emit('CollectorsRaiseValue', {
+    this.$store.state.socket.emit('collectorsRaiseValue', {
       roomId: this.$route.params.id,
       playerId: this.playerId,
       card: card,
@@ -373,9 +380,9 @@ footer a:visited {
   grid-template-areas:
   "BuyCardDiv PlayerItemsDiv"
   "BuySkillDiv PlayerSkillsDiv"
-  "WorkDiv HandDiv"
+  "RaiseValueDiv HandDiv"
   "AuctionDiv PlayerBoardDiv"
-  "RaiseValueDiv PlayerBoardDiv"
+  "WorkDiv PlayerBoardDiv"
 }
 
 .cardslots {

@@ -51,7 +51,7 @@ export default {
       return (this.player.money < minCost);
     },
     cardCost: function (card) {
-      return this.marketValues[card.market];
+      return this.marketValues[card.item];
     },
     placeBottle: function (p) {
       this.$emit('placeBottle', p.cost);
