@@ -1,13 +1,13 @@
 <template>
   <div id="AllOtherPlayerboards">
     <div v-on:click="playerClicked('A')" class="otherPlayerBoard A">
-      Player A
+      <p>Player A</p>
     </div>
     <div v-on:click="playerClicked('B')" class="otherPlayerBoard B">
-      Player B
+      <p>Player B</p>
     </div>
     <div v-on:click="playerClicked('C')" class="otherPlayerBoard C">
-      Player C
+      <p>Player C</p>
     </div>
     <div v-if = dispPlayerboard :class =playertag class="displayedBoard"> Player {{playertag}}'s playerboard!!! </div>
   </div>
