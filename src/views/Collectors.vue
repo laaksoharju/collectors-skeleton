@@ -2,15 +2,7 @@
   <div>
     <main>
       <section class="mainboard">
-        <section class="gameboard">
-          <section class="box item">item</section>
-          <section class="box skill">skill</section>
-          <section class="box market">market</section>
-          <section class="box worker">worker</section>
-          <section class="box auction">auction</section>
-        </section>
-        <section class="playerboard">
-          {{ buyPlacement }} {{ chosenPlacementCost }}this{{ players }}
+        <section class="buy_item">
           <CollectorsBuyActions
             v-if="players[playerId]"
             :labels="labels"
@@ -21,6 +13,16 @@
             @buyCard="buyCard($event)"
             @placeBottle="placeBottle('buy', $event)"
           />
+        </section>
+        <section class="gameboard">
+          <section class="box item">item</section>
+          <section class="box skill">skill</section>
+          <section class="box market">market</section>
+          <section class="box worker">worker</section>
+          <section class="box auction">auction</section>
+        </section>
+        <section class="playerboard">
+          {{ buyPlacement }} {{ chosenPlacementCost }}this{{ players }}
 
           <div class="buttons">
             <button @click="drawCard">
@@ -145,7 +147,7 @@ export default {
     },
   },
   created: function () {
-    this.$store.commit("SET_PLAYER_ID");
+    this.$store.commit("SET_PLAYER_ID", this.$route.params.id);
     //TODO! Fix this ugly hack
     //background: https://github.com/quasarframework/quasar/issues/5672
     const newRoute = this.$route.params.id + "?id=" + this.playerId;
@@ -283,6 +285,7 @@ footer a:visited {
   grid-gap: 0.5em;
   grid-template-rows: 1fr 4fr 1.1fr;
 }
+
 .playerboard {
   position: absolute;
   top: 40px;
@@ -290,7 +293,10 @@ footer a:visited {
   width: 100%;
   grid-column: 2/3;
 }
-
+.buy_item {
+  position: relative;
+  left: 5vw;
+}
 .item {
   background-color: rgb(219, 197, 195);
   grid-column: 2/4;

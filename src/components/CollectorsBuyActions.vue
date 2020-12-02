@@ -14,6 +14,12 @@
     <div>
       <div class="buttons" v-for="(p, index) in placement" :key="index">
         <button
+          style="
+             {
+              width: 60px;
+              height: 60px;
+            }
+          "
           v-if="p.playerId === null"
           :disabled="cannotAfford(p.cost)"
           @click="placeBottle(p)"
