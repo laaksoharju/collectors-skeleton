@@ -2,15 +2,7 @@
   <div>
     <main>
       <section class="mainboard">
-        <section class="gameboard">
-          <section class="box item">item</section>
-          <section class="box skill">skill</section>
-          <section class="box market">market</section>
-          <section class="box worker">worker</section>
-          <section class="box auction">auction</section>
-        </section>
-        <section class="playerboard">
-          {{ buyPlacement }} {{ chosenPlacementCost }}this{{ players }}
+        <section class="buy_item">
           <CollectorsBuyActions
             v-if="players[playerId]"
             :labels="labels"
@@ -21,6 +13,16 @@
             @buyCard="buyCard($event)"
             @placeBottle="placeBottle('buy', $event)"
           />
+        </section>
+        <section class="gameboard">
+          <section class="box item">item</section>
+          <section class="box skill">skill</section>
+          <section class="box market">market</section>
+          <section class="box worker">worker</section>
+          <section class="box auction">auction</section>
+        </section>
+        <section class="playerboard">
+          {{ buyPlacement }} {{ chosenPlacementCost }}this{{ players }}
 
           <div class="buttons">
             <button @click="drawCard">
@@ -35,6 +37,7 @@
               :key="index"
             />
           </div>
+
           Auction
           <div class="cardslots">
             <CollectorsCard
@@ -145,7 +148,7 @@ export default {
     },
   },
   created: function () {
-    this.$store.commit("SET_PLAYER_ID");
+    this.$store.commit("SET_PLAYER_ID", this.$route.query.id);
     //TODO! Fix this ugly hack
     //background: https://github.com/quasarframework/quasar/issues/5672
     const newRoute = this.$route.params.id + "?id=" + this.playerId;
@@ -265,6 +268,7 @@ footer a:visited {
   background-color: rgb(117, 59, 31);
   height: 100vh;
   width: 100vw;
+  z-index: 0;
 }
 .gameboard {
   background-color: rgb(242, 244, 247);
@@ -289,6 +293,15 @@ footer a:visited {
   height: 100%;
   width: 100%;
   grid-column: 2/3;
+}
+.buy_item .buy-cards {
+  z-index: -2;
+}
+.buy_item .buttons {
+  z-index: 3;
+}
+.buy_item {
+  position: relative;
 }
 
 .item {

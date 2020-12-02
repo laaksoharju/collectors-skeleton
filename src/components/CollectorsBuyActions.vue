@@ -14,11 +14,12 @@
     <div>
       <div class="buttons" v-for="(p, index) in placement" :key="index">
         <button
+          class="bottle-style"
           v-if="p.playerId === null"
           :disabled="cannotAfford(p.cost)"
           @click="placeBottle(p)"
         >
-          ${{ p.cost }}
+          ${{ p.cost }}{{ p }}
         </button>
         <div v-if="p.playerId !== null">
           {{ p.playerId }}
@@ -93,10 +94,18 @@ export default {
 };
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.buy-cards,
-.buttons {
+<style >
+.buy-cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, 130px);
 }
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(5, 100px);
+}
+.bottle-style {
+  width: 100px;
+  height: 100px;
+}
 </style>
+
