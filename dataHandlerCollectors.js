@@ -212,11 +212,11 @@ Data.prototype.raiseValue = function (roomId, playerId, card, cost) {
       if (room.skillsOnSale[i].x === card.x &&
           room.skillsOnSale[i].y === card.y) {
         c = room.skillsOnSale.splice(i,1, {});
+        console.log("Förbi c");
         break;
       }
     }
     for (let i = 0; i < room.auctionCards.length; i += 1) {
-      console.log(card);
       if (room.auctionCards[i].x === card.x &&
           room.auctionCards[i].y === card.y) {
         c = room.auctionCards.splice(i,1, {});
@@ -231,12 +231,13 @@ Data.prototype.raiseValue = function (roomId, playerId, card, cost) {
         break;
       }
     }
-    room.market.push(...c); //vet ej om det ska vara marketValues
+    room.market.push(...c);
+    console.log(room.market);
+    console.log(room.skillsOnSale);
     room.players[playerId].money -= cost;
 
   }
 }
-// Slut för raise value
 
 Data.prototype.placeBottle = function (roomId, playerId, action, cost) {
   let room = this.rooms[roomId];

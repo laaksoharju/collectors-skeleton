@@ -50,7 +50,6 @@
         <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :availableAction="card.available" @doAction="handleAction(card)" :key="index"/>
       </div>
 
-
       <div id = 'HandDiv' class="cardslots" v-if="players[playerId]">
         <h2>Hand</h2>
         <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="handleAction(card)" :key="index"/>
@@ -221,6 +220,8 @@ export default {
       console.log(d.playerId, "raised a value");
       this.players = d.players;
       this.marketValues = d.market;
+      this.skillsOnSale = d.skillsOnSale;
+      this.auctionCards = d.auctionCards;
     }.bind(this)
   );
 

@@ -51,7 +51,9 @@ function sockets(io, socket, data) {
       io.to(d.roomId).emit('collectorsValueRaised', {
           playerId: d.playerId,
           players: data.getPlayers(d.roomId),
-          market: data.getMarketValues(d.roomId)
+          market: data.getMarketValues(d.roomId),
+          skillsOnSale: data.getSkillsOnSale(d.roomId),
+          auctionCards: data.getAuctionCards(d.roomId),
         }
       );
     });
