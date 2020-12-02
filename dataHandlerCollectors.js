@@ -203,6 +203,38 @@ Data.prototype.getSkill = function (roomId, playerId, card, cost) {
   }
 }
 
+//Ny, för raise value
+Data.prototype.raiseValue = function (roomId, playerId, card, cost) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    let c = null;
+    /// check first if the card is among the items on sale
+    for (let i = 0; i < room.market.length; i += 1) {
+      // since card comes from the client, it is NOT the same object (reference)
+      // so we need to compare properties for determining equality
+      if (room.market[i].x === card.x &&
+          room.market[i].y === card.y) {
+        c = room.market.splice(i,1, {});
+        break;
+      }
+    }
+    // ...then check if it is in the hand. It cannot be in both so it's safe
+    for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
+      // since card comes from the client, it is NOT the same object (reference)
+      // so we need to compare properties for determining equality
+      if (room.players[playerId].hand[i].x === card.x &&
+          room.players[playerId].hand[i].y === card.y) {
+        c = room.players[playerId].hand.splice(i,1);
+        break;
+      }
+    }
+    room.players[playerId].marketValues.push(...c); //vet ej om det ska vara marketValues
+    room.players[playerId].money -= cost;
+
+  }
+}
+// Slut för raise value
+
 Data.prototype.placeBottle = function (roomId, playerId, action, cost) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
