@@ -11,7 +11,7 @@
         :marketValues="marketValues"
         :placement="buyPlacement"
         @buyCard="buyCard($event)"
-        @placeBottle="placeBottle('buy', $event)"/>
+        @placeBottle="placeBottle('buyItem', $event)"/>
 
       </div>
 
