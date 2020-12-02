@@ -37,7 +37,7 @@
         <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
       </div>
 
-<!-- lägger in RaiseValue div här -->
+      <!-- lägger in RaiseValue div här -->
       <div id ='RaiseValue' class="cardslots">
         <h2>Raise value</h2>
         <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
@@ -63,7 +63,7 @@
         <h2>PlayerBoard</h2>
         {{players}}
         {{marketValues}}
-        <button v-if="players[playerId]" @click="players[playerId].money += 1">
+        <button v-if="players[playerId]" @click="fakeMoreMoney()">
           fake more money
         </button>
         <div class="buttons">
@@ -195,6 +195,12 @@ export default {
         this.skillsOnSale = d.skillsOnSale;
       }.bind(this)
     );
+    this.$store.state.socket.on('collectorsMoneyFaked',
+    function(d) {
+      console.log(d.playerId, "faked money");
+      this.players = d;
+    }.bind(this)
+    );
   },
   methods: {
     selectAll: function (n) {
@@ -208,46 +214,48 @@ export default {
         playerId: this.playerId,
         action: action,
         cost: cost,
+      });
+    },
+    drawCard: function () {
+      this.$store.state.socket.emit('collectorsDrawCard', {
+        roomId: this.$route.params.id,
+        playerId: this.playerId
+      });
+    },
+    buyCard: function (card) {
+      console.log("buyCard", card);
+      this.$store.state.socket.emit('collectorsBuyCard', {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        card: card,
+        cost: this.marketValues[card.market] + this.chosenPlacementCost
+      });
+    },
+    getSkill: function (card) {
+      console.log("getSkill", card);
+      this.$store.state.socket.emit('collectorsGetSkill', {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        card: card,
+        cost: this.chosenPlacementCost
+      });
+    },
+    handleAction: function (card) {
+      console.log("handleAction", card);
+      if (this.chosenAction === "buyItem") {
+        this.buyCard(card);
       }
-    );
-  },
-  drawCard: function () {
-    this.$store.state.socket.emit('collectorsDrawCard', {
-      roomId: this.$route.params.id,
-      playerId: this.playerId
+      if (this.chosenAction === "buySkill") {
+        this.getSkill(card);
+      }
+    },
+    fakeMoreMoney: function () {
+      this.$store.state.socket.emit('collectorsFakeMoreMoney', {
+        roomId: this.$route.params.id,
+        playerId: this.playerId
+      });
     }
-  );
-},
-buyCard: function (card) {
-  console.log("buyCard", card);
-  this.$store.state.socket.emit('collectorsBuyCard', {
-    roomId: this.$route.params.id,
-    playerId: this.playerId,
-    card: card,
-    cost: this.marketValues[card.market] + this.chosenPlacementCost
-  }
-);
-},
-getSkill: function (card) {
-  console.log("getSkill", card);
-  this.$store.state.socket.emit('collectorsGetSkill', {
-    roomId: this.$route.params.id,
-    playerId: this.playerId,
-    card: card,
-    cost: this.chosenPlacementCost
-  }
-);
-},
-handleAction: function (card) {
-  console.log("handleAction", card);
-  if (this.chosenAction === "buyItem") {
-    this.buyCard(card);
-  }
-  if (this.chosenAction === "buySkill") {
-    this.getSkill(card);
-  }
-}
-},
+  },
 }
 </script>
 
