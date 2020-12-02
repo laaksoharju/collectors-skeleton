@@ -5,22 +5,22 @@
       <div class="board">
        <div class = "skillPool">
          Skill Pool
-         <div class = "skillPool EnergyBottles">
+         <div class = "EnergyBottles">
          </div>
-         <div class = "skillPool EnergyBottles">
+         <div class = "EnergyBottles">
          </div>
-         <div class = "skillPool EnergyBottles">
-         </div>
-
-         <div class = "skillPool EnergyBottleCoin">
-         </div>
-         <div class = "skillPool EnergyBottleCoin">
+         <div class = "EnergyBottles">
          </div>
 
-         <div class="cardslots skillcard">
+         <div class = "EnergyBottleCoin">
+         </div>
+         <div class = "EnergyBottleCoin">
+         </div>
+        <div class = 'cardslots'>
+           <div class="skillCard">
              <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
            </div>
-
+        </div>
        </div>
        <div class = "itemPool">
         Item Pool
@@ -30,11 +30,11 @@
        </div>
        <div class = "marketPool">
          Market Pool
-         <div class = "marketPool iconBird"></div>
-         <div class = "marketPool iconRobot"></div>
-         <div class = "marketPool iconMusic"></div>
-         <div class = "marketPool iconFilm"></div>
-         <div class = "marketPool iconTech"></div>
+         <div class = "iconBird"></div>
+         <div class = "iconRobot"></div>
+         <div class = "iconMusic"></div>
+         <div class = "iconFilm"></div>
+         <div class = "iconTech"></div>
        </div>
        <div class = "workPool">
          Work Pool
@@ -280,18 +280,19 @@ export default {
     grid-row: 2/span 8 ;
     width: auto;
 		height: auto;
-    grid-template-columns: repeat(100, 12px);
-    grid-template-rows: repeat(100,150px);
     background-color: #dce5cc;
     color: black;
+    display: grid;
+    grid-template-columns: repeat(3, 50px);
+    grid-template-rows: repeat(5,50px);
 
 
   }
 
   .EnergyBottles{
     grid-column: 1;
-    grid-row-start: 1;
-    grid-row-end: 3;
+/*    grid-row-start: 1;
+    grid-row-end: 3;*/
     width:50px;
     height:50px;
     background-image:  url('/images/Gain-skill-bottle.png');
@@ -300,8 +301,7 @@ export default {
 
   .EnergyBottleCoin{
     grid-column: 1;
-    grid-row-start:4;
-    grid-row-end:5;
+/*      grid-row: 4;*/
     width:50px;
     height:50px;
     background-image:  url('/images/Gain-skill-bottle-coin.png');
@@ -328,7 +328,7 @@ export default {
     color: black;
     display: grid;
     grid-template-columns: repeat(5, 60px);
-    grid-template-rows: repeat(10, 10px);
+    grid-template-rows: repeat(5, 27.5px);
     }
   .workPool{
     grid-column: 3/span 3;
@@ -390,9 +390,9 @@ export default {
   .cardslots {
     display: grid;
     grid-template-columns: repeat(auto-fill, 130px);
-    grid-template-rows: repeat(auto-fill, 18px);
-    grid-column: 1;
-    grid-row: 11 ;
+    grid-template-rows: repeat(auto-fill, 1px);
+    grid-column: 2;
+    grid-row: 2;
   /*  display: grid;
     grid-template-columns: repeat(100, 15px);
     grid-template-rows: repeat(1,150px);*/
@@ -406,13 +406,11 @@ export default {
     z-index: 0;
   }
 
-  .skillcard {
-    grid-column: 2;
-    grid-row-start:1;
-    grid-row-end:5;
+  .skillCard {
+
     display: grid;
     grid-template-columns: repeat(1, 15px);
-    grid-template-rows: repeat(5,150px);
+    grid-template-rows: repeat(5,160px);
 
   }
   .cardslots div:hover {
