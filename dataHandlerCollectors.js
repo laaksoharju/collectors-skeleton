@@ -260,6 +260,16 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost) {
     }
   }
 }
+
+Data.prototype.fakeMoreMoney = function (roomId, playerId) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    room.players[playerId].money += 1;
+    return room.players;
+  }
+  else return [];
+}
+
 /* returns the hand of the player */
 Data.prototype.getCards = function (roomId, playerId) {
   let room = this.rooms[roomId];

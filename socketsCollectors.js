@@ -19,7 +19,7 @@ function sockets(io, socket, data) {
     });
     socket.on('collectorsDrawCard', function(d) {
       io.to(d.roomId).emit('collectorsCardDrawn',
-        data.drawCard(d.roomId, d.playerId)
+      data.drawCard(d.roomId, d.playerId)
       );
     });
     socket.on('collectorsBuyCard', function(d) {
@@ -46,6 +46,7 @@ function sockets(io, socket, data) {
       );
     });
 
+
     socket.on('CollectorsRaiseValue', function(d) {
       data.raiseValue(d.roomId, d.playerId, d.card, d.cost)
       io.to(d.roomId).emit('collectorsValueRaised', {
@@ -53,6 +54,12 @@ function sockets(io, socket, data) {
           players: data.getPlayers(d.roomId),
           market: data.getMarket(d.roomId)
         }
+      );
+    });
+
+    socket.on('collectorsFakeMoreMoney', function(d) {
+      io.to(d.roomId).emit('collectorsMoneyFaked',
+      data.fakeMoreMoney(d.roomId, d.playerId)
       );
     });
 
