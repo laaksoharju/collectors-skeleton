@@ -37,6 +37,13 @@
         <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
       </div>
 
+<!-- lägger in RaiseValue div här -->
+      <div id ='RaiseValue' class="cardslots">
+        <h2>Raise value</h2>
+        <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
+      </div>
+
+
       <div id = 'HandDiv' class="cardslots" v-if="players[playerId]">
         <h2>Hand</h2>
         <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="handleAction(card)" :key="index"/>
@@ -281,6 +288,11 @@ footer a:visited {
   align-self: center;
 }
 
+#RaiseValue {
+  grid-area: RaiseValue;
+  align-self: center;
+}
+
 #HandDiv {
   grid-area: HandDiv;
   align-self: center;
@@ -310,7 +322,7 @@ footer a:visited {
   height: 100%;
   display: grid;
   grid-template-columns: 50% 50% ;
-  grid-template-rows: 33% 33% 33%;
+  grid-template-rows: 25% 25% 25% 25%;
   column-gap: 40px;
   row-gap: 40px;
   grid-template-areas:
@@ -318,7 +330,7 @@ footer a:visited {
   "BuySkillDiv PlayerSkillsDiv"
   "WorkDiv HandDiv"
   "AuctionDiv PlayerBoardDiv"
-
+  "RaiseValue PlayerBoardDiv"
 }
 
 .cardslots {
