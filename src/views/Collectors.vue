@@ -3,6 +3,7 @@
     <main>
       <div class="table">
       <div class="board">
+
        <div class = "skillPool">
          Skill Pool
          <div class = "EnergyBottles">
@@ -16,11 +17,10 @@
          </div>
          <div class = "EnergyBottleCoin">
          </div>
-        <div class = 'cardslots'>
-           <div class="skillCard">
-             <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
+
+           <div class="skillCard" v-for="(card, index) in skillsOnSale" :key="index">
+             <CollectorsCard :card="card" />
            </div>
-        </div>
        </div>
        <div class = "itemPool">
         Item Pool
@@ -279,12 +279,11 @@ export default {
     display: grid;
     grid-template-columns: repeat(3, 50px);
     grid-template-rows: repeat(5,50px);
-
+    grid-auto-flow: column;
 
   }
 
   .EnergyBottles{
-    grid-column: 1;
 /*    grid-row-start: 1;
     grid-row-end: 3;*/
     width:50px;
@@ -294,7 +293,6 @@ export default {
   }
 
   .EnergyBottleCoin{
-    grid-column: 1;
 /*      grid-row: 4;*/
     width:50px;
     height:50px;
@@ -381,8 +379,6 @@ export default {
     display: grid;
     grid-template-columns: repeat(auto-fill, 130px);
     grid-template-rows: repeat(auto-fill, 1px);
-    grid-column: 2;
-    grid-row: 2;
   /*  display: grid;
     grid-template-columns: repeat(100, 15px);
     grid-template-rows: repeat(1,150px);*/
@@ -397,10 +393,11 @@ export default {
   }
 
   .skillCard {
-
-    display: grid;
+    transform: scale(0.3);
+  /*  display: grid;
     grid-template-columns: repeat(1, 15px);
-    grid-template-rows: repeat(5,160px);
+    grid-template-rows: repeat(5,160px);*/
+
 
   }
   .cardslots div:hover {
