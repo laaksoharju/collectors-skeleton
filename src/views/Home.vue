@@ -11,13 +11,15 @@
         </div>
 
           <a id='firstButton' href="#identifier"><img src='https://website-bamedag.netdna-ssl.com/fileadmin/media/_processed_/8/8/csm_7-9-months-introtext_7588a3bb0c.jpg' alt="Span" title="Click for rules!" width="200"></a>
+        </div>
 
-      </div>
-      <ul>
+      <ul >
         <div v-for="i in 3" :key="i">
           <button id=startButton @click="setupCollectors(i+1, 'en')"> <h3>Set up a game of Collectors for {{i+1}} players </h3> </button>
         </div>
+
       </ul>
+
       <p>
         <!--- sorry riktigt dålig lösning:)--><br><br><br><br><br><br><br><br>
           <a name="identifier">RULES</a>
@@ -75,10 +77,15 @@ export default {
     padding: 1em;
 }
   #startButton {
+padding: 1px 80px 1px;
 cursor:pointer;
 transition-duration: 0.4s;
 background-color: #3B737A ;
 color:white;
+}
+
+#beginner{
+  padding: 1px 125px 1px;
 }
 
 #firstButton{
