@@ -1,6 +1,7 @@
 <template>
   <div>
     <main>
+
       {{buyPlacement}} {{chosenPlacementCost}}
       <CollectorsBuyActions v-if="players[playerId]"
         :labels="labels"
@@ -71,7 +72,7 @@ export default {
   name: "Collectors",
   components: {
     CollectorsCard,
-    CollectorsBuyActions
+    CollectorsBuyActions,
   },
   data: function () {
     return {
