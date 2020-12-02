@@ -1,6 +1,7 @@
 <template>
   <div>
     <main>
+
       {{buyPlacement}} {{chosenPlacementCost}}
       <CollectorsBuyActions v-if="players[playerId]"
         :labels="labels"
@@ -23,24 +24,48 @@
         />
               </div>
         <!--       ev inte. </div>-->
+      
+      <div class="box row">
+        <div class="box bottleCircles">
+          <!--Skills-->
+          <p>Skills</p>
+          <div>$1</div>
+          <div>$1</div>
+          <div>$1</div>
+          <div>$1</div>
+        </div>
+        <div class="box cardRow cardslots">
+          <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
+        </div>
+      </div>
 
-      Skills
-      <div class="cardslots">
-        <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
+      <div class="box row">
+        <div class="box bottleCircles">
+        <!--Auction-->
+        <p>Auction</p>
+          <div>$1</div>
+          <div>$1</div>
+          <div>$1</div>
+          <div>$1</div>
+        </div>
+        <div class="box cardRow cardslots">
+          <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>        
+        </div>
       </div>
-      Auction
-      <div class="cardslots">
-        <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
-      </div>
-      Hand
-      <div class="cardslots" v-if="players[playerId]">
-        <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="buyCard(card)" :key="index"/>
-      </div>
+      
+      <!--Dessa items är de man själv har-->
+      <div class="playerboard">
       Items
-      <div class="cardslots" v-if="players[playerId]">
+        <div class="cardslots" v-if="players[playerId]">
         <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
         </div>
         <!--       ev, </div>-->
+        
+        Hand
+      <div class="cardslots" v-if="players[playerId]">
+        <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="buyCard(card)" :key="index"/>
+      </div>
+      </div>
     </main>
     {{players}}
     {{marketValues}}
@@ -222,6 +247,54 @@ header {
 main {
   user-select: none;
 }
+
+.mainBoard {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: auto;
+  background-color: hotpink;
+  color: black;
+}
+
+.box {
+  background-color: whitesmoke;
+  border-radius: 5px;
+  border-color: tan;
+  padding: 1px;
+  /*height: 20px;*/
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+}
+
+.bottleCircles {
+  display: grid;
+  grid-template-columns: 40% 40%;
+  grid-template-rows:  20% 40% 40% ;
+  background-color: teal;
+}
+
+.bottleCircles p {
+  grid-column: 1/3;
+}
+
+.bottleCircles div {
+  text-align: center;
+  background-color: grey;
+  border: 1px;
+  border-radius: 50%;
+}
+
+.cardRow {
+  background-color: yellowgreen;
+}
+
+.playerboard {
+  background-color: indigo;
+}
+
 footer {
   margin-top: 5em auto;
 }
