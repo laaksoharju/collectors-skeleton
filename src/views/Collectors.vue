@@ -61,7 +61,13 @@
      </div>
   </div>
 
-      {{buyPlacement}} {{chosenPlacementCost}}
+    {{buyPlacement}} {{chosenPlacementCost}}
+    <!-- Början på att ta ut players, vems tur, nu får vi en array -->
+    <div v-for="(player,key) in players" :key = "key">
+      {{key}}
+    </div>
+    {{allPlayersId}}
+
       <CollectorsBuyActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
@@ -153,7 +159,10 @@ export default {
     }
   },
   computed: {
-    playerId: function() { return this.$store.state.playerId}
+    playerId: function() { return this.$store.state.playerId},
+    allPlayersId: function() {
+      return Object.keys(this.players) //få nyckeln till players - playerId
+    }
   },
   watch: {
     players: function(newP, oldP) {
