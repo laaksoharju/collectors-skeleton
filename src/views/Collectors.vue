@@ -81,10 +81,20 @@
           </button>
         </div>
 
-        <div id = 'Test' class="cardslots">
-          <h2>All players hands</h2>
-          <div v-for="(player, key) in players" :key="key">
+        <div id = 'AllPlayerCardsDiv'>
+          <h3>Players hands</h3>
+          <div id="AllPlayerHandsDiv" class="playercards" v-for="(player, key) in players" :key="key">
             <CollectorsCard v-for="(card, index) in player.hand" :card="card" :key="index"/>
+          </div>
+
+          <h3>Players items</h3>
+          <div id="AllPlayerItemsDiv" class="playercards" v-for="(player, key) in players" :key="key">
+            <CollectorsCard v-for="(card, index) in player.items" :card="card" :key="index"/>
+          </div>
+
+          <h3>Players skills</h3>
+          <div id="AllPlayerSkillsDiv" class="playercards" v-for="(player, key) in players" :key="key">
+            <CollectorsCard v-for="(card, index) in player.skills" :card="card" :key="index"/>
           </div>
         </div>
 
@@ -371,6 +381,15 @@ footer a:visited {
   align-self: center;
 }
 
+#AllPlayerCardsDiv {
+  grid-area: AllPlayerCardsDiv;
+  align-self: center;
+  display: grid;
+  grid-template-columns: 25% 25% 25%;
+  grid-template-areas:
+  "AllPlayerHandsDiv AllPlayerItemsDiv AllPlayerSkillsDiv"
+}
+
 #container {
   height: 100%;
   display: grid;
@@ -383,7 +402,7 @@ footer a:visited {
   "BuySkillDiv PlayerSkillsDiv"
   "RaiseValueDiv HandDiv"
   "AuctionDiv PlayerBoardDiv"
-  "WorkDiv PlayerBoardDiv"
+  "WorkDiv AllPlayerCardsDiv"
 }
 
 .cardslots {
@@ -398,7 +417,25 @@ footer a:visited {
   z-index: 0;
 }
 .cardslots div:hover {
-  transform: scale(1)translate(-25%,0);
+  transform: scale(0.8)translate(-25%,-25%);
+  z-index: 1;
+}
+
+.playercards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 30px);
+  grid-template-rows: repeat(auto-fill, 80px);
+}
+
+.playercards div {
+  transform: scale(0.2)translate(-200%,-200%);
+  transition:0.2s;
+  transition-timing-function: ease-out;
+  z-index: 0;
+}
+
+.playercards div:hover {
+  transform: scale(0.8)translate(-20%,-20%);
   z-index: 1;
 }
 
