@@ -10,6 +10,7 @@
           </h2> -->
           <div class="player-grid">
             <div
+              v-if="players.hasOwnProperty(playerId)"
               class="current-player"
               v-bind:style="{ 'background-color': players[playerId].color }"
             >
@@ -46,7 +47,7 @@
 
 
 <script>
-/eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }]/
+/eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }]/;
 
 // import CollectorsCard from '@/components/CollectorsCard.vue'
 // import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
@@ -287,7 +288,6 @@ footer a:visited {
 }
 
 .player-grid {
-
 }
 .current-player {
   height: 40vh;
