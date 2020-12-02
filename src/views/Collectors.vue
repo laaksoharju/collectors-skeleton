@@ -4,22 +4,28 @@
       <div class="collectors-game">
         <div class="game main-board">A</div>
         <div class="game player-board">
-          <h2>
+          <!-- <h2 v-if="players.hasOwnProperty(playerId)">
             Player Id {{ playerId }} has been assigned
-            <!-- {{ players[playerId].color }} color -->
-          </h2>
-          <!-- <div class="current-player">
-          Current Player: {{players[playerId]}}
-         </div><br>
-         Other Players <br> -->
-          <!-- {{ players }} -->
-          <div
-            class="other-players"
-            v-for="(value, key) in players"
-            v-bind:key="key"
-          >
-            <div v-if="key != playerId">{{ key }}: {{ value }}</div>
-            <br />
+            {{ players[playerId].color }} color
+          </h2> -->
+          <div class="player-grid">
+            <div
+              class="current-player"
+              v-bind:style="{ 'background-color': players[playerId].color }"
+            >
+              Current Player: {{ players[playerId] }}
+            </div>
+            <div
+              class="other-players"
+              v-for="otherPlayerId in getOtherPlayerIds()"
+              v-bind:key="otherPlayerId"
+              v-bind:style="{
+                'background-color': players[otherPlayerId].color,
+              }"
+            >
+              {{ players[otherPlayerId] }}
+              <br />
+            </div>
           </div>
         </div>
       </div>
@@ -38,8 +44,9 @@
   </div>
 </template>
 
+
 <script>
-/*eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }]*/
+/eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }]/
 
 // import CollectorsCard from '@/components/CollectorsCard.vue'
 // import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
@@ -81,6 +88,7 @@ export default {
       skillsOnSale: [],
       auctionCards: [],
       playerid: 0,
+      otherPlayers: [],
     };
   },
   computed: {
@@ -138,7 +146,6 @@ export default {
     this.$store.state.socket.on(
       "notifyPlayers",
       function (d) {
-        // console.log("Hello");
         this.players = d;
       }.bind(this)
     );
@@ -180,9 +187,15 @@ export default {
     selectAll: function (n) {
       n.target.select();
     },
-    // notifyPlayers: function () {
-    //   console.log("Hello there");
-    // },
+    getOtherPlayerIds: function () {
+      var otherPlayers = [];
+      for (var id of Object.keys(this.players)) {
+        if (id != this.$store.state.playerId) {
+          otherPlayers.push(id);
+        }
+      }
+      return otherPlayers;
+    },
     placeBottle: function (action, cost) {
       this.chosenPlacementCost = cost;
       this.$store.state.socket.emit("collectorsPlaceBottle", {
@@ -271,6 +284,20 @@ footer a:visited {
 .player-board {
   grid-column: 2;
   grid-row: 1;
+}
+
+.player-grid {
+
+}
+.current-player {
+  height: 40vh;
+  border-style: dashed;
+  color: black;
+}
+
+.other-players {
+  height: 15vh;
+  color: black;
 }
 
 @media screen and (max-width: 800px) {
