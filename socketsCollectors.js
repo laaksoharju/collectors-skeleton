@@ -19,7 +19,7 @@ function sockets(io, socket, data) {
     });
     socket.on('collectorsDrawCard', function(d) {
       io.to(d.roomId).emit('collectorsCardDrawn',
-        data.drawCard(d.roomId, d.playerId)
+      data.drawCard(d.roomId, d.playerId)
       );
     });
     socket.on('collectorsBuyCard', function(d) {
@@ -43,6 +43,11 @@ function sockets(io, socket, data) {
           players: data.getPlayers(d.roomId),
           skillsOnSale: data.getSkillsOnSale(d.roomId)
         }
+      );
+    });
+    socket.on('collectorsFakeMoreMoney', function(d) {
+      io.to(d.roomId).emit('collectorsMoneyFaked',
+      data.fakeMoreMoney(d.roomId, d.playerId)
       );
     });
 }
