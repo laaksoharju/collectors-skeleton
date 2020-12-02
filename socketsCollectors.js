@@ -45,6 +45,17 @@ function sockets(io, socket, data) {
         }
       );
     });
+
+    socket.on('CollectorsRaiseValue', function(d) {
+      data.raiseValue(d.roomId, d.playerId, d.card, d.cost)
+      io.to(d.roomId).emit('collectorsValueRaised', {
+          playerId: d.playerId,
+          players: data.getPlayers(d.roomId),
+          market: data.getMarket(d.roomId)
+        }
+      );
+    });
+
 }
 
 module.exports = sockets;

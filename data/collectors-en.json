@@ -3,5 +3,6 @@
 	"invite": "Invite other players with this link:",
 	"endTurn": "End turn",
 	"buyCard": "Buy a item",
-	"getSkill": "Get a skill"
+	"getSkill": "Get a skill",
+	"raiseValue": "Market, Raise a Value"
 }

@@ -38,11 +38,19 @@
       </div>
 
 <!-- lägger in RaiseValue div här -->
-      <div id ='RaiseValue' class="cardslots">
+      <div id ='RaiseValueDiv' class="cardslots">
         <h2>Raise value</h2>
-        <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
-      </div>
 
+        <CollectorsRaiseValueActions v-if="players[playerId]"
+        :labels="labels"
+        :player="players[playerId]"
+        :market="market"
+        :placement="marketPlacement"
+        @raiseValue="raiseValue($event)"
+        @placeBottle="placeBottle('raiseValue', $event)"/>
+
+      </div>
+<!-- slutar RaiseValue div här -->
 
       <div id = 'HandDiv' class="cardslots" v-if="players[playerId]">
         <h2>Hand</h2>
@@ -87,13 +95,15 @@
 import CollectorsCard from '@/components/CollectorsCard.vue'
 import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
 import CollectorsSkillActions from '@/components/CollectorsSkillActions.vue'
+import CollectorsRaiseValueActions from '@/components/CollectorsRaiseValueActions.vue'
 
 export default {
   name: 'Collectors',
   components: {
     CollectorsCard,
     CollectorsBuyActions,
-    CollectorsSkillActions
+    CollectorsSkillActions,
+    CollectorsRaiseValueActions
   },
   data: function () {
     return {
@@ -195,6 +205,15 @@ export default {
         this.skillsOnSale = d.skillsOnSale;
       }.bind(this)
     );
+
+    this.$store.state.socket.on('collectorsValueRaised',
+    function(d) {
+      console.log(d.playerId, "raised a value");
+      this.players = d.players;
+      this.market = d.market;
+    }.bind(this)
+  );
+
   },
   methods: {
     selectAll: function (n) {
@@ -238,6 +257,19 @@ getSkill: function (card) {
   }
 );
 },
+
+raiseValue: function (card) {
+  console.log("raiseValue", card);
+  this.$store.state.socket.emit('CollectorsRaiseValue', {
+    roomId: this.$route.params.id,
+    playerId: this.playerId,
+    card: card,
+    cost: this.chosenPlacementCost
+  }
+);
+},
+
+
 handleAction: function (card) {
   console.log("handleAction", card);
   if (this.chosenAction === "buyItem") {
@@ -288,8 +320,8 @@ footer a:visited {
   align-self: center;
 }
 
-#RaiseValue {
-  grid-area: RaiseValue;
+#RaiseValueDiv {
+  grid-area: RaiseValueDiv;
   align-self: center;
 }
 
@@ -330,7 +362,7 @@ footer a:visited {
   "BuySkillDiv PlayerSkillsDiv"
   "WorkDiv HandDiv"
   "AuctionDiv PlayerBoardDiv"
-  "RaiseValue PlayerBoardDiv"
+  "RaiseValueDiv PlayerBoardDiv"
 }
 
 .cardslots {
