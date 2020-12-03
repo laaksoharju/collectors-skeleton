@@ -39,11 +39,17 @@
        <div class = "workPool">
          Work Pool
        </div>
+
+
        <div class = "auctionPool">
-         Auction Pool
-         <div class="cardslots">
+        <div class= "titleAuctionPool"> Auction Pool</div>
+         <div class="cardslots auctionslot">
            <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
          </div>
+         <div class = "EnergyBottleCoinWhiteTwo"></div> <!-- Olika flaskor med vita coins, 1 2 eller 0 -->
+         <div class = "EnergyBottleCoinWhiteOne"></div>
+         <div class = "EnergyBottleCoinWhiteNoll"></div>
+         <div class = "EnergyBottleCoinWhiteNoll second"></div>
        </div>
        <div class="playerBoard">
           Player {{playerId}}'s Board
@@ -307,8 +313,7 @@ export default {
   }
 
   .EnergyBottles{
-/*    grid-row-start: 1;
-    grid-row-end: 3;*/
+
     width:50px;
     height:50px;
     background-image:  url('/images/Gain-skill-bottle.png');
@@ -322,6 +327,9 @@ export default {
     background-image:  url('/images/Gain-skill-bottle-coin.png');
     background-size: cover;
   }
+
+
+
   .itemPool{
     grid-column: 3/span 5 ;
     grid-row: 2/span 4;
@@ -345,6 +353,7 @@ export default {
     grid-template-columns: repeat(5, 60px);
     grid-template-rows: repeat(5, 27.5px);
     }
+
   .workPool{
     grid-column: 3/span 5;
     grid-row: 6/span 5;
@@ -360,11 +369,50 @@ export default {
     grid-row: 2/span 13;
     width: auto;
     height: auto;
-    grid-template-columns: repeat(100, 12px);
-    grid-template-rows: repeat(100,150px);
     background-color: beige;
     color: black;
+    display: grid;
+    grid-template-columns: repeat(3, 50px);
+    grid-template-rows: repeat(6,100px);
+    grid-auto-flow: column;
   }
+
+.titleAuctionPool{
+  grid-column: 3;
+  grid-row: 1;
+}
+  .EnergyBottleCoinWhiteNoll{
+    width:45px;
+    height:45px;
+    background-image:  url('/images/Coin-white.png');
+    background-size: cover;
+    grid-column: 1;
+    grid-row: 3;
+  }
+  .second{
+    grid-column: 1;
+    grid-row: 4;
+  }
+
+  .EnergyBottleCoinWhiteTwo{
+    width:45px;
+    height:45px;
+    background-image:  url('/images/Coin-white-2.png');
+    background-size: cover;
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .EnergyBottleCoinWhiteOne{
+    width:45px;
+    height:45px;
+    background-image:  url('/images/Coin-white-1.png');
+    background-size: cover;
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+
   .playerBoard {
     grid-column: 11/span 5;
     grid-row: 2/span 4;
@@ -425,6 +473,10 @@ export default {
     transition-timing-function: ease-out;
     z-index: 0;
   }
+
+.au
+
+
 
   .skillCard {
     transform: scale(0.25);
