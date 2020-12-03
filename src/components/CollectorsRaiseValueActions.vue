@@ -5,6 +5,11 @@
         <div v-for="(type, index) in marketValues" :key="index">
           {{ type }}
         </div>
+        <div v-for="(card, index) in market" :key="index">
+          {{ index }}
+          <CollectorsCard
+            :card="card"/>
+        </div>
       </div>
       <div>
         <div class="buttons" v-for="(p, index) in placement" :key="index">
@@ -36,7 +41,8 @@ export default {
     skillsOnSale: Array,
     auctionCards: Array,
     marketValues: Object,
-    placement: Array
+    placement: Array,
+    market: Array
   },
   methods: {
     cannotAfford: function (cost) {
@@ -64,7 +70,7 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .get-skills {
+  .raise-values {
     display: grid;
     grid-template-columns: repeat(auto-fill, 130px);
   }

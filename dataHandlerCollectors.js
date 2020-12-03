@@ -233,7 +233,6 @@ Data.prototype.raiseValue = function (roomId, playerId, card, cost) {
     }
     room.market.push(...c);
     console.log(room.market);
-    console.log(room.skillsOnSale);
     room.players[playerId].money -= cost;
 
   }

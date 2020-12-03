@@ -33,6 +33,7 @@
         :marketValues="marketValues"
         :skillsOnSale="skillsOnSale"
         :auctionCards="auctionCards"
+        :market="market"
         :placement="marketPlacement"
         @raiseValue="raiseValue($event)"
         @placeBottle="placeBottle('market', $event)"/>
@@ -66,7 +67,7 @@
       </div>
 
       <div id="PlayerBoardDiv">
-        <h2>PlayerBoard</h2>
+        <h2>Player boards</h2>
         <!-- Displayar current money -->
         <p v-if="players[playerId]"> Current money: {{ players[playerId].money }} </p>
         <!-- Displayar current money -->
@@ -82,30 +83,30 @@
         </div>
 
         <div id="AllPlayerCardsDiv">
-
+          
           <div id="AllPlayerIdDiv">
-            <h3>Player Names</h3>
+            <h3>Names</h3>
             <div class="playercards" v-for="(player, key) in players" :key="key">
-              {{ playerId }}
+              {{ key }}
             </div>
           </div>
 
           <div id="AllPlayerHandsDiv">
-            <h3>Players hands</h3>
+            <h3>Hands</h3>
             <div class="playercards" v-for="(player, key) in players" :key="key">
               <CollectorsCard v-for="(card, index) in player.hand" :card="card" :key="index"/>
             </div>
           </div>
 
           <div id="AllPlayerItemsDiv">
-            <h3>Players items</h3>
+            <h3>Items</h3>
             <div class="playercards" v-for="(player, key) in players" :key="key">
               <CollectorsCard v-for="(card, index) in player.items" :card="card" :key="index"/>
             </div>
           </div>
 
           <div id="AllPlayerSkillsDiv">
-            <h3>Players skills</h3>
+            <h3>Skills</h3>
             <div class="playercards" v-for="(player, key) in players" :key="key">
               <CollectorsCard v-for="(card, index) in player.skills" :card="card" :key="index"/>
             </div>
@@ -205,6 +206,7 @@ export default {
             this.marketValues = d.marketValues;
             this.skillsOnSale = d.skillsOnSale;
             this.auctionCards = d.auctionCards;
+            this.market = d.market;
             this.buyPlacement = d.placements.buyPlacement;
             this.skillPlacement = d.placements.skillPlacement;
             this.marketPlacement = d.placements.marketPlacement;
