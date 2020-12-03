@@ -3,6 +3,7 @@
     <main>
       <div class="table">
       <div class="board">
+
        <div class = "skillPool">
          Skill Pool
          <div class = "EnergyBottles">
@@ -16,11 +17,10 @@
          </div>
          <div class = "EnergyBottleCoin">
          </div>
-        <div class = 'cardslots'>
-           <div class="skillCard">
-             <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
+
+           <div class="skillCard" v-for="(card, index) in skillsOnSale" :key="index">
+             <CollectorsCard :card="card" />
            </div>
-        </div>
        </div>
        <div class = "itemPool">
         Item Pool
@@ -48,6 +48,12 @@
        <div class="playerBoard">
           Player {{playerId}}'s Board
       </div>
+      <div class="playerHand">
+        Hand
+        <div class="cardslots" v-if="players[playerId]">
+          <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="buyCard(card)" :key="index"/>
+        </div>
+      </div>
       <div class="turnCounter">
         <h3> Who's turn? </h3>
         <h2> Player {{playerId}} </h2>
@@ -55,7 +61,13 @@
      </div>
   </div>
 
-      {{buyPlacement}} {{chosenPlacementCost}}
+    {{buyPlacement}} {{chosenPlacementCost}}
+    <!-- Början på att ta ut players, vems tur, nu får vi en array -->
+    <div v-for="(player,key) in players" :key = "key">
+      {{key}}
+    </div>
+    {{allPlayersId}}
+
       <CollectorsBuyActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
@@ -77,10 +89,10 @@
       <!--<div class="cardslots">
         <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
       </div>-->
-      Hand
+    <!--  Hand
       <div class="cardslots" v-if="players[playerId]">
         <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="buyCard(card)" :key="index"/>
-      </div>
+      </div> -->
 
       <!-- <div class="cardslots" v-if="players[playerId]">
         <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
@@ -147,7 +159,10 @@ export default {
     }
   },
   computed: {
-    playerId: function() { return this.$store.state.playerId}
+    playerId: function() { return this.$store.state.playerId},
+    allPlayersId: function() {
+      return Object.keys(this.players) //få nyckeln till players - playerId
+    }
   },
   watch: {
     players: function(newP, oldP) {
@@ -279,12 +294,11 @@ export default {
     display: grid;
     grid-template-columns: repeat(3, 50px);
     grid-template-rows: repeat(5,50px);
-
+    grid-auto-flow: column;
 
   }
 
   .EnergyBottles{
-    grid-column: 1;
 /*    grid-row-start: 1;
     grid-row-end: 3;*/
     width:50px;
@@ -294,7 +308,6 @@ export default {
   }
 
   .EnergyBottleCoin{
-    grid-column: 1;
 /*      grid-row: 4;*/
     width:50px;
     height:50px;
@@ -354,6 +367,10 @@ export default {
     background-color: pink ;
     color: black;
   }
+  .playerHand {
+    grid-column: 9/span 5;
+    grid-row: 6/span 4;
+  }
 
   .turnCounter {
     background-color: green;
@@ -381,8 +398,6 @@ export default {
     display: grid;
     grid-template-columns: repeat(auto-fill, 130px);
     grid-template-rows: repeat(auto-fill, 1px);
-    grid-column: 2;
-    grid-row: 2;
   /*  display: grid;
     grid-template-columns: repeat(100, 15px);
     grid-template-rows: repeat(1,150px);*/
@@ -397,10 +412,11 @@ export default {
   }
 
   .skillCard {
-
-    display: grid;
+    transform: scale(0.3);
+  /*  display: grid;
     grid-template-columns: repeat(1, 15px);
-    grid-template-rows: repeat(5,160px);
+    grid-template-rows: repeat(5,160px);*/
+
 
   }
   .cardslots div:hover {
