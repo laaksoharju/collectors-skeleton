@@ -83,7 +83,7 @@
         </div>
 
         <div id="AllPlayerCardsDiv">
-          
+
           <div id="AllPlayerIdDiv">
             <h3>Names</h3>
             <div class="playercards" v-for="(player, key) in players" :key="key">
@@ -245,7 +245,8 @@ export default {
     function(d) {
       console.log(d.playerId, "raised a value");
       this.players = d.players;
-      this.marketValues = d.market;
+      this.marketValues = d.marketValues;
+      this.market = d.market;
       this.skillsOnSale = d.skillsOnSale;
       this.auctionCards = d.auctionCards;
     }.bind(this)

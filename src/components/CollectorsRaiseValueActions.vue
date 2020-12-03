@@ -1,12 +1,11 @@
 <template>
     <div>
       <h1>{{ labels.raiseValue }}</h1>
-      <div class="raise-value">
         <div v-for="(type, index) in marketValues" :key="index">
           {{ type }}
         </div>
+        <div class="raise-value">
         <div v-for="(card, index) in market" :key="index">
-          {{ index }}
           <CollectorsCard
             :card="card"/>
         </div>
@@ -28,12 +27,12 @@
 </template>
 
 <script>
-// import CollectorsCard from '@/components/CollectorsCard.vue'
+import CollectorsCard from '@/components/CollectorsCard.vue'
 
 export default {
   name: 'CollectorsRaiseValueActions',
   components: {
-    // CollectorsCard
+    CollectorsCard
   },
   props: {
     labels: Object,
@@ -70,7 +69,7 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .raise-values {
+  .raise-value {
     display: grid;
     grid-template-columns: repeat(auto-fill, 130px);
   }
