@@ -81,20 +81,34 @@
           </button>
         </div>
 
-        <div id = 'AllPlayerCardsDiv'>
-          <h3>Players hands</h3>
-          <div id="AllPlayerHandsDiv" class="playercards" v-for="(player, key) in players" :key="key">
-            <CollectorsCard v-for="(card, index) in player.hand" :card="card" :key="index"/>
+        <div id="AllPlayerCardsDiv">
+
+          <div id="AllPlayerIdDiv">
+            <h3>Player Names</h3>
+            <div class="playercards" v-for="(player, key) in players" :key="key">
+              {{ playerId }}
+            </div>
           </div>
 
-          <h3>Players items</h3>
-          <div id="AllPlayerItemsDiv" class="playercards" v-for="(player, key) in players" :key="key">
-            <CollectorsCard v-for="(card, index) in player.items" :card="card" :key="index"/>
+          <div id="AllPlayerHandsDiv">
+            <h3>Players hands</h3>
+            <div class="playercards" v-for="(player, key) in players" :key="key">
+              <CollectorsCard v-for="(card, index) in player.hand" :card="card" :key="index"/>
+            </div>
           </div>
 
-          <h3>Players skills</h3>
-          <div id="AllPlayerSkillsDiv" class="playercards" v-for="(player, key) in players" :key="key">
-            <CollectorsCard v-for="(card, index) in player.skills" :card="card" :key="index"/>
+          <div id="AllPlayerItemsDiv">
+            <h3>Players items</h3>
+            <div class="playercards" v-for="(player, key) in players" :key="key">
+              <CollectorsCard v-for="(card, index) in player.items" :card="card" :key="index"/>
+            </div>
+          </div>
+
+          <div id="AllPlayerSkillsDiv">
+            <h3>Players skills</h3>
+            <div class="playercards" v-for="(player, key) in players" :key="key">
+              <CollectorsCard v-for="(card, index) in player.skills" :card="card" :key="index"/>
+            </div>
           </div>
         </div>
 
@@ -385,9 +399,9 @@ footer a:visited {
   grid-area: AllPlayerCardsDiv;
   align-self: center;
   display: grid;
-  grid-template-columns: 25% 25% 25%;
+  grid-template-columns: 25% 25% 25% 25%;
   grid-template-areas:
-  "AllPlayerHandsDiv AllPlayerItemsDiv AllPlayerSkillsDiv"
+  "AllPlayerIdDiv AllPlayerHandsDiv AllPlayerItemsDiv AllPlayerSkillsDiv"
 }
 
 #container {
