@@ -58,15 +58,23 @@
         <h3> Who's turn? </h3>
         <h2> Player {{playerId}} </h2>
       </div>
+
+      <div class="showPlayers">
+        The players in this room:
+        <div v-for="(player,key) in players" :key = "key">
+          <div>
+            {{key}}
+          </div>
+        </div>
+      </div>
      </div>
+     <!-- Början på att ta ut players, vems tur, här får vi en array
+     {{allPlayersId}} -->
+
   </div>
 
     {{buyPlacement}} {{chosenPlacementCost}}
-    <!-- Början på att ta ut players, vems tur, nu får vi en array -->
-    <div v-for="(player,key) in players" :key = "key">
-      {{key}}
-    </div>
-    {{allPlayersId}}
+
 
       <CollectorsBuyActions v-if="players[playerId]"
         :labels="labels"
@@ -276,7 +284,7 @@ export default {
   .board {
 	display: grid;
 	grid-template-columns: repeat(15,90px);
-	grid-template-rows: repeat(16, 45px)  ;
+	grid-template-rows: repeat(20, 45px)  ;
 	grid-gap: 0px;
 	margin: 20px ;
 	width: 994px;
@@ -286,14 +294,14 @@ export default {
 }
   .skillPool{
     grid-column: 1 / span 2;
-    grid-row: 2/span 8 ;
+    grid-row: 2/span 13 ;
     width: auto;
 		height: auto;
     background-color: #dce5cc;
     color: black;
     display: grid;
     grid-template-columns: repeat(3, 50px);
-    grid-template-rows: repeat(5,50px);
+    grid-template-rows: repeat(6,100px);
     grid-auto-flow: column;
 
   }
@@ -315,7 +323,7 @@ export default {
     background-size: cover;
   }
   .itemPool{
-    grid-column: 3/span 3 ;
+    grid-column: 3/span 5 ;
     grid-row: 2/span 4;
     width: auto;
     height: auto;
@@ -325,8 +333,8 @@ export default {
     color: black;
   }
   .marketPool{
-    grid-column: 3/span 3;
-    grid-row: 10/span 4;
+    grid-column: 3/span 5;
+    grid-row: 11/span 4;
     width: auto;
     height: auto;
   /*  grid-template-columns: repeat(100, 12px);
@@ -338,8 +346,8 @@ export default {
     grid-template-rows: repeat(5, 27.5px);
     }
   .workPool{
-    grid-column: 3/span 3;
-    grid-row: 6/span 4;
+    grid-column: 3/span 5;
+    grid-row: 6/span 5;
     width: auto;
     height: auto;
     grid-template-columns: repeat(100, 12px);
@@ -348,8 +356,8 @@ export default {
     color: black;
   }
   .auctionPool{
-    grid-column: 6/span 2;
-    grid-row: 2/span 12;
+    grid-column: 8/span 2;
+    grid-row: 2/span 13;
     width: auto;
     height: auto;
     grid-template-columns: repeat(100, 12px);
@@ -358,7 +366,7 @@ export default {
     color: black;
   }
   .playerBoard {
-    grid-column: 9/span 5;
+    grid-column: 11/span 5;
     grid-row: 2/span 4;
     width: auto;
     height: auto;
@@ -368,15 +376,22 @@ export default {
     color: black;
   }
   .playerHand {
-    grid-column: 9/span 5;
+    grid-column: 11/span 5;
     grid-row: 6/span 4;
   }
 
   .turnCounter {
     background-color: green;
     color:white;
-    grid-column: 6/ span 2;
-    grid-row: 15/span 2;
+    grid-column: 4/ span 2;
+    grid-row: 16/span 2;
+    text-align: center;
+  }
+  .showPlayers {
+    background-color: #406c72;
+    color: white;
+    grid-column: 1/ span 2;
+    grid-row: 16/span 2;
     text-align: center;
   }
 
@@ -412,12 +427,14 @@ export default {
   }
 
   .skillCard {
-    transform: scale(0.3);
+    transform: scale(0.25);
   /*  display: grid;
     grid-template-columns: repeat(1, 15px);
     grid-template-rows: repeat(5,160px);*/
-
-
+  }
+  .skillCard div:hover {
+    transform: scale(2)translate(-25%,0);
+    z-index: 1;
   }
   .cardslots div:hover {
     transform: scale(1)translate(-25%,0);
