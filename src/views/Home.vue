@@ -3,7 +3,7 @@
     <div>
       <h1>COLLECTORS</h1>
       <div>
-        <h2 >Welcome to play Collectors, please choose a setup for the game.<nav>
+        <h2> Welcome to play Collectors, please choose a setup for the game.<nav>
         </nav>In the next step you will get a link to send to the other players. </h2>
 
           <a id='firstButton' href="#identifier"><img src='https://website-bamedag.netdna-ssl.com/fileadmin/media/_processed_/8/8/csm_7-9-months-introtext_7588a3bb0c.jpg' alt="Span" title="Click for rules!" width="200"></a>
@@ -13,15 +13,15 @@
           <button id=startButton @click="setupCollectors(i+1, 'en')"><h3>Set up a game of Collectors for {{i+1}} players </h3></button>
         </div>
 
-      </ul>
 
+      </ul>
       <!--Rule button and id for where the text prints out -->
       <button title="Rules!" type="button" id="rulesButton" class="rulesButton" v-on:click="ruleFunction"><h3>Click here to read the rules!</h3></button>
-      <div id="ruleContent" ></div>
+      <div id="ruleContent"></div>
+
 
         <!--- sorry riktigt dålig lösning:)--><br><br><br><br><br><br><br><br>
           <a name="identifier">RULES</a>
-      </p>
 
 
 
@@ -33,6 +33,7 @@
 
 export default {
   name: 'Home',
+  rules: "",
   created: function () {
     this.$store.commit('SET_ROOM_ID');
   },
@@ -48,24 +49,24 @@ export default {
       console.log("button clicked");
       var placement = document.getElementById("ruleContent");
       var rules=
-      ["Collectors is a game for 2-4 players and the winning player is" ,
-      "the one with the most valuable collection of rare collectables" ,
+      ["Collectors is a game for 2-4 players and the winning player is" + '\n' +
+
+      "the one with the most valuable collection of rare collectables",
       "in the end. The game board is divided into 5 different areas," ,
       "buy item, gain skill, start auction, work and raise value.",
       "You use Buy Item if you want to buy one card from the item pool",
       "(the red ish area) or from your own hand. The cost will depend on",
       "how many cards there are with the same symbol in the Market pool" ,
       "(the blue ish area). The cost will also contain the cost for where ",
-      "the bottle was placed."
+      "the bottle was placed."];
 
-    ];
       var text= document.createElement("div");
       var output = document.createTextNode(rules);
       text.appendChild(output);
       placement.appendChild(text);
 
     }
-}}
+}};
 
 </script>
 <style scoped>
@@ -113,6 +114,13 @@ color:white;
   transition-duration: 0.4s;
   background-color: #3B737A ;
   color:white;
+}
+
+#ruleContent {
+  padding: 50px 50px 50px 50px;
+  font-size: 20px;
+  font-style: oblique;
+
 }
 
 </style>
