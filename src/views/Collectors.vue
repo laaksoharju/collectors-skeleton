@@ -43,7 +43,7 @@
 
        <div class = "auctionPool">
         <div class= "titleAuctionPool"> Auction Pool</div>
-         <div class="cardslots auctionslot">
+         <div class="cardslots">
            <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
          </div>
          <div class = "EnergyBottleCoinWhiteTwo"></div> <!-- Olika flaskor med vita coins, 1 2 eller 0 -->
@@ -474,7 +474,6 @@ export default {
     z-index: 0;
   }
 
-.au
 
 
 
