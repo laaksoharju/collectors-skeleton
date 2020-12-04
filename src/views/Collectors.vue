@@ -1,18 +1,13 @@
 <template>
   <div>
     <main>
-<!-- <CollectorsCard v-for="(que, index) in skillsOnSale" :card="que" :key="index"/> -->
          
  <GameBoard 
   :itemsOnSale="itemsOnSale"
  :skillsOnSale="skillsOnSale"
  :auctionCards="auctionCards"
   />
-                  <!-- <CollectorsCard
-              v-for="(card, index) in skillsOnSale"
-              :card="card"
-              :key="index"
-            /> -->
+
       {{ buyPlacement }} {{ chosenPlacementCost }}
       <CollectorsBuyActions
         v-if="players[playerId]"
@@ -37,7 +32,6 @@
         />
       </div>
 
-      <!--Dessa items är de man själv har-->
       <div class="playerboard">
         Items
         <div class="cardslots" v-if="players[playerId]">
@@ -47,8 +41,6 @@
             :key="index"
           />
         </div>
-        <!--       ev, </div>-->
-
         Hand
         <div class="cardslots" v-if="players[playerId]">
           <CollectorsCard
