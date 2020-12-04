@@ -287,6 +287,8 @@ export default {
     padding-left: 50px;
     padding-right: 50px;
   }
+
+
   .board {
 	display: grid;
 	grid-template-columns: repeat(15,90px);
@@ -309,8 +311,7 @@ export default {
     grid-template-columns: repeat(3, 50px);
     grid-template-rows: repeat(6,100px);
     grid-auto-flow: column;
-
-  }
+      }
 
   .EnergyBottles{
 
@@ -374,7 +375,6 @@ export default {
     display: grid;
     grid-template-columns: repeat(3, 50px);
     grid-template-rows: repeat(6,100px);
-    grid-auto-flow: column;
   }
 
 .titleAuctionPool{
