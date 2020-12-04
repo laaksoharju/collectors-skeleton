@@ -21,6 +21,7 @@
           :card="card"
           :key="index"
         />
+
               </div>
         <!--       ev inte. </div>-->
 
