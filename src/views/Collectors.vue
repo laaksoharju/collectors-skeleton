@@ -80,11 +80,15 @@
           <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="buyCard(card)" :key="index"/>
         </div>
       </div>
+      <!-- Vems tur? Start på ruta för att visa vems tur -->
       <div class="turnCounter">
         <h3> Who's turn? </h3>
-        <h2> Player {{playerId}} </h2>
-      </div>
+        <button class="turnButton"  @click= "changeTurn">  <!--  @click= "changeTurn" -->
+          <h2>  Player {{currentPlayer}}.</h2> <h3> Press here when you're done.</h3>
 
+        </button>
+      </div>
+      <!-- Ruta för att visa vilka spelare som är i rummet -->
       <div class="showPlayers">
         The players in this room:
         <div v-for="(player,key) in players" :key = "key">
@@ -93,9 +97,12 @@
           </div>
         </div>
       </div>
+
      </div>
-     <!-- Början på att ta ut players, vems tur, här får vi en array
-     {{allPlayersId}} -->
+     TEST
+
+      Början på att ta ut players, vems tur, här får vi en array
+     {{allPlayersId}}
 
   </div>
 
@@ -167,6 +174,7 @@ export default {
                   y: 0 },
       labels: {},
       players: {},
+      currentPlayer: "",
       // playerId: {
       //   hand: [],
       //   money: 1,
@@ -258,6 +266,11 @@ export default {
         this.itemsOnSale = d.itemsOnSale;
       }.bind(this)
     );
+    this.$store.state.socket.on('collectorsChangedTurn',
+      function(d) {
+          this.currentPlayer = d;
+      }.bind(this)
+    );
   },
   methods: {
     selectAll: function (n) {
@@ -289,9 +302,21 @@ export default {
           cost: this.marketValues[card.market] + this.chosenPlacementCost
         }
       );
+    },
+    changeTurn: function () {
+      console.log("TEST");
+
+      this.$store.state.socket.emit('collectorsChangeTurn', {
+          roomId: this.$route.params.id,
+          currentPlayer: this.currentPlayer
+
+        }
+      );
     }
-  },
+  }
 }
+
+
 </script>
 <style scoped>
   header {
@@ -528,6 +553,20 @@ export default {
   .buttons{
     grid-column: 1;
     grid-row: 10;
+  }
+  .turnButton {
+    grid-column: 4/ span 1;
+    grid-row: 16/span 1;
+    background-color: lightgreen;
+    cursor: pointer;
+    border: 10px dotted green ;
+    text-align: center;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  }
+  .turnButton:hover {
+  background-color: green;
+  color: white;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
   }
   footer {
     margin-top: 5em auto;
