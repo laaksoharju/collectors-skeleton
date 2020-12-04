@@ -1,6 +1,18 @@
 <template>
   <div>
     <main>
+<!-- <CollectorsCard v-for="(que, index) in skillsOnSale" :card="que" :key="index"/> -->
+         
+ <GameBoard 
+  :itemsOnSale="itemsOnSale"
+ :skillsOnSale="skillsOnSale"
+ :auctionCards="auctionCards"
+  />
+                  <!-- <CollectorsCard
+              v-for="(card, index) in skillsOnSale"
+              :card="card"
+              :key="index"
+            /> -->
       {{ buyPlacement }} {{ chosenPlacementCost }}
       <CollectorsBuyActions
         v-if="players[playerId]"
@@ -23,61 +35,6 @@
           :card="card"
           :key="index"
         />
-      </div>
-      <div id="game-board">
-        <!--Items-->
-        <div id="item-section" class="board-section">
-          <div class="section-slots">
-            <h2 class="category-title">Items</h2>
-            <div class="bottleCircles">
-              <div class="bottleCircle">$1</div>
-              <div class="bottleCircle">$1</div>
-              <div class="bottleCircle">$1</div>
-              <div class="bottleCircle">$1</div>
-            </div>
-          </div>
-          <div class="section-card cardslots"></div>
-        </div>
-
-        <!--Skills-->
-        <div id="skill-section" class="board-section">
-          <div class="section-slots">
-            <h2 class="category-title">Skills</h2>
-            <div class="bottleCircles">
-              <div class="bottleCircle">$1</div>
-              <div class="bottleCircle">$1</div>
-              <div class="bottleCircle">$1</div>
-              <div class="bottleCircle">$1</div>
-            </div>
-          </div>
-          <div class="section-card cardslots">
-            <CollectorsCard
-              v-for="(card, index) in skillsOnSale"
-              :card="card"
-              :key="index"
-            />
-          </div>
-        </div>
-
-        <!--Auction-->
-        <div id="auction-section" class="board-section">
-          <div class="section-slots">
-            <h2 class="category-title">Auction</h2>
-            <div class="bottleCircles">
-              <div class="bottleCircle">$1</div>
-              <div class="bottleCircle">$1</div>
-              <div class="bottleCircle">$1</div>
-              <div class="bottleCircle">$1</div>
-            </div>
-          </div>
-          <div class="section-card cardslots">
-            <CollectorsCard
-              v-for="(card, index) in auctionCards"
-              :card="card"
-              :key="index"
-            />
-          </div>
-        </div>
       </div>
 
       <!--Dessa items är de man själv har-->
@@ -128,12 +85,15 @@
 
 import CollectorsCard from "@/components/CollectorsCard.vue";
 import CollectorsBuyActions from "@/components/CollectorsBuyActions.vue";
+import GameBoard from "@/components/GameBoard.vue";
+
 
 export default {
   name: "Collectors",
   components: {
     CollectorsCard,
     CollectorsBuyActions,
+    GameBoard,
   },
   data: function () {
     return {
@@ -298,16 +258,16 @@ main {
 
 #game-board {
   width: 60%;
-  border: 1px solid black;
   background-color: #eeeeeeff;
+  border: 1px solid #19181850;
   color: black;
 }
 
 .board-section {
   padding: 10px;
   display: flex;
-  align-items: flex-end;
-  border: 1px solid black;
+  align-items: center;
+  border: 1px solid #19181850;
 }
 
 #item-section {
@@ -318,8 +278,17 @@ main {
   background-color: #93c47dff;
 }
 
-#raise-value-section {
+.raise-value-slot-container {
+  width: 80%;
+  display: flex;
+  justify-content: space-around;
+}
+.raise-value-slot {
   background-color: #6d9eebff;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid #19181850;
 }
 
 #auction-section {
@@ -328,6 +297,8 @@ main {
 
 .section-slots {
   width: 20%;
+  display: flex;
+  flex-direction: column;
 }
 .section-card {
   width: 80%;
@@ -346,7 +317,9 @@ main {
 }
 
 .bottleCircles {
+  width: 80%;
   display: grid;
+  align-self: center;
   grid-gap: 5px;
   grid-template-columns: 50% 50%;
   grid-template-rows: 50% 50%;
