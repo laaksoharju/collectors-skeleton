@@ -22,12 +22,25 @@
              <CollectorsCard :card="card" />
            </div>
        </div>
+
        <div class = "itemPool">
         Item Pool
-         <div class="cardslots" v-if="players[playerId]">
-           <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
-         </div>
+          <div class = "ItemBottleCoinOne">
+          </div>
+          <div class = "ItemBottleCoinOne">
+          </div>
+          <div class = "ItemBottleCoinTwo">
+          </div>
+          <div class = "ItemBottleCoinThree">
+          </div>
+
+
+          <div class="itemCard" v-if="players[playerId]">
+            <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
+          </div>
        </div>
+
+
        <div class = "marketPool">
          Market Pool
          <div class = "iconBird"></div>
@@ -297,7 +310,8 @@ export default {
 	height: 994px;
 	background: $black;
 	border: 2px solid $black;
-}
+  }
+
   .skillPool{
     grid-column: 1 / span 2;
     grid-row: 2/span 13 ;
@@ -307,10 +321,9 @@ export default {
     color: black;
     display: grid;
     grid-template-columns: repeat(3, 50px);
-    grid-template-rows: repeat(6,100px);
+    grid-template-rows: repeat(6,50px);
     grid-auto-flow: column;
-
-  }
+    }
 
   .EnergyBottles{
 
@@ -321,7 +334,7 @@ export default {
   }
 
   .EnergyBottleCoin{
-/*      grid-row: 4;*/
+
     width:50px;
     height:50px;
     background-image:  url('/images/Gain-skill-bottle-coin.png');
@@ -335,11 +348,38 @@ export default {
     grid-row: 2/span 4;
     width: auto;
     height: auto;
-    grid-template-columns: repeat(100, 12px);
-    grid-template-rows: repeat(100,150px);
+  /*  grid-template-columns: repeat(100, 12px);
+    grid-template-rows: repeat(100,150px);*/
     background-color: #f0d9cc ;
     color: black;
+    display: grid;
+    grid-template-columns: repeat(5, 50px);
+    grid-template-rows: repeat(2,50px);
+    grid-auto-flow: row;
   }
+
+  .ItemBottleCoinOne{
+    width:50px;
+    height:50px;
+    background-image:  url('/images/item-bottle-coin-one.png');
+    background-size: cover;
+  }
+
+  .ItemBottleCoinTwo{
+    width:50px;
+    height:50px;
+    background-image:  url('/images/item-bottle-coin-two.png');
+    background-size: cover;
+  }
+
+  .ItemBottleCoinThree{
+    width:50px;
+    height:50px;
+    background-image:  url('/images/item-bottle-coin-three.png');
+    background-size: cover;
+  }
+
+
   .marketPool{
     grid-column: 3/span 5;
     grid-row: 11/span 4;
@@ -483,10 +523,15 @@ export default {
     grid-template-columns: repeat(1, 15px);
     grid-template-rows: repeat(5,160px);*/
   }
-  .skillCard div:hover {
+  .skillCard div:hover{
     transform: scale(2)translate(-25%,0);
     z-index: 1;
   }
+
+  .itemCard{
+    transform: scale(0.3);
+  }
+
   .cardslots div:hover {
     transform: scale(1)translate(-25%,0);
     z-index: 1;
