@@ -23,6 +23,7 @@
            </div>
        </div>
 
+
        <div class = "itemPool">
         Item Pool
           <div class = "ItemBottleCoinOne">
@@ -49,8 +50,14 @@
          <div class = "iconFilm"></div>
          <div class = "iconTech"></div>
        </div>
+
        <div class = "workPool">
          Work Pool
+         <div class = "Alt1"></div>
+         <div class = "Alt2"></div>
+         <div class = "Alt3"></div>
+         <div class = "Alt4"></div>
+
        </div>
 
 
@@ -326,7 +333,6 @@ export default {
     }
 
   .EnergyBottles{
-
     width:50px;
     height:50px;
     background-image:  url('/images/Gain-skill-bottle.png');
@@ -399,11 +405,47 @@ export default {
     grid-row: 6/span 5;
     width: auto;
     height: auto;
-    grid-template-columns: repeat(100, 12px);
-    grid-template-rows: repeat(100,150px);
+    display:grid;
+    grid-template-columns: repeat(3, 150px);
+    grid-template-rows: repeat(3,50px);
     background-color: #f5f2cc;
     color: black;
   }
+
+  .Alt1 {
+    /grid-column: 1 ;
+    grid-row: 1;
+    width: 150px;
+    height: 80px;
+    background-image: url('/images/WorkPoolAlt1.jpg');
+    background-size: cover;
+  }
+  .Alt2 {
+    grid-column: 1 ;
+    grid-row: 2;
+    width: 150px;
+    height: 80px;
+    background-image: url('/images/WorkPoolAlt2.jpg');
+    background-size: cover;
+  }
+
+  .Alt3 {
+    grid-column: 1 / span 2 ;
+    grid-row: 3;
+    width: 150px;
+    height: 80px;
+    background-image: url('/images/WorkPoolAlt3.jpg');
+    background-size: cover;
+  }
+  .Alt4 {
+    grid-column: 1 ;
+    grid-row: 4;
+    width: 150px;
+    height: 80px;
+    background-image: url('/images/WorkPoolAlt4.jpg');
+    background-size: cover;
+  }
+
   .auctionPool{
     grid-column: 8/span 2;
     grid-row: 2/span 13;
@@ -513,9 +555,6 @@ export default {
     transition-timing-function: ease-out;
     z-index: 0;
   }
-
-
-
 
   .skillCard {
     transform: scale(0.25);
