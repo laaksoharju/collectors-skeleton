@@ -1,27 +1,25 @@
 <template>
-  <div>
-    <h1>{{ labels.buyCard }}</h1>
-    <div class="buy-cards">
-      <div v-for="(card, index) in itemsOnSale" :key="index" class="cardslots">
-        <CollectorsCard
-          :card="card"
-          :availableAction="card.available"
-          @doAction="buyCard(card)"
-        />
-        {{ cardCost(card) }}
+  <div class="buttons">
+    <div v-for="(p, index) in placement" :key="index">
+      <button
+        class="btn-style"
+        v-if="p.playerId === null"
+        :disabled="cannotAfford(p.cost)"
+        @click="placeBottle(p)"
+      >
+        ${{ p.cost }}
+      </button>
+      <div v-if="p.playerId !== null">
+        {{ p.playerId }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import CollectorsCard from "@/components/CollectorsCard.vue";
-
 export default {
-  name: "CollectorsBuyActions",
-  components: {
-    CollectorsCard,
-  },
+  name: "Bottles",
+
   props: {
     labels: Object,
     player: Object,
@@ -79,10 +77,17 @@ export default {
 };
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style >
 .buy-cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, 130px);
+}
+.buttons {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: repeat(5, 5rem);
+  grid-gap: 1em;
 }
 
 .cardslots div {
@@ -91,5 +96,10 @@ export default {
   transition-timing-function: ease-out;
   z-index: 0;
 }
+.btn-style {
+  width: 7em;
+  height: 7em;
+  background-image: url("/images/bottle.jpg");
+  background-size: 100% 100%;
+}
 </style>
-

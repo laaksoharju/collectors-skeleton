@@ -15,7 +15,17 @@
           />
         </section>
         <section class="gameboard">
-          <section class="box item">item</section>
+          <section class="item_bottle">
+            <Bottles
+              v-if="players[playerId]"
+              :labels="labels"
+              :player="players[playerId]"
+              :itemsOnSale="itemsOnSale"
+              :marketValues="marketValues"
+              :placement="buyPlacement"
+              @placeBottle="placeBottle('buy', $event)"
+            />
+          </section>
           <section class="box skill">skill</section>
           <section class="box market">market</section>
           <section class="box worker">worker</section>
@@ -90,12 +100,14 @@
 
 import CollectorsCard from "@/components/CollectorsCard.vue";
 import CollectorsBuyActions from "@/components/CollectorsBuyActions.vue";
+import Bottles from "@/components/Bottles.vue";
 
 export default {
   name: "Collectors",
   components: {
     CollectorsCard,
     CollectorsBuyActions,
+    Bottles,
   },
   data: function () {
     return {
@@ -148,7 +160,7 @@ export default {
     },
   },
   created: function () {
-    this.$store.commit("SET_PLAYER_ID", this.$route.query.id);
+    this.$store.commit("SET_PLAYER_ID", this.$route.params.id);
     //TODO! Fix this ugly hack
     //background: https://github.com/quasarframework/quasar/issues/5672
     const newRoute = this.$route.params.id + "?id=" + this.playerId;
@@ -287,6 +299,7 @@ footer a:visited {
   grid-gap: 0.5em;
   grid-template-rows: 1fr 4fr 1.1fr;
 }
+
 .playerboard {
   position: absolute;
   top: 40px;
@@ -294,23 +307,27 @@ footer a:visited {
   width: 100%;
   grid-column: 2/3;
 }
-.buy_item .buy-cards {
-  z-index: -2;
-}
-.buy_item .buttons {
-  z-index: 3;
-}
 .buy_item {
   position: relative;
+  left: 13vw;
+  top: 4vh;
 }
-
-.item {
+.item_bottle {
   background-color: rgb(219, 197, 195);
   grid-column: 2/4;
   grid-row: 1/2;
   background-image: url("/images/items.jpg");
   background-size: 100% 100%;
 }
+.item_bottle >>> .buttons {
+  top: 5vh;
+  left: 2vw;
+}
+.item_bottle >>> .button {
+  width: 7em;
+  height: 7em;
+}
+
 .skill {
   background-color: rgb(208, 226, 205);
   grid-row: 1/4;
