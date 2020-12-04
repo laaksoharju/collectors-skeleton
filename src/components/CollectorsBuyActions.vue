@@ -1,8 +1,8 @@
 <template>
-    <div>
-      <h1>{{ labels.buyCard }}</h1>
+    <div id="ButActionDiv">
+      <h1 style="text-align: center">{{ labels.buyCard }}</h1>
       <div class="buy-cards">
-        <div v-for="(card, index) in itemsOnSale" :key="index">
+        <div v-for="(card, index) in itemsOnSale" :key="index" style="color:black">
           <CollectorsCard
             :card="card"
             :availableAction="card.available"
@@ -18,7 +18,7 @@
             @click="placeBottle(p)" >
             ${{p.cost}}
           </button>
-          <div v-if="p.playerId !== null">
+          <div v-if="p.playerId !== null" style="color:black">
             {{p.playerId}}
           </div>
         </div>
@@ -99,4 +99,9 @@ export default {
     float:left;
     grid-template-columns: repeat(auto-fill, 130px);
   }
+
+  #ButActionDiv h1, h2, h3, p  {
+    color: black;
+  }
+
 </style>

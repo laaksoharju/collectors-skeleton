@@ -1,6 +1,6 @@
 <template>
-    <div>
-      <h1>{{ labels.getSkill }}</h1>
+    <div id="SkillActionDiv">
+      <h1 style="text-align: center">{{ labels.getSkill }}</h1>
       <div class="get-skills">
         <div v-for="(card, index) in skillsOnSale" :key="index">
           <CollectorsCard
@@ -17,7 +17,7 @@
             @click="placeBottle(p)" >
             ${{p.cost}}
           </button>
-          <div v-if="p.playerId !== null">
+          <div v-if="p.playerId !== null" style="color:black">
             {{p.playerId}}
           </div>
         </div>
@@ -85,4 +85,9 @@ export default {
     float:left;
     grid-template-columns: repeat(auto-fill, 130px);
   }
+
+  #SkillActionDiv  h1, h2, h3, p  {
+    color: black;
+  }
+
 </style>
