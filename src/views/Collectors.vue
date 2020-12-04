@@ -1,6 +1,7 @@
 <template>
   <div>
     <main>
+      <WorkArea/>
       {{buyPlacement}} {{chosenPlacementCost}}
       <CollectorsBuyActions v-if="players[playerId]"
         :labels="labels"
@@ -21,6 +22,7 @@
           :card="card"
           :key="index"
         />
+
               </div>
         <!--       ev inte. </div>-->
 
@@ -73,6 +75,7 @@
 
 import CollectorsCard from '@/components/CollectorsCard.vue'
 import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
+import WorkArea from '@/components/WorkArea.vue'
 
 
 
@@ -81,7 +84,7 @@ export default {
   components: {
     CollectorsCard,
     CollectorsBuyActions,
-    
+    WorkArea
   },
   data: function () {
     return {
