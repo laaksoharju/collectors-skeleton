@@ -13,7 +13,17 @@
             @buyCard="buyCard($event)"
             @placeBottle="placeBottle('buy', $event)"
           />
+          <section class="buy_skill">
+            <CollectorsCard
+              v-for="(card, index) in skillsOnSale"
+              :card="card"
+              :key="index"
+            />
+          </section>
         </section>
+        <!-- <section class="buy_skill">
+         
+        </section> -->
         <section class="gameboard">
           <section class="item_bottle">
             <Bottles
@@ -26,7 +36,7 @@
               @placeBottle="placeBottle('buy', $event)"
             />
           </section>
-          <section class="box skill">skill</section>
+          <section class="box skill"></section>
           <section class="box market">market</section>
           <section class="box worker">worker</section>
           <section class="box auction">auction</section>
@@ -307,6 +317,17 @@ footer a:visited {
   width: 100%;
   grid-column: 2/3;
 }
+
+.buy_skill {
+  position: relative;
+  left: -4vw;
+  top: -6vh;
+  display: grid;
+  grid-template-rows: repeat(5, 180px);
+}
+.buy_skill div {
+  transform: scale(0.5) translate(-50%, -50%);
+}
 .buy_item {
   position: relative;
   left: 13vw;
@@ -321,11 +342,11 @@ footer a:visited {
 }
 .item_bottle >>> .buttons {
   top: 5vh;
-  left: 2vw;
+  left: 1vw;
 }
 .item_bottle >>> .button {
-  width: 7em;
-  height: 7em;
+  width: 5em;
+  height: 5em;
 }
 
 .skill {

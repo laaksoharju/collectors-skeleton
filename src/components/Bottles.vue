@@ -97,8 +97,8 @@ export default {
   z-index: 0;
 }
 .btn-style {
-  width: 7em;
-  height: 7em;
+  width: 6em;
+  height: 6em;
   background-image: url("/images/bottle.jpg");
   background-size: 100% 100%;
 }
