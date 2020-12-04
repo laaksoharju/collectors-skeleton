@@ -24,6 +24,13 @@
               </div>
         <!--       ev inte. </div>-->
 
+      
+      <!--Back of card
+      <div class="cardslots">
+        <CollectorsBackOfCard/>
+      </div> -->
+     
+
       Skills
       <div class="cardslots">
         <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
@@ -67,11 +74,14 @@
 import CollectorsCard from '@/components/CollectorsCard.vue'
 import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
 
+
+
 export default {
   name: "Collectors",
   components: {
     CollectorsCard,
     CollectorsBuyActions,
+    
   },
   data: function () {
     return {
