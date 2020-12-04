@@ -8,13 +8,43 @@
             Player Id {{ playerId }} has been assigned
             {{ players[playerId].color }} color
           </h2> -->
-          <div class="player-grid">
             <div
               v-if="players.hasOwnProperty(playerId)"
               class="current-player"
               v-bind:style="{ 'background-color': players[playerId].color }"
             >
-              Current Player: {{ players[playerId] }}
+            <div class="player-details">
+              <div class="player-name">
+              Player: {{playerId}}
+              </div>
+              <div class="player-coins">
+                <p><img src="/images/player-coins.png" alt="Player Coins" >x5</p>
+
+              </div>
+              <div class="player-cards-for-coins">
+                <img src="/images/player-cards-for-coins.png" alt="Player Cards for Coins" >x4
+              </div>
+            </div>
+            <div class="player-hand">
+
+            </div>
+            <div class="player-bottles" v-if="players.hasOwnProperty(playerId)">
+              <img v-bind:src="playerBoards[players[playerId].color]" alt="Player Boards" >
+            </div>
+            <div class="player-items-skills">
+              <div class="player-items">
+                <div class="player-items-1">
+                  <img src="/images/item-movie-icon.png" alt="Player Items 1">
+                </div>
+              </div>
+              <div class="player-skills">
+                <div class="player-skills-1">
+                  <img src="/images/skill-bottle-icon.png">
+                </div>
+              </div>
+            </div>
+
+              <!-- {{ players[playerId] }} -->
             </div>
             <div
               class="other-players"
@@ -24,10 +54,35 @@
                 'background-color': players[otherPlayerId].color,
               }"
             >
-              {{ players[otherPlayerId] }}
+            <div class="player-details">
+              <div class="player-name">
+              Player: {{otherPlayerId}}
+              </div>
+              <div class="player-coins">
+                <img src="/images/player-coins.png" alt="Player Coins" >x5
+              </div>
+              <div class="player-cards-for-coins">
+                <img src="/images/player-cards-for-coins.png" alt="Player Cards for Coins" >x4
+              </div>
+            </div>
+            <div class="player-bottles" v-if="players.hasOwnProperty(playerId)">
+              <img v-bind:src="playerBoards[players[otherPlayerId].color]" alt="Player Boards" >
+            </div>
+            <div class="player-items-skills">
+              <div class="player-items">
+                <div class="player-items-1">
+                  <img src="/images/item-movie-icon.png" alt="Player Items 1">
+                </div>
+              </div>
+              <div class="player-skills">
+                <div class="player-skills-1">
+                  <img src="/images/skill-bottle-icon.png">
+                </div>
+              </div>
+            </div>
               <br />
             </div>
-          </div>
+
         </div>
       </div>
     </main>
@@ -90,6 +145,12 @@ export default {
       auctionCards: [],
       playerid: 0,
       otherPlayers: [],
+      playerBoards: {
+         'violet': 'images/player-board-4.png',
+         'blue': 'images/player-board-3.png',
+         'brown': 'images/player-board-2.png',
+         'grey': 'images/player-board-1.png',
+      }
     };
   },
   computed: {
@@ -287,17 +348,149 @@ footer a:visited {
   grid-row: 1;
 }
 
-.player-grid {
-}
 .current-player {
+  display: grid;
+  grid-template-rows:10% 50% 20% 20%;
+  background-color: #fff;
   height: 40vh;
   border-style: dashed;
   color: black;
 }
 
+.player-details {
+  grid-column: 1;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns:40% 30% 30%;
+}
+
+.player-name {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.player-coins {
+  grid-column: 2;
+  grid-row: 1;
+
+}
+.player-coins img {
+  height: 4vh;
+  /* padding-top: 5px; */
+}
+
+.player-cards-for-coins {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.player-cards-for-coins img {
+  height: 4vh;
+  /* padding-top: 5px; */
+}
+
+.player-hand {
+  grid-column: 1;
+  grid-row: 2;
+  border-style: dashed;
+  color: red;
+}
+
+.player-bottles {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.other-players .player-bottles {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.player-bottles img {
+  height: 100%;
+  width: 100%;
+}
+
+.player-items-skills {
+  grid-column: 1;
+  grid-row: 4;
+  display: grid;
+  grid-template-columns:50% 50% ;
+
+}
+
+.other-players .player-items-skills {
+  grid-column: 1;
+  grid-row: 3;
+  display: grid;
+  grid-template-columns:50% 50% ;
+}
+
+.player-items {
+  grid-column: 1;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns:20% ;
+
+}
+
+.player-items-1 {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.player-items-1 img {
+  height:80%;
+  width: 100%;
+  padding-top: 1px;
+  padding-bottom: 3px;
+}
+
+.other-players .player-items-1 img {
+  height:45%;
+  width: 100%;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+.player-skills {
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns:20% ;
+  
+}
+
+.player-skills-1 {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.player-skills-1 img {
+  height:75%;
+  width: 100%;
+  padding-top: 1px;
+  padding-bottom: 3px;
+}
+
+.other-players .player-skills-1 img {
+  height:45%;
+  width: 100%;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
 .other-players {
-  height: 15vh;
+  display: grid;
+  grid-gap: 3px;
+  grid-template-rows:20% 40% 40%;
+  background-color: #fff;
+  height: 16vh;
   color: black;
+}
+
+p {
+  margin-top: 0em;
+
 }
 
 @media screen and (max-width: 800px) {
