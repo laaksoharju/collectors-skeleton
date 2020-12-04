@@ -9,8 +9,8 @@
   />
 
       {{ buyPlacement }} {{ chosenPlacementCost }}
-      <CollectorsBuyActions
-        v-if="players[playerId]"
+      <WorkArea/>
+      <CollectorsBuyActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
         :itemsOnSale="itemsOnSale"
@@ -30,6 +30,16 @@
           :card="card"
           :key="index"
         />
+
+              </div>
+
+      Skills
+      <div class="cardslots">
+        <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
+      </div>
+      Auction
+      <div class="cardslots">
+        <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
       </div>
 
       <div class="playerboard">
@@ -78,7 +88,7 @@
 import CollectorsCard from "@/components/CollectorsCard.vue";
 import CollectorsBuyActions from "@/components/CollectorsBuyActions.vue";
 import GameBoard from "@/components/GameBoard.vue";
-
+import WorkArea from '@/components/WorkArea.vue'
 
 export default {
   name: "Collectors",
@@ -86,6 +96,7 @@ export default {
     CollectorsCard,
     CollectorsBuyActions,
     GameBoard,
+    WorkArea,
   },
   data: function () {
     return {
