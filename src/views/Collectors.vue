@@ -69,9 +69,12 @@
       <div id="PlayerBoardDiv">
         <h2>Player boards</h2>
         <!-- Displayar current money -->
-        <p v-if="players[playerId]"> Current money: {{ players[playerId].money }} </p>
+        <p v-if="players[playerId]"> Current money: {{ players[playerId].money }}</p>
         <!-- Displayar current money -->
-        {{players}}
+        <!--{{players}}-->
+				
+
+				
         {{marketValues}}
         <button v-if="players[playerId]" @click="fakeMoreMoney()">
           fake more money
@@ -110,9 +113,15 @@
             <div class="playercards" v-for="(player, key) in players" :key="key">
               <CollectorsCard v-for="(card, index) in player.skills" :card="card" :key="index"/>
             </div>
-          </div>
-        </div>
+					</div>
 
+					<div id="AllPlayerPointsDiv">
+						<h3>Points</h3>
+						<div class="playercards" v-for="(player, key) in players" :key="key">
+								{{ player.points }}
+						</div>
+					</div>
+					</div>
 
         <footer>
           <p>
@@ -404,7 +413,7 @@ footer a:visited {
   display: grid;
   grid-template-columns: 25% 25% 25% 25%;
   grid-template-areas:
-  "AllPlayerIdDiv AllPlayerHandsDiv AllPlayerItemsDiv AllPlayerSkillsDiv"
+  "AllPlayerIdDiv AllPlayerHandsDiv AllPlayerItemsDiv AllPlayerSkillsDiv AllPlayerPointsDiv"
 }
 
 #container {
