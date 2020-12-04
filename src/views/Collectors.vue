@@ -47,6 +47,7 @@
               :key="index"
             />
           </div>
+
           Auction
           <div class="cardslots">
             <CollectorsCard
@@ -279,6 +280,7 @@ footer a:visited {
   background-color: rgb(117, 59, 31);
   height: 100vh;
   width: 100vw;
+  z-index: 0;
 }
 .gameboard {
   background-color: rgb(242, 244, 247);
