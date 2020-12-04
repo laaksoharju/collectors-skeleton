@@ -57,7 +57,6 @@
               :key="index"
             />
           </div>
-
           Auction
           <div class="cardslots">
             <CollectorsCard
@@ -309,7 +308,6 @@ footer a:visited {
   grid-gap: 0.5em;
   grid-template-rows: 1fr 4fr 1.1fr;
 }
-
 .playerboard {
   position: absolute;
   top: 40px;
@@ -377,8 +375,7 @@ footer a:visited {
   background-image: url("/images/auction.jpg");
   background-size: 100% 100%;
 }
-
-.cardslots {
+cardslots {
   display: grid;
   grid-template-columns: repeat(auto-fill, 130px);
   grid-template-rows: repeat(auto-fill, 180px);
