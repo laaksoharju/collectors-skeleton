@@ -42,4 +42,8 @@ export default {
     height: 100vh;
     padding: 1em;
   }
+
+  a:hover{
+    cursor: pointer;
+  }
 </style>
