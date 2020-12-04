@@ -2,33 +2,13 @@
   <div>
     <h1>{{ labels.buyCard }}</h1>
     <div class="buy-cards">
-      <div v-for="(card, index) in itemsOnSale" :key="index">
+      <div v-for="(card, index) in itemsOnSale" :key="index" class="cardslots">
         <CollectorsCard
           :card="card"
           :availableAction="card.available"
           @doAction="buyCard(card)"
         />
         {{ cardCost(card) }}
-      </div>
-    </div>
-    <div>
-      <div class="buttons" v-for="(p, index) in placement" :key="index">
-        <button
-          style="
-             {
-              width: 60px;
-              height: 60px;
-            }
-          "
-          v-if="p.playerId === null"
-          :disabled="cannotAfford(p.cost)"
-          @click="placeBottle(p)"
-        >
-          ${{ p.cost }}
-        </button>
-        <div v-if="p.playerId !== null">
-          {{ p.playerId }}
-        </div>
       </div>
     </div>
   </div>
@@ -100,9 +80,15 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.buy-cards,
-.buttons {
+.buy-cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, 130px);
+}
+
+.cardslots div {
+  transform: scale(0.5) translate(-50%, -50%);
+  transition: 0.2s;
+  transition-timing-function: ease-out;
+  z-index: 0;
 }
 </style>

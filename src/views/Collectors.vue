@@ -15,7 +15,17 @@
           />
         </section>
         <section class="gameboard">
-          <section class="box item">item</section>
+          <section class="item_bottle">
+            <Bottles
+              v-if="players[playerId]"
+              :labels="labels"
+              :player="players[playerId]"
+              :itemsOnSale="itemsOnSale"
+              :marketValues="marketValues"
+              :placement="buyPlacement"
+              @placeBottle="placeBottle('buy', $event)"
+            />
+          </section>
           <section class="box skill">skill</section>
           <section class="box market">market</section>
           <section class="box worker">worker</section>
@@ -89,12 +99,14 @@
 
 import CollectorsCard from "@/components/CollectorsCard.vue";
 import CollectorsBuyActions from "@/components/CollectorsBuyActions.vue";
+import Bottles from "@/components/Bottles.vue";
 
 export default {
   name: "Collectors",
   components: {
     CollectorsCard,
     CollectorsBuyActions,
+    Bottles,
   },
   data: function () {
     return {
@@ -295,15 +307,25 @@ footer a:visited {
 }
 .buy_item {
   position: relative;
-  left: 5vw;
+  left: 13vw;
+  top: 4vh;
 }
-.item {
+.item_bottle {
   background-color: rgb(219, 197, 195);
   grid-column: 2/4;
   grid-row: 1/2;
   background-image: url("/images/items.jpg");
   background-size: 100% 100%;
 }
+.item_bottle >>> .buttons {
+  top: 5vh;
+  left: 2vw;
+}
+.item_bottle >>> .button {
+  width: 7em;
+  height: 7em;
+}
+
 .skill {
   background-color: rgb(208, 226, 205);
   grid-row: 1/4;
