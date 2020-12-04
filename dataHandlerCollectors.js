@@ -101,7 +101,7 @@ Data.prototype.joinGame = function (roomId, playerId) {
     }
     else if (Object.keys(room.players).length < room.playerCount) {
       console.log("Player", playerId, "joined for the first time");
-      room.players[playerId] = { hand: [], 
+      room.players[playerId] = { hand: [],
                                  money: 1,
                                  points: 0,
                                  skills: [],
@@ -142,6 +142,48 @@ Data.prototype.drawCard = function (roomId, playerId) {
   }
   else return [];
 }
+/* VI LÄGGER TILL FÖR ATT BYTA SPELARE I TURNBUTTON */
+Data.prototype.changeTurn = function (roomId, playerId) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    let allPlayersId = Object.keys(room.players);
+    console.log(room.players);
+    console.log(allPlayersId);
+    let nextPlayer = allPlayersId[0];
+    console.log("nextPlayer"+nextPlayer);
+    for (let i in allPlayersId) {
+      console.log("NU I FORLOOP");
+      console.log("i: "+ i);
+      console.log("allPlayersId[i]: " + allPlayersId[i]);
+      console.log("längd"+allPlayersId[allPlayersId.length-1]);
+
+      /* ett försök, funkade ej
+      if (playerId === allPlayersId[allPlayersId.length-1]) {
+        nextPlayer= allPlayersId[0];
+        console.log("ny nextplayer 0 : " + nextPlayer);
+        break;
+      }
+      else {
+          i = Number(i) +  Number(1);
+          console.log("newI: "+ i);
+          nextPlayer = allPlayersId[i];
+          console.log("ALLpLAYERSiD [i+1]"+allPlayersId[i]);
+          console.log("ny nextplayer inte 0 " + nextPlayer);
+          break;
+      }*/
+     if (playerId === allPlayersId[i]){
+        console.log("NU ÄR VI I IFSATSEN");
+        let newIndex = (Number(i) + Number(1))%(room.playerCount);
+        console.log("index:"+ newIndex);
+        nextPlayer = allPlayersId[newIndex]; //kanske +1 tänk MATTE
+        console.log("ny nextplayer: " + nextPlayer);
+        break;
+      }
+    }
+    return nextPlayer;
+  }
+  else return "";
+}
 
 /* moves card from itemsOnSale to a player's hand */
 Data.prototype.buyCard = function (roomId, playerId, card, cost) {
@@ -151,8 +193,8 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost) {
     /// check first if the card is among the items on sale
     for (let i = 0; i < room.itemsOnSale.length; i += 1) {
       // since card comes from the client, it is NOT the same object (reference)
-      // so we need to compare properties for determining equality      
-      if (room.itemsOnSale[i].x === card.x && 
+      // so we need to compare properties for determining equality
+      if (room.itemsOnSale[i].x === card.x &&
           room.itemsOnSale[i].y === card.y) {
         c = room.itemsOnSale.splice(i,1, {});
         break;
@@ -161,8 +203,8 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost) {
     // ...then check if it is in the hand. It cannot be in both so it's safe
     for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
       // since card comes from the client, it is NOT the same object (reference)
-      // so we need to compare properties for determining equality      
-      if (room.players[playerId].hand[i].x === card.x && 
+      // so we need to compare properties for determining equality
+      if (room.players[playerId].hand[i].x === card.x &&
           room.players[playerId].hand[i].y === card.y) {
         c = room.players[playerId].hand.splice(i,1);
         break;
@@ -170,7 +212,7 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost) {
     }
     room.players[playerId].items.push(...c);
     room.players[playerId].money -= cost;
-    
+
   }
 }
 
@@ -191,7 +233,7 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost) {
       activePlacement = room.marketPlacement;
     }
     for(let i = 0; i < activePlacement.length; i += 1) {
-        if( activePlacement[i].cost === cost && 
+        if( activePlacement[i].cost === cost &&
             activePlacement[i].playerId === null ) {
           activePlacement[i].playerId = playerId;
           break;
@@ -233,11 +275,11 @@ Data.prototype.getMarketValues = function(roomId){
   if (typeof room !== 'undefined') {
     return room.market.reduce(function(acc, curr) {
       acc[curr.market] += 1;
-    }, 
-    { fastaval: 0, 
-      movie: 0, 
-      technology: 0, 
-      figures: 0, 
+    },
+    { fastaval: 0,
+      movie: 0,
+      technology: 0,
+      figures: 0,
       music: 0 });
   }
   else return [];
@@ -260,6 +302,3 @@ Data.prototype.getAuctionCards = function(roomId){
 }
 
 module.exports = Data;
-
-
-
