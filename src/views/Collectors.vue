@@ -3,7 +3,7 @@
     <div id='container'>
 
       <div id="BuyCardDiv">
-        {{buyPlacement}} {{chosenPlacementCost}}
+        <!-- {{buyPlacement}} {{chosenPlacementCost}} Detta borde vi kunna skita i nu-->
         <CollectorsBuyActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
@@ -25,7 +25,6 @@
         @placeBottle="placeBottle('buySkill', $event)"/>
       </div>
 
-      <!-- lägger in RaiseValue div här -->
       <div id ='RaiseValueDiv' >
         <CollectorsRaiseValueActions v-if="players[playerId]"
         :labels="labels"
@@ -38,8 +37,6 @@
         @raiseValue="raiseValue($event)"
         @placeBottle="placeBottle('market', $event)"/>
       </div>
-      <!-- slutar RaiseValue div här -->
-
 
       <div id ='WorkDiv' class="cardslots">
         <h2>Work</h2>
@@ -71,8 +68,8 @@
         <!-- Displayar current money -->
         <p v-if="players[playerId]"> Current money: {{ players[playerId].money }} </p>
         <!-- Displayar current money -->
-        {{players}}
-        {{marketValues}}
+        <!-- <p> {{players}}        Tog bort denna info för tillfället, man kan kommentera tillbaka om man vill se
+            {{marketValues}}</p>  -->
         <button v-if="players[playerId]" @click="fakeMoreMoney()">
           fake more money
         </button>
@@ -87,7 +84,7 @@
           <div id="AllPlayerIdDiv">
             <h3>Names</h3>
             <div class="playercards" v-for="(player, key) in players" :key="key">
-              {{ key }}
+              <p>{{ key }}</p>
             </div>
           </div>
 
@@ -356,46 +353,56 @@ footer a:visited {
 #BuyCardDiv {
   grid-area: BuyCardDiv;
   align-self: center;
+  background: #f9dcce;
 }
 
 #BuySkillDiv {
   grid-area: BuySkillDiv;
   align-self: center;
+  background: #dfeccc;
 }
 
 #AuctionDiv {
   grid-area: AuctionDiv;
   align-self: center;
+  background: #f5f1e1;
 }
 
 #RaiseValueDiv {
   grid-area: RaiseValueDiv;
   align-self: center;
-}
-
-#HandDiv {
-  grid-area: HandDiv;
-  align-self: center;
-}
-
-#PlayerItemsDiv {
-  grid-area: PlayerItemsDiv;
-  align-self: center;
-}
-
-#PlayerSkillsDiv {
-  grid-area: PlayerSkillsDiv;
-  align-self: center;
+  background: #cfdcf2;
 }
 
 #WorkDiv {
   grid-area: WorkDiv;
   align-self: center;
+background: #f5f2cc;
+}
+
+#HandDiv {
+  grid-area: HandDiv;
+  align-self: center;
+  background: #e4e4e3;
+}
+
+#PlayerItemsDiv {
+  grid-area: PlayerItemsDiv;
+  align-self: center;
+  background: #e4e4e3;
+}
+
+#PlayerSkillsDiv {
+  grid-area: PlayerSkillsDiv;
+  align-self: center;
+  background: #e4e4e3;
 }
 
 #PlayerBoardDiv {
   grid-area: PlayerBoardDiv;
   align-self: center;
+  /* background: url("https://previews.123rf.com/images/prapann/prapann1606/prapann160600110/58202559-old-wood-vintage-wood-wall-texture-wood-background-old-panels.jpg"); */
+  background: #e4e4e3;
 }
 
 #AllPlayerCardsDiv {
@@ -410,16 +417,23 @@ footer a:visited {
 #container {
   height: 100%;
   display: grid;
+  background: #D7D7D7;
   grid-template-columns: 50% 50% ;
-  grid-template-rows: 25% 25% 25% 25%;
-  column-gap: 40px;
-  row-gap: 40px;
+  grid-template-rows: 16,67% 16,67% 16,67% 16,67% 16,67% 16,67%;
+  column-gap: 20px;
+  row-gap: 20px;
   grid-template-areas:
-  "BuyCardDiv PlayerItemsDiv"
-  "BuySkillDiv PlayerSkillsDiv"
-  "RaiseValueDiv HandDiv"
-  "AuctionDiv PlayerBoardDiv"
-  "WorkDiv AllPlayerCardsDiv"
+  "BuyCardDiv RaiseValueDiv"
+  "BuyCardDiv RaiseValueDiv"
+  "BuySkillDiv AuctionDiv"
+  "BuySkillDiv WorkDiv"
+  "PlayerItemsDiv PlayerBoardDiv"
+  "PlayerSkillsDiv PlayerBoardDiv"
+  "HandDiv PlayerBoardDiv"
+}
+
+#container h1, h2, h3, p  {
+  color: black;
 }
 
 .cardslots {
