@@ -22,12 +22,25 @@
              <CollectorsCard :card="card" />
            </div>
        </div>
+
        <div class = "itemPool">
         Item Pool
-         <div class="cardslots" v-if="players[playerId]">
-           <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
-         </div>
+          <div class = "ItemBottleCoinOne">
+          </div>
+          <div class = "ItemBottleCoinOne">
+          </div>
+          <div class = "ItemBottleCoinTwo">
+          </div>
+          <div class = "ItemBottleCoinThree">
+          </div>
+
+
+          <div class="itemCard" v-if="players[playerId]">
+            <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
+          </div>
        </div>
+
+
        <div class = "marketPool">
          Market Pool
          <div class = "iconBird"></div>
@@ -39,11 +52,17 @@
        <div class = "workPool">
          Work Pool
        </div>
+
+
        <div class = "auctionPool">
-         Auction Pool
+        <div class= "titleAuctionPool"> Auction Pool</div>
          <div class="cardslots">
            <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
          </div>
+         <div class = "EnergyBottleCoinWhiteTwo"></div> <!-- Olika flaskor med vita coins, 1 2 eller 0 -->
+         <div class = "EnergyBottleCoinWhiteOne"></div>
+         <div class = "EnergyBottleCoinWhiteNoll"></div>
+         <div class = "EnergyBottleCoinWhiteNoll second"></div>
        </div>
        <div class="playerBoard">
           Player {{playerId}}'s Board
@@ -316,7 +335,8 @@ export default {
 	height: 994px;
 	background: $black;
 	border: 2px solid $black;
-}
+  }
+
   .skillPool{
     grid-column: 1 / span 2;
     grid-row: 2/span 13 ;
@@ -326,14 +346,12 @@ export default {
     color: black;
     display: grid;
     grid-template-columns: repeat(3, 50px);
-    grid-template-rows: repeat(6,100px);
+    grid-template-rows: repeat(6,50px);
     grid-auto-flow: column;
-
-  }
+    }
 
   .EnergyBottles{
-/*    grid-row-start: 1;
-    grid-row-end: 3;*/
+
     width:50px;
     height:50px;
     background-image:  url('/images/Gain-skill-bottle.png');
@@ -341,22 +359,52 @@ export default {
   }
 
   .EnergyBottleCoin{
-/*      grid-row: 4;*/
+
     width:50px;
     height:50px;
     background-image:  url('/images/Gain-skill-bottle-coin.png');
     background-size: cover;
   }
+
+
+
   .itemPool{
     grid-column: 3/span 5 ;
     grid-row: 2/span 4;
     width: auto;
     height: auto;
-    grid-template-columns: repeat(100, 12px);
-    grid-template-rows: repeat(100,150px);
+  /*  grid-template-columns: repeat(100, 12px);
+    grid-template-rows: repeat(100,150px);*/
     background-color: #f0d9cc ;
     color: black;
+    display: grid;
+    grid-template-columns: repeat(5, 50px);
+    grid-template-rows: repeat(2,50px);
+    grid-auto-flow: row;
   }
+
+  .ItemBottleCoinOne{
+    width:50px;
+    height:50px;
+    background-image:  url('/images/item-bottle-coin-one.png');
+    background-size: cover;
+  }
+
+  .ItemBottleCoinTwo{
+    width:50px;
+    height:50px;
+    background-image:  url('/images/item-bottle-coin-two.png');
+    background-size: cover;
+  }
+
+  .ItemBottleCoinThree{
+    width:50px;
+    height:50px;
+    background-image:  url('/images/item-bottle-coin-three.png');
+    background-size: cover;
+  }
+
+
   .marketPool{
     grid-column: 3/span 5;
     grid-row: 11/span 4;
@@ -370,6 +418,7 @@ export default {
     grid-template-columns: repeat(5, 60px);
     grid-template-rows: repeat(5, 27.5px);
     }
+
   .workPool{
     grid-column: 3/span 5;
     grid-row: 6/span 5;
@@ -385,11 +434,50 @@ export default {
     grid-row: 2/span 13;
     width: auto;
     height: auto;
-    grid-template-columns: repeat(100, 12px);
-    grid-template-rows: repeat(100,150px);
     background-color: beige;
     color: black;
+    display: grid;
+    grid-template-columns: repeat(3, 50px);
+    grid-template-rows: repeat(6,100px);
+    grid-auto-flow: column;
   }
+
+.titleAuctionPool{
+  grid-column: 3;
+  grid-row: 1;
+}
+  .EnergyBottleCoinWhiteNoll{
+    width:45px;
+    height:45px;
+    background-image:  url('/images/Coin-white.png');
+    background-size: cover;
+    grid-column: 1;
+    grid-row: 3;
+  }
+  .second{
+    grid-column: 1;
+    grid-row: 4;
+  }
+
+  .EnergyBottleCoinWhiteTwo{
+    width:45px;
+    height:45px;
+    background-image:  url('/images/Coin-white-2.png');
+    background-size: cover;
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .EnergyBottleCoinWhiteOne{
+    width:45px;
+    height:45px;
+    background-image:  url('/images/Coin-white-1.png');
+    background-size: cover;
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+
   .playerBoard {
     grid-column: 11/span 5;
     grid-row: 2/span 4;
@@ -465,16 +553,24 @@ export default {
     z-index: 0;
   }
 
+
+
+
   .skillCard {
     transform: scale(0.25);
   /*  display: grid;
     grid-template-columns: repeat(1, 15px);
     grid-template-rows: repeat(5,160px);*/
   }
-  .skillCard div:hover {
+  .skillCard div:hover{
     transform: scale(2)translate(-25%,0);
     z-index: 1;
   }
+
+  .itemCard{
+    transform: scale(0.3);
+  }
+
   .cardslots div:hover {
     transform: scale(1)translate(-25%,0);
     z-index: 1;
