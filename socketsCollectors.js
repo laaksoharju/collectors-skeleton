@@ -32,12 +32,20 @@ function sockets(io, socket, data)
     }
   });
 
+  socket.on('updatePlayerName', function (d)
+  {
+    io.to(d.roomId).emit('updatePlayerName',
+      data.updatePlayerName(d.roomId, d.playerId, d.playerName)
+    );
+  });
+
   socket.on('notifyPlayers', function (d)
   {
     io.to(d.roomId).emit('notifyPlayers',
       data.getPlayers(d.roomId)
     );
   });
+
   socket.on('collectorsDrawCard', function (d)
   {
     io.to(d.roomId).emit('collectorsCardDrawn',
