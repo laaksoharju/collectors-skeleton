@@ -106,7 +106,8 @@ Data.prototype.joinGame = function (roomId, playerId) {
                                  skills: [],
                                  items: [],
                                  income: [],
-                                 secret: [] };
+                                 secret: []
+                                };
       return true;
     }
     console.log("Player", playerId, "was declined due to player limit");

@@ -1,29 +1,35 @@
 <template>
   <div id="AllOtherPlayerboards">
-    <div v-on:click="playerClicked('A')" class="otherPlayerBoard A">
-      <p>Player A</p>
-    </div>
-    <div v-on:click="playerClicked('B')" class="otherPlayerBoard B">
-      <p>Player B</p>
-    </div>
-    <div v-on:click="playerClicked('C')" class="otherPlayerBoard C">
-      <p>Player C</p>
-    </div>
-    <div v-if = dispPlayerboard :class =playertag class="displayedBoard"> Player {{playertag}}'s playerboard!!! </div>
+      <div v-for="(player, index) in Players" :key="index" :player="player">
+        <div v-if="player!= Players[playerId]">
+          <div v-on:click="playerClicked(index)" class="otherPlayerBoard"> 
+            <p>Player {{index}}</p>
+            <PlayerBoard v-if = dispPlayerboard :player="player" />
+          </div>
+        </div>
+      </div>
   </div>
 </template>
 
 <script>
+import PlayerBoard from './PlayerBoard.vue';
+
 export default {
     name: "OtherPlayerboards",
+    components: {
+        PlayerBoard
+    },
+    props:{
+      Players: Object,
+      playerId: String
+    },
     data: function () {
     return {
-        dispPlayerboard: false,
-        playertag: ""
+        dispPlayerboard: false
     }},
     methods: {
-        playerClicked: function (playertag) {
-            this.playertag = playertag
+        playerClicked: function(playerIndex) {
+          console.log("Playerboard clicked: " + playerIndex)
             if (this.dispPlayerboard){
                 this.dispPlayerboard = false;
             }
@@ -35,25 +41,17 @@ export default {
 };
 </script>
 <style scoped>
-    .otherPlayerBoard, .displayedBoard {
+    .otherPlayerBoard {
     margin: 5px;
     padding: 5px;
     border-radius: 3px;
-    width: 30%;
+    width: auto;
     text-align: center;
     color: black;
+    background-color: hotpink;
     }
     .otherPlayerBoard:hover {
     cursor: pointer;
     background-color: coral;
-    }
-    .A{
-    background-color: cyan;
-    }
-    .B{
-    background-color: yellow;
-    }
-    .C{
-    background-color: hotpink;
     }
 </style>
