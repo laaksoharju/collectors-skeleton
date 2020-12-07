@@ -10,20 +10,33 @@
             :itemsOnSale="itemsOnSale"
             :marketValues="marketValues"
             :placement="buyPlacement"
-            @buyCard="buyCard($event)"
-            @placeBottle="placeBottle('buy', $event)"
+            @buyCard="buyCard('buy', $event)"
           />
-          <section class="buy_skill">
-            <CollectorsCard
-              v-for="(card, index) in skillsOnSale"
-              :card="card"
-              :key="index"
-            />
-          </section>
         </section>
-        <!-- <section class="buy_skill">
-         
-        </section> -->
+        <section class="buy_skill">
+          <CollectorsBuyActions
+            v-if="players[playerId]"
+            :labels="labels"
+            :player="players[playerId]"
+            :itemsOnSale="skillsOnSale"
+            :marketValues="marketValues"
+            :placement="skillPlacement"
+            @buyCard="buyCard('skill', $event)"
+          />
+        </section>
+
+        <section class="do_auction">
+          <CollectorsBuyActions
+            v-if="players[playerId]"
+            :labels="labels"
+            :player="players[playerId]"
+            :itemsOnSale="auctionCards"
+            :marketValues="marketValues"
+            :placement="auctionPlacement"
+            @buyCard="buyCard('auction', $event)"
+          />
+        </section>
+
         <section class="gameboard">
           <section class="item_bottle">
             <Bottles
@@ -36,49 +49,60 @@
               @placeBottle="placeBottle('buy', $event)"
             />
           </section>
-          <section class="box skill"></section>
+          <section class="skill_bottle">
+            <Bottles
+              v-if="players[playerId]"
+              :labels="labels"
+              :player="players[playerId]"
+              :itemsOnSale="skillsOnSale"
+              :marketValues="marketValues"
+              :placement="skillPlacement"
+              @placeBottle="placeBottle('skill', $event)"
+            />
+          </section>
           <section class="box market">market</section>
           <section class="box worker">worker</section>
           <section class="box auction">auction</section>
         </section>
-        <section class="playerboard">
-          {{ buyPlacement }} {{ chosenPlacementCost }}this{{ players }}
 
-          <div class="buttons">
-            <button @click="drawCard">
-              {{ labels.draw }}
-            </button>
-          </div>
-          Skills
-          <div class="cardslots">
-            <CollectorsCard
-              v-for="(card, index) in skillsOnSale"
-              :card="card"
-              :key="index"
-            />
-          </div>
-          Auction
-          <div class="cardslots">
-            <CollectorsCard
-              v-for="(card, index) in auctionCards"
-              :card="card"
-              :key="index"
-            />
-          </div>
-          Hand
-          <div class="cardslots" v-if="players[playerId]">
-            <CollectorsCard
-              v-for="(card, index) in players[playerId].hand"
-              :card="card"
-              :availableAction="card.available"
-              @doAction="buyCard(card)"
-              :key="index"
-            />
-          </div>
+        <section class="playerboard">
+          <!-- {{ buyPlacement }} {{ chosenPlacementCost }}this{{ players }} -->
+
+          <!-- <div class="buttons">
+                  <button @click="drawCard">
+                    {{ labels.draw }}
+                  </button>
+                </div> -->
+
+          <!-- Auction
+                <div class="cardslots">
+                  <CollectorsCard
+                    v-for="(card, index) in auctionCards"
+                    :card="card"
+                    :key="index"
+                  />
+                </div> -->
+          <!-- Hand
+                <div class="cardslots" v-if="players[playerId]">
+                  <CollectorsCard
+                    v-for="(card, index) in players[playerId].hand"
+                    :card="card"
+                    :availableAction="card.available"
+                    @doAction="buyCard(card)"
+                    :key="index"
+                  />
+                </div> -->
           Items
 
           <CollectorsCard
             v-for="(card, index) in players[playerId].items"
+            :card="card"
+            :key="index"
+          />
+          skills
+
+          <CollectorsCard
+            v-for="(card, index) in players[playerId].skills"
             :card="card"
             :key="index"
           />
@@ -169,7 +193,7 @@ export default {
     },
   },
   created: function () {
-    this.$store.commit("SET_PLAYER_ID", this.$route.params.id);
+    this.$store.commit("SET_PLAYER_ID", this.$route.query.id);
     //TODO! Fix this ugly hack
     //background: https://github.com/quasarframework/quasar/issues/5672
     const newRoute = this.$route.params.id + "?id=" + this.playerId;
@@ -227,6 +251,7 @@ export default {
         console.log(d.playerId, "bought a card");
         this.players = d.players;
         this.itemsOnSale = d.itemsOnSale;
+        this.skillsOnSale = d.skillsOnSale;
       }.bind(this)
     );
   },
@@ -249,12 +274,13 @@ export default {
         playerId: this.playerId,
       });
     },
-    buyCard: function (card) {
-      console.log("buyCard", card);
+    buyCard: function (action, card) {
+      console.log("rish collector function buyCard", card, action);
       this.$store.state.socket.emit("collectorsBuyCard", {
         roomId: this.$route.params.id,
         playerId: this.playerId,
         card: card,
+        action: action,
         cost: this.marketValues[card.market] + this.chosenPlacementCost,
       });
     },
@@ -315,22 +341,32 @@ footer a:visited {
   width: 100%;
   grid-column: 2/3;
 }
+.buy_item >>> .buy-cards {
+  position: relative;
+  left: 62vw;
+  top: 20.2vh;
+  grid-template-columns: repeat(5, 8rem);
 
-.buy_skill {
+  grid-gap: 1rem;
+  transform: scale(1.2) translate(-50%, -50%);
+}
+
+.buy_skill >>> .buy-cards {
   position: relative;
-  left: -4vw;
-  top: -6vh;
-  display: grid;
-  grid-template-rows: repeat(5, 180px);
+  left: -40.2vw;
+  top: 57vh;
+  grid-template-rows: repeat(5, 11rem);
+  grid-template-columns: 12rem;
+  transform: scale(1.2) translate(-50%, -50%);
+  transition-timing-function: ease-out;
 }
-.buy_skill div {
-  transform: scale(0.5) translate(-50%, -50%);
-}
-.buy_item {
+.do_auction {
   position: relative;
-  left: 13vw;
-  top: 4vh;
+  z-index: 5;
+  left: 24.5vw;
+  height: 30vh;
 }
+
 .item_bottle {
   background-color: rgb(219, 197, 195);
   grid-column: 2/4;
@@ -341,18 +377,28 @@ footer a:visited {
 .item_bottle >>> .buttons {
   top: 5vh;
   left: 1vw;
+  display: grid;
+  grid-template-columns: repeat(5, 6rem);
+  grid-gap: 1em;
 }
 .item_bottle >>> .button {
   width: 5em;
   height: 5em;
 }
 
-.skill {
+.skill_bottle {
   background-color: rgb(208, 226, 205);
   grid-row: 1/4;
   grid-column: 1/2;
   background-image: url("/images/skill.jpg");
   background-size: 100% 100%;
+}
+.skill_bottle >>> .buttons {
+  top: 32vh;
+  left: 1.5vw;
+  display: grid;
+  grid-template-rows: repeat(5, 6rem);
+  grid-gap: 1em;
 }
 .market {
   grid-row: 3/4;
@@ -375,7 +421,7 @@ footer a:visited {
   background-image: url("/images/auction.jpg");
   background-size: 100% 100%;
 }
-cardslots {
+.cardslots {
   display: grid;
   grid-template-columns: repeat(auto-fill, 130px);
   grid-template-rows: repeat(auto-fill, 180px);

@@ -1,15 +1,11 @@
 <template>
-  <div>
-    <h1>{{ labels.buyCard }}</h1>
-    <div class="buy-cards">
-      <div v-for="(card, index) in itemsOnSale" :key="index" class="cardslots">
-        <CollectorsCard
-          :card="card"
-          :availableAction="card.available"
-          @doAction="buyCard(card)"
-        />
-        {{ cardCost(card) }}
-      </div>
+  <div class="buy-cards">
+    <div v-for="(card, index) in itemsOnSale" :key="index" class="cardslots">
+      <CollectorsCard
+        :card="card"
+        :availableAction="card.available"
+        @doAction="buyCard(card)"
+      />
     </div>
   </div>
 </template>
@@ -25,6 +21,7 @@ export default {
   props: {
     labels: Object,
     player: Object,
+
     itemsOnSale: Array,
     marketValues: Object,
     placement: Array,
@@ -82,7 +79,7 @@ export default {
 <style scoped>
 .buy-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
+  grid-gap: 1rem;
 }
 
 .cardslots div {

@@ -24,6 +24,7 @@ export default {
     labels: Object,
     player: Object,
     itemsOnSale: Array,
+
     marketValues: Object,
     placement: Array,
   },
@@ -85,9 +86,6 @@ export default {
 .buttons {
   position: relative;
   z-index: 3;
-  display: grid;
-  grid-template-columns: repeat(5, 5rem);
-  grid-gap: 1em;
 }
 
 .cardslots div {
@@ -101,5 +99,12 @@ export default {
   height: 6em;
   background-image: url("/images/bottle.jpg");
   background-size: 100% 100%;
+
+  border-radius: 10px;
+  color: white;
+  text-align: center;
+  padding: 0.5rem;
+
+  font-size: 1rem;
 }
 </style>
