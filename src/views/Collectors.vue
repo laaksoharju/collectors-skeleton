@@ -299,11 +299,13 @@ methods: {
 
   buyCard: function (card) {
     console.log("buyCard", card);
+    console.log(this.marketValues[card.item]);
+    console.log(this.chosenPlacementCost);
     this.$store.state.socket.emit('collectorsBuyCard', {
       roomId: this.$route.params.id,
       playerId: this.playerId,
       card: card,
-      cost: this.marketValues[card.market] + this.chosenPlacementCost
+      cost: this.marketValues[card.item] + this.chosenPlacementCost
     });
   },
 
