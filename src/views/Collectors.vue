@@ -298,17 +298,20 @@ methods: {
     });
   },
   handleAction: function (card) {
-    console.log("handleAction", card);
-    if (this.chosenAction === "buyItem") {
-      this.buyCard(card);
-    }
-    if (this.chosenAction === "buySkill") {
-      this.getSkill(card);
-    }
-    if (this.chosenAction === "market") {
-      this.raiseValue(card);
+    if (card.available) {
+      console.log("Kort tillgängligt, handleAction körs");
+      if (this.chosenAction === "buyItem") {
+        this.buyCard(card);
+      }
+      if (this.chosenAction === "buySkill") {
+        this.getSkill(card);
+      }
+      if (this.chosenAction === "market") {
+        this.raiseValue(card);
+      }
     }
   },
+
   fakeMoreMoney: function () {
     this.$store.state.socket.emit('collectorsFakeMoreMoney', {
       roomId: this.$route.params.id,
