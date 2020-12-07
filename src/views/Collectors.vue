@@ -167,10 +167,10 @@ export default {
           technology: 0,
           figures: 0,
           music: 0 },
-          itemsOnSale: [],
-          skillsOnSale: [],
-          auctionCards: [],
-          playerid: 0
+        itemsOnSale: [],
+        skillsOnSale: [],
+        auctionCards: [],
+        playerid: 0
         }
       },
       computed: {
@@ -299,8 +299,6 @@ methods: {
 
   buyCard: function (card) {
     console.log("buyCard", card);
-    console.log(this.marketValues[card.item]);
-    console.log(this.chosenPlacementCost);
     this.$store.state.socket.emit('collectorsBuyCard', {
       roomId: this.$route.params.id,
       playerId: this.playerId,
