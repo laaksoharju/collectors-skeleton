@@ -34,10 +34,12 @@
           <div class = "ItemBottleCoinThree">
           </div>
 
-
-          <div class="itemCard" v-if="players[playerId]">
-            <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
+          <div class="itemCard" v-for="(card, index) in itemsOnSale" :key="index">
+            <CollectorsCard :card="card" />
           </div>
+          <!--<div class="itemCard" v-if="players[playerId]">
+            <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
+          </div>-->
        </div>
 
 
@@ -108,7 +110,19 @@
           {{ labels.draw }}
         </button>
       </div>
-
+      <buyItemsActions v-if="players[playerId]"
+        :labels="labels"
+        :player="players[playerId]"
+        :itemsOnSale="itemsOnSale"
+        :marketValues="marketValues"
+        :placement="buyPlacement"
+        @buyCard="buyCard($event)"
+        @placeBottle="placeBottle('buy', $event)"/>
+      <div class="buttons">
+        <button @click="drawCard">
+          {{ labels.draw }}
+        </button>
+      </div>
     <!--  <div class="cardslots">
         <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
       </div> -->
@@ -458,8 +472,9 @@ export default {
     grid-row: 2/span 4;
     width: auto;
     height: auto;
-    grid-template-columns: repeat(100, 12px);
-    grid-template-rows: repeat(100,150px);
+    display: grid;
+    grid-template-columns: repeat(10, 60px);
+    grid-template-rows: repeat(3,60px);
     background-color: pink ;
     color: black;
   }
@@ -531,6 +546,12 @@ export default {
   .itemCard{
     transform: scale(0.3);
   }
+
+  .itemCard div:hover{
+    transform: scale(2)translate(-25%,0);
+    z-index: 1;
+  }
+
 
   .cardslots div:hover {
     transform: scale(1)translate(-25%,0);
