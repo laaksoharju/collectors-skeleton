@@ -35,7 +35,7 @@
         :market="market"
         :placement="marketPlacement"
         @raiseValue="raiseValue($event)"
-        @placeBottle="placeBottle('market', $event)"/>
+        @placeBottleRaiseValue="placeBottleRaiseValue('market', $event)"/>
       </div>
 
       <div id ='WorkDiv' class="cardslots">
@@ -160,6 +160,8 @@ export default {
         marketPlacement: [],
         chosenPlacementCost: null,
         chosenAction: "",
+        raiseValueIndex: null,
+        raiseValueSecondCard: null,
         marketValues: { fastaval: 0,
           movie: 0,
           technology: 0,
@@ -262,6 +264,7 @@ methods: {
   selectAll: function (n) {
     n.target.select();
   },
+
   placeBottle: function (action, cost) {
     this.chosenPlacementCost = cost;
     this.chosenAction = action;
@@ -272,6 +275,20 @@ methods: {
       cost: cost,
     });
   },
+
+  placeBottleRaiseValue: function (action, p) {
+    this.chosenPlacementCost = p.cost;
+    this.chosenAction = action;
+    this.raiseValueIndex = p.index;
+    this.$store.state.socket.emit('collectorsPlaceBottleRaiseValue', {
+      roomId: this.$route.params.id,
+      playerId: this.playerId,
+      action: action,
+      cost: p.cost,
+      index: p.index,
+    });
+  },
+
   drawCard: function () {
     console.log(this.market)
     this.$store.state.socket.emit('collectorsDrawCard', {
@@ -279,6 +296,7 @@ methods: {
       playerId: this.playerId
     });
   },
+
   buyCard: function (card) {
     console.log("buyCard", card);
     this.$store.state.socket.emit('collectorsBuyCard', {
@@ -288,6 +306,7 @@ methods: {
       cost: this.marketValues[card.market] + this.chosenPlacementCost
     });
   },
+
   getSkill: function (card) {
     console.log("getSkill", card);
     this.$store.state.socket.emit('collectorsGetSkill', {
@@ -297,6 +316,7 @@ methods: {
       cost: this.chosenPlacementCost
     });
   },
+
   handleAction: function (card) {
     if (card.available) {
       console.log("Kort tillgängligt, handleAction körs");
@@ -307,7 +327,7 @@ methods: {
         this.getSkill(card);
       }
       if (this.chosenAction === "market") {
-        this.raiseValue(card);
+        this.raiseValueHandler(card);
       }
     }
   },
@@ -318,11 +338,27 @@ methods: {
       playerId: this.playerId
     });
   },
-  raiseValue: function (card) {
+
+  raiseValueHandler: function (card) {
+    var card2 = null;
+    if (this.raiseValueIndex === 2) {
+      this.raiseValue(card, card2);
+    }
+    else if (this.raiseValueSecondCard == null) {
+      this.raiseValueSecondCard = card;
+    }
+    else {
+      this.raiseValue(card, this.raiseValueSecondCard);
+      this.raiseValueSecondCard = null;
+    }
+  },
+
+  raiseValue: function (card1, card2) {
     this.$store.state.socket.emit('collectorsRaiseValue', {
       roomId: this.$route.params.id,
       playerId: this.playerId,
-      card: card,
+      card1: card1,
+      card2: card2,
       cost: this.chosenPlacementCost
     });
   },

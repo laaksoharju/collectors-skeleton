@@ -212,7 +212,6 @@ Data.prototype.raiseValue = function (roomId, playerId, card, cost) {
       if (room.skillsOnSale[i].x === card.x &&
           room.skillsOnSale[i].y === card.y) {
         c = room.skillsOnSale.splice(i,1, {});
-        console.log("Förbi c");
         break;
       }
     }
@@ -232,7 +231,6 @@ Data.prototype.raiseValue = function (roomId, playerId, card, cost) {
       }
     }
     room.market.push(...c);
-    console.log(room.market);
     room.players[playerId].money -= cost;
 
   }
@@ -263,6 +261,15 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost) {
     }
   }
 }
+
+Data.prototype.placeBottleRaiseValue = function (roomId, playerId, action, cost, index) {
+  console.log(index);
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    room.marketPlacement[index].playerId = playerId;
+  }
+}
+
 
 Data.prototype.fakeMoreMoney = function (roomId, playerId) {
   let room = this.rooms[roomId];

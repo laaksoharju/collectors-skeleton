@@ -16,7 +16,7 @@
           <button
           v-if="p.playerId===null"
           :disabled="cannotAfford(p.cost)"
-          @click="placeBottle(p)" >
+          @click="placeBottle(p, index)" >
           ${{p.cost}}
         </button>
         <div v-if="p.playerId !== null" style="color:black">
@@ -55,8 +55,9 @@ export default {
       return (this.player.money < cost);
     },
 
-    placeBottle: function (p) {
-      this.$emit('placeBottle', p.cost);
+    placeBottle: function (p, index) {
+      p.index = index;
+      this.$emit('placeBottleRaiseValue', p);
       this.highlightAvailableCards();
     },
 

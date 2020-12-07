@@ -37,6 +37,13 @@ function sockets(io, socket, data) {
       io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId)
       );
     });
+
+    socket.on('collectorsPlaceBottleRaiseValue', function(d) {
+      data.placeBottleRaiseValue(d.roomId, d.playerId, d.action, d.cost, d.index);
+      io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId)
+      );
+    });
+
     socket.on('collectorsGetSkill', function(d) {
       data.getSkill(d.roomId, d.playerId, d.card, d.cost)
       io.to(d.roomId).emit('collectorsSkillAcquired', {
@@ -47,8 +54,12 @@ function sockets(io, socket, data) {
       );
     });
 
+// TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
     socket.on('collectorsRaiseValue', function(d) {
-      data.raiseValue(d.roomId, d.playerId, d.card, d.cost)
+      data.raiseValue(d.roomId, d.playerId, d.card1, d.cost)
+      if (d.card2 !== null) {
+        data.raiseValue(d.roomId, d.playerId, d.card2, 0)
+      }
       io.to(d.roomId).emit('collectorsValueRaised', {
           playerId: d.playerId,
           players: data.getPlayers(d.roomId),
