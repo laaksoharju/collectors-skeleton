@@ -45,6 +45,7 @@ function sockets(io, socket, data) {
           skillsOnSale: data.getSkillsOnSale(d.roomId)
         }
       );
+    });
 
     socket.on('collectorsChangeTurn', function(d) {
       io.to(d.roomId).emit('collectorsChangedTurn',
