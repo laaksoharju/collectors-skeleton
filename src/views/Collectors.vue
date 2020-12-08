@@ -79,13 +79,28 @@
         <div class="cardslots" v-if="players[playerId]">
           <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="buyCard(card)" :key="index"/>
         </div>
+        <!-- visa hur mycket pengar man har -->
+
+          <ul>
+            <li v-for="(value, key) in players" :key = "key">
+              <div v-for="(valuevalue,keykey) in value" :key ="keykey">
+                <div v-if="keykey == 'money' && key == playerId ">
+                  My money: {{valuevalue}}
+                </div>
+                <div v-if="keykey == 'money' && key != playerId ">
+                  Other players money: {{valuevalue}}
+                </div>
+              </div>
+            </li>
+          </ul>
       </div>
+
+
       <!-- Vems tur? Start på ruta för att visa vems tur -->
       <div class="turnCounter">
         <h3> Who's turn? </h3>
         <button class="turnButton"  @click= "changeTurn">  <!--  @click= "changeTurn" -->
-          <h2>  Player {{currentPlayer}}.</h2> <h3> Press here when you're done.</h3>
-
+          <h2>  Player {{currentPlayer}} </h2> <h3> Press here when you're done.</h3>
         </button>
       </div>
       <!-- Ruta för att visa vilka spelare som är i rummet -->
@@ -99,10 +114,6 @@
       </div>
 
      </div>
-     TEST
-
-      Början på att ta ut players, vems tur, här får vi en array
-     {{allPlayersId}}
 
   </div>
 
