@@ -64,6 +64,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.skillsOnSale = room.deck.splice(0, 5);
   room.auctionCards = room.deck.splice(0, 4);
   room.currentAuctionCard = [];
+  room.bidArray = [];
   room.market = [];
   room.buyPlacement = [ {cost:1, playerId: null},
                         {cost:1, playerId: null},
@@ -108,7 +109,8 @@ Data.prototype.joinGame = function (roomId, playerId) {
                                  skills: [],
                                  items: [],
                                  income: [],
-                                 secret: [] };
+                                 secret: [],
+                                 bidArray: [] };
       return true;
     }
     console.log("Player", playerId, "was declined due to player limit");
@@ -303,6 +305,21 @@ Data.prototype.fakeMoreMoney = function (roomId, playerId) {
   }
   else return [];
 }
+
+// BIDDING
+Data.prototype.raiseCurrentBid = function (roomId, playerId) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+      console.log("funktionen körs");
+      room.bidArray.push(playerId);
+      console.log(room.bidArray);
+      console.log("Current leading bid: ",room.bidArray.length,"$" );
+      
+      
+  }
+  else return [];
+}
+
 
 /* returns the hand of the player */
 Data.prototype.getCards = function (roomId, playerId) {
