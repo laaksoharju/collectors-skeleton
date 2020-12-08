@@ -22,6 +22,7 @@
         @buyCard="buyCard($event)"
         @placeBottle="placeBottle('buy', $event)"
       />
+
       <div class="buttons">
         <button @click="drawCard">
           {{ labels.draw }}

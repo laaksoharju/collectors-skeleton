@@ -93,7 +93,7 @@ Data.prototype.createDeck = function() {
 
 Data.prototype.joinGame = function (roomId, playerId) {
   let room = this.rooms[roomId];
-  let colors = ['hotpink', 'cyan', 'yellow', 'blue']; //ÄNDRA FÄRGER HÄR!!!
+  let colors = ['CornflowerBlue', 'DarkSeaGreen', 'Hotpink', 'Lavender']; //ÄNDRA FÄRGER HÄR!!!
   if (typeof room !== 'undefined') {
     if (typeof room.players[playerId] !== 'undefined') {
       console.log("Player", playerId, "joined again with info", room.players[playerId]);
