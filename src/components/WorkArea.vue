@@ -56,14 +56,12 @@
 <script>
 export default {
     name: "WorkArea",
-
     data: function() {
         return {
             round: 4,
             clicked: false,
             color: "blue"
         }
-
     },
     methods: {
         circleClicked: function(e) {
