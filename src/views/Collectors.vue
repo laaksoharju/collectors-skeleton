@@ -18,9 +18,17 @@
          <div class = "EnergyBottleCoin">
          </div>
 
-           <div class="skillCard" v-for="(card, index) in skillsOnSale" :key="index">
-             <CollectorsCard :card="card" />
+           <!--<div class="skillCard" v-for="(card, index) in skillsOnSale" :key="index">
+             <CollectorsCard :card="card" :availableAction="card.available" @doAction="getSkill(card)" :key="index" />
+
+           </div>-->
+
+
+           <div class="skillCard" v-if="players[playerId]">
+             <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :availableAction="card.available" @doAction="getSkill(card)" :key="index"/>
+
            </div>
+
        </div>
 
 
@@ -32,13 +40,15 @@
           </div>
           <div class = "ItemBottleCoinTwo">
           </div>
+          <div class = "ItemBottleCoinTwo">
+          </div>
           <div class = "ItemBottleCoinThree">
           </div>
-
-
-          <div class="itemCard" v-if="players[playerId]">
-            <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
+          <div class="itemCard" v-for="(card, index) in itemsOnSale" :key="index">
+            <CollectorsCard :card="card" />
           </div>
+
+
        </div>
 
 
@@ -60,12 +70,17 @@
 
        </div>
 
-
        <div class = "auctionPool">
-        <div class= "titleAuctionPool"> Auction Pool</div>
-         <div class="cardslots">
+        <div class= "titleAuctionPool" > Auction Pool
+        </div>
+
+        <div class="auctionCard" v-for="(card, index) in auctionCards" :key="index">
+          <CollectorsCard :card="card" />
+        </div>
+      <!--   <div class="cardslots">
            <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
-         </div>
+         </div> -->
+
          <div class = "EnergyBottleCoinWhiteTwo"></div> <!-- Olika flaskor med vita coins, 1 2 eller 0 -->
          <div class = "EnergyBottleCoinWhiteOne"></div>
          <div class = "EnergyBottleCoinWhiteNoll"></div>
@@ -73,6 +88,9 @@
        </div>
        <div class="playerBoard">
           Player {{playerId}}'s Board
+          <div class="chosenSkillCard" v-if="players[playerId]">
+            <CollectorsCard v-for="(card, index) in players[playerId].skills" :card="card" :key="index"/>
+          </div>
       </div>
       <div class="playerHand">
         Hand
@@ -114,25 +132,30 @@
       </div>
 
      </div>
+     <!-- FRÅN DRAWCARD SOM VI FICK FRÅN BÖRJAN, KOPPLAT TILL PLAYERID
+     <div class="itemCard" v-if="players[playerId]">
+       <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
+     </div> -->
 
   </div>
+  Här : {{allPlayersId}}
 
     {{buyPlacement}} {{chosenPlacementCost}}
 
-
-      <CollectorsBuyActions v-if="players[playerId]"
-        :labels="labels"
-        :player="players[playerId]"
-        :itemsOnSale="itemsOnSale"
-        :marketValues="marketValues"
-        :placement="buyPlacement"
-        @buyCard="buyCard($event)"
-        @placeBottle="placeBottle('buy', $event)"/>
-      <div class="buttons">
-        <button @click="drawCard">
-          {{ labels.draw }}
-        </button>
-      </div>
+<!-- här låg CollectorsBuyActions delen : -->
+<CollectorsBuyActions v-if="players[playerId]"
+  :labels="labels"
+  :player="players[playerId]"
+  :itemsOnSale="itemsOnSale"
+  :marketValues="marketValues"
+  :placement="buyPlacement"
+  @buyCard="buyCard($event)"
+  @placeBottle="placeBottle('buy', $event)"/>
+<div class="buttons">
+  <button @click="drawCard">
+    {{ labels.draw }}
+  </button>
+</div>
 
     <!--  <div class="cardslots">
         <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
@@ -170,11 +193,13 @@
 import CollectorsCard from '@/components/CollectorsCard.vue'
 import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
 
+
 export default {
   name: 'Collectors',
   components: {
     CollectorsCard,
-    CollectorsBuyActions
+    CollectorsBuyActions,
+
   },
   data: function () {
     return {
@@ -215,7 +240,11 @@ export default {
     playerId: function() { return this.$store.state.playerId},
     allPlayersId: function() {
       return Object.keys(this.players) //få nyckeln till players - playerId
-    }
+    }/*,
+    numbOfPlayers: function () {
+      let counter = (Object.keys(this.players)).length;
+      return counter
+    }*/
   },
   watch: {
     players: function(newP, oldP) {
@@ -277,9 +306,20 @@ export default {
         this.itemsOnSale = d.itemsOnSale;
       }.bind(this)
     );
+
+
+    this.$store.state.socket.on('collectorsSkillCaught',
+      function(d) {
+        console.log(d.playerId, "Got a skill");
+        this.players = d.players;
+        this.skillsOnSale = d.skillsOnSale;
+      }.bind(this)
+    );
+
     this.$store.state.socket.on('collectorsChangedTurn',
       function(d) {
           this.currentPlayer = d;
+
       }.bind(this)
     );
   },
@@ -314,6 +354,19 @@ export default {
         }
       );
     },
+
+    getSkill: function (card) {
+      console.log("getSkill", card);
+      console.log("NU HAR DEN NÅTT GETSKILL FUNKTIONEN 1");
+      this.$store.state.socket.emit('collectorsGetSkill', {
+          roomId: this.$route.params.id,
+          playerId: this.playerId,
+          card: card,
+          skill: this.skillsOnSale,
+        }
+      );
+      },
+
     changeTurn: function () {
       console.log("TEST");
 
@@ -321,14 +374,17 @@ export default {
           roomId: this.$route.params.id,
           currentPlayer: this.currentPlayer
 
+
+          }
+        );
         }
-      );
-    }
   }
 }
 
 
+
 </script>
+
 <style scoped>
   header {
     user-select: none;
@@ -365,6 +421,7 @@ export default {
     display: grid;
     grid-template-columns: repeat(3, 50px);
     grid-template-rows: repeat(6,50px);
+    grid-row-gap: 25px;
     grid-auto-flow: column;
     }
 
@@ -394,9 +451,11 @@ export default {
     grid-template-rows: repeat(100,150px);*/
     background-color: #f0d9cc ;
     color: black;
+
     display: grid;
-    grid-template-columns: repeat(5, 50px);
+    grid-template-columns: repeat(6, 50px);
     grid-template-rows: repeat(2,50px);
+    grid-column-gap: 25px;
     grid-auto-flow: row;
   }
 
@@ -451,16 +510,16 @@ export default {
   .Alt1 {
     /grid-column: 1 ;
     grid-row: 1;
-    width: 150px;
-    height: 80px;
+    width: 130px;
+    height: 60px;
     background-image: url('/images/WorkPoolAlt1.jpg');
     background-size: cover;
   }
   .Alt2 {
     grid-column: 1 ;
     grid-row: 2;
-    width: 150px;
-    height: 80px;
+    width: 130px;
+    height: 60px;
     background-image: url('/images/WorkPoolAlt2.jpg');
     background-size: cover;
   }
@@ -468,16 +527,17 @@ export default {
   .Alt3 {
     grid-column: 1 / span 2 ;
     grid-row: 3;
-    width: 150px;
-    height: 80px;
+    width: 130px;
+    height: 60px;
     background-image: url('/images/WorkPoolAlt3.jpg');
     background-size: cover;
   }
+
   .Alt4 {
     grid-column: 1 ;
     grid-row: 4;
-    width: 150px;
-    height: 80px;
+    width: 152px;
+    height: 60px;
     background-image: url('/images/WorkPoolAlt4.jpg');
     background-size: cover;
   }
@@ -492,7 +552,7 @@ export default {
     display: grid;
     grid-template-columns: repeat(3, 50px);
     grid-template-rows: repeat(6,100px);
-    grid-auto-flow: column;
+    /*grid-auto-flow: column; */
   }
 
 .titleAuctionPool{
@@ -540,7 +600,18 @@ export default {
     grid-template-rows: repeat(100,150px);
     background-color: pink ;
     color: black;
+    display: grid;
+    grid-template-columns: repeat(8, 60px);
+    grid-template-rows: repeat(3,60px);
   }
+
+  .chosenSkillCard {
+    grid-column: 5;
+    grid-row: 1;
+    transform: scale(0.25);
+  }
+
+
   .playerHand {
     grid-column: 11/span 5;
     grid-row: 6/span 4;
@@ -606,6 +677,12 @@ export default {
     z-index: 0;
   }
 
+  .cardslots div:hover {
+    transform: scale(1)translate(-25%,0);
+    z-index: 1;
+  }
+
+
   .skillCard {
     transform: scale(0.25);
   /*  display: grid;
@@ -618,13 +695,27 @@ export default {
   }
 
   .itemCard{
-    transform: scale(0.3);
+    transform: scale(0.25);
   }
 
-  .cardslots div:hover {
-    transform: scale(1)translate(-25%,0);
+  .itemCard div:hover{
+    transform: scale(2)translate(-25%,0);
     z-index: 1;
   }
+
+  .auctionCard {
+    transform: scale(0.25);
+    grid-column: 2;
+
+  /*  display: grid;
+    grid-template-columns: repeat(1, 15px);
+    grid-template-rows: repeat(5,160px);*/
+  }
+  .auctionCard div:hover{
+    transform: scale(2)translate(-25%,0);
+    z-index: 1;
+  }
+
   .iconBird {
     width: 30px;
     height: 40px;
