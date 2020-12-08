@@ -46,6 +46,11 @@
 
        <div class = "workPool">
          Work Pool
+         <div class = "Alt1"></div>
+         <div class = "Alt2"></div>
+         <div class = "Alt3"></div>
+         <div class = "Alt4"></div>
+
        </div>
 
        <div class = "auctionPool">
@@ -431,11 +436,48 @@ export default {
     grid-row: 6/span 5;
     width: auto;
     height: auto;
-    grid-template-columns: repeat(100, 12px);
-    grid-template-rows: repeat(100,150px);
+    display:grid;
+    grid-template-columns: repeat(3, 150px);
+    grid-template-rows: repeat(3,50px);
     background-color: #f5f2cc;
     color: black;
   }
+
+  .Alt1 {
+    /grid-column: 1 ;
+    grid-row: 1;
+    width: 130px;
+    height: 60px;
+    background-image: url('/images/WorkPoolAlt1.jpg');
+    background-size: cover;
+  }
+  .Alt2 {
+    grid-column: 1 ;
+    grid-row: 2;
+    width: 130px;
+    height: 60px;
+    background-image: url('/images/WorkPoolAlt2.jpg');
+    background-size: cover;
+  }
+
+  .Alt3 {
+    grid-column: 1 / span 2 ;
+    grid-row: 3;
+    width: 130px;
+    height: 60px;
+    background-image: url('/images/WorkPoolAlt3.jpg');
+    background-size: cover;
+  }
+
+  .Alt4 {
+    grid-column: 1 ;
+    grid-row: 4;
+    width: 152px;
+    height: 60px;
+    background-image: url('/images/WorkPoolAlt4.jpg');
+    background-size: cover;
+  }
+
   .auctionPool{
     grid-column: 8/span 2;
     grid-row: 2/span 13;
