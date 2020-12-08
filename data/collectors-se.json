@@ -4,5 +4,6 @@
 	"endTurn": "Avsluta runda",
 	"buyCard": "Köp ett föremål",
 	"getSkill": "Skaffa en skicklighet",
-	"raiseValue": "Marknaden, höj värde"
+	"raiseValue": "Öka ett värde",
+	"auction": "Auktion"
 }

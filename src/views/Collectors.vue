@@ -12,7 +12,6 @@
         :placement="buyPlacement"
         @buyCard="buyCard($event)"
         @placeBottle="placeBottle('buyItem', $event)"/>
-
       </div>
 
       <div id ='BuySkillDiv' >
@@ -38,14 +37,19 @@
         @placeBottleRaiseValue="placeBottleRaiseValue('market', $event)"/>
       </div>
 
+      <div id='AuctionDiv'>
+        <CollectorsAuctionActions v-if="players[playerId]"
+        :labels="labels"
+        :player="players[playerId]"
+        :auctionCards="auctionCards"
+        :placement="auctionPlacement"
+        @handleAction="handleAction($event)"
+        @placeBottle="placeBottle('buySkill', $event)"/>
+      </div>
+
       <div id ='WorkDiv' class="cardslots">
         <h2>Work</h2>
         <!-- <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/> -->
-      </div>
-
-      <div id ='AuctionDiv' class="cardslots">
-        <h2>Auction</h2>
-        <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :availableAction="card.available" @doAction="handleAction(card)" :key="index"/>
       </div>
 
       <div id = 'HandDiv' class="cardslots" v-if="players[playerId]">
@@ -128,6 +132,7 @@ import CollectorsCard from '@/components/CollectorsCard.vue'
 import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
 import CollectorsSkillActions from '@/components/CollectorsSkillActions.vue'
 import CollectorsRaiseValueActions from '@/components/CollectorsRaiseValueActions.vue'
+import CollectorsAuctionActions from '@/components/CollectorsAuctionActions.vue'
 
 export default {
   name: 'Collectors',
@@ -135,7 +140,8 @@ export default {
     CollectorsCard,
     CollectorsBuyActions,
     CollectorsSkillActions,
-    CollectorsRaiseValueActions
+    CollectorsRaiseValueActions,
+    CollectorsAuctionActions
   },
   data: function () {
     return {

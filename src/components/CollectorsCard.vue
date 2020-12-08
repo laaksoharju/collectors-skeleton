@@ -4,7 +4,7 @@
       {{card.item}}
       {{card.skill}}
       {{card.market}}
-      {{card.value}}
+      {{card.auctionValue}}
     </div>
 </template>
 

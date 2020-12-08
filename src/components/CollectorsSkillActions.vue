@@ -49,7 +49,6 @@ export default {
       this.highlightAvailableCards(p.cost);
     },
     highlightAvailableCards: function (cost) {
-
       for (let i = 0; i < this.skillsOnSale.length; i += 1) {
         if (this.player.money >= cost) {
           this.$set(this.skillsOnSale[i], "available", true);

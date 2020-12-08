@@ -1,5 +1,5 @@
 <template>
-    <div id="ButActionDiv">
+    <div id="BuyActionDiv">
       <h1 style="text-align: center">{{ labels.buyCard }}</h1>
       <div class="buy-cards">
         <div v-for="(card, index) in itemsOnSale" :key="index" style="color:black">
@@ -100,7 +100,7 @@ export default {
     grid-template-columns: repeat(auto-fill, 130px);
   }
 
-  #ButActionDiv h1, h2, h3, p  {
+  #BuyActionDiv h1, h2, h3, p  {
     color: black;
   }
 

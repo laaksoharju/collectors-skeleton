@@ -54,7 +54,6 @@ function sockets(io, socket, data) {
       );
     });
 
-// TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
     socket.on('collectorsRaiseValue', function(d) {
       data.raiseValue(d.roomId, d.playerId, d.card1, d.cost)
       if (d.card2 !== null) {
