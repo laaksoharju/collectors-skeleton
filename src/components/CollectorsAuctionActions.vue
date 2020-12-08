@@ -83,8 +83,7 @@ export default {
 <style scoped>
 .auction {
   display: grid;
-  /*grid-template-columns: repeat(auto-fill, 250px);*/
-  grid-template-columns: repeat(auto-fill, 130px);
+  grid-template-columns: repeat(auto-fill, 100px);
   grid-template-rows: repeat(auto-fill, 260px);
 }
 
@@ -98,14 +97,12 @@ export default {
 .auction div:hover {
   transform: scale(0.9)translate(-10%,-10%);
   z-index: 1;
-
 }
 
 .buttons {
   display: grid;
   float:left;
-
-  grid-template-columns: repeat(auto-fill, 130px);
+  grid-template-columns: repeat(auto-fill, 110px);
   transform: scale(0.8)translate(10%,-10%);
 }
 
@@ -116,14 +113,24 @@ export default {
 
 #CurrentAuction {
   grid-area: CurrentAuction;
-  align-self: center;
-  height: 100%;
-  border: 1px dashed black;
+  align-self:flex-start;
+  height: 90%;
+  width: 80%;
+  border: 3px dashed black;
+}
+
+ #CurrentAuctionCard {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 160px);
+  grid-template-rows: repeat(auto-fill, 260px);
+}
+#CurrentAuctionCard div{
+  transform: scale(0.8)translate(-10%,-10%);
 }
 
 #AuctionCardsDiv {
   display: grid;
-  grid-template-columns: 80% 20% ;
+  grid-template-columns: 70% 30% ;
   grid-template-areas:
   "Cards CurrentAuction"
 }

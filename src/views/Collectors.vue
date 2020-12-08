@@ -481,6 +481,7 @@ background: #f5f2cc;
 
 #container {
   height: 100%;
+  width: 100%;
   display: grid;
   background: #D7D7D7;
   grid-template-columns: 25% 25% 25% 25%;
