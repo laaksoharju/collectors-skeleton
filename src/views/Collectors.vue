@@ -294,6 +294,8 @@ export default {
         console.log(d.playerId, "Got a skill");
         this.players = d.players;
         this.skillsOnSale = d.skillsOnSale;
+      }.bind(this)
+    );
 
     this.$store.state.socket.on('collectorsChangedTurn',
       function(d) {
@@ -342,6 +344,9 @@ export default {
           playerId: this.playerId,
           card: card,
           skill: this.skillsOnSale,
+        }
+      );
+      },
 
     changeTurn: function () {
       console.log("TEST");
@@ -351,14 +356,16 @@ export default {
           currentPlayer: this.currentPlayer
 
 
+          }
+        );
         }
-      );
-    }
   }
 }
 
 
+
 </script>
+
 <style scoped>
   header {
     user-select: none;
