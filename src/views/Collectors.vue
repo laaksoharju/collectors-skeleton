@@ -42,7 +42,7 @@
         <button v-if="players[playerId]" @click="raiseCurrentBid()">
           Raise current bid!
         </button>
-        {{ bidArray }}
+        {{bidArray}}
         <CollectorsAuctionActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
@@ -214,6 +214,7 @@ export default {
           function(d) {
             this.labels = d.labels;
             this.players = d.players;
+            this.bidArray = d.bidArray;
             this.itemsOnSale = d.itemsOnSale;
             this.marketValues = d.marketValues;
             this.skillsOnSale = d.skillsOnSale;
@@ -282,7 +283,7 @@ export default {
           this.$store.state.socket.on('collectorsBidRaised',
           function(d) {
             console.log(d.playerId, "bid is raised");
-            this.room.bidArray = d;
+            this.bidArray = d.bidArray;
           }.bind(this));
 
 },

@@ -109,7 +109,8 @@ Data.prototype.joinGame = function (roomId, playerId) {
                                  skills: [],
                                  items: [],
                                  income: [],
-                                 secret: [] };
+                                 secret: [],
+                                 bidArray: [] };
       return true;
     }
     console.log("Player", playerId, "was declined due to player limit");
@@ -309,7 +310,8 @@ Data.prototype.fakeMoreMoney = function (roomId, playerId) {
 Data.prototype.raiseCurrentBid = function (roomId, playerId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
-    room.bidArray.push(this.playerId);
+    console.log("funktionen körs");
+    room.players[playerId].bidArray.push(playerId);
   }
   else return [];
 }
