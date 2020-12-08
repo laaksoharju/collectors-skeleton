@@ -60,11 +60,8 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.lang = lang;
   room.deck = this.createDeck(lang);
   room.playerCount = playerCount;
-  //FÖRSÖK TILL KORTAKJ
-  let numbPlayers = room.playerCount;
-  room.itemsOnSale = room.deck.splice(0, (numbPlayers+1) );
-  room.skillsOnSale = room.deck.splice(0, (numbPlayers+1) );
-  //SLUT
+  room.itemsOnSale = room.deck.splice(0, 5);
+  room.skillsOnSale = room.deck.splice(0, 5);
   room.auctionCards = room.deck.splice(0, 4);
   room.market = [];
   room.buyPlacement = [ {cost:1, playerId: null},
@@ -146,7 +143,7 @@ Data.prototype.drawCard = function (roomId, playerId) {
   else return [];
 }
 
-//getSkill har jag skapat - SIRI
+//getSkill har jag skapat
 Data.prototype.getSkill = function (roomId, playerId, card, skill) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
@@ -172,36 +169,12 @@ Data.prototype.changeTurn = function (roomId, playerId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     let allPlayersId = Object.keys(room.players);
-    console.log(room.players);
-    console.log(allPlayersId);
     let nextPlayer = allPlayersId[0];
-    console.log("nextPlayer"+nextPlayer);
     for (let i in allPlayersId) {
-      console.log("NU I FORLOOP");
-      console.log("i: "+ i);
-      console.log("allPlayersId[i]: " + allPlayersId[i]);
-      console.log("längd"+allPlayersId[allPlayersId.length-1]);
 
-      /* ett försök, funkade ej
-      if (playerId === allPlayersId[allPlayersId.length-1]) {
-        nextPlayer= allPlayersId[0];
-        console.log("ny nextplayer 0 : " + nextPlayer);
-        break;
-      }
-      else {
-          i = Number(i) +  Number(1);
-          console.log("newI: "+ i);
-          nextPlayer = allPlayersId[i];
-          console.log("ALLpLAYERSiD [i+1]"+allPlayersId[i]);
-          console.log("ny nextplayer inte 0 " + nextPlayer);
-          break;
-      }*/
      if (playerId === allPlayersId[i]){
-        console.log("NU ÄR VI I IFSATSEN");
         let newIndex = (Number(i) + Number(1))%(room.playerCount);
-        console.log("index:"+ newIndex);
         nextPlayer = allPlayersId[newIndex]; //kanske +1 tänk MATTE
-        console.log("ny nextplayer: " + nextPlayer);
         break;
       }
     }
