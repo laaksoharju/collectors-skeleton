@@ -12,6 +12,7 @@ function sockets(io, socket, data) {
             marketValues: data.getMarketValues(d.roomId),
             skillsOnSale: data.getSkillsOnSale(d.roomId),
             auctionCards: data.getAuctionCards(d.roomId),
+            currentAuctionCard: data.getCurrentAuctionCard(d.roomId),
             placements: data.getPlacements(d.roomId),
             market: data.getMarket(d.roomId)
           }
@@ -41,6 +42,17 @@ function sockets(io, socket, data) {
     socket.on('collectorsPlaceBottleRaiseValue', function(d) {
       data.placeBottleRaiseValue(d.roomId, d.playerId, d.action, d.cost, d.index);
       io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId)
+      );
+    });
+
+    socket.on('collectorsStartAuction', function(d) {
+      data.startAuction(d.roomId, d.playerId, d.card, d.cost);
+      io.to(d.roomId).emit('collectorsAuctionStarted', {
+          playerId: d.playerId,
+          players: data.getPlayers(d.roomId),
+          auctionCards: data.getAuctionCards(d.roomId),
+          currentAuctionCard: data.getCurrentAuctionCard(d.roomId)
+        }
       );
     });
 
