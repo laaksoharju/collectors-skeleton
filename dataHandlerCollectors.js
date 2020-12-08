@@ -60,8 +60,11 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.lang = lang;
   room.deck = this.createDeck(lang);
   room.playerCount = playerCount;
-  room.itemsOnSale = room.deck.splice(0, 5);
-  room.skillsOnSale = room.deck.splice(0, 5);
+  //FÖRSÖK TILL KORTAKJ
+  let numbPlayers = room.playerCount;
+  room.itemsOnSale = room.deck.splice(0, (numbPlayers+1) );
+  room.skillsOnSale = room.deck.splice(0, (numbPlayers+1) );
+  //SLUT
   room.auctionCards = room.deck.splice(0, 4);
   room.market = [];
   room.buyPlacement = [ {cost:1, playerId: null},
