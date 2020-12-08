@@ -14,7 +14,7 @@
         @placeBottle="placeBottle('buyItem', $event)"/>
       </div>
 
-      <div id ='BuySkillDiv' >
+      <div id ="BuySkillDiv">
         <CollectorsSkillActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
@@ -24,7 +24,7 @@
         @placeBottle="placeBottle('buySkill', $event)"/>
       </div>
 
-      <div id ='RaiseValueDiv' >
+      <div id ="RaiseValueDiv">
         <CollectorsRaiseValueActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
@@ -32,16 +32,18 @@
         :skillsOnSale="skillsOnSale"
         :auctionCards="auctionCards"
         :market="market"
+        :currentAuctionCard="currentAuctionCard"
         :placement="marketPlacement"
         @raiseValue="raiseValue($event)"
         @placeBottleRaiseValue="placeBottleRaiseValue('market', $event)"/>
       </div>
 
-      <div id='AuctionDiv'>
+      <div id="AuctionDiv">
         <CollectorsAuctionActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
         :auctionCards="auctionCards"
+        :currentAuctionCard="currentAuctionCard"
         :placement="auctionPlacement"
         @handleAction="handleAction($event)"
         @placeBottle="placeBottle('startAuction', $event)"/>
@@ -52,17 +54,17 @@
         <!-- <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/> -->
       </div>
 
-      <div id = 'HandDiv' class="cardslots" v-if="players[playerId]">
+      <div id="HandDiv" class="cardslots" v-if="players[playerId]">
         <h2>Hand</h2>
         <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="handleAction(card)" :key="index"/>
       </div>
 
-      <div id = 'PlayerItemsDiv' class="cardslots" v-if="players[playerId]">
+      <div id="PlayerItemsDiv" class="cardslots" v-if="players[playerId]">
         <h2>Items</h2>
         <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
       </div>
 
-      <div id = 'PlayerSkillsDiv' class="cardslots" v-if="players[playerId]">
+      <div id="PlayerSkillsDiv" class="cardslots" v-if="players[playerId]">
         <h2>Skills</h2>
         <CollectorsCard v-for="(card, index) in players[playerId].skills" :card="card" :key="index"/>
       </div>
@@ -113,7 +115,6 @@
             </div>
           </div>
         </div>
-
 
         <footer>
           <p>
@@ -176,6 +177,7 @@ export default {
         itemsOnSale: [],
         skillsOnSale: [],
         auctionCards: [],
+        currentAuctionCard: [],
         playerid: 0
         }
       },
@@ -217,6 +219,7 @@ export default {
             this.marketPlacement = d.placements.marketPlacement;
             this.auctionPlacement = d.placements.auctionPlacement;
           }.bind(this));
+
           this.$store.state.socket.on('collectorsBottlePlaced',
           function(d) {
             this.buyPlacement = d.buyPlacement;
@@ -224,46 +227,52 @@ export default {
             this.marketPlacement = d.marketPlacement;
             this.auctionPlacement = d.auctionPlacement;
           }.bind(this));
+
           this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
+
           this.$store.state.socket.on('collectorsCardDrawn',
           function(d) {
             //this has been refactored to not single out one player's cards
             //better to update the state of all cards
             this.players = d;
-          }.bind(this)
-        );
-        this.$store.state.socket.on('collectorsCardBought',
-        function(d) {
-          console.log(d.playerId, "bought a card");
-          this.players = d.players;
-          this.itemsOnSale = d.itemsOnSale;
-        }.bind(this)
-      );
-      this.$store.state.socket.on('collectorsSkillAcquired',
-      function(d) {
-        console.log(d.playerId, "acquired a skill");
-        this.players = d.players;
-        this.skillsOnSale = d.skillsOnSale;
-      }.bind(this)
-    );
-    this.$store.state.socket.on('collectorsValueRaised',
-    function(d) {
-      console.log(d.playerId, "raised a value");
-      this.players = d.players;
-      this.marketValues = d.marketValues;
-      this.market = d.market;
-      this.skillsOnSale = d.skillsOnSale;
-      this.auctionCards = d.auctionCards;
-    }.bind(this)
-  );
+          }.bind(this));
 
+          this.$store.state.socket.on('collectorsCardBought',
+          function(d) {
+            console.log(d.playerId, "bought a card");
+            this.players = d.players;
+            this.itemsOnSale = d.itemsOnSale;
+          }.bind(this));
 
-  this.$store.state.socket.on('collectorsMoneyFaked',
-  function(d) {
-    console.log(d.playerId, "faked money");
-    this.players = d;
-  }.bind(this)
-);
+          this.$store.state.socket.on('collectorsSkillAcquired',
+          function(d) {
+            console.log(d.playerId, "acquired a skill");
+            this.players = d.players;
+            this.skillsOnSale = d.skillsOnSale;
+          }.bind(this));
+
+          this.$store.state.socket.on('collectorsValueRaised',
+          function(d) {
+            console.log(d.playerId, "raised a value");
+            this.players = d.players;
+            this.marketValues = d.marketValues;
+            this.market = d.market;
+            this.skillsOnSale = d.skillsOnSale;
+            this.auctionCards = d.auctionCards;
+          }.bind(this));
+
+          this.$store.state.socket.on('collectorsAuctionStarted',
+          function(d) {
+            this.players = d.players;
+            this.auctionCards = d.auctionCards;
+            this.currentAuctionCard = d.currentAuctionCard;
+          }.bind(this));
+
+          this.$store.state.socket.on('collectorsMoneyFaked',
+          function(d) {
+            console.log(d.playerId, "faked money");
+            this.players = d;
+          }.bind(this));
 
 },
 methods: {
@@ -305,7 +314,6 @@ methods: {
   },
 
   buyCard: function (card) {
-    console.log("buyCard", card);
     this.$store.state.socket.emit('collectorsBuyCard', {
       roomId: this.$route.params.id,
       playerId: this.playerId,
@@ -315,7 +323,7 @@ methods: {
   },
 
   getSkill: function (card) {
-    console.log("getSkill", card);
+    console.log(this.currentAuctionCard);
     this.$store.state.socket.emit('collectorsGetSkill', {
       roomId: this.$route.params.id,
       playerId: this.playerId,
@@ -326,7 +334,6 @@ methods: {
 
   handleAction: function (card) {
     if (card.available) {
-      console.log("Kort tillgängligt, handleAction körs");
       if (this.chosenAction === "buyItem") {
         this.buyCard(card);
       }
@@ -374,7 +381,6 @@ methods: {
   },
 
   startAuction: function (card) {
-    console.log("startAuction", card);
     this.$store.state.socket.emit('collectorsStartAuction', {
       roomId: this.$route.params.id,
       playerId: this.playerId,

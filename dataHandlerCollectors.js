@@ -63,6 +63,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.itemsOnSale = room.deck.splice(0, 5);
   room.skillsOnSale = room.deck.splice(0, 5);
   room.auctionCards = room.deck.splice(0, 4);
+  room.currentAuctionCard = [];
   room.market = [];
   room.buyPlacement = [ {cost:1, playerId: null},
                         {cost:1, playerId: null},
@@ -203,7 +204,6 @@ Data.prototype.getSkill = function (roomId, playerId, card, cost) {
   }
 }
 
-//Ny, för raise value
 Data.prototype.raiseValue = function (roomId, playerId, card, cost) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
@@ -232,7 +232,31 @@ Data.prototype.raiseValue = function (roomId, playerId, card, cost) {
     }
     room.market.push(...c);
     room.players[playerId].money -= cost;
+  }
+}
 
+Data.prototype.startAuction = function (roomId, playerId, card, cost) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    let c = null;
+    for (let i = 0; i < room.auctionCards.length; i += 1) {
+      if (room.auctionCards[i].x === card.x &&
+          room.auctionCards[i].y === card.y) {
+        c = room.auctionCards.splice(i,1, {});
+        break;
+      }
+    }
+    for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
+      if (room.players[playerId].hand[i].x === card.x &&
+          room.players[playerId].hand[i].y === card.y) {
+        c = room.players[playerId].hand.splice(i,1);
+        break;
+      }
+    }
+    console.log(room.currentAuctionCard);
+    room.currentAuctionCard.push(...c);
+    room.players[playerId].money -= cost;
+    console.log(room.currentAuctionCard);
   }
 }
 
@@ -341,11 +365,18 @@ Data.prototype.getMarket = function(roomId){
   else return [];
 }
 
-
 Data.prototype.getAuctionCards = function(roomId){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     return room.auctionCards;
+  }
+  else return [];
+}
+
+Data.prototype.getCurrentAuctionCard = function(roomId){
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    return room.currentAuctionCard;
   }
   else return [];
 }
