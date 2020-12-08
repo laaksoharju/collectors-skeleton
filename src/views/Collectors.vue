@@ -21,6 +21,7 @@
            <div class="skillCard" v-for="(card, index) in skillsOnSale" :key="index">
              <CollectorsCard :card="card" />
            </div>
+
        </div>
 
        <div class = "itemPool">
@@ -31,13 +32,15 @@
           </div>
           <div class = "ItemBottleCoinTwo">
           </div>
+          <div class = "ItemBottleCoinTwo">
+          </div>
           <div class = "ItemBottleCoinThree">
           </div>
+          <div class="itemCard" v-for="(card, index) in itemsOnSale" :key="index">
+            <CollectorsCard :card="card" />
+          </div> 
 
 
-          <div class="itemCard" v-if="players[playerId]">
-            <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
-          </div>
        </div>
 
 
@@ -55,10 +58,16 @@
 
 
        <div class = "auctionPool">
-        <div class= "titleAuctionPool"> Auction Pool</div>
-         <div class="cardslots">
+        <div class= "titleAuctionPool" > Auction Pool
+        </div>
+
+        <div class="auctionCard" v-for="(card, index) in auctionCards" :key="index">
+          <CollectorsCard :card="card" />
+        </div>
+      <!--   <div class="cardslots">
            <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
-         </div>
+         </div> -->
+
          <div class = "EnergyBottleCoinWhiteTwo"></div> <!-- Olika flaskor med vita coins, 1 2 eller 0 -->
          <div class = "EnergyBottleCoinWhiteOne"></div>
          <div class = "EnergyBottleCoinWhiteNoll"></div>
@@ -107,25 +116,30 @@
       </div>
 
      </div>
+     <!-- FRÅN DRAWCARD SOM VI FICK FRÅN BÖRJAN, KOPPLAT TILL PLAYERID
+     <div class="itemCard" v-if="players[playerId]">
+       <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
+     </div> -->
 
   </div>
+  Här : {{allPlayersId}}
 
     {{buyPlacement}} {{chosenPlacementCost}}
 
-
-      <CollectorsBuyActions v-if="players[playerId]"
-        :labels="labels"
-        :player="players[playerId]"
-        :itemsOnSale="itemsOnSale"
-        :marketValues="marketValues"
-        :placement="buyPlacement"
-        @buyCard="buyCard($event)"
-        @placeBottle="placeBottle('buy', $event)"/>
-      <div class="buttons">
-        <button @click="drawCard">
-          {{ labels.draw }}
-        </button>
-      </div>
+<!-- här låg CollectorsBuyActions delen : -->
+<CollectorsBuyActions v-if="players[playerId]"
+  :labels="labels"
+  :player="players[playerId]"
+  :itemsOnSale="itemsOnSale"
+  :marketValues="marketValues"
+  :placement="buyPlacement"
+  @buyCard="buyCard($event)"
+  @placeBottle="placeBottle('buy', $event)"/>
+<div class="buttons">
+  <button @click="drawCard">
+    {{ labels.draw }}
+  </button>
+</div>
 
     <!--  <div class="cardslots">
         <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
@@ -208,7 +222,11 @@ export default {
     playerId: function() { return this.$store.state.playerId},
     allPlayersId: function() {
       return Object.keys(this.players) //få nyckeln till players - playerId
-    }
+    }/*,
+    numbOfPlayers: function () {
+      let counter = (Object.keys(this.players)).length;
+      return counter
+    }*/
   },
   watch: {
     players: function(newP, oldP) {
@@ -389,7 +407,7 @@ export default {
     background-color: #f0d9cc ;
     color: black;
     display: grid;
-    grid-template-columns: repeat(5, 50px);
+    grid-template-columns: repeat(6, 50px);
     grid-template-rows: repeat(2,50px);
     grid-auto-flow: row;
   }
@@ -450,7 +468,7 @@ export default {
     display: grid;
     grid-template-columns: repeat(3, 50px);
     grid-template-rows: repeat(6,100px);
-    grid-auto-flow: column;
+    /*grid-auto-flow: column; */
   }
 
 .titleAuctionPool{
@@ -564,9 +582,6 @@ export default {
     z-index: 0;
   }
 
-
-
-
   .skillCard {
     transform: scale(0.25);
   /*  display: grid;
@@ -579,7 +594,25 @@ export default {
   }
 
   .itemCard{
-    transform: scale(0.3);
+    transform: scale(0.25);
+  }
+
+  .itemCard div:hover{
+    transform: scale(2)translate(-25%,0);
+    z-index: 1;
+  }
+
+  .auctionCard {
+    transform: scale(0.25);
+    grid-column: 2;
+
+  /*  display: grid;
+    grid-template-columns: repeat(1, 15px);
+    grid-template-rows: repeat(5,160px);*/
+  }
+  .auctionCard div:hover{
+    transform: scale(2)translate(-25%,0);
+    z-index: 1;
   }
 
   .cardslots div:hover {
