@@ -1,7 +1,7 @@
 
 <template>
     <div class = "circle"> 
-        <p>{{value}} &#36;</p>
+        <p>&#36; {{value}}</p>
     </div>
 </template>
 

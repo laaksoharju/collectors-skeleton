@@ -1,7 +1,7 @@
 <template>
     <div>       
         <div id="workArea">
-            <p id=workAreaText>WORK</p>
+            <h2 id=workAreaText>Work</h2>
                 <div v-if = "round == 1" class="rectangular firstArea" >
                     <div class="workArea_circle" v-on:click = "circleClicked"></div>
                     <div class="first figures">&#9203;</div>
@@ -115,8 +115,8 @@ export default {
     #workArea {
         /*background-color: rgb(235, 235, 109);*/
         background-color: #F5F2CC; /* #ffe599ff;*/
-        width: 650px;
-        border: 5px solid black;
+        width: 100%;
+        border: 1px solid black;
         display: flex;
         align-items: center;
         flex-direction: column;
@@ -131,7 +131,7 @@ export default {
 
     #workAreaText {
         color:black;
-        font-size: 30px;
+        /*font-size: 30px;*/
         font-weight: bold;
         text-align: center;
     }

@@ -1,15 +1,19 @@
 <template>
   <div>
     <main>
-         
- <GameBoard 
+<div class="wrapper">      
+ <GameBoard class="gridGame"
   :itemsOnSale="itemsOnSale"
  :skillsOnSale="skillsOnSale"
  :auctionCards="auctionCards"
   />
 
-      {{ buyPlacement }} {{ chosenPlacementCost }}
-      <WorkArea/>
+     <!-- {{ buyPlacement }} {{ chosenPlacementCost }}-->
+  <WorkArea class="gridWork" />
+
+  <OtherPlayerboards class="gridOtherPlayerboards"/>
+</div>
+
       <CollectorsBuyActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
@@ -88,7 +92,8 @@
 import CollectorsCard from "@/components/CollectorsCard.vue";
 import CollectorsBuyActions from "@/components/CollectorsBuyActions.vue";
 import GameBoard from "@/components/GameBoard.vue";
-import WorkArea from '@/components/WorkArea.vue'
+import WorkArea from '@/components/WorkArea.vue';
+import OtherPlayerboards from '@/components/OtherPlayerboards.vue';
 
 export default {
   name: "Collectors",
@@ -97,6 +102,7 @@ export default {
     CollectorsBuyActions,
     GameBoard,
     WorkArea,
+    OtherPlayerboards,
   },
   data: function () {
     return {
@@ -257,6 +263,27 @@ header {
 }
 main {
   user-select: none;
+}
+
+.wrapper {
+  display: flex;
+  grid-template-columns: 1500px 1500px 1500px;
+
+}
+
+.gridGame {
+  grid-column: 1;
+  grid-row: 1 /span 2;
+}
+
+.gridWork {
+  grid-column: 2;
+  grid-row: 1 /span 2;
+}
+
+.gridOtherPlayerboard {
+  grid-column: 3;
+  grid-row: 1;
 }
 
 footer {

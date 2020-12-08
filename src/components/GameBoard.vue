@@ -4,10 +4,18 @@
       <div class="section-slots">
         <h2 class="category-title">Items</h2>
         <div class="bottleCircles">
-          <div class="bottleCircle">$1</div>
-          <div class="bottleCircle">$1</div>
-          <div class="bottleCircle">$1</div>
-          <div class="bottleCircle">$1</div>
+          <div class="circleComponent">
+                    <CircleComponent v-bind:value=1 />
+          </div>
+          <div class="circleComponent">
+                    <CircleComponent v-bind:value=1 />
+          </div>
+          <div class="circleComponent">
+                    <CircleComponent v-bind:value=1 />
+          </div>
+          <div class="circleComponent">
+                    <CircleComponent v-bind:value=1 />
+          </div>
         </div>
       </div>
       <div class="section-card cardslots"></div>
@@ -17,10 +25,18 @@
       <div class="section-slots">
         <h2 class="category-title">Skills</h2>
         <div class="bottleCircles">
-          <div class="bottleCircle">$1</div>
-          <div class="bottleCircle">$1</div>
-          <div class="bottleCircle">$1</div>
-          <div class="bottleCircle">$1</div>
+          <div class="circleComponent">
+                    <CircleComponent v-bind:value=1 />
+          </div>
+          <div class="circleComponent">
+                    <CircleComponent v-bind:value=1 />
+          </div>
+          <div class="circleComponent">
+                    <CircleComponent v-bind:value=1 />
+          </div>
+          <div class="circleComponent">
+                    <CircleComponent v-bind:value=1 />
+          </div>
         </div>
       </div>
       <div class="section-card cardslots">
@@ -35,10 +51,18 @@
       <div class="section-slots">
         <h2 class="category-title">Items</h2>
         <div class="bottleCircles">
-          <div class="bottleCircle">$1</div>
-          <div class="bottleCircle">$1</div>
-          <div class="bottleCircle">$1</div>
-          <div class="bottleCircle">$1</div>
+          <div class="circleComponent">
+                    <CircleComponent v-bind:value=1 />
+          </div>
+          <div class="circleComponent">
+                    <CircleComponent v-bind:value=1 />
+          </div>
+          <div class="circleComponent">
+                    <CircleComponent v-bind:value=1 />
+          </div>
+          <div class="circleComponent">
+                    <CircleComponent v-bind:value=1 />
+          </div>
         </div>
       </div>
       <div class="raise-value-slot-container">
@@ -54,10 +78,18 @@
       <div class="section-slots">
         <h2 class="category-title">Auction</h2>
         <div class="bottleCircles">
-          <div class="bottleCircle">$1</div>
-          <div class="bottleCircle">$1</div>
-          <div class="bottleCircle">$1</div>
-          <div class="bottleCircle">$1</div>
+          <div class="circleComponent">
+                    <CircleComponent v-bind:value=1 />
+          </div>
+          <div class="circleComponent">
+                    <CircleComponent v-bind:value=1 />
+          </div>
+          <div class="circleComponent">
+                    <CircleComponent v-bind:value=1 />
+          </div>
+          <div class="circleComponent">
+                    <CircleComponent v-bind:value=1 />
+          </div>
         </div>
       </div>
       <div class="section-card cardslots">
@@ -73,13 +105,15 @@
 
 
 <script>
-import CollectorsCard from '@/components/CollectorsCard.vue'
+import CollectorsCard from '@/components/CollectorsCard.vue';
+import CircleComponent from '@/components/CircleComponent.vue';
 
 
 export default {
   name: 'GameBoard',
   components: {
     CollectorsCard,
+    CircleComponent
   },
   props: {
     skillsOnSale: Array,
@@ -169,7 +203,8 @@ export default {
   grid-column: 1/3;
 }
 
-.bottleCircle {
+/*Kan tas bort eftersom circleComponent är
+/*.bottleCircle {
   margin: auto;
   display: flex;
   justify-content: center;
@@ -179,6 +214,13 @@ export default {
   color: black;
   background-color: white;
   border-radius: 50%;
+}*/
+
+.circleComponent {
+   margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .cardslots {
