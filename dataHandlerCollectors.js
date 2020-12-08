@@ -142,6 +142,27 @@ Data.prototype.drawCard = function (roomId, playerId) {
   }
   else return [];
 }
+
+//getSkill har jag skapat - SIRI
+Data.prototype.getSkill = function (roomId, playerId, card, skill) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    let c = null;
+
+    //check if card is among skills on sale
+    for (let i = 0; i < room.skillsOnSale.length; i += 1) {
+      // since card comes from the client, it is NOT the same object (reference)
+      // so we need to compare properties for determining equalit
+      if (room.skillsOnSale[i].x === card.x &&
+          room.skillsOnSale[i].y === card.y) {
+        c = room.skillsOnSale.splice(i,1, {});
+
+        break;
+      }
+    }
+    room.players[playerId].skills.push(...c);
+  }
+
 /* VI LÄGGER TILL FÖR ATT BYTA SPELARE I TURNBUTTON */
 Data.prototype.changeTurn = function (roomId, playerId) {
   let room = this.rooms[roomId];
@@ -183,6 +204,7 @@ Data.prototype.changeTurn = function (roomId, playerId) {
     return nextPlayer;
   }
   else return "";
+
 }
 
 /* moves card from itemsOnSale to a player's hand */
