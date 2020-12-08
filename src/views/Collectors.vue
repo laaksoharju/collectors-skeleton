@@ -39,6 +39,10 @@
       </div>
 
       <div id="AuctionDiv">
+        <button v-if="players[playerId]" @click="raiseCurrentBid()">
+          Raise current bid!
+        </button>
+        {{ bidArray }}
         <CollectorsAuctionActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
@@ -169,6 +173,7 @@ export default {
         chosenAction: "",
         raiseValueIndex: null,
         raiseValueSecondCard: null,
+        bidArray: [],
         marketValues: { fastaval: 0,
           movie: 0,
           technology: 0,
@@ -274,6 +279,12 @@ export default {
             this.players = d;
           }.bind(this));
 
+          this.$store.state.socket.on('collectorsBidRaised',
+          function(d) {
+            console.log(d.playerId, "bid is raised");
+            this.room.bidArray = d;
+          }.bind(this));
+
 },
 methods: {
   selectAll: function (n) {
@@ -351,6 +362,13 @@ methods: {
 
   fakeMoreMoney: function () {
     this.$store.state.socket.emit('collectorsFakeMoreMoney', {
+      roomId: this.$route.params.id,
+      playerId: this.playerId
+    });
+  },
+
+  raiseCurrentBid: function () {
+    this.$store.state.socket.emit('collectorsRaiseCurrentBid', {
       roomId: this.$route.params.id,
       playerId: this.playerId
     });

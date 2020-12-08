@@ -64,6 +64,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.skillsOnSale = room.deck.splice(0, 5);
   room.auctionCards = room.deck.splice(0, 4);
   room.currentAuctionCard = [];
+  room.bidArray = [];
   room.market = [];
   room.buyPlacement = [ {cost:1, playerId: null},
                         {cost:1, playerId: null},
@@ -303,6 +304,16 @@ Data.prototype.fakeMoreMoney = function (roomId, playerId) {
   }
   else return [];
 }
+
+// BIDDING
+Data.prototype.raiseCurrentBid = function (roomId, playerId) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    room.bidArray.push(this.playerId);
+  }
+  else return [];
+}
+
 
 /* returns the hand of the player */
 Data.prototype.getCards = function (roomId, playerId) {
