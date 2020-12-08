@@ -162,6 +162,7 @@ Data.prototype.getSkill = function (roomId, playerId, card, skill) {
     }
     room.players[playerId].skills.push(...c);
   }
+}
 
 /* VI LÄGGER TILL FÖR ATT BYTA SPELARE I TURNBUTTON */
 Data.prototype.changeTurn = function (roomId, playerId) {
