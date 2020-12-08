@@ -35,6 +35,7 @@ function sockets(io, socket, data) {
       );
     });
     socket.on('collectorsBuyCard', function(d) {
+      console.log('rich socket')
       
       data.buyCard(d.roomId, d.playerId, d.card, d.cost,d.action)
       io.to(d.roomId).emit('collectorsCardBought', { 

@@ -1,11 +1,6 @@
 <template>
   <div>
     <main>
-      {{ players }}
-      {{ marketValues }}
-      <button v-if="players[playerId]" @click="players[playerId].money += 1">
-        fake more money
-      </button>
       <div class="collectors-game">
         <section class="buy_item">
           <CollectorsBuyActions
@@ -182,6 +177,10 @@
           readonly="readonly"
         />
       </p>
+
+      <button v-if="players[playerId]" @click="players[playerId].money += 1">
+        fake more money
+      </button>
     </footer>
   </div>
 </template>
@@ -190,14 +189,14 @@
 <script>
 // /eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }]/;
 
-import CollectorsCard from "@/components/CollectorsCard.vue";
+// import CollectorsCard from "@/components/CollectorsCard.vue";
 import CollectorsBuyActions from "@/components/CollectorsBuyActions.vue";
 import Bottles from "@/components/Bottles.vue";
 
 export default {
   name: "Collectors",
   components: {
-    CollectorsCard,
+    // CollectorsCard,
     CollectorsBuyActions,
     Bottles,
   },
@@ -271,14 +270,8 @@ export default {
 
     this.$store.state.socket.emit("collectorsLoaded", {
       roomId: this.$route.params.id,
-      playerId: this.playerId,
-    });
-
-    this.$store.state.socket.emit("notifyPlayers", {
-      roomId: this.$route.params.id,
       // playerId: this.playerId,
     });
-
     this.$store.state.socket.on(
       "collectorsInitialize",
       function (d) {
@@ -294,6 +287,11 @@ export default {
         this.auctionPlacement = d.placements.auctionPlacement;
       }.bind(this)
     );
+
+    this.$store.state.socket.emit("notifyPlayers", {
+      roomId: this.$route.params.id,
+      playerId: this.playerId,
+    });
 
     this.$store.state.socket.on(
       "notifyPlayers",
@@ -392,12 +390,13 @@ export default {
         playerId: this.playerId,
       });
     },
-    buyCard: function (card) {
+    buyCard: function (action, card) {
       console.log("buyCard", card);
       this.$store.state.socket.emit("collectorsBuyCard", {
         roomId: this.$route.params.id,
         playerId: this.playerId,
         card: card,
+        action: action,
         cost: this.marketValues[card.market] + this.chosenPlacementCost,
       });
     },
@@ -415,6 +414,8 @@ main {
   user-select: none;
 }
 footer {
+  position: relative;
+  top: 95vh;
   margin-top: 5em auto;
 }
 footer a {
@@ -424,20 +425,20 @@ footer a {
 footer a:visited {
   color: ivory;
 }
-  
 
 .main-board {
-  background-color: rgb(242, 244, 247);
   border: 1px solid rgb(37, 37, 44);
-  border-radius: 10px;
-  margin: 1em;
-  padding: 1em;
+
+  border-radius: 20px;
+  background-color: #fff;
+  /* margin: 1em;
+  padding: 1em; */
   position: absolute;
   grid-column: 1/2;
-  top: 15vh;
-  left: 10vw;
-  height: 70vh;
-  width: 30vw;
+  top: 10vh;
+  left: 9vw;
+
+  width: 40vw;
   display: grid;
   grid-template-columns: 0.8fr 1.2fr 2.5fr;
   grid-gap: 0.5em;
@@ -452,8 +453,8 @@ footer a:visited {
 }
 .buy_item >>> .buy-cards {
   position: relative;
-  left: 62vw;
-  top: 20.2vh;
+  left: 54vw;
+  top: 15.2vh;
   grid-template-columns: repeat(5, 8rem);
 
   grid-gap: 1rem;
@@ -462,18 +463,21 @@ footer a:visited {
 
 .buy_skill >>> .buy-cards {
   position: relative;
-  left: -40.2vw;
-  top: 57vh;
+  left: 49vw;
+  top: -20vh;
   grid-template-rows: repeat(5, 11rem);
   grid-template-columns: 12rem;
   transform: scale(1.2) translate(-50%, -50%);
   transition-timing-function: ease-out;
 }
-.do_auction {
+.do_auction >>> .buy-cards {
   position: relative;
-  z-index: 5;
-  left: 24.5vw;
-  height: 30vh;
+  left: -4.5vw;
+  top: -13vh;
+  grid-template-columns: repeat(5, 8.8rem);
+  grid-template-rows: 12rem;
+  transform: scale(1.2) translate(-50%, -50%);
+  z-index: 6;
 }
 
 .item_bottle {
@@ -503,8 +507,8 @@ footer a:visited {
   background-size: 100% 100%;
 }
 .skill_bottle >>> .buttons {
-  top: 32vh;
-  left: 1.5vw;
+  top: 35vh;
+  left: 2.5vw;
   display: grid;
   grid-template-rows: repeat(5, 6rem);
   grid-gap: 1em;
@@ -563,32 +567,36 @@ footer a:visited {
 }
 
 .collectors-game {
+  position: absolute;
   display: grid;
   grid-gap: 5px;
   grid-template-columns: 60% 40%;
-  background-color: #fff;
-  color: #444;
+  background: rgb(92, 160, 170);
+  background: linear-gradient(
+    0deg,
+    rgba(92, 160, 170, 1) 0%,
+    rgba(189, 149, 93, 0.9920343137254902) 100%
+  );
 
- 
-  
- 
-  height: 100vh;
-  width: 100vw;
+  color: #444;
+  width: 100%;
+  height: 100%;
+
   z-index: 0;
 }
 
 .game {
-  background-color: #444;
-  color: #fff;
-  border-radius: 5px;
-  padding: 20px;
   font-size: 150%;
-  height: 90vh;
+  height: 78vh;
 }
 
-
-
 .player-board {
+  border-radius: 5px;
+  background-color: #444;
+  color: #fff;
+  position: relative;
+  top: 10vh;
+  right: 1vw;
   grid-column: 2;
   grid-row: 1;
 }
@@ -737,7 +745,7 @@ p {
   outline: 2px solid white;
 }
 
-@ media screen and (max-width: 800px) {
+@media screen and (max-width: 800px) {
   main {
     width: 90vw;
   }
