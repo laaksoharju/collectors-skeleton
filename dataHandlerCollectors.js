@@ -310,8 +310,12 @@ Data.prototype.fakeMoreMoney = function (roomId, playerId) {
 Data.prototype.raiseCurrentBid = function (roomId, playerId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
-    console.log("funktionen körs");
-    room.players[playerId].bidArray.push(playerId);
+      console.log("funktionen körs");
+      room.bidArray.push(playerId);
+      console.log(room.bidArray);
+      console.log("Current leading bid: ",room.bidArray.length,"$" );
+      
+      
   }
   else return [];
 }
