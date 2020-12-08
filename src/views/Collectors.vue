@@ -18,11 +18,20 @@
          <div class = "EnergyBottleCoin">
          </div>
 
-           <div class="skillCard" v-for="(card, index) in skillsOnSale" :key="index">
-             <CollectorsCard :card="card" />
+           <!--<div class="skillCard" v-for="(card, index) in skillsOnSale" :key="index">
+             <CollectorsCard :card="card" :availableAction="card.available" @doAction="getSkill(card)" :key="index" />
+
+           </div>-->
+
+
+           <div class="skillCard" v-if="players[playerId]">
+             <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :availableAction="card.available" @doAction="getSkill(card)" :key="index"/>
+
            </div>
 
        </div>
+
+
 
        <div class = "itemPool">
         Item Pool
@@ -38,7 +47,7 @@
           </div>
           <div class="itemCard" v-for="(card, index) in itemsOnSale" :key="index">
             <CollectorsCard :card="card" />
-          </div> 
+          </div>
 
 
        </div>
@@ -52,10 +61,10 @@
          <div class = "iconFilm"></div>
          <div class = "iconTech"></div>
        </div>
+
        <div class = "workPool">
          Work Pool
        </div>
-
 
        <div class = "auctionPool">
         <div class= "titleAuctionPool" > Auction Pool
@@ -75,6 +84,9 @@
        </div>
        <div class="playerBoard">
           Player {{playerId}}'s Board
+          <div class="chosenSkillCard" v-if="players[playerId]">
+            <CollectorsCard v-for="(card, index) in players[playerId].skills" :card="card" :key="index"/>
+          </div>
       </div>
       <div class="playerHand">
         Hand
@@ -177,11 +189,13 @@
 import CollectorsCard from '@/components/CollectorsCard.vue'
 import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
 
+
 export default {
   name: 'Collectors',
   components: {
     CollectorsCard,
-    CollectorsBuyActions
+    CollectorsBuyActions,
+
   },
   data: function () {
     return {
@@ -288,9 +302,20 @@ export default {
         this.itemsOnSale = d.itemsOnSale;
       }.bind(this)
     );
+
+
+    this.$store.state.socket.on('collectorsSkillCaught',
+      function(d) {
+        console.log(d.playerId, "Got a skill");
+        this.players = d.players;
+        this.skillsOnSale = d.skillsOnSale;
+      }.bind(this)
+    );
+
     this.$store.state.socket.on('collectorsChangedTurn',
       function(d) {
           this.currentPlayer = d;
+
       }.bind(this)
     );
   },
@@ -325,6 +350,19 @@ export default {
         }
       );
     },
+
+    getSkill: function (card) {
+      console.log("getSkill", card);
+      console.log("NU HAR DEN NÅTT GETSKILL FUNKTIONEN 1");
+      this.$store.state.socket.emit('collectorsGetSkill', {
+          roomId: this.$route.params.id,
+          playerId: this.playerId,
+          card: card,
+          skill: this.skillsOnSale,
+        }
+      );
+      },
+
     changeTurn: function () {
       console.log("TEST");
 
@@ -332,14 +370,17 @@ export default {
           roomId: this.$route.params.id,
           currentPlayer: this.currentPlayer
 
+
+          }
+        );
         }
-      );
-    }
   }
 }
 
 
+
 </script>
+
 <style scoped>
   header {
     user-select: none;
@@ -376,6 +417,7 @@ export default {
     display: grid;
     grid-template-columns: repeat(3, 50px);
     grid-template-rows: repeat(6,50px);
+    grid-row-gap: 25px;
     grid-auto-flow: column;
     }
 
@@ -406,9 +448,11 @@ export default {
     grid-template-rows: repeat(100,150px);*/
     background-color: #f0d9cc ;
     color: black;
+
     display: grid;
     grid-template-columns: repeat(6, 50px);
     grid-template-rows: repeat(2,50px);
+    grid-column-gap: 25px;
     grid-auto-flow: row;
   }
 
@@ -516,7 +560,18 @@ export default {
     grid-template-rows: repeat(100,150px);
     background-color: pink ;
     color: black;
+    display: grid;
+    grid-template-columns: repeat(8, 60px);
+    grid-template-rows: repeat(3,60px);
   }
+
+  .chosenSkillCard {
+    grid-column: 5;
+    grid-row: 1;
+    transform: scale(0.25);
+  }
+
+
   .playerHand {
     grid-column: 11/span 5;
     grid-row: 6/span 4;
@@ -582,6 +637,12 @@ export default {
     z-index: 0;
   }
 
+  .cardslots div:hover {
+    transform: scale(1)translate(-25%,0);
+    z-index: 1;
+  }
+
+
   .skillCard {
     transform: scale(0.25);
   /*  display: grid;
@@ -615,10 +676,6 @@ export default {
     z-index: 1;
   }
 
-  .cardslots div:hover {
-    transform: scale(1)translate(-25%,0);
-    z-index: 1;
-  }
   .iconBird {
     width: 30px;
     height: 40px;
