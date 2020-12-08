@@ -48,10 +48,9 @@ export default {
       return (this.player.money < cost);
     },
 
-    placeBottle: function (p, index) {
-      p.index = index;
-      this.$emit('placeBottle', p);
-      this.highlightAvailableCards();
+    placeBottle: function (p) {
+      this.$emit('placeBottle', p.cost);
+      this.highlightAvailableCards(p.cost);
     },
 
     highlightAvailableCards: function () {

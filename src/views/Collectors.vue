@@ -44,7 +44,7 @@
         :auctionCards="auctionCards"
         :placement="auctionPlacement"
         @handleAction="handleAction($event)"
-        @placeBottle="placeBottle('buySkill', $event)"/>
+        @placeBottle="placeBottle('startAuction', $event)"/>
       </div>
 
       <div id ='WorkDiv' class="cardslots">
@@ -274,6 +274,7 @@ methods: {
   placeBottle: function (action, cost) {
     this.chosenPlacementCost = cost;
     this.chosenAction = action;
+    console.log(action);
     this.$store.state.socket.emit('collectorsPlaceBottle', {
       roomId: this.$route.params.id,
       playerId: this.playerId,
@@ -335,6 +336,9 @@ methods: {
       if (this.chosenAction === "market") {
         this.raiseValueHandler(card);
       }
+      if (this.chosenAction === "startAuction") {
+        this.startAuction(card);
+      }
     }
   },
 
@@ -365,6 +369,16 @@ methods: {
       playerId: this.playerId,
       card1: card1,
       card2: card2,
+      cost: this.chosenPlacementCost
+    });
+  },
+
+  startAuction: function (card) {
+    console.log("startAuction", card);
+    this.$store.state.socket.emit('collectorsStartAuction', {
+      roomId: this.$route.params.id,
+      playerId: this.playerId,
+      card: card,
       cost: this.chosenPlacementCost
     });
   },

@@ -246,15 +246,15 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost) {
     else if (action === "buySkill") {
       activePlacement = room.skillPlacement;
     }
-    else if (action === "auction") {
-      activePlacement = room.auctionPlacement;
-    }
     else if (action === "market") {
       activePlacement = room.marketPlacement;
     }
+    else if (action === "startAuction") {
+      activePlacement = room.auctionPlacement;
+    }
     for(let i = 0; i < activePlacement.length; i += 1) {
-        if( activePlacement[i].cost === cost &&
-            activePlacement[i].playerId === null ) {
+        if (activePlacement[i].cost === cost &&
+            activePlacement[i].playerId === null) {
           activePlacement[i].playerId = playerId;
           break;
         }
