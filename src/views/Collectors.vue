@@ -1,12 +1,11 @@
 <template>
   <div>
     <main>
-  <!--
   <h1>I am player {{playerId}}</h1>
   <PlayerBoard v-if="players[playerId]"
         :player ="players[playerId]"/>
   <OtherPlayerboards :Players ="players" :playerId="playerId" />
-  -->
+
   <GameBoard 
     :itemsOnSale="itemsOnSale"
     :skillsOnSale="skillsOnSale"
@@ -92,8 +91,8 @@
 import CollectorsCard from "@/components/CollectorsCard.vue";
 import CollectorsBuyActions from "@/components/CollectorsBuyActions.vue";
 import GameBoard from "@/components/GameBoard.vue";
-//import PlayerBoard from "@/components/PlayerBoard.vue";
-//import OtherPlayerboards from '../components/OtherPlayerboards.vue';
+import PlayerBoard from "@/components/PlayerBoard.vue";
+import OtherPlayerboards from '../components/OtherPlayerboards.vue';
 
 export default {
   name: "Collectors",
@@ -101,8 +100,8 @@ export default {
     CollectorsCard,
     CollectorsBuyActions,
     GameBoard,
-    //PlayerBoard,
-    //OtherPlayerboards
+    PlayerBoard,
+    OtherPlayerboards
   },
   data: function () {
     return {

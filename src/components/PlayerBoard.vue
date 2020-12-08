@@ -1,22 +1,23 @@
 <template>
-<div id= "PlayerBoard">
-<div class='mainBoard'>
+<div id= "PlayerBoard" >
+<div class='mainBoard' :style="{backgroundColor: player.color}" >
     <div class='slotSpace'>
+        <div class='slotWrapper'>
+            <h1 class='title'> Items </h1>
+            <div v-for="(item, index) in player.items" :key="index"> 
+                {{item.item}}
+            </div>
+                <div class="dot item fastaval"> {{fastavalCount}}</div>
+                <div class="dot item movie">{{movieCount}}</div>
+                <div class="dot item technology">{{technologyCount}}</div>
+                <div class="dot item figures"> {{figuresCount}}</div>
+                <div class="dot item music"> {{musicCount}}</div>
 
-    <div class='slotWrapper'>
-        <h1 class='title'>Itemz</h1>
-        <div v-for="(item, index) in player.items" :key="index"> 
-            <p> {{item.item + ", "}} </p>
-        </div>
-            <div class="dot item fastaval"> {{fastavalCount}}</div>
-            <div class="dot item movie">{{movieCount}}</div>
-            <div class="dot item technology">{{technologyCount}}</div>
-            <div class="dot item figures"> {{figuresCount}}</div>
-            <div class="dot item music"> {{musicCount}}</div>
         </div>
     </div>
+
     <div class='slotWrapper'>
-    <h1 class='title'>ActionZ</h1>
+    <h1 class='title'>Actions</h1>
     <div v-on:click = 'actionMade("A")' class="dot bottle" id='A'></div>
     <div v-on:click = 'actionMade("B")' class="dot bottle" id='B'></div>
     <div v-on:click = 'actionMade("C")' class="dot bottle" id='C'></div>
@@ -25,8 +26,7 @@
     </div>
 
     <div class='slotWrapper'>
-    <h1 class='title'>Skillz</h1>
-    <div> {{player.skills[1]}}</div>
+    <h1 class='title'>Skills</h1>
     <div id='skillGrid'>
     <div class="dot skill"></div>
     <div class="dot skill"></div>
@@ -67,29 +67,28 @@ export default {
       actionMade: function(id){
           console.log(id)
         },
-      countItems: function(){
-          let items = this.player.items;
-          let i;
-          for (i = 0; i < items.length; i++){
-              if(items[i].item === 'fastaval'){
+        /*countItems: function(i){
+            this.fastavalCount = 0;
+            this.movieCount = 0;
+            this.technologyCount = 0;
+            this.figuresCount = 0;
+            this.musicCount= 0;
+              if(i === 'fastaval'){
                   this.fastavalCount += 1;
                 }
-              else if(items[i].item === 'movie'){
+              else if(i === 'movie'){
                   this.movieCount += 1;
               }
-              else if(items[i].item === 'technology'){
+              else if(i === 'technology'){
                   this.technologyCount += 1;
               }
-              else if(items[i].item === 'figures'){
+              else if(i === 'figures'){
                   this.figuresCount += 1;
               }
-              else if(items[i].item === 'music'){
+              else if(i === 'music'){
                   this.musicCount += 1;
               }
-            }
-        }
-        
-
+        }*/
     }
 }
 </script>
@@ -104,6 +103,9 @@ export default {
     grid-template-columns: 70% 30%;
     text-align: center;
     color: black;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 3px;
 }
 
 .slotSpace {

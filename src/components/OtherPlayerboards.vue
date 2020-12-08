@@ -2,9 +2,9 @@
   <div id="AllOtherPlayerboards">
       <div v-for="(player, index) in Players" :key="index" :player="player">
         <div v-if="player!= Players[playerId]">
-          <div v-on:click="playerClicked(index)" class="otherPlayerBoard"> 
-            <p>Player {{index}}</p>
-            <PlayerBoard v-if = dispPlayerboard :player="player" />
+          <div v-on:click="playerboardClicked(index)" :style="{backgroundColor: player.color}" class="otherPlayerBoard"> 
+            <h2> Player {{index}} </h2>
+            <PlayerBoard v-if="dispPlayerboard === index" :player="player" />
           </div>
         </div>
       </div>
@@ -25,16 +25,15 @@ export default {
     },
     data: function () {
     return {
-        dispPlayerboard: false
+        dispPlayerboard: ""
     }},
     methods: {
-        playerClicked: function(playerIndex) {
-          console.log("Playerboard clicked: " + playerIndex)
-            if (this.dispPlayerboard){
-                this.dispPlayerboard = false;
+        playerboardClicked: function(index) {
+            if(this.dispPlayerboard != index){
+              this.dispPlayerboard = index;
             }
             else{
-                this.dispPlayerboard = true;
+              this.dispPlayerboard = "";
             }
         },
     },
@@ -45,13 +44,10 @@ export default {
     margin: 5px;
     padding: 5px;
     border-radius: 3px;
-    width: auto;
     text-align: center;
     color: black;
-    background-color: hotpink;
     }
-    .otherPlayerBoard:hover {
+    .otherPlayerBoard:hover{
     cursor: pointer;
-    background-color: coral;
     }
 </style>
