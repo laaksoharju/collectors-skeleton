@@ -4,34 +4,13 @@
       <div class="table">
       <div class="board">
 
-       <div class = "skillPool">
-         Skill Pool
-         <div class = "EnergyBottles">
-         </div>
-         <div class = "EnergyBottles">
-         </div>
-         <div class = "EnergyBottles">
-         </div>
 
-         <div class = "EnergyBottleCoin">
-         </div>
-         <div class = "EnergyBottleCoin">
-         </div>
-
-           <!--<div class="skillCard" v-for="(card, index) in skillsOnSale" :key="index">
-             <CollectorsCard :card="card" :availableAction="card.available" @doAction="getSkill(card)" :key="index" />
-
-           </div>-->
-
-
-           <div class="skillCard" v-if="players[playerId]">
-             <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :availableAction="card.available" @doAction="getSkill(card)" :key="index"/>
-
-           </div>
-
-       </div>
-
-
+        <CollectorsGetSkills v-if="players[playerId]"
+             :labels="labels"
+             :player="players[playerId]"
+             :skillsOnSale="skillsOnSale"
+             @getSkill="getSkill($event)"
+        />
 
        <div class = "itemPool">
         Item Pool
@@ -45,11 +24,14 @@
           </div>
           <div class = "ItemBottleCoinThree">
           </div>
-          <div class="itemCard" v-for="(card, index) in itemsOnSale" :key="index">
-            <CollectorsCard :card="card" />
+
+          <div v-for="(card, index) in itemsOnSale" :key="index">
+            <CollectorsCard
+              :card="card"
+              :availableAction="card.available"
+              @doAction="buyCard(card)"/>
+        <!--    {{ cardCost(card) }} -->
           </div>
-
-
        </div>
 
 
@@ -73,9 +55,6 @@
         <div class="auctionCard" v-for="(card, index) in auctionCards" :key="index">
           <CollectorsCard :card="card" />
         </div>
-      <!--   <div class="cardslots">
-           <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
-         </div> -->
 
          <div class = "EnergyBottleCoinWhiteTwo"></div> <!-- Olika flaskor med vita coins, 1 2 eller 0 -->
          <div class = "EnergyBottleCoinWhiteOne"></div>
@@ -153,21 +132,6 @@
   </button>
 </div>
 
-    <!--  <div class="cardslots">
-        <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
-      </div> -->
-
-      <!--<div class="cardslots">
-        <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
-      </div>-->
-    <!--  Hand
-      <div class="cardslots" v-if="players[playerId]">
-        <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="buyCard(card)" :key="index"/>
-      </div> -->
-
-      <!-- <div class="cardslots" v-if="players[playerId]">
-        <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
-      </div> -->
     </main>
     {{players}}
     {{marketValues}}
@@ -188,6 +152,7 @@
 
 import CollectorsCard from '@/components/CollectorsCard.vue'
 import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
+import CollectorsGetSkills from '@/components/CollectorsGetSkills.vue'
 
 
 export default {
@@ -195,6 +160,7 @@ export default {
   components: {
     CollectorsCard,
     CollectorsBuyActions,
+    CollectorsGetSkills,
 
   },
   data: function () {
@@ -353,7 +319,6 @@ export default {
 
     getSkill: function (card) {
       console.log("getSkill", card);
-      console.log("NU HAR DEN NÅTT GETSKILL FUNKTIONEN 1");
       this.$store.state.socket.emit('collectorsGetSkill', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
@@ -361,7 +326,7 @@ export default {
           skill: this.skillsOnSale,
         }
       );
-      },
+    },
 
     changeTurn: function () {
       console.log("TEST");
@@ -407,35 +372,6 @@ export default {
 	border: 2px solid $black;
   }
 
-  .skillPool{
-    grid-column: 1 / span 2;
-    grid-row: 2/span 13 ;
-    width: auto;
-		height: auto;
-    background-color: #dce5cc;
-    color: black;
-    display: grid;
-    grid-template-columns: repeat(3, 50px);
-    grid-template-rows: repeat(6,50px);
-    grid-row-gap: 25px;
-    grid-auto-flow: column;
-    }
-
-  .EnergyBottles{
-
-    width:50px;
-    height:50px;
-    background-image:  url('/images/Gain-skill-bottle.png');
-    background-size: cover;
-  }
-
-  .EnergyBottleCoin{
-
-    width:50px;
-    height:50px;
-    background-image:  url('/images/Gain-skill-bottle-coin.png');
-    background-size: cover;
-  }
 
 
 
@@ -483,8 +419,6 @@ export default {
     grid-row: 11/span 4;
     width: auto;
     height: auto;
-  /*  grid-template-columns: repeat(100, 12px);
-    grid-template-rows: repeat(100,150px);*/
     background-color: #c9d5e1;
     color: black;
     display: grid;
@@ -512,7 +446,6 @@ export default {
     display: grid;
     grid-template-columns: repeat(3, 50px);
     grid-template-rows: repeat(6,100px);
-    /*grid-auto-flow: column; */
   }
 
 .titleAuctionPool{
@@ -624,11 +557,7 @@ export default {
     display: grid;
     grid-template-columns: repeat(auto-fill, 130px);
     grid-template-rows: repeat(auto-fill, 1px);
-  /*  display: grid;
-    grid-template-columns: repeat(100, 15px);
-    grid-template-rows: repeat(1,150px);*/
-  /*  justify-content: center;
-    align-items: center; */
+
   }
   .cardslots div {
     transform: scale(0.3)translate(-50%,-50%); /* scale - minska kortens strl*/
@@ -642,34 +571,16 @@ export default {
     z-index: 1;
   }
 
-
-  .skillCard {
-    transform: scale(0.25);
-  /*  display: grid;
-    grid-template-columns: repeat(1, 15px);
-    grid-template-rows: repeat(5,160px);*/
-  }
-  .skillCard div:hover{
-    transform: scale(2)translate(-25%,0);
-    z-index: 1;
-  }
-
   .itemCard{
+    grid-row: 2;
     transform: scale(0.25);
+
   }
 
-  .itemCard div:hover{
-    transform: scale(2)translate(-25%,0);
-    z-index: 1;
-  }
 
   .auctionCard {
     transform: scale(0.25);
     grid-column: 2;
-
-  /*  display: grid;
-    grid-template-columns: repeat(1, 15px);
-    grid-template-rows: repeat(5,160px);*/
   }
   .auctionCard div:hover{
     transform: scale(2)translate(-25%,0);
