@@ -36,6 +36,7 @@ function sockets(io, socket, data) {
       io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId)
       );
     });
+
     socket.on('collectorsGetSkill', function(d) {
       data.getSkill(d.roomId, d.playerId, d.card, d.skill)
       io.to(d.roomId).emit('collectorsSkillCaught', {
@@ -44,6 +45,12 @@ function sockets(io, socket, data) {
           skillsOnSale: data.getSkillsOnSale(d.roomId)
         }
       );
+
+    socket.on('collectorsChangeTurn', function(d) {
+      io.to(d.roomId).emit('collectorsChangedTurn',
+      data.changeTurn(d.roomId, d.currentPlayer));
+
+
     });
 }
 
