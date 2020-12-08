@@ -1,33 +1,32 @@
 <template>
-  <div id="MarketDiv">
-
-    <div id="TitleANDcards">
-
-      <h1 style="text-align: center">{{ labels.raiseValue }}</h1>
-
-      <div class="raise-value">
-        <div v-for="(card, index) in market" :key="index">
-          <CollectorsCard
-          :card="card"/>
+  <div id="RaiseValueDiv">
+    <h1 style="text-align: center">{{ labels.raiseValue }}</h1>
+    <div id="MarketDiv">
+      <div id="Cards">
+        <div class="raise-value">
+          <div v-for="(card, index) in market" :key="index">
+            <CollectorsCard
+            :card="card"/>
+          </div>
         </div>
-      </div>
-      <div>
-        <div class="buttons" v-for="(p, index) in placement" :key="index">
-          <button
-          v-if="p.playerId===null"
-          :disabled="cannotAfford(p.cost)"
-          @click="placeBottle(p, index)" >
-          ${{p.cost}}
-        </button>
-        <div v-if="p.playerId !== null" style="color:black">
-         {{p.playerId}}
+        <div>
+          <div class="buttons" v-for="(p, index) in placement" :key="index">
+            <button
+            v-if="p.playerId===null"
+            :disabled="cannotAfford(p.cost)"
+            @click="placeBottle(p, index)" >
+            ${{p.cost}}
+          </button>
+          <div v-if="p.playerId !== null" style="color:black">
+            {{p.playerId}}
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div  id="ValueStats">
-    <div  v-for="(type, index) in marketValues" :key="index">
-    <p> {{ index }} : {{ type }} </p>
+    <div id="ValueStats">
+      <div v-for="(type, index) in marketValues" :key="index">
+        <p> {{ index }} : {{ type }} </p>
+      </div>
     </div>
   </div>
 </div>
@@ -88,8 +87,8 @@ export default {
   grid-template-columns: repeat(auto-fill, 130px);
 }
 
-#TitleANDcards {
-  grid-area: TitleANDcards;
+#Cards {
+  grid-area: Cards;
   align-self: center;
 }
 
@@ -102,10 +101,10 @@ export default {
   display: grid;
   grid-template-columns: 80% 20% ;
   grid-template-areas:
-  "TitleANDcards ValueStats"
+  "Cards ValueStats"
 }
 
-#MarketDiv h1, h2, h3, p  {
+#RaiseValueDiv h1, h2, h3, p  {
   color: black;
 }
 

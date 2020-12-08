@@ -1,26 +1,24 @@
 <template>
   <div id="AuctionDiv">
-    <div id="TitleANDcards">
-      <h1 style="text-align: center">{{ labels.auction }}</h1>
-      <div class="auction">
-        <div v-for="(card, index) in auctionCards" :key="index">
-          <CollectorsCard
-          :card="card"
-          :availableAction="card.available"
-          @doAction="handleAction(card)"/>
-        </div>
+    <h1 style="text-align: center">{{ labels.auction }}</h1>
+    <div class="auction">
+      <div v-for="(card, index) in auctionCards" :key="index">
+        <CollectorsCard
+        :card="card"
+        :availableAction="card.available"
+        @doAction="handleAction(card)"/>
       </div>
-      <div>
-        <div class="buttons" v-for="(p, index) in placement" :key="index">
-          <button
-          v-if="p.playerId===null"
-          :disabled="cannotAfford(p.cost)"
-          @click="placeBottle(p, index)" >
-          ${{p.cost}}
-        </button>
-        <div v-if="p.playerId !== null" style="color:black">
-         {{p.playerId}}
-        </div>
+    </div>
+    <div>
+      <div class="buttons" v-for="(p, index) in placement" :key="index">
+        <button
+        v-if="p.playerId===null"
+        :disabled="cannotAfford(p.cost)"
+        @click="placeBottle(p, index)" >
+        ${{p.cost}}
+      </button>
+      <div v-if="p.playerId !== null" style="color:black">
+        {{p.playerId}}
       </div>
     </div>
   </div>
@@ -84,7 +82,7 @@ export default {
   grid-template-columns: repeat(auto-fill, 250px);
 }
 
-#TitleANDcards {
+#Cards {
   grid-area: TitleANDcards;
   align-self: center;
 }
