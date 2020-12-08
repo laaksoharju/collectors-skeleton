@@ -1,7 +1,18 @@
 <template>
   <div>
     <main>
-      {{buyPlacement}} {{chosenPlacementCost}}
+      <div>
+        {{buyPlacement}} {{chosenPlacementCost}}
+        <CollectorsBuySkill v-if="players[playerId]"
+        :labels="labels"
+        :player="players[playerId]"
+        :skillsOnSale="skillsOnSale" 
+        :marketValues="marketValues" 
+        :placement="buyPlacement"
+        @buyCard="buyCard($event)"
+        @placeBottle="placeBottleSkill('buy', $event)"/>
+      <!-- </div> -->
+      <!-- {{buyPlacement}} {{chosenPlacementCost}}
       <CollectorsBuyActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
@@ -10,7 +21,7 @@
         :placement="buyPlacement"
         @buyCard="buyCard($event)"
         @placeBottle="placeBottle('buy', $event)"/>
-      <div class="buttons">
+      <div class="buttons"> -->
         <button @click="drawCard">
           {{ labels.draw }}
         </button>
@@ -66,13 +77,15 @@
 /*eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }]*/
 
 import CollectorsCard from '@/components/CollectorsCard.vue'
-import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
+//import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
+import CollectorsBuySkill from '@/components/CollectorsBuySkill.vue'
 
 export default {
   name: "Collectors",
   components: {
     CollectorsCard,
-    CollectorsBuyActions,
+    //CollectorsBuyActions,
+    CollectorsBuySkill,
   },
   data: function () {
     return {
@@ -183,6 +196,16 @@ export default {
       n.target.select();
     },
     placeBottle: function (action, cost) {
+      this.chosenPlacementCost = cost;
+      this.$store.state.socket.emit('collectorsPlaceBottle', { 
+          roomId: this.$route.params.id, 
+          playerId: this.playerId,
+          action: action, 
+          cost: cost, 
+        }
+      );
+    },
+    placeBottleSkill: function (action, cost) {
       this.chosenPlacementCost = cost;
       this.$store.state.socket.emit('collectorsPlaceBottle', { 
           roomId: this.$route.params.id, 
