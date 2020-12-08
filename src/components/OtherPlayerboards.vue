@@ -1,59 +1,53 @@
 <template>
   <div id="AllOtherPlayerboards">
-    <div v-on:click="playerClicked('A')" class="otherPlayerBoard A">
-      <p>Player A</p>
-    </div>
-    <div v-on:click="playerClicked('B')" class="otherPlayerBoard B">
-      <p>Player B</p>
-    </div>
-    <div v-on:click="playerClicked('C')" class="otherPlayerBoard C">
-      <p>Player C</p>
-    </div>
-    <div v-if = dispPlayerboard :class =playertag class="displayedBoard"> Player {{playertag}}'s playerboard!!! </div>
+      <div v-for="(player, index) in Players" :key="index" :player="player">
+        <div v-if="player!= Players[playerId]">
+          <div v-on:click="playerboardClicked(index)" :style="{backgroundColor: player.color}" class="otherPlayerBoard"> 
+            <h2> Player {{index}} </h2>
+            <PlayerBoard v-if="dispPlayerboard === index" :player="player" />
+          </div>
+        </div>
+      </div>
   </div>
 </template>
 
 <script>
+import PlayerBoard from './PlayerBoard.vue';
+
 export default {
     name: "OtherPlayerboards",
+    components: {
+        PlayerBoard
+    },
+    props:{
+      Players: Object,
+      playerId: String
+    },
     data: function () {
     return {
-        dispPlayerboard: false,
-        playertag: ""
+        dispPlayerboard: ""
     }},
     methods: {
-        playerClicked: function (playertag) {
-            this.playertag = playertag
-            if (this.dispPlayerboard){
-                this.dispPlayerboard = false;
+        playerboardClicked: function(index) {
+            if(this.dispPlayerboard != index){
+              this.dispPlayerboard = index;
             }
             else{
-                this.dispPlayerboard = true;
+              this.dispPlayerboard = "";
             }
         },
     },
 };
 </script>
 <style scoped>
-    .otherPlayerBoard, .displayedBoard {
+    .otherPlayerBoard {
     margin: 5px;
     padding: 5px;
     border-radius: 3px;
-    width: 30%;
     text-align: center;
     color: black;
     }
-    .otherPlayerBoard:hover {
+    .otherPlayerBoard:hover{
     cursor: pointer;
-    background-color: coral;
-    }
-    .A{
-    background-color: cyan;
-    }
-    .B{
-    background-color: yellow;
-    }
-    .C{
-    background-color: hotpink;
     }
 </style>
