@@ -83,13 +83,30 @@ export default {
 <style scoped>
 .auction {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 230px);
+  /*grid-template-columns: repeat(auto-fill, 250px);*/
+  grid-template-columns: repeat(auto-fill, 130px);
+  grid-template-rows: repeat(auto-fill, 260px);
+}
+
+.auction div {
+  transform: scale(0.8)translate(-10%,-10%);
+  transition:0.2s;
+  transition-timing-function: ease-out;
+  z-index: 0;
+}
+
+.auction div:hover {
+  transform: scale(0.9)translate(-10%,-10%);
+  z-index: 1;
+
 }
 
 .buttons {
   display: grid;
   float:left;
-  grid-template-columns: repeat(auto-fill, 230px);
+
+  grid-template-columns: repeat(auto-fill, 130px);
+  transform: scale(0.8)translate(10%,-10%);
 }
 
 #Cards {

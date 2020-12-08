@@ -483,18 +483,19 @@ background: #f5f2cc;
   height: 100%;
   display: grid;
   background: #D7D7D7;
-  grid-template-columns: 50% 50% ;
+  grid-template-columns: 25% 25% 25% 25%;
   grid-template-rows: 16,67% 16,67% 16,67% 16,67% 16,67% 16,67%;
   column-gap: 20px;
   row-gap: 20px;
   grid-template-areas:
-  "BuyCardDiv RaiseValueDiv"
-  "BuyCardDiv RaiseValueDiv"
-  "BuySkillDiv AuctionDiv"
-  "BuySkillDiv WorkDiv"
-  "PlayerItemsDiv PlayerBoardDiv"
-  "PlayerSkillsDiv PlayerBoardDiv"
-  "HandDiv PlayerBoardDiv"
+  "BuyCardDiv BuyCardDiv RaiseValueDiv RaiseValueDiv"
+  "BuyCardDiv BuyCardDiv RaiseValueDiv RaiseValueDiv"
+  "BuySkillDiv BuySkillDiv AuctionDiv AuctionDiv"
+  "BuySkillDiv BuySkillDiv AuctionDiv AuctionDiv"
+  ". WorkDiv WorkDiv ."
+  "PlayerItemsDiv PlayerItemsDiv PlayerBoardDiv PlayerBoardDiv"
+  "PlayerSkillsDiv PlayerSkillsDiv PlayerBoardDiv PlayerBoardDiv"
+  "HandDiv HandDiv PlayerBoardDiv PlayerBoardDiv"
 }
 
 #container h1, h2, h3, p  {

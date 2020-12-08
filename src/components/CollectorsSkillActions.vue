@@ -1,28 +1,28 @@
 <template>
-    <div id="SkillActionDiv">
-      <h1 style="text-align: center">{{ labels.getSkill }}</h1>
-      <div class="get-skills">
-        <div v-for="(card, index) in skillsOnSale" :key="index">
-          <CollectorsCard
-            :card="card"
-            :availableAction="card.available"
-            @doAction="getSkill(card)"/>
-        </div>
-      </div>
-      <div>
-        <div class="buttons" v-for="(p, index) in placement" :key="index">
-          <button
-            v-if="p.playerId===null"
-            :disabled="cannotAfford(p.cost)"
-            @click="placeBottle(p)" >
-            ${{p.cost}}
-          </button>
-          <div v-if="p.playerId !== null" style="color:black">
-            {{p.playerId}}
-          </div>
-        </div>
+  <div id="SkillActionDiv">
+    <h1 style="text-align: center">{{ labels.getSkill }}</h1>
+    <div class="get-skills">
+      <div v-for="(card, index) in skillsOnSale" :key="index">
+        <CollectorsCard
+        :card="card"
+        :availableAction="card.available"
+        @doAction="getSkill(card)"/>
       </div>
     </div>
+    <div>
+      <div class="buttons" v-for="(p, index) in placement" :key="index">
+        <button
+        v-if="p.playerId===null"
+        :disabled="cannotAfford(p.cost)"
+        @click="placeBottle(p)" >
+        ${{p.cost}}
+      </button>
+      <div v-if="p.playerId !== null" style="color:black">
+        {{p.playerId}}
+      </div>
+    </div>
+  </div>
+</div>
 </template>
 
 <script>
@@ -74,19 +74,33 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .get-skills {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 130px);
-  }
 
-  .buttons {
-    display: grid;
-    float:left;
-    grid-template-columns: repeat(auto-fill, 130px);
-  }
+.get-skills {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 130px);
+  grid-template-rows: repeat(auto-fill, 260px);
+}
+.get-skills div {
+  transform: scale(0.8)translate(-10%,-10%);
+  transition:0.2s;
+  transition-timing-function: ease-out;
+  z-index: 0;
+}
+.get-skills div:hover {
+  transform: scale(0.9)translate(-10%,-10%);
+  z-index: 1;
+}
 
-  #SkillActionDiv  h1, h2, h3, p  {
-    color: black;
-  }
+.buttons {
+  display: grid;
+  float:left;
+  grid-template-columns: repeat(auto-fill, 130px);
+  transform: scale(0.8)translate(10%,-10%);
+}
+
+
+#SkillActionDiv  h1, h2, h3, p  {
+  color: black;
+}
 
 </style>

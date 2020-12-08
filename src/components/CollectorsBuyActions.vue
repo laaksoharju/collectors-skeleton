@@ -1,29 +1,28 @@
 <template>
-    <div id="BuyActionDiv">
-      <h1 style="text-align: center">{{ labels.buyCard }}</h1>
-      <div class="buy-cards">
-        <div v-for="(card, index) in itemsOnSale" :key="index" style="color:black">
-          <CollectorsCard
-            :card="card"
-            :availableAction="card.available"
-            @doAction="buyCard(card)"/>
-          {{ cardCost(card) }}
-        </div>
-      </div>
-      <div>
-        <div class="buttons" v-for="(p, index) in placement" :key="index">
-          <button
-            v-if="p.playerId===null"
-            :disabled="cannotAfford(p.cost)"
-            @click="placeBottle(p)" >
-            ${{p.cost}}
-          </button>
-          <div v-if="p.playerId !== null" style="color:black">
-            {{p.playerId}}
-          </div>
-        </div>
+  <div id="BuyActionDiv">
+    <h1 style="text-align: center">{{ labels.buyCard }}</h1>
+    <div class="buy-cards">
+      <div v-for="(card, index) in itemsOnSale" :key="index" style="color:black">
+        Value raised: +{{ cardCost(card) }}
+        <CollectorsCard
+        :card="card"
+        :availableAction="card.available"
+        @doAction="buyCard(card)"/>
+
       </div>
     </div>
+    <div class="buttons" v-for="(p, index) in placement" :key="index">
+      <button
+      v-if="p.playerId===null"
+      :disabled="cannotAfford(p.cost)"
+      @click="placeBottle(p)" >
+      ${{p.cost}}
+    </button>
+    <div v-if="p.playerId !== null" style="color:black">
+      {{p.playerId}}
+    </div>
+  </div>
+</div>
 </template>
 
 <script>
@@ -46,7 +45,7 @@ export default {
       let minCost = 100;
       for(let key in this.marketValues) {
         if (cost + this.marketValues[key] < minCost)
-          minCost = cost + this.marketValues[key]
+        minCost = cost + this.marketValues[key]
       }
       return (this.player.money < minCost);
     },
@@ -93,18 +92,32 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .buy-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 130px);
-  }
-  .buttons {
-    display: grid;
-    float:left;
-    grid-template-columns: repeat(auto-fill, 130px);
-  }
 
-  #BuyActionDiv h1, h2, h3, p  {
-    color: black;
-  }
+.buy-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 130px);
+  grid-template-rows: repeat(auto-fill, 260px);
+}
+.buy-cards div {
+  transform: scale(0.8)translate(-10%,-10%);
+  transition:0.2s;
+  transition-timing-function: ease-out;
+  z-index: 0;
+}
+.buy-cards div:hover {
+  transform: scale(0.9)translate(-10%,-10%);
+  z-index: 1;
+}
+
+.buttons {
+  display: grid;
+  float:left;
+  grid-template-columns: repeat(auto-fill, 130px);
+  transform: scale(0.8)translate(10%,-10%);
+}
+
+#BuyActionDiv h1, h2, h3, p  {
+  color: black;
+}
 
 </style>
