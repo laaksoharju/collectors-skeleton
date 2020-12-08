@@ -1,7 +1,12 @@
 <template>
   <div>
     <main>
-      <section class="mainboard">
+      {{ players }}
+      {{ marketValues }}
+      <button v-if="players[playerId]" @click="players[playerId].money += 1">
+        fake more money
+      </button>
+      <div class="collectors-game">
         <section class="buy_item">
           <CollectorsBuyActions
             v-if="players[playerId]"
@@ -37,7 +42,7 @@
           />
         </section>
 
-        <section class="gameboard">
+        <div class="game main-board">
           <section class="item_bottle">
             <Bottles
               v-if="players[playerId]"
@@ -63,57 +68,110 @@
           <section class="box market">market</section>
           <section class="box worker">worker</section>
           <section class="box auction">auction</section>
-        </section>
+        </div>
 
-        <section class="playerboard">
-          <!-- {{ buyPlacement }} {{ chosenPlacementCost }}this{{ players }} -->
-
-          <!-- <div class="buttons">
-                  <button @click="drawCard">
-                    {{ labels.draw }}
-                  </button>
-                </div> -->
-
-          <!-- Auction
-                <div class="cardslots">
-                  <CollectorsCard
-                    v-for="(card, index) in auctionCards"
-                    :card="card"
-                    :key="index"
-                  />
-                </div> -->
-          <!-- Hand
-                <div class="cardslots" v-if="players[playerId]">
-                  <CollectorsCard
-                    v-for="(card, index) in players[playerId].hand"
-                    :card="card"
-                    :availableAction="card.available"
-                    @doAction="buyCard(card)"
-                    :key="index"
-                  />
-                </div> -->
-          Items
-
-          <CollectorsCard
-            v-for="(card, index) in players[playerId].items"
-            :card="card"
-            :key="index"
-          />
-          skills
-
-          <CollectorsCard
-            v-for="(card, index) in players[playerId].skills"
-            :card="card"
-            :key="index"
-          />
-        </section>
-      </section>
+        <div class="game player-board">
+          <div
+            v-if="players.hasOwnProperty(playerId)"
+            class="current-player"
+            v-bind:style="{ 'background-color': players[playerId].color }"
+          >
+            <div class="player-details">
+              <div class="player-name">
+                <label for="playerNameInputField" id="playerNameLabel">{{
+                  players[playerId].playerName
+                }}</label>
+                <input
+                  id="playerNameInputField"
+                  type="text"
+                  v-bind:value="players[playerId].playerName"
+                  v-on:keyup="changeName($event)"
+                  autofocus="true"
+                  hidden
+                /><img
+                  id="nameChangeImg"
+                  src="../../public/images/pencil.png"
+                  v-on:click="setupNameChange()"
+                />
+                <br />
+              </div>
+              <div class="player-coins">
+                <p>
+                  <img src="/images/player-coins.png" alt="Player Coins" />x5
+                </p>
+              </div>
+              <div class="player-cards-for-coins">
+                <img
+                  src="/images/player-cards-for-coins.png"
+                  alt="Player Cards for Coins"
+                />x4
+              </div>
+            </div>
+            <div class="player-hand"></div>
+            <div class="player-bottles" v-if="players.hasOwnProperty(playerId)">
+              <img
+                v-bind:src="playerBoards[players[playerId].color]"
+                alt="Player Boards"
+              />
+            </div>
+            <div class="player-items-skills">
+              <div class="player-items">
+                <div class="player-items-1">
+                  <img src="/images/item-movie-icon.png" alt="Player Items 1" />
+                </div>
+              </div>
+              <div class="player-skills">
+                <div class="player-skills-1">
+                  <img src="/images/skill-bottle-icon.png" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="other-players"
+            v-for="otherPlayerId in getOtherPlayerIds()"
+            v-bind:key="otherPlayerId"
+            v-bind:style="{
+              'background-color': players[otherPlayerId].color,
+            }"
+          >
+            <div class="player-details">
+              <div class="player-name">
+                Player: {{ players[otherPlayerId].playerName }}
+              </div>
+              <div class="player-coins">
+                <img src="/images/player-coins.png" alt="Player Coins" />x5
+              </div>
+              <div class="player-cards-for-coins">
+                <img
+                  src="/images/player-cards-for-coins.png"
+                  alt="Player Cards for Coins"
+                />x4
+              </div>
+            </div>
+            <div class="player-bottles" v-if="players.hasOwnProperty(playerId)">
+              <img
+                v-bind:src="playerBoards[players[otherPlayerId].color]"
+                alt="Player Boards"
+              />
+            </div>
+            <div class="player-items-skills">
+              <div class="player-items">
+                <div class="player-items-1">
+                  <img src="/images/item-movie-icon.png" alt="Player Items 1" />
+                </div>
+              </div>
+              <div class="player-skills">
+                <div class="player-skills-1">
+                  <img src="/images/skill-bottle-icon.png" />
+                </div>
+              </div>
+            </div>
+            <br />
+          </div>
+        </div>
+      </div>
     </main>
-    {{ players }}
-    {{ marketValues }}
-    <button v-if="players[playerId]" @click="players[playerId].money += 1">
-      fake more money
-    </button>
     <footer>
       <p>
         {{ labels.invite }}
@@ -128,8 +186,9 @@
   </div>
 </template>
 
+
 <script>
-/*eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }]*/
+// /eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }]/;
 
 import CollectorsCard from "@/components/CollectorsCard.vue";
 import CollectorsBuyActions from "@/components/CollectorsBuyActions.vue";
@@ -174,6 +233,14 @@ export default {
       skillsOnSale: [],
       auctionCards: [],
       playerid: 0,
+      playerName: "",
+      otherPlayers: [],
+      playerBoards: {
+        violet: "images/player-board-4.png",
+        blue: "images/player-board-3.png",
+        brown: "images/player-board-2.png",
+        grey: "images/player-board-1.png",
+      },
     };
   },
   computed: {
@@ -183,6 +250,8 @@ export default {
   },
   watch: {
     players: function (newP, oldP) {
+      // console.log(Object.keys(newP).length);
+      // console.log(Object.keys(oldP).length);
       console.log(newP, oldP);
       for (let p in this.players) {
         for (let c = 0; c < this.players[p].hand.length; c += 1) {
@@ -205,6 +274,11 @@ export default {
       playerId: this.playerId,
     });
 
+    this.$store.state.socket.emit("notifyPlayers", {
+      roomId: this.$route.params.id,
+      // playerId: this.playerId,
+    });
+
     this.$store.state.socket.on(
       "collectorsInitialize",
       function (d) {
@@ -218,6 +292,13 @@ export default {
         this.skillPlacement = d.placements.skillPlacement;
         this.marketPlacement = d.placements.marketPlacement;
         this.auctionPlacement = d.placements.auctionPlacement;
+      }.bind(this)
+    );
+
+    this.$store.state.socket.on(
+      "notifyPlayers",
+      function (d) {
+        this.players = d;
       }.bind(this)
     );
 
@@ -246,6 +327,13 @@ export default {
     );
 
     this.$store.state.socket.on(
+      "updatePlayerName",
+      function (d) {
+        this.players = d;
+      }.bind(this)
+    );
+
+    this.$store.state.socket.on(
       "collectorsCardBought",
       function (d) {
         console.log(d.playerId, "bought a card");
@@ -258,6 +346,36 @@ export default {
   methods: {
     selectAll: function (n) {
       n.target.select();
+    },
+    setupNameChange: function () {
+      if (!document.getElementById("playerNameLabel").hidden) {
+        document.getElementById("playerNameLabel").hidden = true;
+        document.getElementById("playerNameInputField").hidden = false;
+      }
+    },
+    changeName: function (e) {
+      if (e.keyCode === 13) {
+        if (e.target.value !== "") {
+          this.playerName = e.target.value;
+          // alert("New name: " + this.playerName);
+          this.$store.state.socket.emit("updatePlayerName", {
+            roomId: this.$route.params.id,
+            playerId: this.$store.state.playerId,
+            playerName: this.playerName,
+          });
+        }
+        document.getElementById("playerNameLabel").hidden = false;
+        document.getElementById("playerNameInputField").hidden = true;
+      }
+    },
+    getOtherPlayerIds: function () {
+      var otherPlayers = [];
+      for (var id of Object.keys(this.players)) {
+        if (id != this.$store.state.playerId) {
+          otherPlayers.push(id);
+        }
+      }
+      return otherPlayers;
     },
     placeBottle: function (action, cost) {
       this.chosenPlacementCost = cost;
@@ -274,13 +392,12 @@ export default {
         playerId: this.playerId,
       });
     },
-    buyCard: function (action, card) {
-      console.log("rish collector function buyCard", card, action);
+    buyCard: function (card) {
+      console.log("buyCard", card);
       this.$store.state.socket.emit("collectorsBuyCard", {
         roomId: this.$route.params.id,
         playerId: this.playerId,
         card: card,
-        action: action,
         cost: this.marketValues[card.market] + this.chosenPlacementCost,
       });
     },
@@ -307,17 +424,9 @@ footer a {
 footer a:visited {
   color: ivory;
 }
-.mainboard {
-  position: relative;
-  display: grid;
-  grid-template-columns: 70% 30%;
-  grid-gap: 0.5em;
-  background-color: rgb(117, 59, 31);
-  height: 100vh;
-  width: 100vw;
-  z-index: 0;
-}
-.gameboard {
+  
+
+.main-board {
   background-color: rgb(242, 244, 247);
   border: 1px solid rgb(37, 37, 44);
   border-radius: 10px;
@@ -437,7 +546,198 @@ footer a:visited {
   z-index: 1;
 }
 
-@media screen and (max-width: 800px) {
+.cardslots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 130px);
+  grid-template-rows: repeat(auto-fill, 180px);
+}
+.cardslots div {
+  transform: scale(0.5) translate(-50%, -50%);
+  transition: 0.2s;
+  transition-timing-function: ease-out;
+  z-index: 0;
+}
+.cardslots div:hover {
+  transform: scale(1) translate(-25%, 0);
+  z-index: 1;
+}
+
+.collectors-game {
+  display: grid;
+  grid-gap: 5px;
+  grid-template-columns: 60% 40%;
+  background-color: #fff;
+  color: #444;
+
+ 
+  
+ 
+  height: 100vh;
+  width: 100vw;
+  z-index: 0;
+}
+
+.game {
+  background-color: #444;
+  color: #fff;
+  border-radius: 5px;
+  padding: 20px;
+  font-size: 150%;
+  height: 90vh;
+}
+
+
+
+.player-board {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.current-player {
+  display: grid;
+  grid-template-rows: 10% 50% 20% 20%;
+  background-color: #fff;
+  height: 40vh;
+  border-style: dashed;
+  color: black;
+}
+
+.player-details {
+  grid-column: 1;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: 40% 30% 30%;
+}
+
+.player-name {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.player-coins {
+  grid-column: 2;
+  grid-row: 1;
+}
+.player-coins img {
+  height: 4vh;
+  /* padding-top: 5px; */
+}
+
+.player-cards-for-coins {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.player-cards-for-coins img {
+  height: 4vh;
+  /* padding-top: 5px; */
+}
+
+.player-hand {
+  grid-column: 1;
+  grid-row: 2;
+  border-style: dashed;
+  color: red;
+}
+
+.player-bottles {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.other-players .player-bottles {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.player-bottles img {
+  height: 100%;
+  width: 100%;
+}
+
+.player-items-skills {
+  grid-column: 1;
+  grid-row: 4;
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.other-players .player-items-skills {
+  grid-column: 1;
+  grid-row: 3;
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.player-items {
+  grid-column: 1;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: 20%;
+}
+
+.player-items-1 {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.player-items-1 img {
+  height: 80%;
+  width: 100%;
+  padding-top: 1px;
+  padding-bottom: 3px;
+}
+
+.other-players .player-items-1 img {
+  height: 45%;
+  width: 100%;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+.player-skills {
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: 20%;
+}
+
+.player-skills-1 {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.player-skills-1 img {
+  height: 75%;
+  width: 100%;
+  padding-top: 1px;
+  padding-bottom: 3px;
+}
+
+.other-players .player-skills-1 img {
+  height: 45%;
+  width: 100%;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+.other-players {
+  display: grid;
+  grid-gap: 3px;
+  grid-template-rows: 20% 40% 40%;
+  background-color: #fff;
+  height: 16vh;
+  color: black;
+}
+
+p {
+  margin-top: 0em;
+}
+
+#nameChangeImg:hover {
+  outline: 2px solid white;
+}
+
+@ media screen and (max-width: 800px) {
   main {
     width: 90vw;
   }
