@@ -9,7 +9,10 @@
              :labels="labels"
              :player="players[playerId]"
              :skillsOnSale="skillsOnSale"
+             :marketValues="marketValues"
+             :placement="skillPlacement"
              @getSkill="getSkill($event)"
+             @placeBottle="placeBottle('skill', $event)"
         />
 
         <CollectorsBuyItem v-if="players[playerId]"
