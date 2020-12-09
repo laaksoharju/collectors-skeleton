@@ -12,28 +12,15 @@
              @getSkill="getSkill($event)"
         />
 
-       <div class = "itemPool">
-        Item Pool
-          <div class = "ItemBottleCoinOne">
-          </div>
-          <div class = "ItemBottleCoinOne">
-          </div>
-          <div class = "ItemBottleCoinTwo">
-          </div>
-          <div class = "ItemBottleCoinTwo">
-          </div>
-          <div class = "ItemBottleCoinThree">
-          </div>
-
-          <div v-for="(card, index) in itemsOnSale" :key="index">
-            <CollectorsCard
-              :card="card"
-              :availableAction="card.available"
-              @doAction="buyCard(card)"/>
-        <!--    {{ cardCost(card) }} -->
-          </div>
-       </div>
-
+        <CollectorsBuyItem v-if="players[playerId]"
+          :labels="labels"
+          :player="players[playerId]"
+          :itemsOnSale="itemsOnSale"
+          :marketValues="marketValues"
+          :placement="buyPlacement"
+          @buyCard="buyCard($event)"
+          @placeBottle="placeBottle('buy', $event)"
+          />
 
        <div class = "marketPool">
          Market Pool
@@ -66,12 +53,25 @@
          <div class = "EnergyBottleCoinWhiteNoll"></div>
          <div class = "EnergyBottleCoinWhiteNoll second"></div>
        </div>
+
        <div class="playerBoard">
-          Player {{playerId}}'s Board
-          <div class="chosenSkillCard" v-if="players[playerId]">
-            <CollectorsCard v-for="(card, index) in players[playerId].skills" :card="card" :key="index"/>
+         <div class="playerTitle"> Player {{playerId}}'s Board </div>
+
+          <!--    <div v-if="players[playerId]">-->
+                <div class="chosenSkillCard" v-for="(card, index) in players[playerId].skills" :card="card" :key="index">
+                <CollectorsCard
+                :card="card"
+                 />
+              </div>
+
+      <!--    <div v-if="players[playerId]">-->
+            <div class="chosenItemCard" v-for="(card, index) in players[playerId].items" :card="card" :key="index">
+            <CollectorsCard
+            :card="card"
+             />
           </div>
-      </div>
+        </div>
+
       <div class="playerHand">
         Hand
         <div class="cardslots" v-if="players[playerId]">
@@ -157,12 +157,22 @@
 import CollectorsCard from '@/components/CollectorsCard.vue'
 import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
 import CollectorsGetSkills from '@/components/CollectorsGetSkills.vue'
+<<<<<<< HEAD
+=======
+import CollectorsBuyItem from '@/components/CollectorsBuyItem.vue'
+
+>>>>>>> 4607983317babdeca346a3cf47ec1c1400c81d17
 export default {
   name: 'Collectors',
   components: {
     CollectorsCard,
     CollectorsBuyActions,
     CollectorsGetSkills,
+<<<<<<< HEAD
+=======
+    CollectorsBuyItem,
+
+>>>>>>> 4607983317babdeca346a3cf47ec1c1400c81d17
   },
   data: function () {
     return {
@@ -356,6 +366,7 @@ export default {
 	background: $black;
 	border: 2px solid $black;
   }
+<<<<<<< HEAD
   .itemPool{
     grid-column: 3/span 5 ;
     grid-row: 2/span 4;
@@ -389,6 +400,9 @@ export default {
     background-image:  url('/images/item-bottle-coin-three.png');
     background-size: cover;
   }
+=======
+
+>>>>>>> 4607983317babdeca346a3cf47ec1c1400c81d17
   .marketPool{
     grid-column: 3/span 5;
     grid-row: 11/span 4;
@@ -488,7 +502,7 @@ export default {
   }
   .playerBoard {
     grid-column: 11/span 5;
-    grid-row: 2/span 4;
+    grid-row: 2/span 6;
     width: auto;
     height: auto;
     grid-template-columns: repeat(100, 12px);
@@ -498,15 +512,34 @@ export default {
     display: grid;
     grid-template-columns: repeat(8, 60px);
     grid-template-rows: repeat(3,60px);
+    grid-auto-flow: row;
+    grid-column-gap: 25px;
   }
+<<<<<<< HEAD
+=======
+
+.playerTitle {
+  grid-row: 1;
+  grid-column: 1 / span 2;
+}
+
+>>>>>>> 4607983317babdeca346a3cf47ec1c1400c81d17
   .chosenSkillCard {
-    grid-column: 5;
+    grid-row: 3;
+    transform: scale(0.25);
+  }
+<<<<<<< HEAD
+=======
+
+  .chosenItemCard {
     grid-row: 1;
     transform: scale(0.25);
   }
+
+>>>>>>> 4607983317babdeca346a3cf47ec1c1400c81d17
   .playerHand {
     grid-column: 11/span 5;
-    grid-row: 6/span 4;
+    grid-row: 8/span 4;
   }
   .turnCounter {
     background-color: green;
