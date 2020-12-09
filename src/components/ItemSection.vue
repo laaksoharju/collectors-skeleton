@@ -103,6 +103,7 @@ export default {
 .button-section {
   width: 20%;
 }
+
 .buttons {
   display: grid;
   grid-template-columns: repeat(auto-fill, 130px);
@@ -119,15 +120,6 @@ export default {
 
 #item-section {
   background-color: #ea9999ff;
-}
-
-.bottleCircles {
-  width: 80%;
-  display: grid;
-  align-self: center;
-  grid-gap: 5px;
-  grid-template-columns: 50% 50%;
-  grid-template-rows: 50% 50%;
 }
 
 .cardslots {
