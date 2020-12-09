@@ -25,14 +25,21 @@
           @placeBottle="placeBottle('buy', $event)"
           />
 
-       <div class = "marketPool">
+          <CollectorsMarket v-if="players[playerId]"
+            :labels="labels"
+            :player="players[playerId]"
+            :marketValues="marketValues"
+            :placement="buyPlacement"
+            />
+
+       <!--div class = "marketPool">
          Market Pool
          <div class = "iconBird"></div>
          <div class = "iconRobot"></div>
          <div class = "iconMusic"></div>
          <div class = "iconFilm"></div>
          <div class = "iconTech"></div>
-       </div>
+       </div-->
 
        <div class = "workPool">
          Work Pool
@@ -160,22 +167,17 @@
 import CollectorsCard from '@/components/CollectorsCard.vue'
 import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
 import CollectorsGetSkills from '@/components/CollectorsGetSkills.vue'
-<<<<<<< HEAD
-=======
 import CollectorsBuyItem from '@/components/CollectorsBuyItem.vue'
+import CollectorsMarket from '@/components/CollectorsMarket.vue'
 
->>>>>>> 4607983317babdeca346a3cf47ec1c1400c81d17
 export default {
   name: 'Collectors',
   components: {
     CollectorsCard,
     CollectorsBuyActions,
     CollectorsGetSkills,
-<<<<<<< HEAD
-=======
     CollectorsBuyItem,
-
->>>>>>> 4607983317babdeca346a3cf47ec1c1400c81d17
+    CollectorsMarket,
   },
   data: function () {
     return {
@@ -369,44 +371,7 @@ export default {
 	background: $black;
 	border: 2px solid $black;
   }
-<<<<<<< HEAD
-  .itemPool{
-    grid-column: 3/span 5 ;
-    grid-row: 2/span 4;
-    width: auto;
-    height: auto;
-  /*  grid-template-columns: repeat(100, 12px);
-    grid-template-rows: repeat(100,150px);*/
-    background-color: #f0d9cc ;
-    color: black;
-    display: grid;
-    grid-template-columns: repeat(6, 50px);
-    grid-template-rows: repeat(2,50px);
-    grid-column-gap: 25px;
-    grid-auto-flow: row;
-  }
-  .ItemBottleCoinOne{
-    width:50px;
-    height:50px;
-    background-image:  url('/images/item-bottle-coin-one.png');
-    background-size: cover;
-  }
-  .ItemBottleCoinTwo{
-    width:50px;
-    height:50px;
-    background-image:  url('/images/item-bottle-coin-two.png');
-    background-size: cover;
-  }
-  .ItemBottleCoinThree{
-    width:50px;
-    height:50px;
-    background-image:  url('/images/item-bottle-coin-three.png');
-    background-size: cover;
-  }
-=======
-
->>>>>>> 4607983317babdeca346a3cf47ec1c1400c81d17
-  .marketPool{
+  /*.marketPool{
     grid-column: 3/span 5;
     grid-row: 11/span 4;
     width: auto;
@@ -416,7 +381,7 @@ export default {
     display: grid;
     grid-template-columns: repeat(5, 60px);
     grid-template-rows: repeat(5, 27.5px);
-    }
+    }*/
   .workPool{
     grid-column: 3/span 5;
     grid-row: 6/span 5;
@@ -518,28 +483,18 @@ export default {
     grid-auto-flow: row;
     grid-column-gap: 25px;
   }
-<<<<<<< HEAD
-=======
-
 .playerTitle {
   grid-row: 1;
   grid-column: 1 / span 2;
 }
-
->>>>>>> 4607983317babdeca346a3cf47ec1c1400c81d17
   .chosenSkillCard {
     grid-row: 3;
     transform: scale(0.25);
   }
-<<<<<<< HEAD
-=======
-
   .chosenItemCard {
     grid-row: 1;
     transform: scale(0.25);
   }
-
->>>>>>> 4607983317babdeca346a3cf47ec1c1400c81d17
   .playerHand {
     grid-column: 11/span 5;
     grid-row: 8/span 4;
@@ -613,7 +568,7 @@ export default {
     transform: scale(2)translate(-25%,0);
     z-index: 1;
   }
-  .iconBird {
+  /*.iconBird {
     width: 30px;
     height: 40px;
     background-image: url('/images/iconBird.PNG');
@@ -652,7 +607,7 @@ export default {
     background-size: cover;
     grid-column: 5;
     grid-row: 10;
-  }
+  }*/
   @media screen and (max-width: 800px) {
     main {
       width:90vw;
