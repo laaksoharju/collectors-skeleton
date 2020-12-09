@@ -2,6 +2,7 @@
   <main>
     <div id='container'>
 
+
       <div id="BuyCardDiv">
         <!-- {{buyPlacement}} {{chosenPlacementCost}} Detta borde vi kunna skita i nu-->
         <CollectorsBuyActions v-if="players[playerId]"
@@ -111,6 +112,7 @@
             <h3>Names</h3>
             <div class="playercards" v-for="(player, key) in players" :key="key">
               <p>{{ key }}</p>
+
             </div>
           </div>
 
@@ -142,6 +144,11 @@
             <input type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
           </p>
         </footer>
+        <div id='readyGameButton'>
+          <button v-on:click="readyGame()" @click="isActive = true" :disabled="isActive">
+            Click here if you are ready!
+            </button>
+        </div>
       </div>
     </div>
   </main>
@@ -168,6 +175,7 @@ export default {
   },
   data: function () {
     return {
+      isActive:false,
       publicPath: "localhost:8080/#", //"collectors-groupxx.herokuapp.com/#",
       touchScreen: false,
       maxSizes: { x: 0,
@@ -203,7 +211,8 @@ export default {
         skillsOnSale: [],
         auctionCards: [],
         currentAuctionCard: [],
-        playerid: 0
+        playerid: 0,
+        playerIdArray: []
         }
       },
       computed: {
@@ -220,6 +229,7 @@ export default {
           }
         }
       },
+
       created: function () {
         this.$store.commit('SET_PLAYER_ID', this.$route.query.id)
         //TODO! Fix this ugly hack
@@ -254,6 +264,12 @@ export default {
             this.marketPlacement = d.marketPlacement;
             this.auctionPlacement = d.auctionPlacement;
             this.workPlacement = d.workPlacement;
+          }.bind(this));
+
+          this.$store.state.socket.on('collectorsPlayerArrayFinished',function(d){
+            this.playerIdArray=d.playerIdArray;
+            console.log('jr', d.playerIdArray);
+
           }.bind(this));
 
           this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
@@ -315,6 +331,15 @@ export default {
 
 },
 methods: {
+  readyGame: function(){
+    alert('You are ready, wait for the rest of the players to ready up. If all are ready hit "start game"');
+    this.$store.state.socket.emit('collectorsPlayerReady', {
+      playerId: this.playerId,
+      roomId: this.$route.params.id
+
+    });
+    // console.log(this.playerIdArray);
+  },
   selectAll: function (n) {
     n.target.select();
   },
