@@ -43,7 +43,7 @@
           Raise current bid!
         </button>
         <!--<div v-for="key in room.bidArray" :key="key"/> </div>-->
-	
+
         <CollectorsAuctionActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
@@ -439,48 +439,56 @@ footer a:visited {
   grid-area: BuyCardDiv;
   align-self: center;
   background: #f9dcce;
+  margin: 5px;
 }
 
 #BuySkillDiv {
   grid-area: BuySkillDiv;
   align-self: center;
   background: #dfeccc;
+  margin: 5px;
 }
 
 #AuctionDiv {
   grid-area: AuctionDiv;
   align-self: center;
   background: #f5f1e1;
+  margin: 5px;
 }
 
 #RaiseValueDiv {
   grid-area: RaiseValueDiv;
   align-self: center;
   background: #cfdcf2;
+  margin: 5px;
 }
 
 #WorkDiv {
   grid-area: WorkDiv;
   align-self: center;
-background: #f5f2cc;
+  background: #f5f2cc;
+  margin: 5px;
 }
 
 #HandDiv {
   grid-area: HandDiv;
   align-self: center;
   background: #e4e4e3;
+  margin: 5px;
 }
 
 #PlayerItemsDiv {
   grid-area: PlayerItemsDiv;
   align-self: center;
   background: #e4e4e3;
+  margin: 5px;
 }
 
 #PlayerSkillsDiv {
   grid-area: PlayerSkillsDiv;
   align-self: center;
   background: #e4e4e3;
+  margin: 5px;
 }
 
 #PlayerBoardDiv {
@@ -488,6 +496,7 @@ background: #f5f2cc;
   align-self: center;
   /* background: url("https://previews.123rf.com/images/prapann/prapann1606/prapann160600110/58202559-old-wood-vintage-wood-wall-texture-wood-background-old-panels.jpg"); */
   background: #e4e4e3;
+  margin: 5px;
 }
 
 #AllPlayerCardsDiv {
@@ -506,8 +515,6 @@ background: #f5f2cc;
   background: #D7D7D7;
   grid-template-columns: 25% 25% 25% 25%;
   grid-template-rows: 16,67% 16,67% 16,67% 16,67% 16,67% 16,67%;
-  column-gap: 20px;
-  row-gap: 20px;
   grid-template-areas:
   "BuyCardDiv BuyCardDiv RaiseValueDiv RaiseValueDiv"
   "BuyCardDiv BuyCardDiv RaiseValueDiv RaiseValueDiv"
