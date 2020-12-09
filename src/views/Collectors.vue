@@ -6,14 +6,9 @@
         :player ="players[playerId]"/>
   <OtherPlayerboards :Players ="players" :playerId="playerId" />
 
-  <GameBoard 
-    :itemsOnSale="itemsOnSale"
-    :skillsOnSale="skillsOnSale"
-    :auctionCards="auctionCards"
-    />
-
       {{ buyPlacement }} {{ chosenPlacementCost }}
-      <CollectorsBuyActions v-if="players[playerId]"
+    <div id="game-board">
+      <ItemSection v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
         :itemsOnSale="itemsOnSale"
@@ -22,7 +17,7 @@
         @buyCard="buyCard($event)"
         @placeBottle="placeBottle('buy', $event)"
       />
-
+</div>
       <div class="buttons">
         <button @click="drawCard">
           {{ labels.draw }}
@@ -90,8 +85,7 @@
 /*eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }]*/
 
 import CollectorsCard from "@/components/CollectorsCard.vue";
-import CollectorsBuyActions from "@/components/CollectorsBuyActions.vue";
-import GameBoard from "@/components/GameBoard.vue";
+import ItemSection from "@/components/ItemSection.vue";
 import PlayerBoard from "@/components/PlayerBoard.vue";
 import OtherPlayerboards from '../components/OtherPlayerboards.vue';
 
@@ -99,8 +93,7 @@ export default {
   name: "Collectors",
   components: {
     CollectorsCard,
-    CollectorsBuyActions,
-    GameBoard,
+    ItemSection,
     PlayerBoard,
     OtherPlayerboards
   },
