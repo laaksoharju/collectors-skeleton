@@ -123,6 +123,8 @@ export default {
   grid-column-gap: 25px;
   grid-auto-flow: row;
   padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .buttons{
