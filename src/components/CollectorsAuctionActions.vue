@@ -73,7 +73,6 @@ export default {
     handleAction: function (card) {
       if (card.available) {
         this.$emit('handleAction', card)
-        this.highlightAvailableCards()
       }
     }
   },

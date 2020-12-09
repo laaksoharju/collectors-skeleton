@@ -34,7 +34,6 @@
         :market="market"
         :currentAuctionCard="currentAuctionCard"
         :placement="marketPlacement"
-        @raiseValue="raiseValue($event)"
         @placeBottleRaiseValue="placeBottleRaiseValue('market', $event)"/>
       </div>
 

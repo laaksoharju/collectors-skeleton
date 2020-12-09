@@ -61,10 +61,10 @@ export default {
     },
 
     highlightAvailableCards: function () {
-      if (this.skillsOnSale[4].item !== undefined) {
+      if (this.skillsOnSale.length === 5) {
         this.$set(this.skillsOnSale[4], "available", true);
       }
-      if (this.auctionCards[3].item !== undefined) {
+      if (this.auctionCards.length === 4) {
         this.$set(this.auctionCards[3], "available", true);
       }
       for (let i = 0; i < this.player.hand.length; i += 1) {
