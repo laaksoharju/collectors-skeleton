@@ -306,6 +306,21 @@ Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index
     room.workPlacement[index].playerId = playerId;
     room.players[playerId].money -= cost;
   }
+  if (index === 1 ){
+      console.log('Work ruta index 1');
+  }
+  if (index === 2 ){
+      console.log('Work ruta index 2');
+    //dra 2 kort
+  }
+  if (index === 3 ){
+      console.log('Work ruta index 3');
+
+  }
+  if (index === 4 ){
+      console.log('Work ruta index 4');
+
+  }
 }
 
 Data.prototype.fakeMoreMoney = function (roomId, playerId) {

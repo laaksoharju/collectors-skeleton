@@ -6,7 +6,7 @@
         <button
         v-if="p.playerId===null"
         :disabled="cannotAfford(p.cost)"
-        @click="placeBottle(p, index)" >
+        @click="placeBottle(p, index)">
         ${{p.cost}}
       </button>
       <div v-if="p.playerId !== null" style="color:black">
@@ -65,7 +65,7 @@ export default {
 }
 
 
-#SkillActionDiv  h1, h2, h3, p  {
+#WorkActionsDiv  h1, h2, h3, p  {
   color: black;
 }
 
