@@ -9,30 +9,21 @@
              :labels="labels"
              :player="players[playerId]"
              :skillsOnSale="skillsOnSale"
+             :marketValues="marketValues"
+             :placement="skillPlacement"
              @getSkill="getSkill($event)"
+             @placeBottle="placeBottle('skill', $event)"
         />
 
-       <div class = "itemPool">
-        Item Pool
-          <div class = "ItemBottleCoinOne">
-          </div>
-          <div class = "ItemBottleCoinOne">
-          </div>
-          <div class = "ItemBottleCoinTwo">
-          </div>
-          <div class = "ItemBottleCoinTwo">
-          </div>
-          <div class = "ItemBottleCoinThree">
-          </div>
-
-          <div v-for="(card, index) in itemsOnSale" :key="index">
-            <CollectorsCard
-              :card="card"
-              :availableAction="card.available"
-              @doAction="buyCard(card)"/>
-        <!--    {{ cardCost(card) }} -->
-          </div>
-       </div>
+        <CollectorsBuyItem v-if="players[playerId]"
+          :labels="labels"
+          :player="players[playerId]"
+          :itemsOnSale="itemsOnSale"
+          :marketValues="marketValues"
+          :placement="buyPlacement"
+          @buyCard="buyCard($event)"
+          @placeBottle="placeBottle('buy', $event)"
+          />
 
        <div class = "marketPool">
          Market Pool
@@ -59,12 +50,30 @@
             :cardUpForAuction="cardUpForAuction"
             @startAuction="startAuction($event)"/>
 
+         <div class = "EnergyBottleCoinWhiteTwo"></div> <!-- Olika flaskor med vita coins, 1 2 eller 0 -->
+         <div class = "EnergyBottleCoinWhiteOne"></div>
+         <div class = "EnergyBottleCoinWhiteNoll"></div>
+         <div class = "EnergyBottleCoinWhiteNoll second"></div>
+       </div>
+
        <div class="playerBoard">
-          Player {{playerId}}'s Board
-          <div class="chosenSkillCard" v-if="players[playerId]">
-            <CollectorsCard v-for="(card, index) in players[playerId].skills" :card="card" :key="index"/>
+         <div class="playerTitle"> Player {{playerId}}'s Board </div>
+
+          <!--    <div v-if="players[playerId]">-->
+                <div class="chosenSkillCard" v-for="(card, index) in players[playerId].skills" :card="card" :key="index">
+                <CollectorsCard
+                :card="card"
+                 />
+              </div>
+
+      <!--    <div v-if="players[playerId]">-->
+            <div class="chosenItemCard" v-for="(card, index) in players[playerId].items" :card="card" :key="index">
+            <CollectorsCard
+            :card="card"
+             />
           </div>
-      </div>
+        </div>
+
       <div class="playerHand">
         Hand
         <div class="cardslots" v-if="players[playerId]">
@@ -167,6 +176,8 @@ import CollectorsCard from '@/components/CollectorsCard.vue'
 import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
 import CollectorsGetSkills from '@/components/CollectorsGetSkills.vue'
 import CollectorsStartAuction from '@/components/CollectorsStartAuction.vue'
+import CollectorsBuyItem from '@/components/CollectorsBuyItem.vue'
+
 
 export default {
   name: 'Collectors',
@@ -175,6 +186,7 @@ export default {
     CollectorsBuyActions,
     CollectorsGetSkills,
     CollectorsStartAuction,
+    CollectorsBuyItem,
 
   },
   data: function () {
@@ -371,8 +383,6 @@ export default {
       this.$store.state.socket.emit('collectorsChangeTurn', {
           roomId: this.$route.params.id,
           currentPlayer: this.currentPlayer
-
-
           }
         );
       },
@@ -391,9 +401,6 @@ export default {
 
   }
 }
-
-
-
 </script>
 
 <style scoped>
@@ -421,48 +428,6 @@ export default {
 	background: $black;
 	border: 2px solid $black;
   }
-
-
-
-
-  .itemPool{
-    grid-column: 3/span 5 ;
-    grid-row: 2/span 4;
-    width: auto;
-    height: auto;
-  /*  grid-template-columns: repeat(100, 12px);
-    grid-template-rows: repeat(100,150px);*/
-    background-color: #f0d9cc ;
-    color: black;
-
-    display: grid;
-    grid-template-columns: repeat(6, 50px);
-    grid-template-rows: repeat(2,50px);
-    grid-column-gap: 25px;
-    grid-auto-flow: row;
-  }
-
-  .ItemBottleCoinOne{
-    width:50px;
-    height:50px;
-    background-image:  url('/images/item-bottle-coin-one.png');
-    background-size: cover;
-  }
-
-  .ItemBottleCoinTwo{
-    width:50px;
-    height:50px;
-    background-image:  url('/images/item-bottle-coin-two.png');
-    background-size: cover;
-  }
-
-  .ItemBottleCoinThree{
-    width:50px;
-    height:50px;
-    background-image:  url('/images/item-bottle-coin-three.png');
-    background-size: cover;
-  }
-
 
   .marketPool{
     grid-column: 3/span 5;
@@ -525,7 +490,7 @@ export default {
 
   .playerBoard {
     grid-column: 11/span 5;
-    grid-row: 2/span 4;
+    grid-row: 2/span 6;
     width: auto;
     height: auto;
     display: grid;
@@ -536,18 +501,28 @@ export default {
     display: grid;
     grid-template-columns: repeat(8, 60px);
     grid-template-rows: repeat(3,60px);
+    grid-auto-flow: row;
+    grid-column-gap: 25px;
   }
 
+.playerTitle {
+  grid-row: 1;
+  grid-column: 1 / span 2;
+}
+
   .chosenSkillCard {
-    grid-column: 5;
+    grid-row: 3;
+    transform: scale(0.25);
+  }
+
+  .chosenItemCard {
     grid-row: 1;
     transform: scale(0.25);
   }
 
-
   .playerHand {
     grid-column: 11/span 5;
-    grid-row: 6/span 4;
+    grid-row: 8/span 4;
   }
 
   .turnCounter {

@@ -1,4 +1,5 @@
 <template>
+
     <div>
       <h1>{{ labels.buyCard }}</h1>
       <div class="buy-cards">
@@ -11,7 +12,10 @@
         </div>
       </div>
       <div>
+
+        {{placement}}
         <div class="buttons" v-for="(p, index) in placement" :key="index">
+
           <button
             v-if="p.playerId===null"
             :disabled="cannotAfford(p.cost)"
@@ -94,4 +98,5 @@ export default {
     display: grid;
     grid-template-columns: repeat(auto-fill, 130px);
   }
+
 </style>
