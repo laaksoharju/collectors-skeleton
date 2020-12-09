@@ -33,6 +33,15 @@ function sockets(io, socket, data) {
         }
       );
     });
+    socket.on('collectorsPlayerReady', function(d) {
+      data.addPlayerReady(d.roomId, d.playerId);
+      io.to(d.roomId).emit('collectorsPlayerArrayFinished', {
+        playerIdArray: data.getPlayerIdArray(d.roomId)
+      }
+    );
+
+    });
+
     socket.on('collectorsPlaceBottle', function(d) {
       data.placeBottle(d.roomId, d.playerId, d.action, d.cost);
       io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId)

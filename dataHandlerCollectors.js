@@ -66,6 +66,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.currentAuctionCard = [];
   room.bidArray = [];
   room.market = [];
+  room.playerIdArray2=[];
   room.buyPlacement = [ {cost:1, playerId: null},
                         {cost:1, playerId: null},
                         {cost:2, playerId: null},
@@ -236,6 +237,13 @@ Data.prototype.raiseValue = function (roomId, playerId, card, cost) {
     room.players[playerId].money -= cost;
   }
 }
+Data.prototype.addPlayerReady= function(roomId, playerId){
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    room.playerIdArray2.push(playerId);
+    console.log(room.playerIdArray2);
+  }
+}
 
 Data.prototype.startAuction = function (roomId, playerId, card, cost) {
   let room = this.rooms[roomId];
@@ -314,8 +322,8 @@ Data.prototype.raiseCurrentBid = function (roomId, playerId) {
       room.bidArray.push(playerId);
       console.log(room.bidArray);
       console.log("Current leading bid: ",room.bidArray.length,"$" );
-      
-      
+
+
   }
   else return [];
 }
@@ -378,6 +386,13 @@ Data.prototype.getMarket = function(roomId){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     return room.market;
+  }
+  else return [];
+}
+Data.prototype.getPlayerIdArray = function(roomId){
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    return room.playerIdArray2;
   }
   else return [];
 }
