@@ -101,7 +101,9 @@ Data.prototype.joinGame = function (roomId, playerId) {
     }
     else if (Object.keys(room.players).length < room.playerCount) {
       console.log("Player", playerId, "joined for the first time");
-      room.players[playerId] = { hand: [], 
+      console.log(room.deck.pop());
+      console.log(room.deck.length)
+      room.players[playerId] = { hand: room.deck.splice(0, 3),
                                  money: 1,
                                  points: 0,
                                  skills: [],
@@ -110,6 +112,7 @@ Data.prototype.joinGame = function (roomId, playerId) {
                                  secret: [],
                                  color: colors[Object.keys(room.players).length]
                                 };
+      console.log(room.deck.length)
       return true;
     }
     console.log("Player", playerId, "was declined due to player limit");

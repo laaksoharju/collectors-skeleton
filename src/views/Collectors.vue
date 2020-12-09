@@ -147,7 +147,7 @@ export default {
     WorkArea,
     ItemSection,
     PlayerBoard,
-    OtherPlayerboards
+    OtherPlayerboards,
   },
   data: function () {
     return {
