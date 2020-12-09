@@ -4,34 +4,13 @@
       <div class="table">
       <div class="board">
 
-       <div class = "skillPool">
-         Skill Pool
-         <div class = "EnergyBottles">
-         </div>
-         <div class = "EnergyBottles">
-         </div>
-         <div class = "EnergyBottles">
-         </div>
 
-         <div class = "EnergyBottleCoin">
-         </div>
-         <div class = "EnergyBottleCoin">
-         </div>
-
-           <!--<div class="skillCard" v-for="(card, index) in skillsOnSale" :key="index">
-             <CollectorsCard :card="card" :availableAction="card.available" @doAction="getSkill(card)" :key="index" />
-
-           </div>-->
-
-
-           <div class="skillCard" v-if="players[playerId]">
-             <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :availableAction="card.available" @doAction="getSkill(card)" :key="index"/>
-
-           </div>
-
-       </div>
-
-
+        <CollectorsGetSkills v-if="players[playerId]"
+             :labels="labels"
+             :player="players[playerId]"
+             :skillsOnSale="skillsOnSale"
+             @getSkill="getSkill($event)"
+        />
 
        <div class = "itemPool">
         Item Pool
@@ -45,11 +24,14 @@
           </div>
           <div class = "ItemBottleCoinThree">
           </div>
-          <div class="itemCard" v-for="(card, index) in itemsOnSale" :key="index">
-            <CollectorsCard :card="card" />
+
+          <div v-for="(card, index) in itemsOnSale" :key="index">
+            <CollectorsCard
+              :card="card"
+              :availableAction="card.available"
+              @doAction="buyCard(card)"/>
+        <!--    {{ cardCost(card) }} -->
           </div>
-
-
        </div>
 
 
@@ -64,6 +46,11 @@
 
        <div class = "workPool">
          Work Pool
+         <div class = "Alt1"></div>
+         <div class = "Alt2"></div>
+         <div class = "Alt3"></div>
+         <div class = "Alt4"></div>
+
        </div>
 
        <div class = "auctionPool">
@@ -73,9 +60,6 @@
         <div class="auctionCard" v-for="(card, index) in auctionCards" :key="index">
           <CollectorsCard :card="card" />
         </div>
-      <!--   <div class="cardslots">
-           <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
-         </div> -->
 
          <div class = "EnergyBottleCoinWhiteTwo"></div> <!-- Olika flaskor med vita coins, 1 2 eller 0 -->
          <div class = "EnergyBottleCoinWhiteOne"></div>
@@ -153,21 +137,6 @@
   </button>
 </div>
 
-    <!--  <div class="cardslots">
-        <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
-      </div> -->
-
-      <!--<div class="cardslots">
-        <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
-      </div>-->
-    <!--  Hand
-      <div class="cardslots" v-if="players[playerId]">
-        <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="buyCard(card)" :key="index"/>
-      </div> -->
-
-      <!-- <div class="cardslots" v-if="players[playerId]">
-        <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
-      </div> -->
     </main>
     {{players}}
     {{marketValues}}
@@ -185,17 +154,15 @@
 
 <script>
 /*eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }]*/
-
 import CollectorsCard from '@/components/CollectorsCard.vue'
 import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
-
-
+import CollectorsGetSkills from '@/components/CollectorsGetSkills.vue'
 export default {
   name: 'Collectors',
   components: {
     CollectorsCard,
     CollectorsBuyActions,
-
+    CollectorsGetSkills,
   },
   data: function () {
     return {
@@ -276,7 +243,6 @@ export default {
         this.marketPlacement = d.placements.marketPlacement;
         this.auctionPlacement = d.placements.auctionPlacement;
       }.bind(this));
-
     this.$store.state.socket.on('collectorsBottlePlaced',
       function(d) {
         this.buyPlacement = d.buyPlacement;
@@ -284,9 +250,7 @@ export default {
         this.marketPlacement = d.marketPlacement;
         this.auctionPlacement = d.auctionPlacement;
       }.bind(this));
-
     this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
-
     this.$store.state.socket.on('collectorsCardDrawn',
       function(d) {
           //this has been refactored to not single out one player's cards
@@ -294,7 +258,6 @@ export default {
           this.players = d;
       }.bind(this)
     );
-
     this.$store.state.socket.on('collectorsCardBought',
       function(d) {
         console.log(d.playerId, "bought a card");
@@ -302,8 +265,6 @@ export default {
         this.itemsOnSale = d.itemsOnSale;
       }.bind(this)
     );
-
-
     this.$store.state.socket.on('collectorsSkillCaught',
       function(d) {
         console.log(d.playerId, "Got a skill");
@@ -311,11 +272,9 @@ export default {
         this.skillsOnSale = d.skillsOnSale;
       }.bind(this)
     );
-
     this.$store.state.socket.on('collectorsChangedTurn',
       function(d) {
           this.currentPlayer = d;
-
       }.bind(this)
     );
   },
@@ -350,10 +309,8 @@ export default {
         }
       );
     },
-
     getSkill: function (card) {
       console.log("getSkill", card);
-      console.log("NU HAR DEN NÅTT GETSKILL FUNKTIONEN 1");
       this.$store.state.socket.emit('collectorsGetSkill', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
@@ -361,24 +318,17 @@ export default {
           skill: this.skillsOnSale,
         }
       );
-      },
-
+    },
     changeTurn: function () {
       console.log("TEST");
-
       this.$store.state.socket.emit('collectorsChangeTurn', {
           roomId: this.$route.params.id,
           currentPlayer: this.currentPlayer
-
-
           }
         );
         }
   }
 }
-
-
-
 </script>
 
 <style scoped>
@@ -395,8 +345,6 @@ export default {
     padding-left: 50px;
     padding-right: 50px;
   }
-
-
   .board {
 	display: grid;
 	grid-template-columns: repeat(15,90px);
@@ -408,43 +356,6 @@ export default {
 	background: $black;
 	border: 2px solid $black;
   }
-
-  .skillPool{
-    grid-column: 1 / span 2;
-    grid-row: 2/span 13 ;
-    width: auto;
-		height: auto;
-    background-color: #dce5cc;
-    color: black;
-    display: grid;
-    grid-template-columns: repeat(3, 50px);
-    grid-template-rows: repeat(6,50px);
-    grid-row-gap: 25px;
-    grid-auto-flow: column;
-<<<<<<< HEAD
-      }
-=======
-    }
->>>>>>> bf50d1764e837ccacf1c05047e9a7f48698583da
-
-  .EnergyBottles{
-
-    width:50px;
-    height:50px;
-    background-image:  url('/images/Gain-skill-bottle.png');
-    background-size: cover;
-  }
-
-  .EnergyBottleCoin{
-
-    width:50px;
-    height:50px;
-    background-image:  url('/images/Gain-skill-bottle-coin.png');
-    background-size: cover;
-  }
-
-
-
   .itemPool{
     grid-column: 3/span 5 ;
     grid-row: 2/span 4;
@@ -454,59 +365,83 @@ export default {
     grid-template-rows: repeat(100,150px);*/
     background-color: #f0d9cc ;
     color: black;
-
     display: grid;
     grid-template-columns: repeat(6, 50px);
     grid-template-rows: repeat(2,50px);
     grid-column-gap: 25px;
     grid-auto-flow: row;
   }
-
   .ItemBottleCoinOne{
     width:50px;
     height:50px;
     background-image:  url('/images/item-bottle-coin-one.png');
     background-size: cover;
   }
-
   .ItemBottleCoinTwo{
     width:50px;
     height:50px;
     background-image:  url('/images/item-bottle-coin-two.png');
     background-size: cover;
   }
-
   .ItemBottleCoinThree{
     width:50px;
     height:50px;
     background-image:  url('/images/item-bottle-coin-three.png');
     background-size: cover;
   }
-
-
   .marketPool{
     grid-column: 3/span 5;
     grid-row: 11/span 4;
     width: auto;
     height: auto;
-  /*  grid-template-columns: repeat(100, 12px);
-    grid-template-rows: repeat(100,150px);*/
     background-color: #c9d5e1;
     color: black;
     display: grid;
     grid-template-columns: repeat(5, 60px);
     grid-template-rows: repeat(5, 27.5px);
     }
-
   .workPool{
     grid-column: 3/span 5;
     grid-row: 6/span 5;
     width: auto;
     height: auto;
-    grid-template-columns: repeat(100, 12px);
-    grid-template-rows: repeat(100,150px);
+    display:grid;
+    grid-template-columns: repeat(3, 150px);
+    grid-template-rows: repeat(3,50px);
     background-color: #f5f2cc;
     color: black;
+  }
+  .Alt1 {
+    /grid-column: 1 ;
+    grid-row: 1;
+    width: 130px;
+    height: 60px;
+    background-image: url('/images/WorkPoolAlt1.jpg');
+    background-size: cover;
+  }
+  .Alt2 {
+    grid-column: 1 ;
+    grid-row: 2;
+    width: 130px;
+    height: 60px;
+    background-image: url('/images/WorkPoolAlt2.jpg');
+    background-size: cover;
+  }
+  .Alt3 {
+    grid-column: 1 / span 2 ;
+    grid-row: 3;
+    width: 130px;
+    height: 60px;
+    background-image: url('/images/WorkPoolAlt3.jpg');
+    background-size: cover;
+  }
+  .Alt4 {
+    grid-column: 1 ;
+    grid-row: 4;
+    width: 152px;
+    height: 60px;
+    background-image: url('/images/WorkPoolAlt4.jpg');
+    background-size: cover;
   }
   .auctionPool{
     grid-column: 8/span 2;
@@ -518,12 +453,7 @@ export default {
     display: grid;
     grid-template-columns: repeat(3, 50px);
     grid-template-rows: repeat(6,100px);
-<<<<<<< HEAD
-=======
-    /*grid-auto-flow: column; */
->>>>>>> 67d1853aa4147add05ec9602bf4fed50338d0f2a
   }
-
 .titleAuctionPool{
   grid-column: 3;
   grid-row: 1;
@@ -540,7 +470,6 @@ export default {
     grid-column: 1;
     grid-row: 4;
   }
-
   .EnergyBottleCoinWhiteTwo{
     width:45px;
     height:45px;
@@ -549,7 +478,6 @@ export default {
     grid-column: 1;
     grid-row: 1;
   }
-
   .EnergyBottleCoinWhiteOne{
     width:45px;
     height:45px;
@@ -558,8 +486,6 @@ export default {
     grid-column: 1;
     grid-row: 2;
   }
-
-
   .playerBoard {
     grid-column: 11/span 5;
     grid-row: 2/span 4;
@@ -573,19 +499,15 @@ export default {
     grid-template-columns: repeat(8, 60px);
     grid-template-rows: repeat(3,60px);
   }
-
   .chosenSkillCard {
     grid-column: 5;
     grid-row: 1;
     transform: scale(0.25);
   }
-
-
   .playerHand {
     grid-column: 11/span 5;
     grid-row: 6/span 4;
   }
-
   .turnCounter {
     background-color: green;
     color:white;
@@ -600,7 +522,6 @@ export default {
     grid-row: 16/span 2;
     text-align: center;
   }
-
   .buttons{
     grid-column: 1;
     grid-row: 10;
@@ -633,11 +554,6 @@ export default {
     display: grid;
     grid-template-columns: repeat(auto-fill, 130px);
     grid-template-rows: repeat(auto-fill, 1px);
-  /*  display: grid;
-    grid-template-columns: repeat(100, 15px);
-    grid-template-rows: repeat(1,150px);*/
-  /*  justify-content: center;
-    align-items: center; */
   }
   .cardslots div {
     transform: scale(0.3)translate(-50%,-50%); /* scale - minska kortens strl*/
@@ -645,46 +561,22 @@ export default {
     transition-timing-function: ease-out;
     z-index: 0;
   }
-
   .cardslots div:hover {
     transform: scale(1)translate(-25%,0);
     z-index: 1;
   }
-
-
-  .skillCard {
-    transform: scale(0.25);
-  /*  display: grid;
-    grid-template-columns: repeat(1, 15px);
-    grid-template-rows: repeat(5,160px);*/
-  }
-  .skillCard div:hover{
-    transform: scale(2)translate(-25%,0);
-    z-index: 1;
-  }
-
   .itemCard{
+    grid-row: 2;
     transform: scale(0.25);
   }
-
-  .itemCard div:hover{
-    transform: scale(2)translate(-25%,0);
-    z-index: 1;
-  }
-
   .auctionCard {
     transform: scale(0.25);
     grid-column: 2;
-
-  /*  display: grid;
-    grid-template-columns: repeat(1, 15px);
-    grid-template-rows: repeat(5,160px);*/
   }
   .auctionCard div:hover{
     transform: scale(2)translate(-25%,0);
     z-index: 1;
   }
-
   .iconBird {
     width: 30px;
     height: 40px;
@@ -692,7 +584,6 @@ export default {
     background-size: cover;
     grid-column: 1;
     grid-row: 10;
-
   }
   .iconRobot {
     width: 30px;
@@ -701,7 +592,6 @@ export default {
     background-size: cover;
     grid-column: 2;
     grid-row: 10;
-
   }
   .iconMusic {
     width: 30px;
@@ -727,7 +617,6 @@ export default {
     grid-column: 5;
     grid-row: 10;
   }
-
   @media screen and (max-width: 800px) {
     main {
       width:90vw;
