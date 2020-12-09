@@ -38,9 +38,7 @@
       </div>
 
       <div id="AuctionDiv">
-        <button v-if="players[playerId]" @click="raiseCurrentBid()">
-          Raise current bid!
-        </button>
+
         <!--<div v-for="key in room.bidArray" :key="key"/> </div>-->
 
         <CollectorsAuctionActions v-if="players[playerId]"
@@ -51,6 +49,21 @@
         :placement="auctionPlacement"
         @handleAction="handleAction($event)"
         @placeBottle="placeBottle('startAuction', $event)"/>
+
+
+
+        <div v-if="currentAuctionCard.length === 1">
+          <p>player '{{ bidArray[bidArray.length - 1]}}' is now leading the auction with a: {{ bidArray.length}}$ bid.</p>
+          <button v-if="players[playerId]" @click="raiseCurrentBid()">
+            Raise current bid!
+          </button>
+          <button v-if="players[playerId]" @click="raiseCurrentBid()">
+            end auction
+          </button>
+
+        </div>
+
+
       </div>
 
       <div id="WorkDiv">
@@ -161,6 +174,7 @@ export default {
         y: 0 },
         labels: {},
         players: {},
+        room: {},
         // playerId: {
         //   hand: [],
         //   money: 1,
@@ -220,7 +234,7 @@ export default {
           function(d) {
             this.labels = d.labels;
             this.players = d.players;
-            this.bidArray = d.bidArray;
+            this.room = d.room;
             this.itemsOnSale = d.itemsOnSale;
             this.marketValues = d.marketValues;
             this.skillsOnSale = d.skillsOnSale;
@@ -296,7 +310,7 @@ export default {
           this.$store.state.socket.on('collectorsBidRaised',
           function(d) {
             console.log(d.playerId, "bid is raised");
-            this.bidArray = d.bidArray;
+            this.bidArray = d;
           }.bind(this));
 
 },

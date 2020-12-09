@@ -341,6 +341,7 @@ Data.prototype.raiseCurrentBid = function (roomId, playerId) {
       console.log(room.bidArray);
       console.log("Current leading bid: ",room.bidArray.length,"$" );
 
+      return room.bidArray;
 
   }
   else return [];
