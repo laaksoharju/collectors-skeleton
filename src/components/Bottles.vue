@@ -95,8 +95,8 @@ export default {
   z-index: 0;
 }
 .btn-style {
-  width: 6em;
-  height: 6em;
+  width: 5em;
+  height: 5em;
   background-image: url("/images/bottle.jpg");
   background-size: 100% 100%;
 
@@ -105,6 +105,6 @@ export default {
   text-align: center;
   padding: 0.5rem;
 
-  font-size: 1rem;
+  font-size: 0.5rem;
 }
 </style>

@@ -167,7 +167,7 @@
         </div>
       </div>
     </main>
-    
+
 
     <footer>
       {{ players }}
@@ -417,7 +417,7 @@ header {
 }
 main {
   user-select: none;
- 
+
 }
 footer {
   position: relative;
@@ -458,17 +458,14 @@ footer a:visited {
   grid-column: 2/3;
 }
 .buy_item{
-   
+
 
 }
 .buy_item >>> .buy-cards {
   position: relative;
- 
- 
-  left: 24vw;
-  top: 5.2vh;
+  left: 16.5vw;
+  top: 10.2vh;
   grid-template-columns: repeat(5, 8rem);
-
   grid-gap: 1rem;
   transform: scale(0.6) translate(-50%, -50%);
 }
@@ -476,19 +473,20 @@ footer a:visited {
 .buy_skill >>> .buy-cards {
   position: relative;
   left: 13vw;
-  top: -50vh;
-  grid-template-rows: repeat(5, 11rem);
-  grid-template-columns: 12rem;
+  top: -62vh;
+  grid-template-rows: repeat(5, 10.5rem);
+  grid-template-columns: 11rem;
   transform: scale(0.6) translate(-50%, -50%);
   transition-timing-function: ease-out;
 }
+
 .do_auction >>> .buy-cards {
   position: relative;
-  left: -4.5vw;
-  top: -13vh;
-  grid-template-columns: repeat(5, 8.8rem);
+  left: -31.5vw;
+  top: -25vh;
+  grid-template-columns: repeat(5, 7.5rem);
   grid-template-rows: 12rem;
-  transform: scale(1.2) translate(-50%, -50%);
+  transform: scale(0.5) translate(-50%, -50%);
   z-index: 6;
 }
 
@@ -501,14 +499,14 @@ footer a:visited {
 }
 .item_bottle >>> .buttons {
   top: 5vh;
-  left: 1vw;
+  left: 3vw;
   display: grid;
-  grid-template-columns: repeat(5, 6rem);
-  grid-gap: 1em;
+  grid-template-columns: repeat(5, 2rem);
+  grid-gap: 0.5em;
 }
 .item_bottle >>> .button {
-  width: 5em;
-  height: 5em;
+  width: 2rem;
+  height: 2rem;
 }
 
 .skill_bottle {
@@ -519,11 +517,11 @@ footer a:visited {
   background-size: 100% 100%;
 }
 .skill_bottle >>> .buttons {
-  top: 35vh;
-  left: 2.5vw;
+  top: 40vh;
+  left: 2.25vw;
   display: grid;
-  grid-template-rows: repeat(5, 6rem);
-  grid-gap: 1em;
+  grid-template-rows: repeat(5, 2rem);
+  grid-gap: 0.5em;
 }
 .market {
   grid-row: 3/4;
@@ -599,8 +597,9 @@ footer a:visited {
 
 .game {
   font-size: 150%;
-  height: 78vh;
+  height: 88vh;
 }
+
 
 .player-board {
   border-radius: 5px;
