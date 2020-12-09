@@ -103,9 +103,10 @@ export default {
     grid-template-columns: 70% 30%;
     text-align: center;
     color: black;
-    margin: 5px;
+    border: 1px solid black;
+    /*margin: 5px;*/
     padding: 5px;
-    border-radius: 3px;
+    /*border-radius: 3px;*/
 }
 
 .slotSpace {

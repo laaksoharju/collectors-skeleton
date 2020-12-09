@@ -79,14 +79,18 @@ export default {
 
     components: {
         CircleComponent,
-        FirstPlayerToken
+        FirstPlayerToken,
+    },
+
+    props: {
+        color: String
     },
 
     data: function() {
         return {
             round: 4,
             clicked: false,
-            color: "blue"
+            /*color: "blue",*/
         }
 
     },
@@ -94,13 +98,14 @@ export default {
         circleClicked: function(e) {
             if(!this.clicked){
                 let clickedEl = e.target;
-                clickedEl.style.backgroundColor = this.color;
+                /*clickedEl.style.backgroundColor = this.color;*/
+                clickedEl.setAttribute("style", "background-color:"+this.color);
                 this.clicked = true;
+                console.log("färg")
             }
             else{
                 let clickedEl = e.target;
                 clickedEl.setAttribute("style", "background-color:white");
-
                 this.clicked = false;
             }
             
@@ -137,7 +142,7 @@ export default {
     }
 
     .rectangular {
-        margin: 10px;
+        margin: 7px;
         height: 120px;
         width: 90%;
         color: black;
@@ -147,6 +152,7 @@ export default {
         justify-content: space-around;*/
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+
     }
 
     .firstArea {
@@ -157,7 +163,7 @@ export default {
 
     .firstArea p {
         color: black;
-        font-size: 20px;
+        font-size: 14px;
         font-weight: bold;
         text-align: right;
         grid-column: 5;

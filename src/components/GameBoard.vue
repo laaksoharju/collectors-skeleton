@@ -126,7 +126,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #game-board {
-  width: 60%;
+  width: 100%;
   background-color: #eeeeeeff;
   border: 1px solid #19181850;
   color: black;
