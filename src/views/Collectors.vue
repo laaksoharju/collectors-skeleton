@@ -4,7 +4,7 @@
       <div class="table">
       <div class="board">
 
-
+<!-- TEST ATT PUSHA -->
         <CollectorsGetSkills v-if="players[playerId]"
              :labels="labels"
              :player="players[playerId]"
