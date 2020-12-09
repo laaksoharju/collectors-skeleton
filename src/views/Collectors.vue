@@ -34,7 +34,6 @@
           </div>
        </div>
 
-
        <div class = "marketPool">
          Market Pool
          <div class = "iconBird"></div>
@@ -53,19 +52,13 @@
 
        </div>
 
-       <div class = "auctionPool">
-        <div class= "titleAuctionPool" > Auction Pool
-        </div>
+       <CollectorsStartAuction v-if="players[playerId]"
+            :labels="labels"
+            :player="players[playerId]"
+            :auctionCards="auctionCards"
+            :cardUpForAuction="cardUpForAuction"
+            @startAuction="startAuction($event)"/>
 
-        <div class="auctionCard" v-for="(card, index) in auctionCards" :key="index">
-          <CollectorsCard :card="card" />
-        </div>
-
-         <div class = "EnergyBottleCoinWhiteTwo"></div> <!-- Olika flaskor med vita coins, 1 2 eller 0 -->
-         <div class = "EnergyBottleCoinWhiteOne"></div>
-         <div class = "EnergyBottleCoinWhiteNoll"></div>
-         <div class = "EnergyBottleCoinWhiteNoll second"></div>
-       </div>
        <div class="playerBoard">
           Player {{playerId}}'s Board
           <div class="chosenSkillCard" v-if="players[playerId]">
@@ -136,19 +129,7 @@
           {{ labels.draw }}
         </button>
       </div>
-      <buyItemsActions v-if="players[playerId]"
-        :labels="labels"
-        :player="players[playerId]"
-        :itemsOnSale="itemsOnSale"
-        :marketValues="marketValues"
-        :placement="buyPlacement"
-        @buyCard="buyCard($event)"
-        @placeBottle="placeBottle('buy', $event)"/>
-      <div class="buttons">
-        <button @click="drawCard">
-          {{ labels.draw }}
-        </button>
-      </div>
+
     <!--  <div class="cardslots">
         <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
       </div> -->
@@ -185,7 +166,7 @@
 import CollectorsCard from '@/components/CollectorsCard.vue'
 import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
 import CollectorsGetSkills from '@/components/CollectorsGetSkills.vue'
-
+import CollectorsStartAuction from '@/components/CollectorsStartAuction.vue'
 
 export default {
   name: 'Collectors',
@@ -193,6 +174,7 @@ export default {
     CollectorsCard,
     CollectorsBuyActions,
     CollectorsGetSkills,
+    CollectorsStartAuction,
 
   },
   data: function () {
@@ -227,6 +209,7 @@ export default {
       itemsOnSale: [],
       skillsOnSale: [],
       auctionCards: [],
+      cardUpForAuction: {},
       playerid: 0
     }
   },
@@ -316,7 +299,18 @@ export default {
 
       }.bind(this)
     );
-  },
+
+    this.$store.state.socket.on('collectorsAuctionStarted',
+    function(d) {
+      console.log(d.playerId, "Started an auction");
+      this.players = d.players;
+      this.auctionCards = d.auctionCards;
+      this.cardUpForAuction = d.cardUpForAuction;
+    }.bind(this)
+  );
+
+},
+
   methods: {
     selectAll: function (n) {
       n.target.select();
@@ -360,6 +354,17 @@ export default {
       );
     },
 
+    startAuction: function (card) {
+      console.log("startAuction", card);
+      this.$store.state.socket.emit('collectorsStartAuction', {
+          roomId: this.$route.params.id,
+          playerId: this.playerId,
+          card: card,
+          auctionCard: this.auctionCards,
+        }
+      );
+    },
+
     changeTurn: function () {
       console.log("TEST");
 
@@ -370,7 +375,20 @@ export default {
 
           }
         );
-        }
+      },
+
+        countRounds: function () {
+          console.log("TEST RÄKNA RUNDOR");
+
+          this.$store.state.socket.emit('collectorsCountRounds', {
+              roomId: this.$route.params.id,
+              currentPlayer: this.currentPlayer
+
+
+              }
+            );
+            }
+
   }
 }
 
@@ -395,7 +413,7 @@ export default {
   .board {
 	display: grid;
 	grid-template-columns: repeat(15,90px);
-	grid-template-rows: repeat(20, 45px)  ;
+	grid-template-rows: repeat(20, 45px);
 	grid-gap: 0px;
 	margin: 20px ;
 	width: 994px;
@@ -505,54 +523,6 @@ export default {
     background-size: cover;
   }
 
-  .auctionPool{
-    grid-column: 8/span 2;
-    grid-row: 2/span 13;
-    width: auto;
-    height: auto;
-    background-color: beige;
-    color: black;
-    display: grid;
-    grid-template-columns: repeat(3, 50px);
-    grid-template-rows: repeat(6,100px);
-  }
-
-.titleAuctionPool{
-  grid-column: 3;
-  grid-row: 1;
-}
-  .EnergyBottleCoinWhiteNoll{
-    width:45px;
-    height:45px;
-    background-image:  url('/images/Coin-white.png');
-    background-size: cover;
-    grid-column: 1;
-    grid-row: 3;
-  }
-  .second{
-    grid-column: 1;
-    grid-row: 4;
-  }
-
-  .EnergyBottleCoinWhiteTwo{
-    width:45px;
-    height:45px;
-    background-image:  url('/images/Coin-white-2.png');
-    background-size: cover;
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .EnergyBottleCoinWhiteOne{
-    width:45px;
-    height:45px;
-    background-image:  url('/images/Coin-white-1.png');
-    background-size: cover;
-    grid-column: 1;
-    grid-row: 2;
-  }
-
-
   .playerBoard {
     grid-column: 11/span 5;
     grid-row: 2/span 4;
@@ -645,16 +615,6 @@ export default {
     grid-row: 2;
     transform: scale(0.25);
 
-  }
-
-
-  .auctionCard {
-    transform: scale(0.25);
-    grid-column: 2;
-  }
-  .auctionCard div:hover{
-    transform: scale(2)translate(-25%,0);
-    z-index: 1;
   }
 
   .itemCard div:hover{
