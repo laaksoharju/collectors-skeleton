@@ -47,12 +47,27 @@ function sockets(io, socket, data) {
       );
     });
 
+    socket.on('collectorsStartAuction', function(d){
+      data.startAuction(d.roomId, d.playerId, d.card, d.auctionCard)
+      io.to(d.roomId).emit('collectorsAuctionStarted', {
+        playerId: d.playerId,
+        players: data.getPlayers(d.roomId),
+        auctionCards: data.getAuctionCards(d.roomId),
+        cardUpForAuction: data.getCardUpForAuction(d.roomId)
+        }
+      );
+    });
+
     socket.on('collectorsChangeTurn', function(d) {
       io.to(d.roomId).emit('collectorsChangedTurn',
       data.changeTurn(d.roomId, d.currentPlayer));
-
-
     });
+
+    socket.on('collectorsCountRounds', function(d) {
+      io.to(d.roomId).emit('collectorsRoundsCounted',
+      data.countRounds(d.roomId, d.currentPlayer));
+    });
+
 }
 
 module.exports = sockets;
