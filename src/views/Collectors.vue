@@ -1,6 +1,16 @@
 <template>
   <div>
     <main>
+          <div id="game-board">
+      <ItemSection v-if="players[playerId]"
+        :labels="labels"
+        :player="players[playerId]"
+        :itemsOnSale="itemsOnSale"
+        :marketValues="marketValues"
+        :placement="buyPlacement"
+        @buyCard="buyCard($event)"
+        @placeBottle="placeBottle('buy', $event)"
+      />
       <div>
         {{ skillPlacement }} {{ chosenPlacementCost }}
         <CollectorsBuySkill
@@ -14,6 +24,7 @@
           @placeBottle="placeBottle('buy', $event)"
         />
       </div>
+      </div>
 
       <!-- <GameBoard 
   :itemsOnSale="itemsOnSale"
@@ -22,16 +33,16 @@
   /> -->
 
       <WorkArea />
-      <CollectorsBuyActions
+      <!-- <CollectorsBuyActions
         v-if="players[playerId]"
-        :labels="labels"
-        :player="players[playerId]"
-        :itemsOnSale="itemsOnSale"
-        :marketValues="marketValues"
-        :placement="buyPlacement"
-        @buyCard="buyCard($event)"
-        @placeBottle="placeBottle('buy', $event)"
-      />
+        I am player {{playerId}}
+    /> -->
+  <PlayerBoard v-if="players[playerId]"
+        :player ="players[playerId]"/>
+  <OtherPlayerboards :Players ="players" :playerId="playerId" />
+
+      {{ buyPlacement }} {{ chosenPlacementCost }}
+
       <div class="buttons">
         <button @click="drawCard">
           {{ labels.draw }}
@@ -118,9 +129,12 @@
 import CollectorsCard from "@/components/CollectorsCard.vue";
 //import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
 import CollectorsBuySkill from "@/components/CollectorsBuySkill.vue";
-import CollectorsBuyActions from "@/components/CollectorsBuyActions.vue";
+//import CollectorsBuyActions from "@/components/CollectorsBuyActions.vue";
 // import GameBoard from "@/components/GameBoard.vue";
 import WorkArea from "@/components/WorkArea.vue";
+import ItemSection from "@/components/ItemSection.vue";
+import PlayerBoard from "@/components/PlayerBoard.vue";
+import OtherPlayerboards from '../components/OtherPlayerboards.vue';
 
 export default {
   name: "Collectors",
@@ -128,9 +142,12 @@ export default {
     CollectorsCard,
     //CollectorsBuyActions,
     CollectorsBuySkill,
-    CollectorsBuyActions,
+    //CollectorsBuyActions,
     //GameBoard,
     WorkArea,
+    ItemSection,
+    PlayerBoard,
+    OtherPlayerboards
   },
   data: function () {
     return {
