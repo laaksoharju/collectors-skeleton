@@ -21,7 +21,6 @@ export default {
   props: {
     labels: Object,
     player: Object,
-
     itemsOnSale: Array,
     marketValues: Object,
     placement: Array,
@@ -79,8 +78,10 @@ export default {
 <style scoped>
 .buy-cards {
   display: grid;
+  grid-template-columns:repeat(5,1fr);
   grid-gap: 1rem;
 }
+
 
 .cardslots div {
   transform: scale(0.5) translate(-50%, -50%);

@@ -32,6 +32,7 @@ export default {
   user-select: none;
   width: 250px;
   height: 350px;
+  transform: scale(1.2) translate(-50%, -50%);
   background-image: url("/images/collectors-cards.png");
   border-radius: 10px;
 }

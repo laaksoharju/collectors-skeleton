@@ -167,7 +167,12 @@
         </div>
       </div>
     </main>
+    
+
     <footer>
+      {{ players }}
+    {{ marketValues }}
+    {{'this is place'+ placement }}
       <p>
         {{ labels.invite }}
         <input
@@ -270,7 +275,7 @@ export default {
 
     this.$store.state.socket.emit("collectorsLoaded", {
       roomId: this.$route.params.id,
-      // playerId: this.playerId,
+      playerId: this.playerId,
     });
     this.$store.state.socket.on(
       "collectorsInitialize",
@@ -412,6 +417,7 @@ header {
 }
 main {
   user-select: none;
+ 
 }
 footer {
   position: relative;
@@ -451,23 +457,29 @@ footer a:visited {
   width: 100%;
   grid-column: 2/3;
 }
+.buy_item{
+   
+
+}
 .buy_item >>> .buy-cards {
   position: relative;
-  left: 54vw;
-  top: 15.2vh;
+ 
+ 
+  left: 24vw;
+  top: 5.2vh;
   grid-template-columns: repeat(5, 8rem);
 
   grid-gap: 1rem;
-  transform: scale(1.2) translate(-50%, -50%);
+  transform: scale(0.6) translate(-50%, -50%);
 }
 
 .buy_skill >>> .buy-cards {
   position: relative;
-  left: 49vw;
-  top: -20vh;
+  left: 13vw;
+  top: -50vh;
   grid-template-rows: repeat(5, 11rem);
   grid-template-columns: 12rem;
-  transform: scale(1.2) translate(-50%, -50%);
+  transform: scale(0.6) translate(-50%, -50%);
   transition-timing-function: ease-out;
 }
 .do_auction >>> .buy-cards {
@@ -747,7 +759,7 @@ p {
 
 @media screen and (max-width: 800px) {
   main {
-    width: 90vw;
+    width: 70vw;
   }
 }
 </style>
