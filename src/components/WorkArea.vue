@@ -92,7 +92,6 @@ export default {
             clicked: false,
             /*color: "blue",*/
         }
-
     },
     methods: {
         circleClicked: function(e) {

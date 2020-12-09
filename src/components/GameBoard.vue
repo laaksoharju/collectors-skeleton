@@ -21,32 +21,6 @@
       <div class="section-card cardslots"></div>
     </div>
 
-    <div id="skill-section" class="board-section">
-      <div class="section-slots">
-        <h2 class="category-title">Skills</h2>
-        <div class="bottleCircles">
-          <div class="circleComponent">
-                    <CircleComponent v-bind:value=1 />
-          </div>
-          <div class="circleComponent">
-                    <CircleComponent v-bind:value=1 />
-          </div>
-          <div class="circleComponent">
-                    <CircleComponent v-bind:value=1 />
-          </div>
-          <div class="circleComponent">
-                    <CircleComponent v-bind:value=1 />
-          </div>
-        </div>
-      </div>
-      <div class="section-card cardslots">
-                  <CollectorsCard
-              v-for="(card, index) in skillsOnSale"
-              :card="card"
-              :key="index"
-            />
-      </div>
-    </div>
     <div id="raise-value-section" class="board-section">
       <div class="section-slots">
         <h2 class="category-title">Items</h2>
