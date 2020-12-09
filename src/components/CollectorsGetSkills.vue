@@ -49,7 +49,7 @@ export default {
    highlightAvailableCards: function (){
       for (let i = 0; i < this.skillsOnSale.length; i += 1) {
           this.$set(this.skillsOnSale[i], "available", true);
-          }
+        }
         }
     }
   }
