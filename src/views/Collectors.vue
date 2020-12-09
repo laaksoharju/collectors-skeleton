@@ -35,14 +35,11 @@
         :market="market"
         :currentAuctionCard="currentAuctionCard"
         :placement="marketPlacement"
-        @raiseValue="raiseValue($event)"
         @placeBottleRaiseValue="placeBottleRaiseValue('market', $event)"/>
       </div>
 
       <div id="AuctionDiv">
-        <button v-if="players[playerId]" @click="raiseCurrentBid()">
-          Raise current bid!
-        </button>
+
         <!--<div v-for="key in room.bidArray" :key="key"/> </div>-->
 
         <CollectorsAuctionActions v-if="players[playerId]"
@@ -53,11 +50,29 @@
         :placement="auctionPlacement"
         @handleAction="handleAction($event)"
         @placeBottle="placeBottle('startAuction', $event)"/>
+
+
+
+        <div v-if="currentAuctionCard.length === 1">
+          <p>player '{{ bidArray[bidArray.length - 1]}}' is now leading the auction with a: {{ bidArray.length}}$ bid.</p>
+          <button v-if="players[playerId]" @click="raiseCurrentBid()">
+            Raise current bid!
+          </button>
+          <button v-if="players[playerId]" @click="raiseCurrentBid()">
+            end auction
+          </button>
+
+        </div>
+
+
       </div>
 
-      <div id ='WorkDiv' class="cardslots">
-        <h2>Work</h2>
-        <!-- <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/> -->
+      <div id="WorkDiv">
+        <CollectorsWorkActions v-if="players[playerId]"
+        :labels="labels"
+        :player="players[playerId]"
+        :placement="workPlacement"
+        @placeBottleWork="placeBottleWork('doWork', $event)"/>
       </div>
 
       <div id="HandDiv" class="cardslots" v-if="players[playerId]">
@@ -146,6 +161,7 @@ import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
 import CollectorsSkillActions from '@/components/CollectorsSkillActions.vue'
 import CollectorsRaiseValueActions from '@/components/CollectorsRaiseValueActions.vue'
 import CollectorsAuctionActions from '@/components/CollectorsAuctionActions.vue'
+import CollectorsWorkActions from '@/components/CollectorsWorkActions.vue'
 
 export default {
   name: 'Collectors',
@@ -154,7 +170,8 @@ export default {
     CollectorsBuyActions,
     CollectorsSkillActions,
     CollectorsRaiseValueActions,
-    CollectorsAuctionActions
+    CollectorsAuctionActions,
+    CollectorsWorkActions
   },
   data: function () {
     return {
@@ -165,6 +182,7 @@ export default {
         y: 0 },
         labels: {},
         players: {},
+        room: {},
         // playerId: {
         //   hand: [],
         //   money: 1,
@@ -178,6 +196,7 @@ export default {
         skillPlacement: [],
         auctionPlacement: [],
         marketPlacement: [],
+        workPlacement: [],
         chosenPlacementCost: null,
         chosenAction: "",
         raiseValueIndex: null,
@@ -225,7 +244,7 @@ export default {
           function(d) {
             this.labels = d.labels;
             this.players = d.players;
-            this.bidArray = d.bidArray;
+            this.room = d.room;
             this.itemsOnSale = d.itemsOnSale;
             this.marketValues = d.marketValues;
             this.skillsOnSale = d.skillsOnSale;
@@ -235,6 +254,7 @@ export default {
             this.skillPlacement = d.placements.skillPlacement;
             this.marketPlacement = d.placements.marketPlacement;
             this.auctionPlacement = d.placements.auctionPlacement;
+            this.workPlacement = d.placements.workPlacement;
           }.bind(this));
 
           this.$store.state.socket.on('collectorsBottlePlaced',
@@ -243,6 +263,7 @@ export default {
             this.skillPlacement = d.skillPlacement;
             this.marketPlacement = d.marketPlacement;
             this.auctionPlacement = d.auctionPlacement;
+            this.workPlacement = d.workPlacement;
           }.bind(this));
 
           this.$store.state.socket.on('collectorsPlayerArrayFinished',function(d){
@@ -252,6 +273,11 @@ export default {
           }.bind(this));
 
           this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
+
+          this.$store.state.socket.on('collectorsMoneyUpdated',
+          function(d) {
+            this.players = d;
+          }.bind(this));
 
           this.$store.state.socket.on('collectorsCardDrawn',
           function(d) {
@@ -300,7 +326,7 @@ export default {
           this.$store.state.socket.on('collectorsBidRaised',
           function(d) {
             console.log(d.playerId, "bid is raised");
-            this.bidArray = d.bidArray;
+            this.bidArray = d;
           }.bind(this));
 
 },
@@ -343,6 +369,19 @@ methods: {
     });
   },
 
+  placeBottleWork: function (action, p) {
+    this.chosenPlacementCost = p.cost;
+    this.chosenAction = action;
+    this.raiseValueIndex = p.index;
+    this.$store.state.socket.emit('collectorsPlaceBottleWork', {
+      roomId: this.$route.params.id,
+      playerId: this.playerId,
+      action: action,
+      cost: p.cost,
+      index: p.index,
+    });
+  },
+
   drawCard: function () {
     console.log(this.market)
     this.$store.state.socket.emit('collectorsDrawCard', {
@@ -361,7 +400,6 @@ methods: {
   },
 
   getSkill: function (card) {
-    console.log(this.currentAuctionCard);
     this.$store.state.socket.emit('collectorsGetSkill', {
       roomId: this.$route.params.id,
       playerId: this.playerId,
@@ -464,48 +502,56 @@ footer a:visited {
   grid-area: BuyCardDiv;
   align-self: center;
   background: #f9dcce;
+  margin: 5px;
 }
 
 #BuySkillDiv {
   grid-area: BuySkillDiv;
   align-self: center;
   background: #dfeccc;
+  margin: 5px;
 }
 
 #AuctionDiv {
   grid-area: AuctionDiv;
   align-self: center;
   background: #f5f1e1;
+  margin: 5px;
 }
 
 #RaiseValueDiv {
   grid-area: RaiseValueDiv;
   align-self: center;
   background: #cfdcf2;
+  margin: 5px;
 }
 
 #WorkDiv {
   grid-area: WorkDiv;
   align-self: center;
-background: #f5f2cc;
+  background: #f5f2cc;
+  margin: 5px;
 }
 
 #HandDiv {
   grid-area: HandDiv;
   align-self: center;
   background: #e4e4e3;
+  margin: 5px;
 }
 
 #PlayerItemsDiv {
   grid-area: PlayerItemsDiv;
   align-self: center;
   background: #e4e4e3;
+  margin: 5px;
 }
 
 #PlayerSkillsDiv {
   grid-area: PlayerSkillsDiv;
   align-self: center;
   background: #e4e4e3;
+  margin: 5px;
 }
 
 #PlayerBoardDiv {
@@ -513,6 +559,7 @@ background: #f5f2cc;
   align-self: center;
   /* background: url("https://previews.123rf.com/images/prapann/prapann1606/prapann160600110/58202559-old-wood-vintage-wood-wall-texture-wood-background-old-panels.jpg"); */
   background: #e4e4e3;
+  margin: 5px;
 }
 
 #AllPlayerCardsDiv {
@@ -531,8 +578,6 @@ background: #f5f2cc;
   background: #D7D7D7;
   grid-template-columns: 25% 25% 25% 25%;
   grid-template-rows: 16,67% 16,67% 16,67% 16,67% 16,67% 16,67%;
-  column-gap: 20px;
-  row-gap: 20px;
   grid-template-areas:
   "BuyCardDiv BuyCardDiv RaiseValueDiv RaiseValueDiv"
   "BuyCardDiv BuyCardDiv RaiseValueDiv RaiseValueDiv"

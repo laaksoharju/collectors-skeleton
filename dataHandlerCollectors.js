@@ -84,6 +84,11 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.marketPlacement = [ {cost:0, playerId: null},
                            {cost:2, playerId: null},
                            {cost:0, playerId: null} ];
+  room.workPlacement = [ {cost:0, playerId: null},
+                         {cost:-1, playerId: null},
+                         {cost:1, playerId: null},
+                         {cost:0, playerId: null},
+                         {cost:0, playerId: null} ];
   this.rooms[roomId] = room;
 }
 
@@ -297,13 +302,34 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost) {
 }
 
 Data.prototype.placeBottleRaiseValue = function (roomId, playerId, action, cost, index) {
-  console.log(index);
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     room.marketPlacement[index].playerId = playerId;
   }
 }
 
+Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    room.workPlacement[index].playerId = playerId;
+    room.players[playerId].money -= cost;
+  }
+  if (index === 1 ){
+      console.log('Work ruta index 1');
+  }
+  if (index === 2 ){
+      console.log('Work ruta index 2');
+    //dra 2 kort
+  }
+  if (index === 3 ){
+      console.log('Work ruta index 3');
+
+  }
+  if (index === 4 ){
+      console.log('Work ruta index 4');
+
+  }
+}
 
 Data.prototype.fakeMoreMoney = function (roomId, playerId) {
   let room = this.rooms[roomId];
@@ -322,6 +348,9 @@ Data.prototype.raiseCurrentBid = function (roomId, playerId) {
       room.bidArray.push(playerId);
       console.log(room.bidArray);
       console.log("Current leading bid: ",room.bidArray.length,"$" );
+
+
+      return room.bidArray;
 
 
   }
@@ -345,7 +374,8 @@ Data.prototype.getPlacements = function(roomId){
     return { buyPlacement: room.buyPlacement,
              skillPlacement: room.skillPlacement,
              auctionPlacement: room.auctionPlacement,
-             marketPlacement: room.marketPlacement }
+             marketPlacement: room.marketPlacement,
+             workPlacement: room.workPlacement }
   }
   else return {};
 }

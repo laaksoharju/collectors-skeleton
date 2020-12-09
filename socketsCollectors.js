@@ -54,6 +54,12 @@ function sockets(io, socket, data) {
       );
     });
 
+    socket.on('collectorsPlaceBottleWork', function(d) {
+      data.placeBottleWork(d.roomId, d.playerId, d.action, d.cost, d.index);
+      io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId));
+      io.to(d.roomId).emit('collectorsMoneyUpdated', data.getPlayers(d.roomId));
+    });
+
     socket.on('collectorsStartAuction', function(d) {
       data.startAuction(d.roomId, d.playerId, d.card, d.cost);
       io.to(d.roomId).emit('collectorsAuctionStarted', {
@@ -98,8 +104,8 @@ function sockets(io, socket, data) {
     });
 
     socket.on('collectorsRaiseCurrentBid', function(d) {
-	io.to(d.roomId).emit('collectorsBidRaised',
-			     data.raiseCurrentBid(d.roomId, d.playerId)
+	     io.to(d.roomId).emit('collectorsBidRaised',
+			 data.raiseCurrentBid(d.roomId, d.playerId, d.bidArray)
       );
     });
 

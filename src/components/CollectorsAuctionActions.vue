@@ -73,7 +73,6 @@ export default {
     handleAction: function (card) {
       if (card.available) {
         this.$emit('handleAction', card)
-        this.highlightAvailableCards()
       }
     }
   },
@@ -114,8 +113,8 @@ export default {
 #CurrentAuction {
   grid-area: CurrentAuction;
   align-self:flex-start;
-  height: 90%;
-  width: 80%;
+  height: 240px;
+  width: 180px;
   border: 3px dashed black;
 }
 

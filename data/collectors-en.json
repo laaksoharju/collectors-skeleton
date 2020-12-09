@@ -5,5 +5,6 @@
 	"buyCard": "Buy an item",
 	"getSkill": "Get a skill",
 	"raiseValue": "Raise a value",
-	"auction": "Auction"
+	"auction": "Auction",
+	"doWork": "Work"
 }
