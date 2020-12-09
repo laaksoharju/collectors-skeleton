@@ -72,7 +72,6 @@ export default {
   }
 
 .EnergyBottles{
-
   width:50px;
   height:50px;
   background-image:  url('/images/Gain-skill-bottle.png');
@@ -80,7 +79,6 @@ export default {
 }
 
 .EnergyBottleCoin{
-
   width:50px;
   height:50px;
   background-image:  url('/images/Gain-skill-bottle-coin.png');
