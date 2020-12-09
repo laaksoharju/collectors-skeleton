@@ -97,58 +97,6 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-/* .buy-cards {
-  display: grid;
-  display: flex;
-  transform: scale(0.7);
-  grid-template-columns: repeat(auto-fill, 130px);
-}
-
-.buttons {
-  display: grid;
-  display: flex;
-  width: 30px;
-  height: 30px;
-  color: pink;
-  border-radius: 50%;
-}
-.board-section {
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  border: 1px solid #19181850;
-}
-#skill-section {
-  background-color: #93c47dff;
-  display: grid;
-  grid-template-columns: 20% 80%;
-}
-.bottleCircle {
-  margin: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 30px;
-  height: 30px;
-  color: black;
-  background-color: white;
-  border-radius: 50%;
-}
-.bottleCircles {
-  display: grid;
-  grid-template-columns: 50% 50%;
-  grid-template-rows: 50% 50%;
-}
-
-.category-title {
-  color: black;
-  text-align: center;
-}
-
-.bottleCircles p {
-  grid-column: 1/3;
-}  */
-
 .buy-cards {
   width: 80%;
   display: grid;
