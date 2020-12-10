@@ -29,9 +29,7 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures
   Function to load initial data from CSV files into the object
 */
 Data.prototype.initializeTable = function (table) {
-  csv({
-      checkType: true
-    })
+  csv({ checkType: true })
     .fromFile("./data/" + table + ".csv")
     .then((jsonObj) => {
       this.data[table] = jsonObj;
@@ -64,78 +62,23 @@ Data.prototype.createRoom = function (roomId, playerCount, lang = "en") {
   room.skillsOnSale = room.deck.splice(0, 5);
   room.auctionCards = room.deck.splice(0, 4);
   room.market = [];
-  room.buyPlacement = [{
-      cost: 1,
-      playerId: null
-    },
-    {
-      cost: 1,
-      playerId: null
-    },
-    {
-      cost: 2,
-      playerId: null
-    },
-    {
-      cost: 2,
-      playerId: null
-    },
-    {
-      cost: 3,
-      playerId: null
-    }
-  ];
-  room.skillPlacement = [{
-      cost: 0,
-      playerId: null
-    },
-    {
-      cost: 0,
-      playerId: null
-    },
-    {
-      cost: 0,
-      playerId: null
-    },
-    {
-      cost: 1,
-      playerId: null
-    },
-    {
-      cost: 1,
-      playerId: null
-    }
-  ];
-  room.auctionPlacement = [{
-      cost: -2,
-      playerId: null
-    },
-    {
-      cost: -1,
-      playerId: null
-    },
-    {
-      cost: 0,
-      playerId: null
-    },
-    {
-      cost: 0,
-      playerId: null
-    }
-  ];
-  room.marketPlacement = [{
-      cost: 0,
-      playerId: null
-    },
-    {
-      cost: -2,
-      playerId: null
-    },
-    {
-      cost: 0,
-      playerId: null
-    }
-  ];
+  room.buyPlacement = [{ cost: 1, playerId: null },
+  { cost: 1, playerId: null },
+  { cost: 2, playerId: null },
+  { cost: 2, playerId: null },
+  { cost: 3, playerId: null }];
+  room.skillPlacement = [{ cost: 0, playerId: null },
+  { cost: 0, playerId: null },
+  { cost: 0, playerId: null },
+  { cost: 1, playerId: null },
+  { cost: 1, playerId: null }];
+  room.auctionPlacement = [{ cost: -2, playerId: null },
+  { cost: -1, playerId: null },
+  { cost: 0, playerId: null },
+  { cost: 0, playerId: null }];
+  room.marketPlacement = [{ cost: 0, playerId: null },
+  { cost: -2, playerId: null },
+  { cost: 0, playerId: null }];
   this.rooms[roomId] = room;
 }
 
@@ -300,6 +243,39 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost) {
       }
     }
     room.players[playerId].items.push(...c);
+    room.players[playerId].money -= cost;
+
+  }
+}
+
+Data.prototype.buySkillCard = function (roomId, playerId, card, cost) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    let d = null;
+    console.log('DH BSC innan for1')
+    console.log(room.skillsOnSale.length)
+    /// check first if the card is among the items on sale
+    for (let i = 0; i < room.skillsOnSale.length; i += 1) {
+      // since card comes from the client, it is NOT the same object (reference)
+      // so we need to compare properties for determining equality      
+      if (room.skillsOnSale[i].x === card.x &&
+        room.skillsOnSale[i].y === card.y) {
+        d = room.skillsOnSale.splice(i, 1, {});
+        break;
+      }  
+    }
+    console.log(room.skillsOnSale.length)
+    // ...then check if it is in the hand. It cannot be in both so it's safe
+    for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
+      // since card comes from the client, it is NOT the same object (reference)
+      // so we need to compare properties for determining equality      
+      if (room.players[playerId].hand[i].x === card.x &&
+        room.players[playerId].hand[i].y === card.y) {
+        d = room.players[playerId].hand.splice(i, 1);
+        break;
+      }
+    }
+    room.players[playerId].skills.push(...d);
     room.players[playerId].money -= cost;
 
   }
