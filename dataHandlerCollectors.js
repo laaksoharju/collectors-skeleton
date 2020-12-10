@@ -319,7 +319,6 @@ Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index
 
       //dennna ska variera med vilken runda det är
   }
-
   if (index === 1 ){
       console.log('Work ruta index 1, släng en flaska');
 

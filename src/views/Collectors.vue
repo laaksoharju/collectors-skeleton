@@ -61,10 +61,7 @@
           <button v-if="players[playerId]" @click="raiseCurrentBid()">
             end auction
           </button>
-
         </div>
-
-
       </div>
 
       <div id="WorkDiv">
@@ -73,6 +70,7 @@
         :player="players[playerId]"
         :placement="workPlacement"
         @placeBottleWork="placeBottleWork('doWork', $event)"/>
+
       </div>
 
       <div id="HandDiv" class="cardslots" v-if="players[playerId]">
@@ -589,7 +587,7 @@ footer a:visited {
   "HandDiv HandDiv PlayerBoardDiv PlayerBoardDiv"
 }
 
-#container h1, h2, h3, p  {
+#container h1, h2, h3, p, label, span  {
   color: black;
 }
 
