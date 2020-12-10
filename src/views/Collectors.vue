@@ -31,7 +31,8 @@
             :labels="labels"
             :player="players[playerId]"
             :marketValues="marketValues"
-            :placement="buyPlacement"
+            :placement="marketPlacement"
+            @placeBottle="placeBottle('market', $event)"
             />
 
        <!--div class = "marketPool">
