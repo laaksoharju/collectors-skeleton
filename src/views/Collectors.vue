@@ -647,6 +647,10 @@ footer a:visited {
   color: black;
 }
 
+#container div {
+  border-radius: 10px;
+}
+
 .cardslots {
   display: grid;
   grid-template-columns: repeat(auto-fill, 130px);
