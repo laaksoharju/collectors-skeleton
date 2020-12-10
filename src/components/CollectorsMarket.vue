@@ -45,7 +45,7 @@ export default {
   grid-row: 11/span 4;
   width: auto;
   height: auto;
-  background-color: #c9d5e1;
+  background-color: #cfdcf2;
   color: black;
   display: grid;
   grid-template-columns: repeat(5, 90px);
@@ -100,15 +100,28 @@ export default {
     grid-row: 10;
   }
   .bottleCoins {
-    background-image: ;
-    grid-column: 3;
-    grid-row: 9;
+    width:50px;
+    height:50px;
+    background-image: url('/images/marketbottletwocoins.PNG');
+    background-size: cover;
+    grid-column: 2;
+    grid-row: 2;
 
   }
   .bottleOneFlag {
-    background-image: ;
+    width:50px;
+    height:50px;
+    background-image: url('/images/marketbottleoneflagg.PNG') ;
+    background-size: cover;
+    grid-column: 3;
+    grid-row: 2;
   }
 .bottleTwoFlags {
-  background-image: ;
+  width:50px;
+  height:50px;
+  background-image: url('/images/marketbottletwoflaggs.PNG') ;
+  background-size: cover;
+  grid-column: 4;
+  grid-row: 2;
 }
   </style>
