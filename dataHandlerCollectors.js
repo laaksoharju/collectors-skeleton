@@ -314,20 +314,53 @@ Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index
     room.workPlacement[index].playerId = playerId;
     room.players[playerId].money -= cost;
   }
+  if (index === 0){
+        console.log('Work ruta index 0, variera med rundan.');
+
+      //dennna ska variera med vilken runda det är
+  }
+
   if (index === 1 ){
-      console.log('Work ruta index 1');
+      console.log('Work ruta index 1, släng en flaska');
+
+      //kod för att slänga 1 flaska här
   }
   if (index === 2 ){
-      console.log('Work ruta index 2');
-    //dra 2 kort
+      console.log('Work ruta index 2, dra två kort');
+
+      let room = this.rooms[roomId];
+      if (typeof room !== 'undefined') {
+        let card1 = room.deck.pop();
+        let card2 = room.deck.pop();                  //Dra två kort
+        room.players[playerId].hand.push(card1);
+        room.players[playerId].hand.push(card2);
+        return room.players;
+      }
+      else return [];
   }
   if (index === 3 ){
-      console.log('Work ruta index 3');
+      console.log('Work ruta index 3, dra ett kort, och bli spelare 1');
 
+      let room = this.rooms[roomId];
+      if (typeof room !== 'undefined') {
+        let card1 = room.deck.pop();              //Dra ett kort
+        room.players[playerId].hand.push(card1);
+        return room.players;
+      }
+      else return [];
+
+      //Kod för att bli spelare 1 här
   }
   if (index === 4 ){
-      console.log('Work ruta index 4');
+      console.log('Work ruta index 4, dra ett kort och placera ett från handen på income');
 
+      let room = this.rooms[roomId];
+      if (typeof room !== 'undefined') {
+        let card1 = room.deck.pop();              //Dra ett kort
+        room.players[playerId].hand.push(card1);
+        return room.players;
+      }
+      else return [];
   }
 }
 
