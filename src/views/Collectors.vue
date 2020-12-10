@@ -58,7 +58,7 @@
           <button v-if="players[playerId]" @click="raiseCurrentBid()">
             Raise current bid!
           </button>
-          <button v-if="players[playerId]" @click="raiseCurrentBid()">
+          <button v-if="players[playerId]" @click="endAuction()">
             end auction
           </button>
 
@@ -329,6 +329,12 @@ export default {
             this.bidArray = d;
           }.bind(this));
 
+          this.$store.state.socket.on('collectorsAuctionEnded',
+          function(d) {
+            console.log(d.playerId, "auction is raised");
+            this.bidArray = d;
+          }.bind(this));
+
 },
 methods: {
   readyGame: function(){
@@ -438,6 +444,15 @@ methods: {
       playerId: this.playerId
     });
   },
+   endAuction: function (card) {
+    this.$store.state.socket.emit('collectorsEndAuction', {
+        roomId: this.$route.params.id,
+      playerId: this.playerId,
+      card: card,
+    });
+  }, 
+
+    
 
   raiseValueHandler: function (card) {
     var card2 = null;
