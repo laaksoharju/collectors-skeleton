@@ -142,11 +142,16 @@
             <input type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
           </p>
         </footer>
-        <div id='readyGameButton'>
-          <button v-on:click="readyGame()" @click="isActive = true" :disabled="isActive">
-            Click here if you are ready!
-            </button>
-        </div>
+      </div>
+      <div id='readyGameButton'>
+        <button v-on:click="readyGame()" @click="isActive = true" :disabled="isActive">
+          Click here if you are ready!
+          </button>
+      </div>
+      <div id='startGameButton'>
+        <button v-on:click="startGame()">
+          Press here when everyone is ready, here you find your play order.
+          </button>
       </div>
     </div>
   </main>
@@ -173,6 +178,7 @@ export default {
   },
   data: function () {
     return {
+      isActive2:false,
       isActive:false,
       publicPath: "localhost:8080/#", //"collectors-groupxx.herokuapp.com/#",
       touchScreen: false,
@@ -266,8 +272,6 @@ export default {
 
           this.$store.state.socket.on('collectorsPlayerArrayFinished',function(d){
             this.playerIdArray=d.playerIdArray;
-            console.log('jr', d.playerIdArray);
-
           }.bind(this));
 
           this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
@@ -342,8 +346,15 @@ methods: {
       roomId: this.$route.params.id
 
     });
+    },
+    startGame: function(){
+
+      alert("This is the playing order"),
+      alert(this.playerIdArray)
+      console.log(this.playerIdArray);
+
+    },
     // console.log(this.playerIdArray);
-  },
   selectAll: function (n) {
     n.target.select();
   },
@@ -448,9 +459,9 @@ methods: {
       playerId: this.playerId,
       card: card,
     });
-  }, 
+  },
 
-    
+
 
   raiseValueHandler: function (card) {
     var card2 = null;

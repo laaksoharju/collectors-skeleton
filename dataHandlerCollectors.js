@@ -245,8 +245,9 @@ Data.prototype.raiseValue = function (roomId, playerId, card, cost) {
 Data.prototype.addPlayerReady= function(roomId, playerId){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
-    room.playerIdArray2.push(playerId);
-    console.log(room.playerIdArray2);
+
+    shuffle(room.playerIdArray2).push(playerId);
+
   }
 }
 
