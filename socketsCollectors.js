@@ -70,6 +70,18 @@ function sockets(io, socket, data) {
         }
       );
     });
+    
+    socket.on('collectorsEndAuction', function(d) {
+      data.endAuction(d.roomId, d.playerId, d.card, d.cost);
+      io.to(d.roomId).emit('collectorsAuctionEnded', {
+          playerId: d.playerId,
+          players: data.getPlayers(d.roomId),
+          auctionCards: data.getAuctionCards(d.roomId),
+          currentAuctionCard: data.getCurrentAuctionCard(d.roomId)
+      }
+                          );
+    });
+
 
     socket.on('collectorsGetSkill', function(d) {
       data.getSkill(d.roomId, d.playerId, d.card, d.cost)

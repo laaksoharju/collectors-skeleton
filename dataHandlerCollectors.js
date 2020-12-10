@@ -274,6 +274,11 @@ Data.prototype.startAuction = function (roomId, playerId, card, cost) {
     console.log(room.currentAuctionCard);
   }
 }
+Data.prototype.endAuction = function (roomId, playerId, card, cost) {
+    let room = this.rooms[roomId];
+    console.log('tjohej');
+}
+
 
 Data.prototype.placeBottle = function (roomId, playerId, action, cost) {
   let room = this.rooms[roomId];
