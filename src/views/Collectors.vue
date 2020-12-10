@@ -52,8 +52,8 @@
 
         <div v-if="currentAuctionCard.length === 1">
           <p>player '{{ bidArray[bidArray.length - 1]}}' is now leading the auction with a: {{ bidArray.length}}$ bid.</p>
-          <button v-if="players[playerId]" @click="raiseCurrentBid()">Raise current bid!</button>
-          <button v-if="bidArray[bidArray.length - 1] === this.playerId" @click="noMoreBids()">My {{bidArray.length}}$ bid won!</button>
+          <button v-if="players[playerId]" :disabled="cannotRaiseBid()" @click="raiseCurrentBid()">Raise current bid!</button>
+          <button v-if="bidArray[bidArray.length - 1] === this.playerId" :disabled="noMoreBidsBoolean" @click="noMoreBids()">My {{bidArray.length}}$ bid won!</button>
           <button v-if="this.noMoreBidsBoolean" @click="endAuction('buyItem')">Use as item</button>
           <button v-if="this.noMoreBidsBoolean" @click="endAuction('getSkill')">Use as skill</button>
           <button v-if="this.noMoreBidsBoolean" @click="endAuction('market')">Place in the market</button>
@@ -453,6 +453,12 @@ methods: {
       card: card,
       cost: this.chosenPlacementCost
     });
+  },
+
+  cannotRaiseBid: function () {
+    console.log(this.players[this.playerId].money);
+    console.log(this.bidArray.length);
+    return (this.players[this.playerId].money <= this.bidArray.length);
   },
 
   raiseCurrentBid: function () {
