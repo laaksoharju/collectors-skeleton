@@ -102,7 +102,15 @@
                 />x4
               </div>
             </div>
-            <div class="player-hand"></div>
+            <div class="player-hand">
+              <div class="secret-card">
+                <CollectorsCard v-for="(card, index) in players[playerId].secret" :card="card" :availableAction="card.available" :key="'secret'+index"/>
+              </div>
+              <div class="cardslots" v-if="players[playerId]">
+                  <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" :key="index"/>
+                  
+              </div>
+            </div>
             <div class="player-bottles" v-if="players.hasOwnProperty(playerId)">
               <img
                 v-bind:src="playerBoards[players[playerId].color]"
@@ -172,7 +180,6 @@
     <footer>
       {{ players }}
     {{ marketValues }}
-    {{'this is place'+ placement }}
       <p>
         {{ labels.invite }}
         <input
@@ -194,14 +201,14 @@
 <script>
 // /eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }]/;
 
-// import CollectorsCard from "@/components/CollectorsCard.vue";
+import CollectorsCard from "@/components/CollectorsCard.vue";
 import CollectorsBuyActions from "@/components/CollectorsBuyActions.vue";
 import Bottles from "@/components/Bottles.vue";
 
 export default {
   name: "Collectors",
   components: {
-    // CollectorsCard,
+    CollectorsCard,
     CollectorsBuyActions,
     Bottles,
   },
@@ -546,34 +553,25 @@ footer a:visited {
 }
 .cardslots {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
-  grid-template-rows: repeat(auto-fill, 180px);
+  grid-template-columns: repeat(auto-fill, 80px);
+  grid-template-rows: repeat(auto-fill, 100px);
 }
-.cardslots div {
-  transform: scale(0.5) translate(-50%, -50%);
+.secret-card div, .cardslots div {
+  transform: scale(0.3) translate(-110%, -110%);
   transition: 0.2s;
   transition-timing-function: ease-out;
   z-index: 0;
-}
-.cardslots div:hover {
-  transform: scale(1) translate(-25%, 0);
-  z-index: 1;
 }
 
-.cardslots {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
-  grid-template-rows: repeat(auto-fill, 180px);
-}
-.cardslots div {
-  transform: scale(0.5) translate(-50%, -50%);
-  transition: 0.2s;
-  transition-timing-function: ease-out;
-  z-index: 0;
-}
-.cardslots div:hover {
+.secret-card div:hover, .cardslots div:hover {
   transform: scale(1) translate(-25%, 0);
   z-index: 1;
+  opacity: 1;
+}
+
+.secret-card div {
+  border: dashed green;
+  opacity: 0.5;
 }
 
 .collectors-game {
@@ -657,6 +655,9 @@ footer a:visited {
   grid-row: 2;
   border-style: dashed;
   color: red;
+  display: grid;
+  grid-template-columns: 15% 85%;
+  
 }
 
 .player-bottles {

@@ -120,13 +120,13 @@ Data.prototype.joinGame = function (roomId, playerId)
       console.log("Player", playerId, "joined for the first time");
       room.players[playerId] = {
         playerName: playerId,
-        hand: [],
+        hand: room.deck.splice(0, 2), // Two cards are kept secret and form the hands of each player
         money: 1,
         points: 0,
         skills: [],
         items: [],
         income: [],
-        secret: [],
+        secret: room.deck.splice(0, 1), // picks one card and places it face down, tucked under their player board at the position marked with a treasure chest.
         color: room.playerColors.pop()
       };
       return true;
