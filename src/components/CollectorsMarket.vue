@@ -7,11 +7,36 @@
     <div class = "iconFilm"></div>
     <div class = "iconTech"></div>
 
-    <div class = "bottleTwoFlags"></div>
+<!--    <div class = "bottleTwoFlags"></div>
     <div class = "bottleOneFlag"> </div>
-    <div class = "bottleCoins"> </div>
-  </div>
+    <div class = "bottleCoins"> </div>-->
 
+<div class="buttons" v-for="(p, index) in placement" :key="index">
+    <button
+      v-if="p.playerId===null && index ===0 "
+      :disabled="cannotAfford(p.cost)"
+      @click="placeBottle(p)">
+      <div class = "bottleTwoFlags">
+      </div>
+     </button>
+
+     <button
+       v-if="p.playerId===null && index===1"
+       :disabled="cannotAfford(p.cost)"
+       @click="placeBottle(p)">
+       <div class = "bottleOneFlag">
+       </div>
+    </button>
+
+    <button
+      v-if="p.playerId===null && index===2"
+      :disabled="cannotAfford(p.cost)"
+      @click="placeBottle(p)">
+      <div class = "bottleCoins">
+      </div>
+   </button>
+  </div>
+</div>
 </template>
 
 <script>
@@ -28,7 +53,29 @@ export default {
     placement: Array
   },
   methods: {
-
+    placeBottle: function (p) {
+      this.$emit('placeBottle', p.cost);
+      this.highlightAvailableCards(p.cost);
+    },
+    cannotAfford: function (cost) {
+      let minCost = 100;
+      for(let key in this.marketValues) {
+        if (cost + this.marketValues[key] < minCost)
+          minCost = cost + this.marketValues[key]
+      }
+      return (this.player.money < minCost);
+    },
+    highlightAvailableCards: function (cost=100) {
+      for (let i = 0; i < this.itemsOnSale.length; i += 1) {
+        if (this.marketValues[this.itemsOnSale[i].item] <= this.player.money - cost) {
+          this.$set(this.itemsOnSale[i], "available", true);
+        }
+        else {
+          this.$set(this.itemsOnSale[i], "available", false);
+        }
+        this.chosenPlacementCost = cost;
+      }
+    },
   }
 }
 
@@ -99,6 +146,16 @@ export default {
     grid-column: 5;
     grid-row: 10;
   }
+
+  .buttons{
+  /*  place-self: stretch;*/
+  }
+
+  .buttons div:hover {
+    transform: scale(1.5)translate(0,0);
+    z-index: 1;
+  }
+
   .bottleCoins {
     width:50px;
     height:50px;
@@ -106,7 +163,6 @@ export default {
     background-size: cover;
     grid-column: 2;
     grid-row: 2;
-
   }
   .bottleOneFlag {
     width:50px;
