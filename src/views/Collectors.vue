@@ -38,7 +38,7 @@
         <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
       </div>
       Current auction
-      <div class="cardslots" v-if="players[playerId]">
+      <div class="cardslots">
         <CollectorsCard v-for="(card, index) in currentAuction" :card="card" :key="index"/>
       </div>
     </main>
