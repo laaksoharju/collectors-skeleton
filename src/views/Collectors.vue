@@ -492,7 +492,7 @@ methods: {
         cost: this.bidArray.length
       });
     }
-    this.noMoreBids = false;
+    this.noMoreBidsBoolean = false;
     this.$store.state.socket.emit('collectorsEndAuction', {
       roomId: this.$route.params.id,
       playerId: this.playerId
