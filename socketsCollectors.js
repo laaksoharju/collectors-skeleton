@@ -24,7 +24,8 @@ function sockets(io, socket, data) {
 
   socket.on('rotateCards', function (d) {
     io.to(d.roomId).emit('cardsRotated', {
-      rotatedCards: data.rotateCards(d.roomId)
+      rotatedCards: data.rotateCards(d.roomId),
+      marketValues: data.getMarketValues(d.roomId),
     });
   });
 

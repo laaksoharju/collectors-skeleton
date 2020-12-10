@@ -1,29 +1,24 @@
 <template>
-  <div>
-    <!-- <h1>{{ labels.buySkillCard }}</h1> -->
-    <div id="skill-section" class="board-section">
-      <div class="buy-cards">
-        <div class='cardslots' v-for="(card, index) in skillsOnSale" :key="index">
-          <CollectorsCard
-            :card="card"
-            :availableAction="card.available"
-            @doAction="buySkillCard(card)"
-          />
-          {{ cardCost(card) }}
-        </div>
-      </div>
-      <div class='button-section'>
-        <div class="buttons" v-for="(p, index) in placement" :key="index">
-          <button
-            v-if="p.playerId === null"
-            :disabled="cannotAfford(p.cost)"
-            @click="placeBottle(p)"
-          >
-            ${{ p.cost }}
-          </button>
-          <div v-if="p.playerId !== null">
-            {{ p.playerId }}
-          </div>
+  <div id="RaiseValueSection" class="board-section">
+    <div class="raise-value-slot-container">
+      <div class="raise-value-slot">{{marketValues.fastaval}}</div>
+      <div class="raise-value-slot">{{marketValues.movie}}</div>
+      <div class="raise-value-slot">{{marketValues.technology}}</div>
+      <div class="raise-value-slot">{{marketValues.figures}}</div>
+      <div class="raise-value-slot">{{marketValues.music}}</div>
+    </div>
+
+    <div class="button-section">
+      <div class="buttons" v-for="(p, index) in placement" :key="index">
+        <button
+          v-if="p.playerId === null"
+          :disabled="cannotAfford(p.cost)"
+          @click="placeBottle(p)"
+        >
+          ${{ p.cost }}
+        </button>
+        <div v-if="p.playerId !== null">
+          <!-- {{ p.playerId }} -->
         </div>
       </div>
     </div>
@@ -31,17 +26,13 @@
 </template>
 
 <script>
-import CollectorsCard from "@/components/CollectorsCard.vue";
-
 export default {
-  name: "CollectorsBuySkill",
-  components: {
-    CollectorsCard,
-  },
+  name: "RaiseValueSection",
+  components: {},
   props: {
     labels: Object,
     player: Object,
-    skillsOnSale: Array,
+    itemsOnSale: Array,
     marketValues: Object,
     placement: Array,
   },
@@ -61,15 +52,15 @@ export default {
       this.$emit("placeBottle", p.cost);
       this.highlightAvailableCards(p.cost);
     },
-    highlightAvailableCards: function (cost = 100) {
-      for (let i = 0; i < this.skillsOnSale.length; i += 1) {
+    highlightAvailableCards: function (cost = 100) { //Vilka kort ska vara väljbara här? Skick in rätt props
+      for (let i = 0; i < this.itemsOnSale.length; i += 1) {
         if (
-          this.marketValues[this.skillsOnSale[i].item] <=
+          this.marketValues[this.itemsOnSale[i].item] <=
           this.player.money - cost
         ) {
-          this.$set(this.skillsOnSale[i], "available", true);
+          this.$set(this.itemsOnSale[i], "available", true);
         } else {
-          this.$set(this.skillsOnSale[i], "available", false);
+          this.$set(this.itemsOnSale[i], "available", false);
         }
         this.chosenPlacementCost = cost;
       }
@@ -86,17 +77,20 @@ export default {
         }
       }
     },
-    buySkillCard: function (card) {
+    buyCard: function (card) { // Kortet ska hamna ner på raise-value-area, inte till item on hand. Ny funktion.
       if (card.available) {
-        this.$emit("buySkillCard", card);
+        this.$emit("buyCard", card);
         this.highlightAvailableCards();
       }
-    }
+    },
   },
 };
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+#RaiseValueSection {
+  background-color: #b4a7d6ff;
+}
 .buy-cards {
   width: 80%;
   display: grid;
@@ -113,6 +107,7 @@ export default {
 }
 
 .board-section {
+  min-height: 100px;
   width: 50%;
   padding: 10px;
   align-items: center;
@@ -121,23 +116,16 @@ export default {
   border: 1px solid #19181850;
 }
 
-#skill-section {
-  background-color: #93c47dff;
+.raise-value-slot-container {
+  width: 80%;
+  display: flex;
+  justify-content: space-around;
 }
-
-.cardslots {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
-  grid-template-rows: repeat(auto-fill, 180px);
-}
-.cardslots div {
-  transform: scale(0.5) translate(-50%, -50%);
-  transition: 0.2s;
-  transition-timing-function: ease-out;
-  z-index: 0;
-}
-.cardslots div:hover {
-  transform: scale(1) translate(-25%, 0);
-  z-index: 1;
+.raise-value-slot {
+  background-color: #6d9eebff;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid #19181850;
 }
 </style>

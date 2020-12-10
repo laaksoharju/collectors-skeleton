@@ -167,13 +167,14 @@ Data.prototype.rotateItems = function (room) {
 }
 
 Data.prototype.rotateSkills = function (room) {
-  room.skillsOnSale.pop();
-  // FIX: Så dessa flyttas in i rätt raise value
+  let card = room.skillsOnSale.pop();
+  room.market.push(card);
+
 }
 
 Data.prototype.rotateAuction = function (room) {
-  room.auctionCards.pop();
-  // FIX: Så dessa flyttas in i rätt raise value
+  let card = room.auctionCards.pop();
+  room.market.push(card);
 
 }
 
@@ -335,13 +336,20 @@ Data.prototype.getMarketValues = function (roomId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     return room.market.reduce(function (acc, curr) {
-      acc[curr.market] += 1;
+    
+      curr.market == "fastaval" ? acc.fastaval += 1 : null
+      curr.market == "movie" ? acc.movie += 1 : null
+      curr.market == "technology" ? acc.technology += 1 : null
+      curr.market == "figures" ? acc.figures += 1 : null
+      curr.market == "music" ? acc.music += 1 : null
+
+       return acc;
     }, {
-      fastaval: 0,
-      movie: 0,
-      technology: 0,
-      figures: 0,
-      music: 0
+      "fastaval": 0,
+      "movie": 0,
+      "technology": 0,
+      "figures": 0,
+      "music": 0
     });
   } else return [];
 }

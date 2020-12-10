@@ -13,7 +13,7 @@
           @placeBottle="placeBottle('buy', $event)"
         />
         <div>
-          {{ skillPlacement }} {{ chosenPlacementCost }}
+          <!-- {{ skillPlacement }} {{ chosenPlacementCost }} -->
           <CollectorsBuySkill
             v-if="players[playerId]"
             :labels="labels"
@@ -22,6 +22,26 @@
             :marketValues="marketValues"
             :placement="skillPlacement"
             @buySkillCard="buySkillCard($event)"
+            @placeBottle="placeBottle('buy', $event)"
+          />
+          <RaiseValueSection
+            v-if="players[playerId]"
+            :labels="labels"
+            :player="players[playerId]"
+            :itemsOnSale="itemsOnSale"
+            :marketValues="marketValues"
+            :placement="marketPlacement"
+            @buyCard="buyCard($event)"
+            @placeBottle="placeBottle('buy', $event)"
+          />
+          <AuctionSection
+            v-if="players[playerId]"
+            :labels="labels"
+            :player="players[playerId]"
+            :auctionCards="auctionCards"
+            :marketValues="marketValues"
+            :placement="auctionPlacement"
+            @buyCard="buyCard($event)"
             @placeBottle="placeBottle('buy', $event)"
           />
         </div>
@@ -105,7 +125,7 @@
       </div>
     </main>
     {{ players }}
-    {{ marketValues }}
+    <!-- <h1>MARKET VALUES: </h1>{{ marketValues }} -->
     <button v-if="players[playerId]" @click="players[playerId].money += 1">
       fake more money
     </button>
@@ -135,6 +155,8 @@ import WorkArea from "@/components/WorkArea.vue";
 import ItemSection from "@/components/ItemSection.vue";
 import PlayerBoard from "@/components/PlayerBoard.vue";
 import OtherPlayerboards from "../components/OtherPlayerboards.vue";
+import RaiseValueSection from "../components/RaiseValueSection.vue";
+import AuctionSection from "../components/AuctionSection.vue";
 
 export default {
   name: "Collectors",
@@ -148,6 +170,8 @@ export default {
     ItemSection,
     PlayerBoard,
     OtherPlayerboards,
+    RaiseValueSection,
+    AuctionSection,
   },
   data: function () {
     return {
@@ -264,6 +288,8 @@ export default {
         this.itemsOnSale = d.rotatedCards.itemsOnSale;
         this.skillsOnSale = d.rotatedCards.skillsOnSale;
         this.auctionCards = d.rotatedCards.auctionCards;
+        this.marketValues = d.marketValues;
+
       }.bind(this)
     );
 
