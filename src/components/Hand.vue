@@ -4,7 +4,6 @@
         <CollectorsCard v-for="(card, index) in player.hand"
             :card="card"
             :availableAction="card.available"
-            @doAction="buyCard(card)"
             :key="index"/>
         <div id="secretCard">
             <p>Secret</p>

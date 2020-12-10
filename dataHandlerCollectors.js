@@ -106,7 +106,8 @@ Data.prototype.joinGame = function (roomId, playerId) {
                                  items: [],
                                  income: [],
                                  secret: [],
-                                 color: colors[Object.keys(room.players).length]
+                                 color: colors[Object.keys(room.players).length],
+
                                 };
       return true;
     }
