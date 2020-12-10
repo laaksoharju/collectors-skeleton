@@ -10,6 +10,16 @@
         :placement="buyPlacement"
         @buyCard="buyCard($event)"
         @placeBottle="placeBottle('buy', $event)"/>
+
+      <CollectorsStartAuction v-if="players[playerId]"
+        :labels="labels"
+        :player="players[playerId]"
+        :auctionCards="auctionCards" 
+        :marketValues="marketValues" 
+        :placement="auctionPlacement"
+        @buyCard="auctionCard($event)"
+        @placeBottle="placeBottle('buy', $event)"/>
+
       <div class="buttons">
         <button @click="drawCard">
           {{ labels.draw }} 
@@ -51,12 +61,14 @@
 
 import CollectorsCard from '@/components/CollectorsCard.vue'
 import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
+import CollectorsStartAuction from '@/components/CollectorsStartAuction.vue'
 
 export default {
   name: 'Collectors',
   components: {
     CollectorsCard,
-    CollectorsBuyActions
+    CollectorsBuyActions,
+    CollectorsStartAuction
   },
   data: function () {
     return {
@@ -181,6 +193,16 @@ export default {
     buyCard: function (card) {
       console.log("buyCard", card);
       this.$store.state.socket.emit('collectorsBuyCard', { 
+          roomId: this.$route.params.id, 
+          playerId: this.playerId,
+          card: card,
+          cost: this.marketValues[card.market] + this.chosenPlacementCost 
+        }
+      );
+    },
+    auctionCard: function (card){
+      console.log("auctionCard", card);
+      this.$store.state.socket.emit('CollectorsStartAuction', { 
           roomId: this.$route.params.id, 
           playerId: this.playerId,
           card: card,
