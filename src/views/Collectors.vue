@@ -55,12 +55,9 @@
             :player="players[playerId]"
             :auctionCards="auctionCards"
             :cardUpForAuction="cardUpForAuction"
-            @startAuction="startAuction($event)"/>
-
-         <div class = "EnergyBottleCoinWhiteTwo"></div> <!-- Olika flaskor med vita coins, 1 2 eller 0 -->
-         <div class = "EnergyBottleCoinWhiteOne"></div>
-         <div class = "EnergyBottleCoinWhiteNoll"></div>
-         <div class = "EnergyBottleCoinWhiteNoll second"></div>
+            @startAuction="startAuction($event)"
+            @startBidding="startBidding($event)"
+            />
 
 
        <div class="playerBoard">
@@ -230,6 +227,7 @@ export default {
       skillsOnSale: [],
       auctionCards: [],
       cardUpForAuction: {},
+      highestBid: {},
       playerid: 0
     }
   },
@@ -321,6 +319,14 @@ export default {
     }.bind(this)
   );
 
+  this.$store.state.socket.on('collectorsBiddingStarted',
+  function(d) {
+    console.log(d.playerId, "BIDDING STARTED I COLLECTORS.VUE");
+    this.players = d.players;
+    this.highestBid = d.highestBid;
+  }.bind(this)
+);
+
 },
 
   methods: {
@@ -374,7 +380,17 @@ export default {
           auctionCard: this.auctionCards,
         }
       );
-    },
+  },
+      startBidding: function () {
+        console.log("Starting Bidding");
+        console.log(this.players.bids);
+        this.$store.state.socket.emit('collectorsStartBidding', {
+            roomId: this.$route.params.id,
+            playerId: this.playerId,
+            bids: this.players.bids,
+              }
+        );
+  },
 
     changeTurn: function () {
       console.log("TEST");
@@ -585,46 +601,7 @@ export default {
     transform: scale(1)translate(-25%,0);
     z-index: 1;
   }
-  .iconBird {
-    width: 30px;
-    height: 40px;
-    background-image: url('/images/iconBird.PNG');
-    background-size: cover;
-    grid-column: 1;
-    grid-row: 10;
-  }
-  .iconRobot {
-    width: 30px;
-    height: 40px;
-    background-image: url('/images/iconRobot.PNG');
-    background-size: cover;
-    grid-column: 2;
-    grid-row: 10;
-  }
-  .iconMusic {
-    width: 30px;
-    height: 40px;
-    background-image: url('/images/iconMusic.PNG');
-    background-size: cover;
-    grid-column: 3;
-    grid-row: 10;
-  }
-  .iconFilm {
-    width: 30px;
-    height: 40px;
-    background-image: url('/images/iconFilm.PNG');
-    background-size: cover;
-    grid-column: 4;
-    grid-row: 10;
-  }
-  .iconTech {
-    width: 30px;
-    height: 40px;
-    background-image: url('/images/iconTech.PNG');
-    background-size: cover;
-    grid-column: 5;
-    grid-row: 10;
-  }
+
   @media screen and (max-width: 800px) {
     main {
       width:90vw;

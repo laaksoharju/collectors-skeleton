@@ -68,6 +68,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
 
   room.auctionCards = room.deck.splice(0, 4);
   room.cardUpForAuction = {};
+  room.highestBid = 0;
   room.market = [];
   room.buyPlacement = [ {cost:1, playerId: null},
                         {cost:1, playerId: null},
@@ -112,7 +113,8 @@ Data.prototype.joinGame = function (roomId, playerId) {
                                  skills: [],
                                  items: [],
                                  income: [],
-                                 secret: [] };
+                                 secret: [],
+                                 bids: 0, };
       return true;
     }
     console.log("Player", playerId, "was declined due to player limit");
@@ -184,6 +186,27 @@ Data.prototype.startAuction = function (roomId, playerId, card, auctionCard) {
       }
     }
   }
+}
+
+Data.prototype.startBidding = function (roomId, playerId) {
+  console.log('console.log("HEJ NU I DATA");');
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+  //var highestBidValue = {};
+  let allPlayersId = Object.keys(room.players);
+  console.log(allPlayersId);
+  console.log(room.players[playerId].bids +"HÄÄÄÄÄR");
+  for (let i in allPlayersId){
+    console.log(room.players[allPlayersId[i]].bids)
+    if (room.highestBid < room.players[allPlayersId[i]].bids){
+        room.highestBid = room.players[allPlayersId[i]].bids;
+      }
+    }
+  //for (let i = 0; i < room.bids.length; i += 1) {
+    //   if (highestBid < room.bids[i]){
+      //   highestBid = room.bids[i];
+    console.log("Det högsta budet är" +room.highestBid);
+    }
 }
 
 /* VI LÄGGER TILL FÖR ATT BYTA SPELARE I TURNBUTTON */

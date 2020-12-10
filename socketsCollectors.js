@@ -12,8 +12,8 @@ function sockets(io, socket, data) {
             marketValues: data.getMarketValues(d.roomId),
             skillsOnSale: data.getSkillsOnSale(d.roomId),
             auctionCards: data.getAuctionCards(d.roomId),
-            placements: data.getPlacements(d.roomId)
-          }
+            placements: data.getPlacements(d.roomId),
+            }
         );
       }
     });
@@ -56,6 +56,18 @@ function sockets(io, socket, data) {
         cardUpForAuction: data.getCardUpForAuction(d.roomId)
         }
       );
+    });
+
+    socket.on('collectorsStartBidding', function(d){
+    //  data.startBidding(d.roomId, d.playerId)
+    console.log("HEJ NU I SOCKET");
+
+      io.to(d.roomId).emit('collectorsBiddingStarted', {
+        playerId: d.playerId,
+        players: data.startBidding(d.roomId, d.playerId, d.bids),
+        }
+      );
+            console.log("Socket" +d.bids); //bids är undefined här
     });
 
     socket.on('collectorsChangeTurn', function(d) {
