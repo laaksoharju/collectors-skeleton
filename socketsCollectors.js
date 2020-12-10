@@ -36,7 +36,7 @@ function sockets(io, socket, data) {
         }
       );
     });
-    
+
     socket.on('collectorsPlayerReady', function(d) {
       data.addPlayerReady(d.roomId, d.playerId);
       io.to(d.roomId).emit('collectorsPlayerArrayFinished', {
@@ -76,12 +76,11 @@ function sockets(io, socket, data) {
     });
 
     socket.on('collectorsEndAuction', function(d) {
-      data.endAuction(d.roomId, d.playerId, d.card, d.cost);
+      data.endAuction(d.roomId, d.playerId,);
       io.to(d.roomId).emit('collectorsAuctionEnded', {
           playerId: d.playerId,
           players: data.getPlayers(d.roomId),
-          auctionCards: data.getAuctionCards(d.roomId),
-          currentAuctionCard: data.getCurrentAuctionCard(d.roomId)
+          bidArray: data.getBidArray(d.roomId)
         }
       );
     });
