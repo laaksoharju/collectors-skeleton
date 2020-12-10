@@ -42,7 +42,7 @@ function sockets(io, socket, data) {
           playerId: d.playerId,
           players: data.getPlayers(d.roomId),
           auctionCards: data.getAuctionCards(d.roomId),
-          currentAuction: data.currentAuction
+          currentAuction: data.getCurrentAuctionCard(d.roomId)
         }
       );
     });

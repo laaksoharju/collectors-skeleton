@@ -203,7 +203,6 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost) {
 
 /* auction */
 Data.prototype.startAuction = function (roomId, playerId, card, cost) {
-  console.log("datahadnlar auction")
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     let c = null;
@@ -227,7 +226,7 @@ Data.prototype.startAuction = function (roomId, playerId, card, cost) {
         break;
       }
     }
-    room.currentAuction.push(...c);
+    room.currentAuction = c;
     room.players[playerId].money -= cost;
     
   }
@@ -258,6 +257,14 @@ Data.prototype.getItemsOnSale = function(roomId){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     return room.itemsOnSale;
+  }
+  else return [];
+}
+
+Data.prototype.getCurrentAuctionCard = function(roomId){
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    return room.currentAuction;
   }
   else return [];
 }

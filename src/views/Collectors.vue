@@ -18,7 +18,7 @@
         :marketValues="marketValues" 
         :placement="auctionPlacement"
         @startAuction="startAuction($event)"
-        @placeBottle="placeBottle('buy', $event)"/>
+        @placeBottle="placeBottle('auction', $event)"/>
 
       <div class="buttons">
         <button @click="drawCard">
@@ -31,7 +31,7 @@
       </div>
       Hand
       <div class="cardslots" v-if="players[playerId]">
-        <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="buyCard(card)" :key="index"/>
+        <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="doAction(card)" :key="index"/>
       </div>
       Items
       <div class="cardslots" v-if="players[playerId]">
@@ -87,6 +87,10 @@ export default {
       //   income: [],
       //   secret: []
       // }
+      isPlacedList: {item: false,
+                     skill: false,
+                     auction: false
+                    },
       buyPlacement: [],
       skillPlacement: [],
       auctionPlacement: [],
@@ -176,6 +180,7 @@ export default {
         this.players = d.players;
         this.auctionCards = d.auctionCards;
         this.currentAuction = d.currentAuction;
+        console.log("currentAuction = " + this.currentAuction)
       }.bind(this)
     ); 
   },
@@ -183,7 +188,21 @@ export default {
     selectAll: function (n) {
       n.target.select();
     },
+
+/* Vad har vi gjort här med placeBottle och doAction? Jo, problemet var att när man klickade på en auctionknapp
+och ville aktionera ut ngt man hade på handen så lades det i item och inte i currentAuction. Det löstes genom att
+skicka @doAction till vår egen doAction, och denna skickar vidare till rätt funktion beroende på vad som placeBottle 
+har gjort true eller false. Om man börjar auction så ska auction vara true och allt annat false tex. */
     placeBottle: function (action, cost) {
+      if(action === "buy"){
+        this.isPlacedList.item = true
+      }
+      else if(action === "skill"){
+        this.isPlacedList.skill = true
+      }
+      else if(action === "auction"){
+        this.isPlacedList.auction = true
+      }
       this.chosenPlacementCost = cost;
       this.$store.state.socket.emit('collectorsPlaceBottle', { 
           roomId: this.$route.params.id, 
@@ -192,6 +211,20 @@ export default {
           cost: cost, 
         }
       );
+    },
+    doAction: function(card){
+      if(this.isPlacedList.item===true){
+        this.buyCard(card);
+        this.isPlacedListt.item=false;
+      }
+      else if(this.isPlacedList.skill===true){
+        this.buyCard(card);
+        this.isPlacedList.skill=false;
+      }
+      else if(this.isPlacedList.auction===true){
+        this.startAuction(card);
+        this.isPlacedList.auction=false;
+      }
     },
     drawCard: function () {
       this.$store.state.socket.emit('collectorsDrawCard', { 
@@ -211,7 +244,6 @@ export default {
       );
     },
     startAuction: function (card){
-      console.log("startAuction", card);
       this.$store.state.socket.emit('collectorsStartAuction', { 
           roomId: this.$route.params.id, 
           playerId: this.playerId,
