@@ -61,7 +61,7 @@
          <div class = "EnergyBottleCoinWhiteOne"></div>
          <div class = "EnergyBottleCoinWhiteNoll"></div>
          <div class = "EnergyBottleCoinWhiteNoll second"></div>
-       </div>
+
 
        <div class="playerBoard">
          <div class="playerTitle"> Player {{playerId}}'s Board </div>
@@ -121,6 +121,7 @@
       </div>
 
      </div>
+        </div>
      <!-- FRÅN DRAWCARD SOM VI FICK FRÅN BÖRJAN, KOPPLAT TILL PLAYERID
      <div class="itemCard" v-if="players[playerId]">
        <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
@@ -448,7 +449,7 @@ export default {
     color: black;
   }
   .Alt1 {
-    /grid-column: 1 ;
+    grid-column: 1 ;
     grid-row: 1;
     width: 130px;
     height: 60px;
@@ -623,7 +624,7 @@ export default {
     background-size: cover;
     grid-column: 5;
     grid-row: 10;
-  }*/
+  }
   @media screen and (max-width: 800px) {
     main {
       width:90vw;
