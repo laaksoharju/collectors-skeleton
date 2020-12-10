@@ -19,20 +19,24 @@ function sockets(io, socket, data) {
         );
       }
     });
+
     socket.on('collectorsDrawCard', function(d) {
       io.to(d.roomId).emit('collectorsCardDrawn',
       data.drawCard(d.roomId, d.playerId)
       );
     });
-    socket.on('collectorsBuyCard', function(d) {
-      data.buyCard(d.roomId, d.playerId, d.card, d.cost)
-      io.to(d.roomId).emit('collectorsCardBought', {
+
+    socket.on('collectorsBuyItem', function(d) {
+      data.buyItem(d.roomId, d.playerId, d.card, d.cost)
+      io.to(d.roomId).emit('collectorsItemBought', {
           playerId: d.playerId,
           players: data.getPlayers(d.roomId),
-          itemsOnSale: data.getItemsOnSale(d.roomId)
+          itemsOnSale: data.getItemsOnSale(d.roomId),
+          currentAuctionCard: data.getCurrentAuctionCard(d.roomId)
         }
       );
     });
+    
     socket.on('collectorsPlayerReady', function(d) {
       data.addPlayerReady(d.roomId, d.playerId);
       io.to(d.roomId).emit('collectorsPlayerArrayFinished', {
@@ -70,7 +74,7 @@ function sockets(io, socket, data) {
         }
       );
     });
-    
+
     socket.on('collectorsEndAuction', function(d) {
       data.endAuction(d.roomId, d.playerId, d.card, d.cost);
       io.to(d.roomId).emit('collectorsAuctionEnded', {
@@ -78,17 +82,17 @@ function sockets(io, socket, data) {
           players: data.getPlayers(d.roomId),
           auctionCards: data.getAuctionCards(d.roomId),
           currentAuctionCard: data.getCurrentAuctionCard(d.roomId)
-      }
-                          );
+        }
+      );
     });
-
 
     socket.on('collectorsGetSkill', function(d) {
       data.getSkill(d.roomId, d.playerId, d.card, d.cost)
       io.to(d.roomId).emit('collectorsSkillAcquired', {
           playerId: d.playerId,
           players: data.getPlayers(d.roomId),
-          skillsOnSale: data.getSkillsOnSale(d.roomId)
+          skillsOnSale: data.getSkillsOnSale(d.roomId),
+          currentAuctionCard: data.getCurrentAuctionCard(d.roomId)
         }
       );
     });
@@ -105,6 +109,7 @@ function sockets(io, socket, data) {
           market: data.getMarket(d.roomId),
           skillsOnSale: data.getSkillsOnSale(d.roomId),
           auctionCards: data.getAuctionCards(d.roomId),
+          currentAuctionCard: data.getCurrentAuctionCard(d.roomId)
         }
       );
     });
@@ -117,7 +122,7 @@ function sockets(io, socket, data) {
 
     socket.on('collectorsRaiseCurrentBid', function(d) {
 	     io.to(d.roomId).emit('collectorsBidRaised',
-			 data.raiseCurrentBid(d.roomId, d.playerId, d.bidArray)
+			 data.raiseCurrentBid(d.roomId, d.playerId)
       );
     });
 

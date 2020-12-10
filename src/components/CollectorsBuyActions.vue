@@ -7,7 +7,7 @@
         <CollectorsCard
         :card="card"
         :availableAction="card.available"
-        @doAction="buyCard(card)"/>
+        @doAction="buyItem(card)"/>
 
       </div>
     </div>
@@ -80,9 +80,9 @@ export default {
         }
       }
     },
-    buyCard: function (card) {
+    buyItem: function (card) {
       if (card.available) {
-        this.$emit('buyCard', card)
+        this.$emit('buyItem', card)
         this.highlightAvailableCards()
       }
     }

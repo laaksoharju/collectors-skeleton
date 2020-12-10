@@ -2,8 +2,7 @@
   <main>
     <div id='container'>
 
-
-      <div id="BuyCardDiv">
+      <div id="BuyItemDiv">
         <!-- {{buyPlacement}} {{chosenPlacementCost}} Detta borde vi kunna skita i nu-->
         <CollectorsBuyActions v-if="players[playerId]"
         :labels="labels"
@@ -11,11 +10,11 @@
         :itemsOnSale="itemsOnSale"
         :marketValues="marketValues"
         :placement="buyPlacement"
-        @buyCard="buyCard($event)"
+        @buyItem="buyItem($event)"
         @placeBottle="placeBottle('buyItem', $event)"/>
       </div>
 
-      <div id ="BuySkillDiv">
+      <div id="BuySkillDiv">
         <CollectorsSkillActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
@@ -25,7 +24,7 @@
         @placeBottle="placeBottle('buySkill', $event)"/>
       </div>
 
-      <div id ="RaiseValueDiv">
+      <div id="RaiseValueDiv">
         <CollectorsRaiseValueActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
@@ -51,16 +50,13 @@
         @handleAction="handleAction($event)"
         @placeBottle="placeBottle('startAuction', $event)"/>
 
-
-
         <div v-if="currentAuctionCard.length === 1">
           <p>player '{{ bidArray[bidArray.length - 1]}}' is now leading the auction with a: {{ bidArray.length}}$ bid.</p>
-          <button v-if="players[playerId]" @click="raiseCurrentBid()">
-            Raise current bid!
-          </button>
-          <button v-if="players[playerId]" @click="endAuction()">
-            end auction
-          </button>
+          <button v-if="players[playerId]" @click="raiseCurrentBid()">Raise current bid!</button>
+          <button v-if="bidArray[bidArray.length - 1] === this.playerId" @click="noMoreBids()">My bid won!</button>
+          <button v-if="this.noMoreBidsBoolean" @click="endAuction('buyItem')">Use as item</button>
+          <button v-if="this.noMoreBidsBoolean" @click="endAuction('getSkill')">Use as skill</button>
+          <button v-if="this.noMoreBidsBoolean" @click="endAuction('market')">Place in the market</button>
         </div>
       </div>
 
@@ -70,7 +66,6 @@
         :player="players[playerId]"
         :placement="workPlacement"
         @placeBottleWork="placeBottleWork('doWork', $event)"/>
-
       </div>
 
       <div id="HandDiv" class="cardslots" v-if="players[playerId]">
@@ -215,6 +210,7 @@ export default {
         skillsOnSale: [],
         auctionCards: [],
         currentAuctionCard: [],
+        noMoreBidsBoolean: false,
         playerid: 0,
         playerIdArray: []
         }
@@ -253,6 +249,7 @@ export default {
             this.marketValues = d.marketValues;
             this.skillsOnSale = d.skillsOnSale;
             this.auctionCards = d.auctionCards;
+            this.currentAuctionCard = d.currentAuctionCard;
             this.market = d.market;
             this.buyPlacement = d.placements.buyPlacement;
             this.skillPlacement = d.placements.skillPlacement;
@@ -288,11 +285,12 @@ export default {
             this.players = d;
           }.bind(this));
 
-          this.$store.state.socket.on('collectorsCardBought',
+          this.$store.state.socket.on('collectorsItemBought',
           function(d) {
-            console.log(d.playerId, "bought a card");
+            console.log(d.playerId, "bought an item");
             this.players = d.players;
             this.itemsOnSale = d.itemsOnSale;
+            this.currentAuctionCard = d.currentAuctionCard;
           }.bind(this));
 
           this.$store.state.socket.on('collectorsSkillAcquired',
@@ -300,6 +298,7 @@ export default {
             console.log(d.playerId, "acquired a skill");
             this.players = d.players;
             this.skillsOnSale = d.skillsOnSale;
+            this.currentAuctionCard = d.currentAuctionCard;
           }.bind(this));
 
           this.$store.state.socket.on('collectorsValueRaised',
@@ -310,6 +309,7 @@ export default {
             this.market = d.market;
             this.skillsOnSale = d.skillsOnSale;
             this.auctionCards = d.auctionCards;
+            this.currentAuctionCard = d.currentAuctionCard;
           }.bind(this));
 
           this.$store.state.socket.on('collectorsAuctionStarted',
@@ -348,7 +348,6 @@ methods: {
     });
     },
     startGame: function(){
-
       alert("This is the playing order"),
       alert(this.playerIdArray)
       console.log(this.playerIdArray);
@@ -405,8 +404,8 @@ methods: {
     });
   },
 
-  buyCard: function (card) {
-    this.$store.state.socket.emit('collectorsBuyCard', {
+  buyItem: function (card) {
+    this.$store.state.socket.emit('collectorsBuyItem', {
       roomId: this.$route.params.id,
       playerId: this.playerId,
       card: card,
@@ -426,7 +425,7 @@ methods: {
   handleAction: function (card) {
     if (card.available) {
       if (this.chosenAction === "buyItem") {
-        this.buyCard(card);
+        this.buyItem(card);
       }
       if (this.chosenAction === "buySkill") {
         this.getSkill(card);
@@ -447,21 +446,58 @@ methods: {
     });
   },
 
+  startAuction: function (card) {
+    this.$store.state.socket.emit('collectorsStartAuction', {
+      roomId: this.$route.params.id,
+      playerId: this.playerId,
+      card: card,
+      cost: this.chosenPlacementCost
+    });
+  },
+
   raiseCurrentBid: function () {
     this.$store.state.socket.emit('collectorsRaiseCurrentBid', {
       roomId: this.$route.params.id,
       playerId: this.playerId
     });
   },
-   endAuction: function (card) {
-    this.$store.state.socket.emit('collectorsEndAuction', {
-        roomId: this.$route.params.id,
-      playerId: this.playerId,
-      card: card,
-    });
+
+  noMoreBids: function() {
+    this.noMoreBidsBoolean = true;
   },
 
-
+  endAuction: function (action) {
+    if (action === "buyItem") {
+      this.$store.state.socket.emit('collectorsBuyItem', {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        card: this.currentAuctionCard[0],
+        cost: this.bidArray.length
+      });
+    }
+    if (action === "getSkill") {
+      this.$store.state.socket.emit('collectorsGetSkill', {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        card: this.currentAuctionCard[0],
+        cost: this.bidArray.length
+      });
+    }
+    if (action === "market") {
+      this.$store.state.socket.emit('collectorsRaiseValue', {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        card1: this.currentAuctionCard[0],
+        card2: null,
+        cost: this.bidArray.length
+      });
+    }
+    this.noMoreBids = false;
+    this.$store.state.socket.emit('collectorsEndAuction', {
+      roomId: this.$route.params.id,
+      playerId: this.playerId
+    });
+  },
 
   raiseValueHandler: function (card) {
     var card2 = null;
@@ -486,18 +522,9 @@ methods: {
       cost: this.chosenPlacementCost
     });
   },
-
-  startAuction: function (card) {
-    this.$store.state.socket.emit('collectorsStartAuction', {
-      roomId: this.$route.params.id,
-      playerId: this.playerId,
-      card: card,
-      cost: this.chosenPlacementCost
-    });
-  },
 },
-
 }
+
 </script>
 
 <style scoped>
@@ -522,8 +549,8 @@ footer a:visited {
 }
 
 
-#BuyCardDiv {
-  grid-area: BuyCardDiv;
+#BuyItemDiv {
+  grid-area: BuyItemDiv;
   align-self: center;
   background: #f9dcce;
   margin: 5px;
@@ -603,8 +630,8 @@ footer a:visited {
   grid-template-columns: 25% 25% 25% 25%;
   grid-template-rows: 16,67% 16,67% 16,67% 16,67% 16,67% 16,67%;
   grid-template-areas:
-  "BuyCardDiv BuyCardDiv RaiseValueDiv RaiseValueDiv"
-  "BuyCardDiv BuyCardDiv RaiseValueDiv RaiseValueDiv"
+  "BuyItemDiv BuyItemDiv RaiseValueDiv RaiseValueDiv"
+  "BuyItemDiv BuyItemDiv RaiseValueDiv RaiseValueDiv"
   "BuySkillDiv BuySkillDiv AuctionDiv AuctionDiv"
   "BuySkillDiv BuySkillDiv AuctionDiv AuctionDiv"
   ". WorkDiv WorkDiv ."

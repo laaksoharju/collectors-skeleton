@@ -153,7 +153,7 @@ Data.prototype.drawCard = function (roomId, playerId) {
 }
 
 /* moves card from itemsOnSale to a player's hand */
-Data.prototype.buyCard = function (roomId, playerId, card, cost) {
+Data.prototype.buyItem = function (roomId, playerId, card, cost) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     let c = null;
@@ -175,6 +175,12 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost) {
           room.players[playerId].hand[i].y === card.y) {
         c = room.players[playerId].hand.splice(i,1);
         break;
+      }
+    }
+    if (room.currentAuctionCard.length === 1) {
+      if (room.currentAuctionCard[0].x === card.x &&
+          room.currentAuctionCard[0].y === card.y) {
+        c = room.currentAuctionCard.splice(0,1);
       }
     }
     room.players[playerId].items.push(...c);
@@ -206,9 +212,14 @@ Data.prototype.getSkill = function (roomId, playerId, card, cost) {
         break;
       }
     }
+    if (room.currentAuctionCard.length === 1) {
+      if (room.currentAuctionCard[0].x === card.x &&
+          room.currentAuctionCard[0].y === card.y) {
+        c = room.currentAuctionCard.splice(0,1);
+      }
+    }
     room.players[playerId].skills.push(...c);
     room.players[playerId].money -= cost;
-
   }
 }
 
@@ -227,7 +238,6 @@ Data.prototype.raiseValue = function (roomId, playerId, card, cost) {
       if (room.auctionCards[i].x === card.x &&
           room.auctionCards[i].y === card.y) {
         c = room.auctionCards.splice(i,1, {});
-        console.log(c);
         break;
       }
     }
@@ -238,10 +248,17 @@ Data.prototype.raiseValue = function (roomId, playerId, card, cost) {
         break;
       }
     }
+    if (room.currentAuctionCard.length === 1) {
+      if (room.currentAuctionCard[0].x === card.x &&
+          room.currentAuctionCard[0].y === card.y) {
+        c = room.currentAuctionCard.splice(0,1);
+      }
+    }
     room.market.push(...c);
     room.players[playerId].money -= cost;
   }
 }
+
 Data.prototype.addPlayerReady= function(roomId, playerId){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
@@ -269,15 +286,14 @@ Data.prototype.startAuction = function (roomId, playerId, card, cost) {
         break;
       }
     }
-    console.log(room.currentAuctionCard);
     room.currentAuctionCard.push(...c);
     room.players[playerId].money -= cost;
-    console.log(room.currentAuctionCard);
   }
 }
+
 Data.prototype.endAuction = function (roomId, playerId, card, cost) {
     let room = this.rooms[roomId];
-    console.log('tjohej');
+    room.bidArray = [];
 }
 
 
@@ -378,23 +394,14 @@ Data.prototype.fakeMoreMoney = function (roomId, playerId) {
   else return [];
 }
 
-// BIDDING
 Data.prototype.raiseCurrentBid = function (roomId, playerId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
-      console.log("funktionen körs");
       room.bidArray.push(playerId);
-      console.log(room.bidArray);
-      console.log("Current leading bid: ",room.bidArray.length,"$" );
-
-
       return room.bidArray;
-
-
   }
   else return [];
 }
-
 
 /* returns the hand of the player */
 Data.prototype.getCards = function (roomId, playerId) {
@@ -475,8 +482,17 @@ Data.prototype.getAuctionCards = function(roomId){
 
 Data.prototype.getCurrentAuctionCard = function(roomId){
   let room = this.rooms[roomId];
+  console.log(room.currentAuctionCard);
   if (typeof room !== 'undefined') {
     return room.currentAuctionCard;
+  }
+  else return [];
+}
+
+Data.prototype.getBidArray = function(roomId){
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    return room.bidArray;
   }
   else return [];
 }
