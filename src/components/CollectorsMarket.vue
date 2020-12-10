@@ -6,6 +6,10 @@
     <div class = "iconMusic"></div>
     <div class = "iconFilm"></div>
     <div class = "iconTech"></div>
+
+    <div class = "bottleTwoFlags"></div>
+    <div class = "bottleOneFlag"> </div>
+    <div class = "bottleCoins"> </div>
   </div>
 
 </template>
@@ -95,5 +99,16 @@ export default {
     grid-column: 5;
     grid-row: 10;
   }
+  .bottleCoins {
+    background-image: ;
+    grid-column: 3;
+    grid-row: 9;
 
+  }
+  .bottleOneFlag {
+    background-image: ;
+  }
+.bottleTwoFlags {
+  background-image: ;
+}
   </style>
