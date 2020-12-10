@@ -36,6 +36,16 @@ function sockets(io, socket, data) {
       io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId)
       );
     });
+    socket.on('collectorsStartAuction', function(d) {
+      data.startAuction(d.roomId, d.playerId, d.card, d.cost)
+      io.to(d.roomId).emit('auctionStarted', { 
+          playerId: d.playerId,
+          players: data.getPlayers(d.roomId),
+          auctionCards: data.getAuctionCards(d.roomId),
+          currentAuction: data.currentAuction
+        }
+      );
+    });
 }
 
 module.exports = sockets;

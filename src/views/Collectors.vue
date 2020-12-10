@@ -17,7 +17,7 @@
         :auctionCards="auctionCards" 
         :marketValues="marketValues" 
         :placement="auctionPlacement"
-        @buyCard="auctionCard($event)"
+        @startAuction="startAuction($event)"
         @placeBottle="placeBottle('buy', $event)"/>
 
       <div class="buttons">
@@ -29,10 +29,6 @@
       <div class="cardslots">
         <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
       </div>
-      Auction
-      <div class="cardslots">
-        <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
-      </div>
       Hand
       <div class="cardslots" v-if="players[playerId]">
         <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="buyCard(card)" :key="index"/>
@@ -40,6 +36,10 @@
       Items
       <div class="cardslots" v-if="players[playerId]">
         <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
+      </div>
+      Current auction
+      <div class="cardslots" v-if="players[playerId]">
+        <CollectorsCard v-for="(card, index) in currentAuction" :card="card" :key="index"/>
       </div>
     </main>
     {{players}}
@@ -100,7 +100,8 @@ export default {
       itemsOnSale: [],
       skillsOnSale: [],
       auctionCards: [],
-      playerid: 0
+      playerid: 0,
+      currentAuction: []
     }
   },
   computed: {
@@ -168,6 +169,15 @@ export default {
         this.itemsOnSale = d.itemsOnSale;
       }.bind(this)
     );
+
+    this.$store.state.socket.on('auctionStarted', 
+      function(d) {
+        console.log(d.playerId, "started an auction");
+        this.players = d.players;
+        this.auctionCards = d.auctionCards;
+        this.currentAuction = d.currentAuction;
+      }.bind(this)
+    ); 
   },
   methods: {
     selectAll: function (n) {
@@ -200,13 +210,13 @@ export default {
         }
       );
     },
-    auctionCard: function (card){
-      console.log("auctionCard", card);
-      this.$store.state.socket.emit('CollectorsStartAuction', { 
+    startAuction: function (card){
+      console.log("startAuction", card);
+      this.$store.state.socket.emit('collectorsStartAuction', { 
           roomId: this.$route.params.id, 
           playerId: this.playerId,
           card: card,
-          cost: this.marketValues[card.market] + this.chosenPlacementCost 
+          cost: this.chosenPlacementCost 
         }
       );
     }
