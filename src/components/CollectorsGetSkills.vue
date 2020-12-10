@@ -60,8 +60,8 @@ export default {
     getSkill: function (card) {
 
       if (card.available){
-        this.$emit('getSkill', card)
-        this.highlightAvailableCards()
+        this.$emit('getSkill', card);
+        this.highlightAvailableCards();
       }
     },
     cannotAfford: function (cost) {
@@ -84,13 +84,12 @@ export default {
         if (this.marketValues[this.skillsOnSale[i].item] <= this.player.money - cost) {
           this.$set(this.skillsOnSale[i], "available", true);
         }
-        }
         else {
           this.$set(this.skillsOnSale[i], "available", false);
         }
         this.chosenPlacementCost = cost;
       }
-    }
+    },
     }
   }
 </script>

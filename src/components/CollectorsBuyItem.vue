@@ -8,16 +8,15 @@
 
    <div class="buttons" v-for="(p, index) in placement" :key="index">
      <button
-       v-if="p.playerId===null & p.cost===1"
+       v-if="p.playerId===null && p.cost===1"
        :disabled="cannotAfford(p.cost)"
        @click="placeBottle(p)">
        <div class = "ItemBottleCoinOne">
        </div>
-
       </button>
 
       <button
-        v-if="p.playerId===null & p.cost===2"
+        v-if="p.playerId===null && p.cost===2"
         :disabled="cannotAfford(p.cost)"
         @click="placeBottle(p)">
         <div class = "ItemBottleCoinTwo">
@@ -25,7 +24,7 @@
      </button>
 
      <button
-       v-if="p.playerId===null & p.cost===3"
+       v-if="p.playerId===null && p.cost===3"
        :disabled="cannotAfford(p.cost)"
        @click="placeBottle(p)">
        <div class = "ItemBottleCoinThree">
@@ -96,10 +95,10 @@ export default {
     },
     buyCard: function (card) {
       if (card.available) {
-        this.$emit('buyCard', card)
-        this.highlightAvailableCards()
+        this.$emit('buyCard', card);
+        this.highlightAvailableCards();
       }
-    },
+    }
     }
   }
 </script>

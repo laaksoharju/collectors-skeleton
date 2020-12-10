@@ -119,7 +119,7 @@
        <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
      </div> -->
 
-  </div>
+
   Här : {{allPlayersId}}
 
     {{buyPlacement}} {{chosenPlacementCost}}
@@ -154,7 +154,7 @@
       <!-- <div class="cardslots" v-if="players[playerId]">
         <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
       </div> -->
-    </main>
+</main>
     {{players}}
     {{marketValues}}
     <button v-if="players[playerId]" @click="players[playerId].money += 1">
@@ -166,7 +166,7 @@
           <input type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
         </p>
     </footer>
-  </div>
+</div>
 </template>
 
 <script>
@@ -228,7 +228,7 @@ export default {
   computed: {
     playerId: function() { return this.$store.state.playerId},
     allPlayersId: function() {
-      return Object.keys(this.players) //få nyckeln till players - playerId
+      return Object.keys(this.players); //få nyckeln till players - playerId
     }/*,
     numbOfPlayers: function () {
       let counter = (Object.keys(this.players)).length;
