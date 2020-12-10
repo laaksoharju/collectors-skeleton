@@ -1,23 +1,23 @@
 <template>
   <div>
     <main>
-  <h1>I am player {{playerId}}</h1>
-  <PlayerBoard v-if="players[playerId]"
+      <h1>I am player {{ playerId }}</h1>
+      <PlayerBoard v-if="players[playerId]"
         :player ="players[playerId]"/>
   <OtherPlayerboards :Players ="players" :playerId="playerId" />
-
       {{ buyPlacement }} {{ chosenPlacementCost }}
-    <div id="game-board">
-      <ItemSection v-if="players[playerId]"
-        :labels="labels"
-        :player="players[playerId]"
-        :itemsOnSale="itemsOnSale"
-        :marketValues="marketValues"
-        :placement="buyPlacement"
-        @buyCard="buyCard($event)"
-        @placeBottle="placeBottle('buy', $event)"
-      />
-</div>
+      <div id="game-board">
+        <ItemSection
+          v-if="players[playerId]"
+          :labels="labels"
+          :player="players[playerId]"
+          :itemsOnSale="itemsOnSale"
+          :marketValues="marketValues"
+          :placement="buyPlacement"
+          @buyCard="buyCard($event)"
+          @placeBottle="placeBottle('buy', $event)"
+        />
+      </div>
       <div class="buttons">
         <button @click="drawCard">
           {{ labels.draw }}
@@ -29,16 +29,23 @@
           :card="card"
           :key="index"
         />
-
-              </div>
+      </div>
 
       Skills
       <div class="cardslots">
-        <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
+        <CollectorsCard
+          v-for="(card, index) in skillsOnSale"
+          :card="card"
+          :key="index"
+        />
       </div>
       Auction
       <div class="cardslots">
-        <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
+        <CollectorsCard
+          v-for="(card, index) in auctionCards"
+          :card="card"
+          :key="index"
+        />
       </div>
 
       <div class="playerboard">
@@ -207,6 +214,15 @@ export default {
     );
 
     this.$store.state.socket.on(
+      "cardsRotated",
+      function (d) {
+        this.itemsOnSale = d.rotatedCards.itemsOnSale;
+        this.skillsOnSale = d.rotatedCards.skillsOnSale;
+        this.auctionCards = d.rotatedCards.auctionCards;
+      }.bind(this)
+    );
+
+    this.$store.state.socket.on(
       "collectorsCardBought",
       function (d) {
         console.log(d.playerId, "bought a card");
@@ -241,6 +257,12 @@ export default {
         playerId: this.playerId,
         card: card,
         cost: this.marketValues[card.market] + this.chosenPlacementCost,
+      });
+    },
+    rotateCards: function () {
+      this.$store.state.socket.emit("rotateCards", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
       });
     },
   },
