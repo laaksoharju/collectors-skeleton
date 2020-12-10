@@ -1,49 +1,82 @@
 <template>
 <div id= "PlayerBoard" >
-<div class='mainBoard' :style="{backgroundColor: player.color}" >
-    <div class='slotSpace'>
-        <div class='slotWrapper'>
-            <h1 class='title'> Items </h1>
+    <div id='mainBoard' :style="{backgroundColor: player.color}" >
+        <div id="itemSection">
+            <h2> Items </h2>
+            <div id='itemGrid'>
                 <!--countItems = [fastaval, movie, technology, figures, music]-->
-                <div class="dot item fastaval"> {{countItems[0]}}</div>
-                <div class="dot item movie">{{countItems[1]}}</div>
-                <div class="dot item technology">{{countItems[2]}}</div>
-                <div class="dot item figures"> {{countItems[3]}}</div>
-                <div class="dot item music"> {{countItems[4]}}</div>
+                <div class="dot fastaval"></div>
+                <div class="dot movie"></div>
+                <div class="dot technology"></div>
+                <div class="dot figures"></div>
+                <div class="dot music"></div>
+                <p>{{countItems[0]}}</p>
+                <p>{{countItems[1]}}</p>
+                <p>{{countItems[2]}}</p>
+                <p>{{countItems[3]}}</p>
+                <p>{{countItems[4]}}</p>
+            </div>
         </div>
-    </div>
-
-    <div class='slotWrapper'>
-    <h1 class='title'>Actions</h1>
-    <div v-on:click = 'actionMade("A")' class="dot bottle" id='A'></div>
-    <div v-on:click = 'actionMade("B")' class="dot bottle" id='B'></div>
-    <div v-on:click = 'actionMade("C")' class="dot bottle" id='C'></div>
-    <div v-on:click = 'actionMade("D")' class="dot bottle" id='D'></div>
-    <div v-on:click = 'actionMade("E")' class="dot bottle" id='E'></div>
-    </div>
-
-    <div class='slotWrapper'>
-        <h1 class='title'>Skills</h1>
-        <div id='skillGrid'>
-            <!--countSkills = [bottle, workerIncome, workerCard, auctionIncome, VP-all,
-            VP-fastaval, VP-movie, VP-technology, VP-figures, VP-music]-->
-            <div class="dot skill bottleSkill">{{countSkills[0]}}</div>
-            <div class="dot skill workerIncomeSkill">{{countSkills[1]}}</div>
-            <div class="dot skill workerCardSkill">{{countSkills[2]}}</div>
-            <div class="dot skill auctionIncomeSkill">{{countSkills[3]}}</div>
-            <div class="dot skill VP-allSkill">{{countSkills[4]}}</div>
-            <div class="dot skill VP-fastavalSkill">{{countSkills[5]}}</div>
-            <div class="dot skill VP-movieSkill">{{countSkills[6]}}</div>
-            <div class="dot skill VP-technologySkill">{{countSkills[7]}}</div>
-            <div class="dot skill VP-figuresSkill">{{countSkills[8]}}</div>
-            <div class="dot skill VP-musicSkill">{{countSkills[9]}}</div>
+    
+        <div id='actionSection'>
+            <h2>Bottles</h2>
+            <div id ="actionGrid">
+                <div v-on:click = 'actionMade("A")' class="dot bottle" id='A'></div>
+                <div v-on:click = 'actionMade("B")' class="dot bottle" id='B'></div>
+                <div v-on:click = 'actionMade("C")' class="dot bottle" id='C'></div>
+                <div v-on:click = 'actionMade("D")' class="dot bottle" id='D'></div>
+                <div v-on:click = 'actionMade("E")' class="dot bottle" id='E'></div>
+            </div>
         </div>
-    </div>
 
-    <div class='slotWrapper'>
-        <h1 class='title'>Work</h1>
-        <div class='dot work'></div>
-    </div>
+        <div id='skillSection'>
+            <h2>Skills</h2>
+            <div id='skillGrid'>
+                <!--countSkills = [bottle, workerIncome, workerCard, auctionIncome, VP-all,
+                VP-fastaval, VP-movie, VP-technology, VP-figures, VP-music]-->
+                <div class="dot bottleSkill"></div>
+                <div class="dot workerIncomeSkill"></div>
+                <div class="dot workerCardSkill"> </div>
+                <div class="dot auctionIncomeSkill"></div>
+                <div class="dot VP-allSkill"></div>
+                <p>{{countSkills[0]}}</p>
+                <p>{{countSkills[1]}}</p>
+                <p>{{countSkills[2]}}</p>
+                <p>{{countSkills[3]}}</p>
+                <p>{{countSkills[4]}}</p>
+                <div class="dot VP-fastavalSkill"></div>
+                <div class="dot VP-movieSkill"></div>
+                <div class="dot VP-technologySkill"></div>
+                <div class="dot VP-figuresSkill"></div>
+                <div class="dot VP-musicSkill"></div>
+                <p>{{countSkills[5]}}</p>
+                <p>{{countSkills[6]}}</p>
+                <p>{{countSkills[7]}}</p>
+                <p>{{countSkills[8]}}</p>
+                <p>{{countSkills[9]}}</p>
+            </div>
+        </div>
+
+        <div id="infoSection">
+            <div id='incomeSection'>
+                <h2>Income</h2>
+                <div class="income dot">
+                    <p>&#36;{{countIncome}}</p>
+                </div>
+            </div>
+            <div id="moneySection">
+                <h2>Money</h2>
+                <div class="money dot">
+                    <p> &#36;{{player.money}}</p>
+                </div>
+            </div>
+            <div id="secretSection">
+                <div id="secretCard">
+                    <h2>Secret card</h2>
+                    <div>{{player.secret}}</div>
+                </div>
+            </div>
+        </div> 
     </div>
 </div>
 </template>
@@ -114,6 +147,9 @@ export default {
                 }
             }
             return count;
+        },
+        countIncome: function(){
+            return this.player.income.length;
         }
     },
      methods: {
@@ -124,162 +160,145 @@ export default {
 }
 </script>
 
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.mainBoard {
-    /* background-color: #d9ead3ff; */
-    background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(147,230,241,1) 0%, rgba(145,192,241,1) 45.5% );
-    height: 250px;
+#mainBoard {    
+    height: fit-content;
     display: grid;
-    grid-template-columns: 70% 30%;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 10px;
     text-align: center;
     color: black;
     margin: 5px;
     padding: 5px;
     border-radius: 3px;
 }
-
-.slotSpace {
-    display: grid;
-    grid-template-columns: 50% 50%;
-    grid-template-rows: 50% 50%; 
+#mainBoard h2{
+    font-size: 90%;
 }
-
+#mainBoard p{
+    font-size: 100%;
+    font-weight: bold;
+}
+#itemSection{
+    grid-row: 1/3;
+    grid-column: 1/4;
+}
+#actionSection{
+    grid-row: 1/3;
+    grid-column:4/6;
+}
+#skillSection{
+    grid-row: 3/6;
+    grid-column: 1/4;
+}
+#infoSection{
+    grid-row:3/6;
+    grid-column: 4/6;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+#secretSection{
+    grid-column:1/3;
+}
+#itemGrid{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+#skillGrid{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+#actionGrid{
+    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 5px;
+}
 .dot {
-    height: 50px;
-    width: 50px;
-    border: 10px;
+    width: 6vw;
+    height: 6vw;
     border-radius: 50%;
-    border-color: black;
-    margin-right: 10px;  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right:auto;
 } 
-
-.item {
-    background-color: #ea9999ff;
-}
-
-.skill {
-    background-color: #6aa84fff;
-}
-
-#skillGrid {
-    display: grid;
-    grid-template-columns: 20% 20% 20% 20% 20%;
-    grid-template-rows: 50% 50%;
-}
-
-.work {
+.income, .money {
     background-color: #ffe599ff;
-    height: 80px;
-    width: 80px;
+    height: 8vw;
+    width: 8vw;
 }
-
 .bottle {
-    height: 60px;
-    width: 60px;
+    height: 8vw;;
+    width: 8vw;
     background-color: whitesmoke;
-
 }
-
 .bottle:hover {
     background-color: red;
     transition: 0.3s;
 }
-
-.title {
-    color: black;
-    margin-left: 5px;
-    margin-right: 10px;
-    text-align: center;
-    align-items: center;
-}
-
-.slotWrapper {
-    display: flex;
-    align-items: center;
-}
-
 .music{
     background: url("/images/ITEM-MUSIC.png");
-    background-size: 50px 50px;
-    background-repeat: no-repeat;
+    background-size: 6vw 6vw;
 }
-
 .movie{
     background: url("/images/ITEM-FILM.png");
-    background-size: 50px 50px;
-    background-repeat: no-repeat;
+    background-size: 6vw 6vw;
 }
-
 .technology{ 
     background: url("/images/ITEM-IT.png");
-    background-size: 50px 50px;
-    background-repeat: no-repeat;
+    background-size: 6vw 6vw;
 }
-
 .figures{
     background: url("/images/ITEM-ROBOT.png");
-    background-size: 50px 50px;
-    background-repeat: no-repeat;
-
+    background-size: 6vw 6vw;
 }
-
 .fastaval{
     background: url("/images/ITEM-PINGVIN.png");
-    background-size: 50px 50px;
-    background-repeat: no-repeat;
+    background-size:  6vw 6vw;
 }
-
 .bottleSkill{
     background: url("/images/SKILL-FLASKA.png");
-    background-size: 50px 50px;
-    background-repeat: no-repeat;
+    background-size:  6vw 6vw;
 }
 .workerIncomeSkill{
     background: url("/images/SKILL-GUBBE2PENG.png");
-    background-size: 50px 50px;
-    background-repeat: no-repeat;
+    background-size:  6vw 6vw;
 }
 .workerCardSkill{
     background: url("/images/SKILL-GUBBEKORT.png");
-    background-size: 50px 50px;
-    background-repeat: no-repeat;
+    background-size: 6vw 6vw;
 }
 .auctionIncomeSkill{
     background: url("/images/SKILL-1PENG.png");
-    background-size: 50px 50px;
-    background-repeat: no-repeat;
+    background-size:  6vw 6vw;
 }
 .VP-allSkill{
     background: url("/images/SKILL-5STARS.png");
-    background-size: 50px 50px;
-    background-repeat: no-repeat;
+    background-size:  6vw 6vw;
 }
 .VP-fastavalSkill{
     background: url("/images/SKILL-PINGVINEX.png");
-    background-size: 50px 50px;
-    background-repeat: no-repeat;
+    background-size:  6vw 6vw;
 }
 .VP-figuresSkill{
     background: url("/images/SKILL-ROBOTEX.png");
-    background-size: 50px 50px;
-    background-repeat: no-repeat;
+    background-size:  6vw 6vw;
 }
 .VP-movieSkill{
     background: url("/images/SKILL-FILMEX.png");
-    background-size: 50px 50px;
-    background-repeat: no-repeat;
+    background-size:  6vw 6vw;
 }
 .VP-technologySkill{
     background: url("/images/SKILL-ITEX.png");
-    background-size: 50px 50px;
-    background-repeat: no-repeat;
+    background-size:  6vw 6vw;
 }
 .VP-musicSkill{
     background: url("/images/SKILL-MUSICEX.png");
-    background-size: 50px 50px;
-    background-repeat: no-repeat;
+    background-size:  6vw 6vw;
 }
-
 </style>

@@ -14,19 +14,68 @@
   <PlayerBoard v-if="players[playerId]"
         :player ="players[playerId]"/>
   <OtherPlayerboards :Players ="players" :playerId="playerId" />
+      <div id="game-board">
+        <ItemSection
+          v-if="players[playerId]"
+          :labels="labels"
+          :player="players[playerId]"
+          :itemsOnSale="itemsOnSale"
+          :marketValues="marketValues"
+          :placement="buyPlacement"
+          @buyCard="buyCard($event)"
+          @placeBottle="placeBottle('buy', $event)"
+        />
+        <div>
+          <!-- {{ skillPlacement }} {{ chosenPlacementCost }} -->
+          <CollectorsBuySkill
+            v-if="players[playerId]"
+            :labels="labels"
+            :player="players[playerId]"
+            :skillsOnSale="skillsOnSale"
+            :marketValues="marketValues"
+            :placement="skillPlacement"
+            @buySkillCard="buySkillCard($event)"
+            @placeBottle="placeBottle('buy', $event)"
+          />
+          <RaiseValueSection
+            v-if="players[playerId]"
+            :labels="labels"
+            :player="players[playerId]"
+            :itemsOnSale="itemsOnSale"
+            :marketValues="marketValues"
+            :placement="marketPlacement"
+            @buyCard="buyCard($event)"
+            @placeBottle="placeBottle('buy', $event)"
+          />
+          <AuctionSection
+            v-if="players[playerId]"
+            :labels="labels"
+            :player="players[playerId]"
+            :auctionCards="auctionCards"
+            :marketValues="marketValues"
+            :placement="auctionPlacement"
+            @buyCard="buyCard($event)"
+            @placeBottle="placeBottle('buy', $event)"
+          />
+        </div>
+      </div>
+
+      <!-- <GameBoard 
+  :itemsOnSale="itemsOnSale"
+ :skillsOnSale="skillsOnSale"
+ :auctionCards="auctionCards"
+  /> -->
+
+      <WorkArea />
+      <!-- <CollectorsBuyActions
+        v-if="players[playerId]"
+        I am player {{playerId}}
+    /> -->
+      <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
+      <OtherPlayerboards :Players="players" :playerId="playerId" />
 
       {{ buyPlacement }} {{ chosenPlacementCost }}
-    <div id="game-board">
-      <ItemSection v-if="players[playerId]"
-        :labels="labels"
-        :player="players[playerId]"
-        :itemsOnSale="itemsOnSale"
-        :marketValues="marketValues"
-        :placement="buyPlacement"
-        @buyCard="buyCard($event)"
-        @placeBottle="placeBottle('buy', $event)"
-      />
-</div>
+
       <div class="buttons">
         <button @click="drawCard">
           {{ labels.draw }}
@@ -38,26 +87,43 @@
           :card="card"
           :key="index"
         />
-
-              </div>
+      </div>
 
       Skills
       <div class="cardslots">
-        <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
+        <CollectorsCard
+          v-for="(card, index) in skillsOnSale"
+          :card="card"
+          :key="index"
+        />
       </div>
       Auction
       <div class="cardslots">
-        <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
+        <CollectorsCard
+          v-for="(card, index) in auctionCards"
+          :card="card"
+          :key="index"
+        />
       </div>
 
       <div class="playerboard">
-        Items
+        Items-on-hand
         <div class="cardslots" v-if="players[playerId]">
           <CollectorsCard
             v-for="(card, index) in players[playerId].items"
             :card="card"
             :key="index"
           />
+        </div>
+        <div>
+          Skills-on-hand
+          <div class="cardslots" v-if="players[playerId]">
+            <CollectorsCard
+              v-for="(card, index) in players[playerId].skills"
+              :card="card"
+              :key="index"
+            />
+          </div>
         </div>
         Hand
         <div class="cardslots" v-if="players[playerId]">
@@ -72,7 +138,7 @@
       </div>
     </main>
     {{ players }}
-    {{ marketValues }}
+    <!-- <h1>MARKET VALUES: </h1>{{ marketValues }} -->
     <button v-if="players[playerId]" @click="players[playerId].money += 1">
       fake more money
     </button>
@@ -94,20 +160,31 @@
 /*eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }]*/
 
 import CollectorsCard from "@/components/CollectorsCard.vue";
+//import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
+import CollectorsBuySkill from "@/components/CollectorsBuySkill.vue";
+//import CollectorsBuyActions from "@/components/CollectorsBuyActions.vue";
+// import GameBoard from "@/components/GameBoard.vue";
+import WorkArea from "@/components/WorkArea.vue";
 import ItemSection from "@/components/ItemSection.vue";
 import PlayerBoard from "@/components/PlayerBoard.vue";
-import OtherPlayerboards from '../components/OtherPlayerboards.vue';
-import InfoButtons from '../components/CollectorsPlayerboardInfo.vue';
-
+import OtherPlayerboards from "../components/OtherPlayerboards.vue";
+import RaiseValueSection from "../components/RaiseValueSection.vue";
+import AuctionSection from "../components/AuctionSection.vue";
 
 export default {
   name: "Collectors",
   components: {
     CollectorsCard,
+    //CollectorsBuyActions,
+    CollectorsBuySkill,
+    //CollectorsBuyActions,
+    //GameBoard,
+    WorkArea,
     ItemSection,
     PlayerBoard,
     OtherPlayerboards,
-    InfoButtons
+    RaiseValueSection,
+    AuctionSection,
   },
   data: function () {
     return {
@@ -231,11 +308,31 @@ export default {
     );
 
     this.$store.state.socket.on(
+      "cardsRotated",
+      function (d) {
+        this.itemsOnSale = d.rotatedCards.itemsOnSale;
+        this.skillsOnSale = d.rotatedCards.skillsOnSale;
+        this.auctionCards = d.rotatedCards.auctionCards;
+        this.marketValues = d.marketValues;
+
+      }.bind(this)
+    );
+
+    this.$store.state.socket.on(
       "collectorsCardBought",
       function (d) {
         console.log(d.playerId, "bought a card");
         this.players = d.players;
         this.itemsOnSale = d.itemsOnSale;
+      }.bind(this)
+    );
+
+    this.$store.state.socket.on(
+      "collectorsSkillCardBought",
+      function (d) {
+        console.log(d.playerId, "bought a card");
+        this.players = d.players;
+        this.skillsOnSale = d.skillsOnSale;
       }.bind(this)
     );
   },
@@ -265,6 +362,20 @@ export default {
         playerId: this.playerId,
         card: card,
         cost: this.marketValues[card.market] + this.chosenPlacementCost,
+      });
+    },
+    buySkillCard: function (card) {
+      this.$store.state.socket.emit("collectorsBuySkillCard", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        card: card,
+        cost: this.marketValues[card.market] + this.chosenPlacementCost,
+      });
+    },
+    rotateCards: function () {
+      this.$store.state.socket.emit("rotateCards", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
       });
     },
   },
