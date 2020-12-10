@@ -448,7 +448,7 @@ export default {
     color: black;
   }
   .Alt1 {
-    /grid-column: 1 ;
+    grid-column: 1 ;
     grid-row: 1;
     width: 130px;
     height: 60px;
@@ -623,7 +623,7 @@ export default {
     background-size: cover;
     grid-column: 5;
     grid-row: 10;
-  }*/
+  }
   @media screen and (max-width: 800px) {
     main {
       width:90vw;
