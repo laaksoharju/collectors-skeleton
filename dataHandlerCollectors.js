@@ -60,9 +60,14 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.lang = lang;
   room.deck = this.createDeck(lang);
   room.playerCount = playerCount;
-  room.itemsOnSale = room.deck.splice(0, 5);
-  room.skillsOnSale = room.deck.splice(0, 5);
+  //FÖRSÖK TILL KORTAKJ
+  let numbPlayers = room.playerCount;
+  room.itemsOnSale = room.deck.splice(0, (numbPlayers+1) );
+  room.skillsOnSale = room.deck.splice(0, (numbPlayers+1) );
+  //SLUT
+
   room.auctionCards = room.deck.splice(0, 4);
+  room.cardUpForAuction = {};
   room.market = [];
   room.buyPlacement = [ {cost:1, playerId: null},
                         {cost:1, playerId: null},
@@ -164,6 +169,23 @@ Data.prototype.getSkill = function (roomId, playerId, card, skill) {
   }
 }
 
+Data.prototype.startAuction = function (roomId, playerId, card, auctionCard) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+        //check if card is among skills on sale
+    for (let i = 0; i < room.auctionCards.length; i += 1) {
+      // since card comes from the client, it is NOT the same object (reference)
+      // so we need to compare properties for determining equalit
+      if (room.auctionCards[i].x === card.x &&
+          room.auctionCards[i].y === card.y) {
+            let temp = room.auctionCards.splice(i,1, {});
+            room.cardUpForAuction = temp[0];
+        break;
+      }
+    }
+  }
+}
+
 /* VI LÄGGER TILL FÖR ATT BYTA SPELARE I TURNBUTTON */
 Data.prototype.changeTurn = function (roomId, playerId) {
   let room = this.rooms[roomId];
@@ -183,6 +205,9 @@ Data.prototype.changeTurn = function (roomId, playerId) {
   else return "";
 
 }
+
+Data.prototype.countRounds = function (roomId, playerId) {};//FORTSÄTT HÄR FÖR QUARTER TILES
+
 
 /* moves card from itemsOnSale to a player's hand */
 Data.prototype.buyCard = function (roomId, playerId, card, cost) {
@@ -267,6 +292,14 @@ Data.prototype.getItemsOnSale = function(roomId){
     return room.itemsOnSale;
   }
   else return [];
+}
+
+Data.prototype.getCardUpForAuction = function(roomId){
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    return room.cardUpForAuction;
+  }
+  else return {};
 }
 
 Data.prototype.getMarketValues = function(roomId){
