@@ -1,7 +1,9 @@
 <template>
   <div>
     <main>
+
       <div class="table">
+          <h1>COLLECTORS</h1>
       <div class="board">
 
 <!-- TEST ATT PUSHA -->
@@ -402,6 +404,15 @@ export default {
 </script>
 
 <style scoped>
+
+h1 {
+  text-align: center;
+  font-style:italic;
+  font-size: 50px;
+  text-shadow: 2px 2px 4px blue;
+  margin-bottom: 0px;
+}
+
   header {
     user-select: none;
     position: fixed;
