@@ -20,14 +20,18 @@
         @startAuction="startAuction($event)"
         @placeBottle="placeBottle('auction', $event)"/>
 
+      <CollectorsBuySkill v-if="players[playerId]"
+        :labels="labels"
+        :player="players[playerId]"
+        :skillsOnSale="skillsOnSale"
+        :placement="skillPlacement"
+        @buySkill="buySkill($event)"
+        @placeBottle="placeBottle('skill',$event)"/>
+
       <div class="buttons">
         <button @click="drawCard">
           {{ labels.draw }} 
         </button>
-      </div>
-      Skills
-      <div class="cardslots">
-        <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
       </div>
       Hand
       <div class="cardslots" v-if="players[playerId]">
@@ -36,6 +40,10 @@
       Items
       <div class="cardslots" v-if="players[playerId]">
         <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
+      </div>
+      Skills
+      <div class="cardslots" v-if="players[playerId]">
+        <CollectorsCard v-for="(card, index) in players[playerId].skills" :card="card" :key="index"/>
       </div>
       Current auction
       <div class="cardslots">
@@ -62,13 +70,15 @@
 import CollectorsCard from '@/components/CollectorsCard.vue'
 import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
 import CollectorsStartAuction from '@/components/CollectorsStartAuction.vue'
+import CollectorsBuySkill from '@/components/CollectorsBuySkill.vue'
 
 export default {
   name: 'Collectors',
   components: {
     CollectorsCard,
     CollectorsBuyActions,
-    CollectorsStartAuction
+    CollectorsStartAuction,
+    CollectorsBuySkill
   },
   data: function () {
     return {
@@ -174,6 +184,14 @@ export default {
       }.bind(this)
     );
 
+    this.$store.state.socket.on('collectorsSkillBought',
+      function(d){
+        console.log(d.playerId, "bought a Skill");
+        this.players=d.players;
+        this.skillsOnSale=d.skillsOnSale;
+      }.bind(this)
+    );
+
     this.$store.state.socket.on('auctionStarted', 
       function(d) {
         console.log(d.playerId, "started an auction");
@@ -218,7 +236,7 @@ har gjort true eller false. Om man börjar auction så ska auction vara true och
         this.isPlacedListt.item=false;
       }
       else if(this.isPlacedList.skill===true){
-        this.buyCard(card);
+        this.buySkill(card);
         this.isPlacedList.skill=false;
       }
       else if(this.isPlacedList.auction===true){
@@ -240,6 +258,16 @@ har gjort true eller false. Om man börjar auction så ska auction vara true och
           playerId: this.playerId,
           card: card,
           cost: this.marketValues[card.market] + this.chosenPlacementCost 
+        }
+      );
+    },
+    buySkill: function (card){
+        console.log("buySkill", card);
+        this.$store.state.socket.emit('collectorsBuySkill', {
+          roomId: this.$route.params.id,
+          playerId: this.playerId,
+          card: card,
+          cost: this.chosenPlacementCost
         }
       );
     },
