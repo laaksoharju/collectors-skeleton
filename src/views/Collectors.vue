@@ -1,6 +1,15 @@
 <template>
   <div>
     <main>
+
+  <InfoButtons
+    :modalProps='modalProps'
+  />
+
+  <InfoButtons
+    :modalProps='modalProps2'
+  />
+
   <h1>I am player {{playerId}}</h1>
   <PlayerBoard v-if="players[playerId]"
         :player ="players[playerId]"/>
@@ -88,6 +97,8 @@ import CollectorsCard from "@/components/CollectorsCard.vue";
 import ItemSection from "@/components/ItemSection.vue";
 import PlayerBoard from "@/components/PlayerBoard.vue";
 import OtherPlayerboards from '../components/OtherPlayerboards.vue';
+import InfoButtons from '../components/CollectorsPlayerboardInfo.vue';
+
 
 export default {
   name: "Collectors",
@@ -95,7 +106,8 @@ export default {
     CollectorsCard,
     ItemSection,
     PlayerBoard,
-    OtherPlayerboards
+    OtherPlayerboards,
+    InfoButtons
   },
   data: function () {
     return {
@@ -135,6 +147,18 @@ export default {
       skillsOnSale: [],
       auctionCards: [],
       playerid: 0,
+      modalProps: {
+        value: 'Items',
+        text: 'hej hej det här är en knapp',
+        title: 'Item2',
+        classes: 'button green'
+      },
+      modalProps2: {
+        value: 'Skills',
+        text: 'hej hej det här är en knapp2',
+        title: 'Skills2',
+        classes: 'button red'
+      }
     };
   },
   computed: {

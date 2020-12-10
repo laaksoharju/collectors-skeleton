@@ -128,7 +128,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .mainBoard {
-    background-color: #d9ead3ff;
+    /* background-color: #d9ead3ff; */
+    background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(147,230,241,1) 0%, rgba(145,192,241,1) 45.5% );
     height: 250px;
     display: grid;
     grid-template-columns: 70% 30%;
