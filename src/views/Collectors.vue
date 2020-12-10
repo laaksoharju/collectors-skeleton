@@ -41,7 +41,7 @@
             :auctionCards="auctionCards"
             :marketValues="marketValues"
             :placement="auctionPlacement"
-            @buyCard="buyCard($event)"
+            @buyCard="buyAuctionCard($event)"
             @placeBottle="placeBottle('buy', $event)"
           />
         </div>

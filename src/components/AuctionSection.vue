@@ -1,11 +1,11 @@
 <template>
-  <div id="item-section" class="board-section">
+  <div id="auction-section" class="board-section">
     <div class="buy-cards">
       <div class="cardslots" v-for="(card, index) in auctionCards" :key="index">
         <CollectorsCard
           :card="card"
           :availableAction="card.available"
-          @doAction="buyCard(card)"
+          @doAction="buyAuctionCard(card)"
         />
         <!-- {{ cardCost(card) }} -->
       </div>
@@ -83,7 +83,7 @@ export default {
         }
       }
     },
-    buyCard: function (card) {
+    buyAuctionCard: function (card) {
       if (card.available) {
         this.$emit("buyCard", card);
         this.highlightAvailableCards();
