@@ -38,9 +38,6 @@
       </div>
 
       <div id="AuctionDiv">
-
-        <!--<div v-for="key in room.bidArray" :key="key"/> </div>-->
-
         <CollectorsAuctionActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
@@ -173,8 +170,7 @@ export default {
   },
   data: function () {
     return {
-      isActive2:false,
-      isActive:false,
+      isActive: false,
       publicPath: "localhost:8080/#", //"collectors-groupxx.herokuapp.com/#",
       touchScreen: false,
       maxSizes: { x: 0,
@@ -447,12 +443,14 @@ methods: {
   },
 
   startAuction: function (card) {
-    this.$store.state.socket.emit('collectorsStartAuction', {
-      roomId: this.$route.params.id,
-      playerId: this.playerId,
-      card: card,
-      cost: this.chosenPlacementCost
-    });
+    if (this.currentAuctionCard.length === 0) {
+      this.$store.state.socket.emit('collectorsStartAuction', {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        card: card,
+        cost: this.chosenPlacementCost
+      });
+    }
   },
 
   cannotRaiseBid: function () {
@@ -553,7 +551,6 @@ footer a {
 footer a:visited {
   color:ivory;
 }
-
 
 #BuyItemDiv {
   grid-area: BuyItemDiv;
