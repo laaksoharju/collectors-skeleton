@@ -1,29 +1,26 @@
 <template>
-  <div>
-    <!-- <h1>{{ labels.buySkillCard }}</h1> -->
-    <div id="skill-section" class="board-section">
-      <div class="buy-cards">
-        <div class='cardslots' v-for="(card, index) in skillsOnSale" :key="index">
-          <CollectorsCard
-            :card="card"
-            :availableAction="card.available"
-            @doAction="buySkillCard(card)"
-          />
-          {{ cardCost(card) }}
-        </div>
+  <div id="item-section" class="board-section">
+    <div class="buy-cards">
+      <div class="cardslots" v-for="(card, index) in auctionCards" :key="index">
+        <CollectorsCard
+          :card="card"
+          :availableAction="card.available"
+          @doAction="buyCard(card)"
+        />
+        <!-- {{ cardCost(card) }} -->
       </div>
-      <div class='button-section'>
-        <div class="buttons" v-for="(p, index) in placement" :key="index">
-          <button
-            v-if="p.playerId === null"
-            :disabled="cannotAfford(p.cost)"
-            @click="placeBottle(p)"
-          >
-            ${{ p.cost }}
-          </button>
-          <div v-if="p.playerId !== null">
-            {{ p.playerId }}
-          </div>
+    </div>
+    <div class="button-section">
+      <div class="buttons" v-for="(p, index) in placement" :key="index">
+        <button
+          v-if="p.playerId === null"
+          :disabled="cannotAfford(p.cost)"
+          @click="placeBottle(p)"
+        >
+          ${{ p.cost }}
+        </button>
+        <div v-if="p.playerId !== null">
+          <!-- {{ p.playerId }} -->
         </div>
       </div>
     </div>
@@ -34,14 +31,14 @@
 import CollectorsCard from "@/components/CollectorsCard.vue";
 
 export default {
-  name: "CollectorsBuySkill",
+  name: "AuctionSection",
   components: {
     CollectorsCard,
   },
   props: {
     labels: Object,
     player: Object,
-    skillsOnSale: Array,
+    auctionCards: Array,
     marketValues: Object,
     placement: Array,
   },
@@ -62,14 +59,14 @@ export default {
       this.highlightAvailableCards(p.cost);
     },
     highlightAvailableCards: function (cost = 100) {
-      for (let i = 0; i < this.skillsOnSale.length; i += 1) {
+      for (let i = 0; i < this.auctionCards.length; i += 1) {
         if (
-          this.marketValues[this.skillsOnSale[i].item] <=
+          this.marketValues[this.auctionCards[i].item] <=
           this.player.money - cost
         ) {
-          this.$set(this.skillsOnSale[i], "available", true);
+          this.$set(this.auctionCards[i], "available", true);
         } else {
-          this.$set(this.skillsOnSale[i], "available", false);
+          this.$set(this.auctionCards[i], "available", false);
         }
         this.chosenPlacementCost = cost;
       }
@@ -86,12 +83,12 @@ export default {
         }
       }
     },
-    buySkillCard: function (card) {
+    buyCard: function (card) {
       if (card.available) {
-        this.$emit("buySkillCard", card);
+        this.$emit("buyCard", card);
         this.highlightAvailableCards();
       }
-    }
+    },
   },
 };
 </script>
@@ -121,8 +118,8 @@ export default {
   border: 1px solid #19181850;
 }
 
-#skill-section {
-  background-color: #93c47dff;
+#item-section {
+  background-color: #ea9999ff;
 }
 
 .cardslots {
