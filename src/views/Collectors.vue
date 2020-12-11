@@ -11,7 +11,7 @@
              :skillsOnSale="skillsOnSale"
              :marketValues="marketValues"
              :placement="skillPlacement"
-             @getSkill="getSkill($event)"
+             @getSkill="whichAction($event)"
              @placeBottle="placeBottle('skill', $event)"
         />
 
@@ -26,10 +26,13 @@
           />
 
           <CollectorsMarket v-if="players[playerId]"
-            :labels="labels"
-            :player="players[playerId]"
-            :marketValues="marketValues"
-            :placement="buyPlacement"
+          :labels="labels"
+          :player="players[playerId]"
+          :skillsOnSale="skillsOnSale"
+          :marketValues="marketValues"
+          :placement="skillPlacement"
+            @placeBottle="placeBottle('market', $event)"
+            @startMarket="startMarket($event)"
             />
 
        <!--div class = "marketPool">
@@ -55,13 +58,7 @@
             :player="players[playerId]"
             :auctionCards="auctionCards"
             :cardUpForAuction="cardUpForAuction"
-            @startAuction="startAuction($event)"/>
-
-         <div class = "EnergyBottleCoinWhiteTwo"></div> <!-- Olika flaskor med vita coins, 1 2 eller 0 -->
-         <div class = "EnergyBottleCoinWhiteOne"></div>
-         <div class = "EnergyBottleCoinWhiteNoll"></div>
-         <div class = "EnergyBottleCoinWhiteNoll second"></div>
-
+            @startAuction="startAuction($event)"/> <!-- sen när startAuction har placeBottle  @startAuction="whichAction($event)"/> -->
 
        <div class="playerBoard">
          <div class="playerTitle"> Player {{playerId}}'s Board </div>
@@ -121,7 +118,7 @@
       </div>
 
      </div>
-        </div>
+    </div>
      <!-- FRÅN DRAWCARD SOM VI FICK FRÅN BÖRJAN, KOPPLAT TILL PLAYERID
      <div class="itemCard" v-if="players[playerId]">
        <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
@@ -230,7 +227,9 @@ export default {
       skillsOnSale: [],
       auctionCards: [],
       cardUpForAuction: {},
-      playerid: 0
+      cardUpForMarket: {},
+      chosenAction: ""
+
     }
   },
   computed: {
@@ -321,6 +320,16 @@ export default {
     }.bind(this)
   );
 
+  this.$store.state.socket.on('collectorsMarketStarted',
+  function(d) {
+    console.log(d.playerId, "Started market");
+    this.players = d.players;
+    this.skillsOnSale = d.skillsOnSale;
+    this.cardUpForMarket = d.cardUpForMarket;
+  }.bind(this)
+);
+
+
 },
 
   methods: {
@@ -329,6 +338,7 @@ export default {
     },
     placeBottle: function (action, cost) {
       this.chosenPlacementCost = cost;
+      this.chosenAction = action;
       this.$store.state.socket.emit('collectorsPlaceBottle', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
@@ -336,6 +346,17 @@ export default {
           cost: cost,
         }
       );
+    },
+    whichAction: function (card){
+      if (this.chosenAction === "skill") {
+        this.getSkill(card)
+            }
+      if (this.chosenAction === "market") {
+        this.startMarket(card)
+      }
+    /*  if (this.chosenAction === "auction") {
+        this.startAuction(card)
+      } LÄGG TILL SEN */
     },
     drawCard: function () {
       this.$store.state.socket.emit('collectorsDrawCard', {
@@ -375,6 +396,18 @@ export default {
         }
       );
     },
+    startMarket: function (card) {
+      console.log("startMarket", card);
+      this.$store.state.socket.emit('collectorsStartMarket', {
+          roomId: this.$route.params.id,
+          playerId: this.playerId,
+          card: card,
+        //  cardUpForMarket: this.cardUpForMarket,
+
+        }
+      );
+    },
+
 
     changeTurn: function () {
       console.log("TEST");
@@ -585,46 +618,7 @@ export default {
     transform: scale(1)translate(-25%,0);
     z-index: 1;
   }
-  .iconBird {
-    width: 30px;
-    height: 40px;
-    background-image: url('/images/iconBird.PNG');
-    background-size: cover;
-    grid-column: 1;
-    grid-row: 10;
-  }
-  .iconRobot {
-    width: 30px;
-    height: 40px;
-    background-image: url('/images/iconRobot.PNG');
-    background-size: cover;
-    grid-column: 2;
-    grid-row: 10;
-  }
-  .iconMusic {
-    width: 30px;
-    height: 40px;
-    background-image: url('/images/iconMusic.PNG');
-    background-size: cover;
-    grid-column: 3;
-    grid-row: 10;
-  }
-  .iconFilm {
-    width: 30px;
-    height: 40px;
-    background-image: url('/images/iconFilm.PNG');
-    background-size: cover;
-    grid-column: 4;
-    grid-row: 10;
-  }
-  .iconTech {
-    width: 30px;
-    height: 40px;
-    background-image: url('/images/iconTech.PNG');
-    background-size: cover;
-    grid-column: 5;
-    grid-row: 10;
-  }
+
   @media screen and (max-width: 800px) {
     main {
       width:90vw;
