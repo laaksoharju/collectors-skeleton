@@ -33,15 +33,15 @@
           {{ labels.draw }} 
         </button>
       </div>
-      Hand
+      My Hand
       <div class="cardslots" v-if="players[playerId]">
         <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="doAction(card)" :key="index"/>
       </div>
-      Items
+      My Items
       <div class="cardslots" v-if="players[playerId]">
         <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
       </div>
-      Skills
+      My Skills
       <div class="cardslots" v-if="players[playerId]">
         <CollectorsCard v-for="(card, index) in players[playerId].skills" :card="card" :key="index"/>
       </div>
@@ -232,16 +232,16 @@ har gjort true eller false. Om man börjar auction så ska auction vara true och
     },
     doAction: function(card){
       if(this.isPlacedList.item===true){
+        this.isPlacedList.item=false;
         this.buyCard(card);
-        this.isPlacedListt.item=false;
       }
       else if(this.isPlacedList.skill===true){
-        this.buySkill(card);
         this.isPlacedList.skill=false;
+        this.buySkill(card);
       }
       else if(this.isPlacedList.auction===true){
-        this.startAuction(card);
         this.isPlacedList.auction=false;
+        this.startAuction(card);
       }
     },
     drawCard: function () {
@@ -252,6 +252,7 @@ har gjort true eller false. Om man börjar auction så ska auction vara true och
       );
     },
     buyCard: function (card) {
+      this.isPlacedList.item=false;
       console.log("buyCard", card);
       this.$store.state.socket.emit('collectorsBuyCard', { 
           roomId: this.$route.params.id, 
@@ -262,6 +263,7 @@ har gjort true eller false. Om man börjar auction så ska auction vara true och
       );
     },
     buySkill: function (card){
+        this.isPlacedList.skill=false;
         console.log("buySkill", card);
         this.$store.state.socket.emit('collectorsBuySkill', {
           roomId: this.$route.params.id,
@@ -272,6 +274,7 @@ har gjort true eller false. Om man börjar auction så ska auction vara true och
       );
     },
     startAuction: function (card){
+      this.isPlacedList.auction=false;
       this.$store.state.socket.emit('collectorsStartAuction', { 
           roomId: this.$route.params.id, 
           playerId: this.playerId,
