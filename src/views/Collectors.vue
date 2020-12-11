@@ -1,6 +1,19 @@
 <template>
   <div>
     <main>
+
+  <InfoButtons
+    :modalProps='modalProps'
+  />
+
+  <InfoButtons
+    :modalProps='modalProps2'
+  />
+
+  <h1>I am player {{playerId}}</h1>
+  <PlayerBoard v-if="players[playerId]"
+        :player ="players[playerId]"/>
+  <OtherPlayerboards :Players ="players" :playerId="playerId" />
       <div id="game-board">
         <ItemSection
           v-if="players[playerId]"
@@ -211,6 +224,18 @@ export default {
       skillsOnSale: [],
       auctionCards: [],
       playerid: 0,
+      modalProps: {
+        value: 'Items',
+        text: 'hej hej det här är en knapp',
+        title: 'Item2',
+        classes: 'button green'
+      },
+      modalProps2: {
+        value: 'Skills',
+        text: 'hej hej det här är en knapp2',
+        title: 'Skills2',
+        classes: 'button red'
+      }
     };
   },
   computed: {
