@@ -112,12 +112,12 @@ Data.prototype.joinGame = function (roomId, playerId) {
       console.log("Player", playerId, "joined for the first time");
       room.players[playerId] = { hand: [],
                                  money: 1,
+                                 bottles: 2,
                                  points: 0,
                                  skills: [],
                                  items: [],
                                  income: [],
-                                 secret: [],
-                                 bidArray: [] };
+                                 secret: [] };
       return true;
     }
     console.log("Player", playerId, "was declined due to player limit");
@@ -329,6 +329,7 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost) {
           break;
         }
     }
+    room.players[playerId].bottles -= 1;
   }
 }
 
@@ -337,6 +338,7 @@ Data.prototype.placeBottleRaiseValue = function (roomId, playerId, action, cost,
   if (typeof room !== 'undefined') {
     room.marketPlacement[index].playerId = playerId;
   }
+  room.players[playerId].bottles -= 1;
 }
 
 Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index) {
@@ -344,6 +346,7 @@ Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index
   if (typeof room !== 'undefined') {
     room.workPlacement[index].playerId = playerId;
     room.players[playerId].money -= cost;
+    room.players[playerId].bottles -= 1;
   }
   if (index === 0){
         console.log('Work ruta index 0, variera med rundan.');

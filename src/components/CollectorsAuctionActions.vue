@@ -15,7 +15,7 @@
           <div class="buttons" v-for="(p, index) in placement" :key="index">
             <button
             v-if="p.playerId===null"
-            :disabled="cannotAfford(p.cost)"
+            :disabled="cannotAfford(p.cost) || player.bottles < 1 || currentAuctionCard.length === 1"
             @click="placeBottle(p, index)">
             ${{p.cost}}</button>
             <div v-if="p.playerId !== null" style="color:black">

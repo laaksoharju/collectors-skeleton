@@ -256,18 +256,19 @@ export default {
 
           this.$store.state.socket.on('collectorsBottlePlaced',
           function(d) {
-            this.buyPlacement = d.buyPlacement;
-            this.skillPlacement = d.skillPlacement;
-            this.marketPlacement = d.marketPlacement;
-            this.auctionPlacement = d.auctionPlacement;
-            this.workPlacement = d.workPlacement;
+            this.buyPlacement = d.placements.buyPlacement;
+            this.skillPlacement = d.placements.skillPlacement;
+            this.marketPlacement = d.placements.marketPlacement;
+            this.auctionPlacement = d.placements.auctionPlacement;
+            this.workPlacement = d.placements.workPlacement;
+            this.players = d.players;
           }.bind(this));
 
           this.$store.state.socket.on('collectorsPlayerArrayFinished',function(d){
             this.playerIdArray=d.playerIdArray;
           }.bind(this));
 
-        
+
 
           this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
 

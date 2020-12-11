@@ -14,7 +14,7 @@
     <div class="buttons" v-for="(p, index) in placement" :key="index">
       <button
       v-if="p.playerId===null"
-      :disabled="cannotAfford(p.cost)"
+      :disabled="cannotAfford(p.cost) || player.bottles < 1"
       @click="placeBottle(p)" >
       ${{p.cost}}
     </button>
@@ -55,8 +55,9 @@ export default {
     },
 
     placeBottle: function (p) {
+      console.log(this.player.bottles);
       this.$emit('placeBottle', p.cost);
-      this.highlightAvailableCards(p.cost);
+      this.highlightAvailableCards(p.cost)
     },
 
     highlightAvailableCards: function (cost=100) {

@@ -50,27 +50,31 @@ function sockets(io, socket, data) {
       data.changeRound(d.roomId, d.playerId, d.round);
       io.to(d.roomId).emit('collectorsRoundUpdated', {
         activeRound: data.getActiveRound(d.roomId)
-      }
-    );
-
+      });
     });
 
     socket.on('collectorsPlaceBottle', function(d) {
       data.placeBottle(d.roomId, d.playerId, d.action, d.cost);
-      io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId)
-      );
+      io.to(d.roomId).emit('collectorsBottlePlaced', {
+        placements: data.getPlacements(d.roomId),
+        players: data.getPlayers(d.roomId),
+      });
     });
 
     socket.on('collectorsPlaceBottleRaiseValue', function(d) {
       data.placeBottleRaiseValue(d.roomId, d.playerId, d.action, d.cost, d.index);
-      io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId)
-      );
+      io.to(d.roomId).emit('collectorsBottlePlaced', {
+        placements: data.getPlacements(d.roomId),
+        players: data.getPlayers(d.roomId)
+      });
     });
 
     socket.on('collectorsPlaceBottleWork', function(d) {
       data.placeBottleWork(d.roomId, d.playerId, d.action, d.cost, d.index);
-      io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId));
-      io.to(d.roomId).emit('collectorsMoneyUpdated', data.getPlayers(d.roomId));
+      io.to(d.roomId).emit('collectorsBottlePlaced', {
+        placements: data.getPlacements(d.roomId),
+        players: data.getPlayers(d.roomId)
+      });
     });
 
     socket.on('collectorsStartAuction', function(d) {
