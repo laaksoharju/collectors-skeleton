@@ -46,6 +46,15 @@ function sockets(io, socket, data) {
 
     });
 
+    socket.on('collectorsChangeRound', function(d) {
+      data.changeRound(d.roomId, d.playerId, d.round);
+      io.to(d.roomId).emit('collectorsRoundUpdated', {
+        activeRound: data.getActiveRound(d.roomId)
+      }
+    );
+
+    });
+
     socket.on('collectorsPlaceBottle', function(d) {
       data.placeBottle(d.roomId, d.playerId, d.action, d.cost);
       io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId)

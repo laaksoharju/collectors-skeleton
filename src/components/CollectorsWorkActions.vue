@@ -2,20 +2,22 @@
   <div id="WorkActionsDiv">
     <h1 style="text-align: center">{{ labels.doWork }}</h1>
       <div id="WorkContainer">
+
         <div id="PickRoundButtons" >
-          <input type="radio" id="roundOneButton" value="Round 1" v-model="picked" >
+            <h3>Doubleclick to change round</h3>
+          <input type="radio" id="roundOneButton" value="Round 1" v-model="picked" v-on:dblclick="changeFirstWorkCard()" >
           <label for="roundOneButton">Round 1</label>
           <br>
-          <input type="radio" id="roundTwoButton" value="Round 2" v-model="picked" >
+          <input type="radio" id="roundTwoButton" value="Round 2" v-model="picked" v-on:dblclick="changeFirstWorkCard()">
           <label for="roundTwoButton">Round 2</label>
           <br>
-          <input type="radio" id="roundThreeButton" value="Round 3" v-model="picked" >
+          <input type="radio" id="roundThreeButton" value="Round 3" v-model="picked" v-on:dblclick="changeFirstWorkCard()">
           <label for="roundThreeButton">Round 3</label>
           <br>
-          <input type="radio" id="roundFourButton" value="Round 4" v-model="picked" >
+          <input type="radio" id="roundFourButton" value="Round 4" v-model="picked" v-on:dblclick="changeFirstWorkCard()">
           <label for="roundFourButton">Round 4</label>
           <br>
-          <span>Round: {{ picked }}</span>
+          <!-- <span>Round: {{ picked }}</span> -->
         </div>
         <div id="WorkButtons">
           <div class="buttons" v-for="(p, index) in placement" :key="index">
@@ -43,14 +45,24 @@ export default {
   props: {
     labels: Object,
     player: Object,
-    placement: Array
+    placement: Array,
   },
 
   data: function () {
     return {
-        picked:'Round 1'
+        picked:  this.picked
       }
   },
+
+    created: function () {
+
+      this.$store.state.socket.on('collectorsRoundUpdated',function(d){
+        console.log('round updated');
+        this.activeRound=d.activeRound;
+        this.picked = d.activeRound;
+        console.log(this.activeRound,  this.picked );
+      }.bind(this));
+    },
 
   methods: {
     cannotAfford: function (cost) {
@@ -62,8 +74,18 @@ export default {
       this.$emit('placeBottleWork', p);
     },
 
-  }
+    changeFirstWorkCard: function (){
+      console.log(this.picked);
 
+      alert(this.picked);
+      this.$store.state.socket.emit('collectorsChangeRound', {
+        playerId: this.playerId,
+        roomId: this.$route.params.id,
+        round: this.picked
+      });
+    },
+
+  }
 }
 
 </script>

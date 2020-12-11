@@ -67,6 +67,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.bidArray = [];
   room.market = [];
   room.playerIdArray2=[];
+  room.activeRound=String;
   room.buyPlacement = [ {cost:1, playerId: null},
                         {cost:1, playerId: null},
                         {cost:2, playerId: null},
@@ -265,6 +266,14 @@ Data.prototype.addPlayerReady= function(roomId, playerId){
 
     shuffle(room.playerIdArray2).push(playerId);
 
+  }
+}
+
+Data.prototype.changeRound= function(roomId, playerId, round){
+  console.log('!!!!changeRound fuktion');
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+     room.activeRound = round;
   }
 }
 
@@ -470,6 +479,15 @@ Data.prototype.getPlayerIdArray = function(roomId){
     return room.playerIdArray2;
   }
   else return [];
+}
+
+Data.prototype.getActiveRound = function(roomId){
+  console.log('getActiveRound funktion');
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    return room.activeRound;
+  }
+  else return String;
 }
 
 Data.prototype.getAuctionCards = function(roomId){
