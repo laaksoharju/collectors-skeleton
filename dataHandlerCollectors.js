@@ -66,7 +66,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.currentAuctionCard = [];
   room.bidArray = [];
   room.market = [];
-  room.playerIdArray2=[];
+  room.playerIdArray=[];
   room.activeRound=String;
   room.buyPlacement = [ {cost:1, playerId: null},
                         {cost:1, playerId: null},
@@ -221,6 +221,10 @@ Data.prototype.getSkill = function (roomId, playerId, card, cost) {
     }
     room.players[playerId].skills.push(...c);
     room.players[playerId].money -= cost;
+
+    if (card.skill === "bottle") {
+      room.players[playerId].bottles += 1;
+    }
   }
 }
 
@@ -264,7 +268,7 @@ Data.prototype.addPlayerReady= function(roomId, playerId){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
 
-    shuffle(room.playerIdArray2).push(playerId);
+    shuffle(room.playerIdArray).push(playerId);
 
   }
 }
@@ -297,6 +301,15 @@ Data.prototype.startAuction = function (roomId, playerId, card, cost) {
     }
     room.currentAuctionCard.push(...c);
     room.players[playerId].money -= cost;
+    for (var player in room.players) {
+      if (room.players[player].skills.length !== 0) {
+        for (var card in room.players[player].skills) {
+          if (room.players[player].skills[card].skill === "auctionIncome") {
+            room.players[player].money += 1;
+          }
+        }
+      }
+    }
   }
 }
 
@@ -343,58 +356,53 @@ Data.prototype.placeBottleRaiseValue = function (roomId, playerId, action, cost,
 
 Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index) {
   let room = this.rooms[roomId];
-  if (typeof room !== 'undefined') {
-    room.workPlacement[index].playerId = playerId;
+  if (typeof room !=='undefined') {
     room.players[playerId].money -= cost;
     room.players[playerId].bottles -= 1;
-  }
-  if (index === 0){
-        console.log('Work ruta index 0, variera med rundan.');
+    if (room.players[playerId].skills.length !== 0) {
+      for (let i = 0; i < room.players[playerId].skills.length; i += 1) {
+        if (room.players[playerId].skills[i].skill === "workerIncome") {
+          room.players[playerId].money += 2;
+          console.log("You have the workerIncome skill, you gained 2 coins")
+        }
+        if (room.players[playerId].skills[i].skill === "workerCard") {
+          let card1 = room.deck.pop();
+          room.players[playerId].hand.push(card1);
+          console.log("You have the workerCard skill, you gained a card")
+        }
+      }
+    }
 
-      //dennna ska variera med vilken runda det är
-  }
-  if (index === 1 ){
+    if (index === 0) {
+      console.log('Work ruta index 0, variera med rundan.');
+      room.workPlacement[index].playerId = playerId;
+    }
+    if (index === 1) {
       console.log('Work ruta index 1, släng en flaska');
-
-      //kod för att slänga 1 flaska här
-  }
-  if (index === 2 ){
+    }
+    if (index === 2) {
       console.log('Work ruta index 2, dra två kort');
-
-      let room = this.rooms[roomId];
-      if (typeof room !== 'undefined') {
-        let card1 = room.deck.pop();
-        let card2 = room.deck.pop();                  //Dra två kort
-        room.players[playerId].hand.push(card1);
-        room.players[playerId].hand.push(card2);
-        return room.players;
-      }
-      else return [];
-  }
-  if (index === 3 ){
+      room.workPlacement[index].playerId = playerId;
+      let card1 = room.deck.pop();
+      let card2 = room.deck.pop();
+      room.players[playerId].hand.push(card1);
+      room.players[playerId].hand.push(card2);
+    }
+    if (index === 3) {
       console.log('Work ruta index 3, dra ett kort, och bli spelare 1');
-
-      let room = this.rooms[roomId];
-      if (typeof room !== 'undefined') {
-        let card1 = room.deck.pop();              //Dra ett kort
-        room.players[playerId].hand.push(card1);
-        return room.players;
-      }
-      else return [];
-
-      //Kod för att bli spelare 1 här
-  }
-  if (index === 4 ){
+      room.workPlacement[index].playerId = playerId;
+      let card1 = room.deck.pop();
+      room.players[playerId].hand.push(card1);
+    }
+    if (index === 4) {
       console.log('Work ruta index 4, dra ett kort och placera ett från handen på income');
-
-      let room = this.rooms[roomId];
-      if (typeof room !== 'undefined') {
-        let card1 = room.deck.pop();              //Dra ett kort
-        room.players[playerId].hand.push(card1);
-        return room.players;
-      }
-      else return [];
+      room.workPlacement[index].playerId = playerId;
+      let card1 = room.deck.pop();
+      room.players[playerId].hand.push(card1);
+    }
+    return room.players;
   }
+  else return [];
 }
 
 Data.prototype.fakeMoreMoney = function (roomId, playerId) {
@@ -479,7 +487,7 @@ Data.prototype.getMarket = function(roomId){
 Data.prototype.getPlayerIdArray = function(roomId){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
-    return room.playerIdArray2;
+    return room.playerIdArray;
   }
   else return [];
 }
@@ -503,7 +511,6 @@ Data.prototype.getAuctionCards = function(roomId){
 
 Data.prototype.getCurrentAuctionCard = function(roomId){
   let room = this.rooms[roomId];
-  console.log(room.currentAuctionCard);
   if (typeof room !== 'undefined') {
     return room.currentAuctionCard;
   }
