@@ -28,31 +28,16 @@
           />
 
           <CollectorsMarket v-if="players[playerId]"
-<<<<<<< HEAD
-            :labels="labels"
-            :player="players[playerId]"
-            :skillsOnSale="skillsOnSale"
-            :marketValues="marketValues"
-            :placement="marketPlacement"
-=======
+          :placement="marketPlacement"
           :labels="labels"
           :player="players[playerId]"
           :skillsOnSale="skillsOnSale"
           :marketValues="marketValues"
-          :placement="skillPlacement"
->>>>>>> 2793aa0831b4bb3a8e75ee768f7daff74fb69ccf
             @placeBottle="placeBottle('market', $event)"
             @startMarket="startMarket($event)"
             />
 
-       <!--div class = "marketPool">
-         Market Pool
-         <div class = "iconBird"></div>
-         <div class = "iconRobot"></div>
-         <div class = "iconMusic"></div>
-         <div class = "iconFilm"></div>
-         <div class = "iconTech"></div>
-       </div-->
+
 
        <div class = "workPool">
          Work Pool
