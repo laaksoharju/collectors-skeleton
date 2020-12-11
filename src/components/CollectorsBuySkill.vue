@@ -39,6 +39,7 @@ export default {
     skillsOnSale: Array,
     placement: Array
   },
+
   methods: {
     cannotAfford: function (cost) {
       return this.player.money<cost;

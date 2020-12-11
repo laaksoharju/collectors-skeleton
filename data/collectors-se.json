@@ -4,5 +4,6 @@
 	"endTurn": "Avsluta runda",
 	"buyCard": "Köp ett kort",
 	"buySkill": "BuySkill",
-	"startAuction": "Starta Auktion"
+	"startAuction": "Starta Auktion",
+	"raiseMarket": "Öka värdet"
 }
