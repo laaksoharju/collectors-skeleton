@@ -1,7 +1,9 @@
 <template>
   <div>
     <main>
+
       <div class="table">
+          <h1>COLLECTORS</h1>
       <div class="board">
 
 <!-- TEST ATT PUSHA -->
@@ -58,9 +60,12 @@
             :player="players[playerId]"
             :auctionCards="auctionCards"
             :cardUpForAuction="cardUpForAuction"
-            @startAuction="startAuction($event)"/> <!-- sen när startAuction har placeBottle  @startAuction="whichAction($event)"/> -->
+            @startAuction="startAuction($event)"
+            @startBidding="startBidding($event)"
+            />
 
-       <div class="playerBoard">
+
+       <div v-if="players[playerId]" class="playerBoard">
          <div class="playerTitle"> Player {{playerId}}'s Board </div>
 
           <!--    <div v-if="players[playerId]">-->
@@ -227,9 +232,8 @@ export default {
       skillsOnSale: [],
       auctionCards: [],
       cardUpForAuction: {},
-      cardUpForMarket: {},
-      chosenAction: ""
-
+      chosenAction: "",
+      highestBid: 0
     }
   },
   computed: {
@@ -320,6 +324,7 @@ export default {
     }.bind(this)
   );
 
+
   this.$store.state.socket.on('collectorsMarketStarted',
   function(d) {
     console.log(d.playerId, "Started market");
@@ -329,6 +334,14 @@ export default {
   }.bind(this)
 );
 
+  this.$store.state.socket.on('collectorsBiddingStarted',
+  function(d) {
+    console.log(d.players, "BIDDING STARTED I COLLECTORS.VUE");
+    this.players = d.players;
+    this.highestBid = d.highestBid;
+    console.log(d.highestBid, "högsta budet");
+  }.bind(this)
+);
 
 },
 
@@ -395,6 +408,7 @@ export default {
           auctionCard: this.auctionCards,
         }
       );
+
     },
     startMarket: function (card) {
       console.log("startMarket", card);
@@ -407,8 +421,19 @@ export default {
         }
       );
     },
-
-
+      startBidding: function () {
+        console.log("Starting Bidding");
+        console.log("this.players.bids" +this.players.bids);
+        console.log("this.players[this.playerId]" +this.players[this.playerId]);
+        console.log("this.playerId]" +this.playerId);
+        console.log("this.players[this.playerId].bids" +this.players[this.playerId].bids);
+        this.$store.state.socket.emit('collectorsStartBidding', {
+            roomId: this.$route.params.id,
+            playerId: this.playerId,
+            bids: this.players[this.playerId].bids,
+              }
+        );
+  },
     changeTurn: function () {
       console.log("TEST");
       this.$store.state.socket.emit('collectorsChangeTurn', {
@@ -435,6 +460,15 @@ export default {
 </script>
 
 <style scoped>
+
+h1 {
+  text-align: center;
+  font-style:italic;
+  font-size: 50px;
+  text-shadow: 2px 2px 4px blue;
+  margin-bottom: 0px;
+}
+
   header {
     user-select: none;
     position: fixed;
