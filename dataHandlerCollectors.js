@@ -86,10 +86,10 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
                            {cost:2, playerId: null},
                            {cost:0, playerId: null} ];
   room.workPlacement = [ {cost:0, playerId: null},
-                         {cost:-1, playerId: null},
-                         {cost:1, playerId: null},
-                         {cost:0, playerId: null},
-                         {cost:0, playerId: null} ];
+                         {cost:-1, playerId: null, img: 'images/Static_Work_Image_001.png'},
+                         {cost:1, playerId: null, img: 'images/Static_Work_Image_002.png'},
+                         {cost:0, playerId: null, img: 'images/Static_Work_Image_003.png'},
+                         {cost:0, playerId: null, img: 'images/Static_Work_Image_004.png'} ];
   this.rooms[roomId] = room;
 }
 
