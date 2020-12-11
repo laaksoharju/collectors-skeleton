@@ -267,6 +267,8 @@ export default {
             this.playerIdArray=d.playerIdArray;
           }.bind(this));
 
+        
+
           this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
 
           this.$store.state.socket.on('collectorsMoneyUpdated',
