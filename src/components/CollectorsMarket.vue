@@ -1,6 +1,7 @@
 <template>
   <div class = "marketPool">
     Market Pool
+    {{market}}
     <div class = "iconBird"></div>
     <div class = "iconRobot"></div>
     <div class = "iconMusic"></div>
@@ -35,7 +36,17 @@
       <div class = "bottleCoins">
       </div>
    </button>
+
+   <div v-if="p.playerId !== null">
+     {{p.playerId}}
+   </div>
+
   </div>
+
+
+
+
+
 </div>
 </template>
 
@@ -49,6 +60,7 @@ export default {
   props: {
     labels: Object,
     player: Object,
+    market: Array,
     skillsOnSale: Array,
     marketValues: Object,
     placement: Array
@@ -67,7 +79,7 @@ export default {
       return (this.player.money < minCost);
     },
 
-  highlightAvailableCards: function () {           //problemet är nog if vilkoret!!!!!!!!!!!! highlitar sista kortet i skill men bara första gången! sidan måste laddas om
+  highlightAvailableCards: function () {           //problemet är  if vilkoret!!!!!!!!!!!! highlitar sista kortet i skill men bara första gången! sidan måste laddas om
       for (let i = 0; i < this.skillsOnSale.length; i += 1) {
         if (i=== this.skillsOnSale.length-1) {
           this.$set(this.skillsOnSale[i], "available", true);

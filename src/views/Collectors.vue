@@ -33,6 +33,7 @@
           :player="players[playerId]"
           :skillsOnSale="skillsOnSale"
           :marketValues="marketValues"
+          :market="market"
             @placeBottle="placeBottle('market', $event)"
             @startMarket="startMarket($event)"
             />
@@ -224,6 +225,7 @@ export default {
       itemsOnSale: [],
       skillsOnSale: [],
       auctionCards: [],
+      market:[],
       cardUpForAuction: {},
       chosenAction: "",
       highestBid: 0
@@ -323,7 +325,7 @@ export default {
     console.log(d.playerId, "Started market");
     this.players = d.players;
     this.skillsOnSale = d.skillsOnSale;
-    this.cardUpForMarket = d.cardUpForMarket;
+    this.market = d.market;
   }.bind(this)
 );
 

@@ -63,9 +63,8 @@ function sockets(io, socket, data) {
       io.to(d.roomId).emit('collectorsMarketStarted', {
         playerId: d.playerId,
         players: data.getPlayers(d.roomId),
-      //  skillsOnSale: data.getSkillsOnSale(d.roomId),
-      //  market: data.getCardToMarket(d.roomId),
-      //  cardUpForMarket: data.getCardUpForMarket(d.roomId)
+      skillsOnSale: data.getSkillsOnSale(d.roomId),
+      market: data.getMarket(d.roomId),
         }
       );
     });

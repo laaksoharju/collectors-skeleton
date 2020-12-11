@@ -188,7 +188,7 @@ Data.prototype.startAuction = function (roomId, playerId, card, auctionCard) {
   }
 }
 
-Data.prototype.startMarket = function (roomId, playerId, card, skill) {
+Data.prototype.startMarket = function (roomId, playerId, card) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
   console.log("TEST I START MARKET");
@@ -201,7 +201,6 @@ Data.prototype.startMarket = function (roomId, playerId, card, skill) {
                 break;
           //  c = room.skillsOnSale.splice(i,1, {});
 
-            break;
           }
         }
       //  room.players[playerId].skills.push(...c);
@@ -381,6 +380,13 @@ Data.prototype.getSkillsOnSale = function(roomId){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     return room.skillsOnSale;
+  }
+  else return [];
+}
+Data.prototype.getMarket = function(roomId){
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    return room.market;
   }
   else return [];
 }
