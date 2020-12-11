@@ -6,8 +6,37 @@
     <div class = "iconMusic"></div>
     <div class = "iconFilm"></div>
     <div class = "iconTech"></div>
-  </div>
 
+<!--    <div class = "bottleTwoFlags"></div>
+    <div class = "bottleOneFlag"> </div>
+    <div class = "bottleCoins"> </div>-->
+
+<div class="buttons" v-for="(p, index) in placement" :key="index">
+    <button
+      v-if="p.playerId===null && index ===0 "
+      :disabled="cannotAfford(p.cost)"
+      @click="placeBottle(p)">
+      <div class = "bottleTwoFlags">
+      </div>
+     </button>
+
+     <button
+       v-if="p.playerId===null && index===1"
+       :disabled="cannotAfford(p.cost)"
+       @click="placeBottle(p)">
+       <div class = "bottleOneFlag">
+       </div>
+    </button>
+
+    <button
+      v-if="p.playerId===null && index===2"
+      :disabled="cannotAfford(p.cost)"
+      @click="placeBottle(p)">
+      <div class = "bottleCoins">
+      </div>
+   </button>
+  </div>
+</div>
 </template>
 
 <script>
@@ -24,7 +53,29 @@ export default {
     placement: Array
   },
   methods: {
-
+    placeBottle: function (p) {
+      this.$emit('placeBottle', p.cost);
+      this.highlightAvailableCards(p.cost);
+    },
+    cannotAfford: function (cost) {
+      let minCost = 100;
+      for(let key in this.marketValues) {
+        if (cost + this.marketValues[key] < minCost)
+          minCost = cost + this.marketValues[key]
+      }
+      return (this.player.money < minCost);
+    },
+    highlightAvailableCards: function (cost=100) {
+      for (let i = 0; i < this.itemsOnSale.length; i += 1) {
+        if (this.marketValues[this.itemsOnSale[i].item] <= this.player.money - cost) {
+          this.$set(this.itemsOnSale[i], "available", true);
+        }
+        else {
+          this.$set(this.itemsOnSale[i], "available", false);
+        }
+        this.chosenPlacementCost = cost;
+      }
+    },
   }
 }
 
@@ -41,7 +92,7 @@ export default {
   grid-row: 11/span 4;
   width: auto;
   height: auto;
-  background-color: #c9d5e1;
+  background-color: #cfdcf2;
   color: black;
   display: grid;
   grid-template-columns: repeat(5, 90px);
@@ -96,4 +147,37 @@ export default {
     grid-row: 10;
   }
 
+  .buttons{
+  /*  place-self: stretch;*/
+  }
+
+  .buttons div:hover {
+    transform: scale(1.5)translate(0,0);
+    z-index: 1;
+  }
+
+  .bottleCoins {
+    width:50px;
+    height:50px;
+    background-image: url('/images/marketbottletwocoins.PNG');
+    background-size: cover;
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .bottleOneFlag {
+    width:50px;
+    height:50px;
+    background-image: url('/images/marketbottleoneflagg.PNG') ;
+    background-size: cover;
+    grid-column: 3;
+    grid-row: 2;
+  }
+.bottleTwoFlags {
+  width:50px;
+  height:50px;
+  background-image: url('/images/marketbottletwoflaggs.PNG') ;
+  background-size: cover;
+  grid-column: 4;
+  grid-row: 2;
+}
   </style>
