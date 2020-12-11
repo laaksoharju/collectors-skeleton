@@ -6,7 +6,7 @@
 <!--Ser till att alt hamnar i en rad, med en tom column innan -->
 <div></div>
 
-   <div class="buttons" v-for="(p, index) in placement" :key="index">
+   <div class="buttons" v-for="(p, index) in placement" :key="'Item Button'+index">
      <button
        v-if="p.playerId===null && p.cost===1"
        :disabled="cannotAfford(p.cost)"
@@ -39,7 +39,7 @@
 <!--Ser till att alt hamnar i en rad, med en tom column innan -->
 <div></div>
 
-     <div class="itemCard" v-for="(card, index) in itemsOnSale" :key="index">
+     <div class="itemCard" v-for="(card, index) in itemsOnSale" :key="'Item Card'+index">
        <CollectorsCard
          :card="card"
          :availableAction="card.available"

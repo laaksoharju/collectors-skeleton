@@ -188,16 +188,20 @@ Data.prototype.startAuction = function (roomId, playerId, card, auctionCard) {
   }
 }
 
-Data.prototype.startBidding = function (roomId, playerId) {
-  console.log('console.log("HEJ NU I DATA");');
+Data.prototype.startBidding = function (roomId, playerId, bids) {
+  console.log('HEJ NU I DATA');
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
-  //var highestBidValue = {};
   let allPlayersId = Object.keys(room.players);
+
+    //  players.bids = bids
+  //    player[playerId].bids = bids
+  room.players[playerId].bids = bids;
   console.log(allPlayersId);
-  console.log(room.players[playerId].bids +"HÄÄÄÄÄR");
+  console.log(bids +" Bids i data");
   for (let i in allPlayersId){
-    console.log(room.players[allPlayersId[i]].bids)
+    console.log("Data room.players[allPlayersId[i]]" ,room.players[allPlayersId[i]]);
+    console.log("Data room.players[allPlayersId[i]].bids" ,room.players[allPlayersId[i]].bids);
     if (room.highestBid < room.players[allPlayersId[i]].bids){
         room.highestBid = room.players[allPlayersId[i]].bids;
       }
@@ -205,7 +209,7 @@ Data.prototype.startBidding = function (roomId, playerId) {
   //for (let i = 0; i < room.bids.length; i += 1) {
     //   if (highestBid < room.bids[i]){
       //   highestBid = room.bids[i];
-    console.log("Det högsta budet är" +room.highestBid);
+      console.log("Det högsta budet är" +room.highestBid);
     }
 }
 
@@ -323,6 +327,14 @@ Data.prototype.getCardUpForAuction = function(roomId){
     return room.cardUpForAuction;
   }
   else return {};
+}
+
+Data.prototype.getHighestBid = function(roomId){
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    return room.highestBid;
+  }
+  else return 0;
 }
 
 Data.prototype.getMarketValues = function(roomId){

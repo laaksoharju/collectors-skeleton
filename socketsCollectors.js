@@ -61,13 +61,16 @@ function sockets(io, socket, data) {
     socket.on('collectorsStartBidding', function(d){
     //  data.startBidding(d.roomId, d.playerId)
     console.log("HEJ NU I SOCKET");
-
+    console.log("här är d:" ,d);
+    console.log(data.getPlayers(d.roomId));
+    data.startBidding(d.roomId, d.playerId, d.bids)
       io.to(d.roomId).emit('collectorsBiddingStarted', {
-        playerId: d.playerId,
-        players: data.startBidding(d.roomId, d.playerId, d.bids),
+        players: data.getPlayers(d.roomId),
+        highestBid: data.getHighestBid(d.roomId)
         }
       );
-            console.log("Socket" +d.bids); //bids är undefined här
+        console.log("SOCKET BIDS" +d.bids);
+        console.log("SOCKET HIGHESTBID" + data.getHighestBid(d.roomId));
     });
 
     socket.on('collectorsChangeTurn', function(d) {

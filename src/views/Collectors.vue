@@ -60,7 +60,7 @@
             />
 
 
-       <div class="playerBoard">
+       <div v-if="players[playerId]" class="playerBoard">
          <div class="playerTitle"> Player {{playerId}}'s Board </div>
 
           <!--    <div v-if="players[playerId]">-->
@@ -227,7 +227,7 @@ export default {
       skillsOnSale: [],
       auctionCards: [],
       cardUpForAuction: {},
-      highestBid: {},
+      highestBid: 0,
       playerid: 0
     }
   },
@@ -321,9 +321,10 @@ export default {
 
   this.$store.state.socket.on('collectorsBiddingStarted',
   function(d) {
-    console.log(d.playerId, "BIDDING STARTED I COLLECTORS.VUE");
+    console.log(d.players, "BIDDING STARTED I COLLECTORS.VUE");
     this.players = d.players;
     this.highestBid = d.highestBid;
+    console.log(d.highestBid, "högsta budet");
   }.bind(this)
 );
 
@@ -383,11 +384,14 @@ export default {
   },
       startBidding: function () {
         console.log("Starting Bidding");
-        console.log(this.players.bids);
+        console.log("this.players.bids" +this.players.bids);
+        console.log("this.players[this.playerId]" +this.players[this.playerId]);
+        console.log("this.playerId]" +this.playerId);
+        console.log("this.players[this.playerId].bids" +this.players[this.playerId].bids);
         this.$store.state.socket.emit('collectorsStartBidding', {
             roomId: this.$route.params.id,
             playerId: this.playerId,
-            bids: this.players.bids,
+            bids: this.players[this.playerId].bids,
               }
         );
   },

@@ -61,11 +61,13 @@ export default {
       },
 
   startBidding: function (){
-     var bid = document.getElementById("bidSquare").value;
+     var bid = Number(document.getElementById("bidSquare").value);
      console.log(bid);
      console.log(this.player);
      this.player.bids = bid;
+     console.log(this.player);
      this.$emit('startBidding', this.player.bids);
+
   },
 
    highlightAvailableCards: function (){
