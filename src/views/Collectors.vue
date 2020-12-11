@@ -210,7 +210,7 @@ export default {
       itemsOnSale: [],
       skillsOnSale: [],
       auctionCards: [],
-      playerid: 0,
+      playerid: 0
     };
   },
   computed: {

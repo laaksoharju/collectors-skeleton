@@ -16,7 +16,7 @@
         <div class="buttons" v-for="(p, index) in placement" :key="index">
           <button
             v-if="p.playerId === null"
-            :disabled="cannotAfford(p.cost)"
+            :disabled="buttonDisabled(p.cost)"
             @click="placeBottle(p)"
           >
             ${{ p.cost }}
@@ -46,6 +46,12 @@ export default {
     placement: Array,
   },
   methods: {
+    buttonDisabled:function (cost){
+      if(this.cannotAfford(cost) || !this.player.active){
+        return true;
+      }
+      else return false;
+    },
     cannotAfford: function (cost) {
       let minCost = 100;
       for (let key in this.marketValues) {
