@@ -159,6 +159,44 @@ Data.prototype.drawCard = function (roomId, playerId) {
   else return [];
 }
 
+Data.prototype.skipThisRound = function (roomId, playerId) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+        // Turn-base- function
+        var aPlayer
+        for(aPlayer in room.players){
+    
+          if(room.players[aPlayer].myTurn === true){
+    
+            if(Object.keys(room.players).indexOf(aPlayer) === room.playerCount - 1){
+              room.players[aPlayer].myTurn = false;
+              room.players[Object.keys(room.players)[0]].myTurn = true;
+              break;
+            }
+            else{
+              room.players[aPlayer].myTurn = false;
+    
+              // Följande är en black box. Men jag kan förklara:
+              // Object.keys(room.players).indexOf(aPlayer) = index av den spelare vars tur det är
+    
+              // Object.keys(room.players).indexOf(aPlayer) = index av den spelare vars tur det är nästa gång, 
+              // förutsatt att spelaren vars tur det är inte är den sista spelaren. 
+    
+              // Object.keys(room.players)[Object.keys(room.players).indexOf(aPlayer) + 1] = playerId:t av den spelare
+              // vars tur det är nästa gång
+    
+              // room.players[Object.keys(room.players)[Object.keys(room.players).indexOf(aPlayer) + 1]] = 
+              // room.players[playerId:t av den spelare vars tur det är nästa gång]
+              room.players[Object.keys(room.players)[Object.keys(room.players).indexOf(aPlayer) + 1]].myTurn = true;
+              break;
+          } 
+          }
+        }
+    return room.players;
+  }
+  else return [];
+}
+
 /* moves card from itemsOnSale to a player's hand */
 Data.prototype.buyCard = function (roomId, playerId, card, cost) {
   let room = this.rooms[roomId];

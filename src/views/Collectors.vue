@@ -7,6 +7,12 @@
       <br>
       <br>
       {{buyPlacement}} {{chosenPlacementCost}}
+      <br>
+      <div class="buttons">
+        <button @click="skipThisRound">
+          {{ labels.skipThisRound }}
+        </button>
+      </div>
       <CollectorsBuyActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
@@ -181,6 +187,14 @@ export default {
       }.bind(this)
     );
 
+    this.$store.state.socket.on('collectorsRoundSkipped', 
+      function(d) {
+          this.players = d;
+      }.bind(this)
+    );
+
+
+
     this.$store.state.socket.on('collectorsCardBought', 
       function(d) {
         console.log(d.playerId, "bought a card");
@@ -217,8 +231,7 @@ och ville aktionera ut ngt man hade på handen så lades det i item och inte i c
 skicka @doAction till vår egen doAction, och denna skickar vidare till rätt funktion beroende på vad som placeBottle 
 har gjort true eller false. Om man börjar auction så ska auction vara true och allt annat false tex. */
     placeBottle: function (action, cost) {
-      if(this.players[this.playerId].myTurn === false){
-        console.log("place bottle säger myturn är false")
+      if(this.players[this.playerId].myTurn === false || this.players[this.playerId].energyBottles === 0){
         return
       }
       else if(action === "buy"){
@@ -240,8 +253,7 @@ har gjort true eller false. Om man börjar auction så ska auction vara true och
       );
     },
     doAction: function(card){
-      if(this.players[this.playerId].myTurn === false){
-        console.log("do action säger myturn är false")
+      if(this.players[this.playerId].myTurn === false || this.players[this.playerId].energyBottles === 0){
         return
       }
       else if(this.isPlacedList.item===true){
@@ -257,9 +269,9 @@ har gjort true eller false. Om man börjar auction så ska auction vara true och
         this.startAuction(card);
       }
     },
+    // drawCard kommer inte behållas på detta vis
     drawCard: function () {
-      if(this.players[this.playerId].myTurn === false){
-        console.log("draw card säger myturn är false")
+      if(this.players[this.playerId].myTurn === false || this.players[this.playerId].energyBottles === 0){
         return
       }
       this.$store.state.socket.emit('collectorsDrawCard', { 
@@ -268,8 +280,22 @@ har gjort true eller false. Om man börjar auction så ska auction vara true och
         }
       );
     },
-    buyCard: function (card) {
+    skipThisRound: function() {
       if(this.players[this.playerId].myTurn === false){
+        console.log("skip this round säger myturn är false")
+        return
+      }
+      else{
+        console.log("hit kommer vi")
+        this.$store.state.socket.emit('collectorsSkipThisRound', { 
+          roomId: this.$route.params.id, 
+          playerId: this.playerId
+        }
+      );
+      }
+    },
+    buyCard: function (card) {
+      if(this.players[this.playerId].myTurn === false || this.players[this.playerId].energyBottles === 0){
         console.log("buyCard säger myturn är false")
         return
       }
@@ -284,7 +310,7 @@ har gjort true eller false. Om man börjar auction så ska auction vara true och
       );
     },
     buySkill: function (card){
-       if(this.players[this.playerId].myTurn === false){
+       if(this.players[this.playerId].myTurn === false || this.players[this.playerId].energyBottles === 0){
         console.log("buySkill säger myturn är false")
         return
       }
@@ -299,7 +325,7 @@ har gjort true eller false. Om man börjar auction så ska auction vara true och
       );
     },
     startAuction: function (card){
-      if(this.players[this.playerId].myTurn === false){
+      if(this.players[this.playerId].myTurn === false || this.players[this.playerId].energyBottles === 0){
         console.log("startAuction säger myturn är false")
         return
       }

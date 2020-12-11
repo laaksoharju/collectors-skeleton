@@ -4,5 +4,6 @@
 	"endTurn": "End turn",
 	"buyCard": "Buy a card",
 	"buySkill": "Buy Skill",
-	"startAuction": "Start Auction"
+	"startAuction": "Start Auction",
+	"skipThisRound": "End Turn"
 }

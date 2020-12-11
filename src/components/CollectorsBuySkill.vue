@@ -48,7 +48,7 @@ export default {
       this.highlightAvailableCards(p.cost);
     },
     highlightAvailableCards: function (cost=100) {
-      if(this.player.myTurn === true){
+      if(this.player.myTurn === true && this.player.energyBottles > 0){
         for (let i = 0; i < this.skillsOnSale.length; i += 1) {
           this.$set(this.skillsOnSale[i],'available',true);
           this.chosenPlacementCost=cost;

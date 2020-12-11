@@ -58,7 +58,7 @@ export default {
       this.highlightAvailableCards(p.cost);
     },
     highlightAvailableCards: function (cost=100) {
-      if(this.player.myTurn === true){
+      if(this.player.myTurn === true && this.player.energyBottles > 0){
         for (let i = 0; i < this.itemsOnSale.length; i += 1) {
           if (this.marketValues[this.itemsOnSale[i].item] <= this.player.money - cost) {
             this.$set(this.itemsOnSale[i], "available", true);

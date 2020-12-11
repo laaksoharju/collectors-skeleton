@@ -22,6 +22,11 @@ function sockets(io, socket, data) {
         data.drawCard(d.roomId, d.playerId)
       );
     });
+    socket.on('collectorsSkipThisRound', function(d) {
+      io.to(d.roomId).emit('collectorsRoundSkipped', 
+        data.skipThisRound(d.roomId, d.playerId)
+      );
+    });
     socket.on('collectorsBuyCard', function(d) {
       data.buyCard(d.roomId, d.playerId, d.card, d.cost)
       io.to(d.roomId).emit('collectorsCardBought', { 
