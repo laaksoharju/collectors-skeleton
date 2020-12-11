@@ -68,6 +68,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
 
   room.auctionCards = room.deck.splice(0, 4);
   room.cardUpForAuction = {};
+  room.highestBid = 0;
   room.market = [];
   room.buyPlacement = [ {cost:1, playerId: null},
                         {cost:1, playerId: null},
@@ -112,7 +113,8 @@ Data.prototype.joinGame = function (roomId, playerId) {
                                  skills: [],
                                  items: [],
                                  income: [],
-                                 secret: [] };
+                                 secret: [],
+                                 bids: 0, };
       return true;
     }
     console.log("Player", playerId, "was declined due to player limit");
@@ -184,6 +186,52 @@ Data.prototype.startAuction = function (roomId, playerId, card, auctionCard) {
       }
     }
   }
+}
+
+Data.prototype.startMarket = function (roomId, playerId, card, skill) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+  console.log("TEST I START MARKET");
+        for (let i = 0; i < room.skillsOnSale.length; i += 1) {
+
+          if (room.skillsOnSale[i].x === card.x &&
+              room.skillsOnSale[i].y === card.y) {
+                let temp = room.skillsOnSale.splice(i,1, {});
+                room.market.push(temp[0]);
+                break;
+          //  c = room.skillsOnSale.splice(i,1, {});
+
+            break;
+          }
+        }
+      //  room.players[playerId].skills.push(...c);
+      }
+    }
+
+
+Data.prototype.startBidding = function (roomId, playerId, bids) {
+  console.log('HEJ NU I DATA');
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+  let allPlayersId = Object.keys(room.players);
+
+    //  players.bids = bids
+  //    player[playerId].bids = bids
+  room.players[playerId].bids = bids;
+  console.log(allPlayersId);
+  console.log(bids +" Bids i data");
+  for (let i in allPlayersId){
+    console.log("Data room.players[allPlayersId[i]]" ,room.players[allPlayersId[i]]);
+    console.log("Data room.players[allPlayersId[i]].bids" ,room.players[allPlayersId[i]].bids);
+    if (room.highestBid < room.players[allPlayersId[i]].bids){
+        room.highestBid = room.players[allPlayersId[i]].bids;
+      }
+    }
+  //for (let i = 0; i < room.bids.length; i += 1) {
+    //   if (highestBid < room.bids[i]){
+      //   highestBid = room.bids[i];
+      console.log("Det högsta budet är" +room.highestBid);
+    }
 }
 
 /* VI LÄGGER TILL FÖR ATT BYTA SPELARE I TURNBUTTON */
@@ -302,20 +350,32 @@ Data.prototype.getCardUpForAuction = function(roomId){
   else return {};
 }
 
+Data.prototype.getHighestBid = function(roomId){
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    return room.highestBid;
+  }
+  else return 0;
+}
+
 Data.prototype.getMarketValues = function(roomId){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
-    return room.market.reduce(function(acc, curr) {
-      acc[curr.market] += 1;
-    },
-    { fastaval: 0,
-      movie: 0,
-      technology: 0,
-      figures: 0,
-      music: 0 });
+    let mv = { fastaval: 0,
+              movie: 0,
+              technology: 0,
+              figures: 0,
+              music: 0 };
+
+    for (let cardIndex in room.market) {
+      mv[room.market[cardIndex].market] += 1;
+    }
+    return mv;
   }
   else return [];
 }
+
+
 
 Data.prototype.getSkillsOnSale = function(roomId){
   let room = this.rooms[roomId];

@@ -12,8 +12,8 @@ function sockets(io, socket, data) {
             marketValues: data.getMarketValues(d.roomId),
             skillsOnSale: data.getSkillsOnSale(d.roomId),
             auctionCards: data.getAuctionCards(d.roomId),
-            placements: data.getPlacements(d.roomId)
-          }
+            placements: data.getPlacements(d.roomId),
+            }
         );
       }
     });
@@ -56,6 +56,33 @@ function sockets(io, socket, data) {
         cardUpForAuction: data.getCardUpForAuction(d.roomId)
         }
       );
+    });
+
+    socket.on('collectorsStartMarket', function(d){
+      data.startMarket(d.roomId, d.playerId, d.card)
+      io.to(d.roomId).emit('collectorsMarketStarted', {
+        playerId: d.playerId,
+        players: data.getPlayers(d.roomId),
+      //  skillsOnSale: data.getSkillsOnSale(d.roomId),
+      //  market: data.getCardToMarket(d.roomId),
+      //  cardUpForMarket: data.getCardUpForMarket(d.roomId)
+        }
+      );
+    });
+
+    socket.on('collectorsStartBidding', function(d){
+    //  data.startBidding(d.roomId, d.playerId)
+    console.log("HEJ NU I SOCKET");
+    console.log("här är d:" ,d);
+    console.log(data.getPlayers(d.roomId));
+    data.startBidding(d.roomId, d.playerId, d.bids)
+      io.to(d.roomId).emit('collectorsBiddingStarted', {
+        players: data.getPlayers(d.roomId),
+        highestBid: data.getHighestBid(d.roomId)
+        }
+      );
+        console.log("SOCKET BIDS" +d.bids);
+        console.log("SOCKET HIGHESTBID" + data.getHighestBid(d.roomId));
     });
 
     socket.on('collectorsChangeTurn', function(d) {

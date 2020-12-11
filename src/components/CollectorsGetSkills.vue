@@ -34,7 +34,8 @@
           <CollectorsCard
             :card="card"
             :availableAction="card.available"
-            @doAction="getSkill(card)"/>
+            @doAction="getSkill(card)"
+           />
         </div>
       </div>
   </div>

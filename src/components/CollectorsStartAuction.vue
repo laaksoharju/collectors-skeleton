@@ -11,6 +11,15 @@
 <div class = "cardUpForAuction">
   <CollectorsCard :card="cardUpForAuction"/>
 </div>
+
+<div class = "bidSquare" >
+  <form>
+  <label for="bidSquare">Place bid:</label>
+  <input type="text" id="bidSquare" name="bidSquare">
+  </form>
+  <button id = "bidPlacement" @click="startBidding()">Place bid!</button>
+</div>
+
   <div class = "EnergyBottleCoinWhiteTwo"></div> <!-- Olika flaskor med vita coins, 1 2 eller 0 -->
   <div class = "EnergyBottleCoinWhiteOne"></div>
   <div class = "EnergyBottleCoinWhiteNoll"></div>
@@ -40,6 +49,7 @@ export default {
     player: Object,
     auctionCards: Array,
     cardUpForAuction: Object,
+    //bids: Object,
     //placement: Array
   },
   methods: {
@@ -47,8 +57,19 @@ export default {
       this.highlightAvailableCards()
       if (card.available){
         this.$emit('startAuction', card)
-      }
-    },
+        }
+      },
+
+  startBidding: function (){
+     var bid = Number(document.getElementById("bidSquare").value);
+     console.log(bid);
+     console.log(this.player);
+     this.player.bids = bid;
+     console.log(this.player);
+     this.$emit('startBidding', this.player.bids);
+
+  },
+
    highlightAvailableCards: function (){
       for (let i = 0; i < this.auctionCards.length; i += 1) {
           this.$set(this.auctionCards[i], "available", true);
@@ -69,7 +90,8 @@ export default {
   color: black;
   display: grid;
   grid-template-columns: repeat(3, 60px);
-  grid-template-rows: repeat(5,117px);
+  grid-template-rows: repeat(10,48.5px);
+  grid-row-gap: 20px;
 }
 
 .titleAuctionPool{
@@ -121,16 +143,16 @@ grid-row: 1;
 
   .auctionSquare{
   grid-column: 1;
-  grid-row: 5;
-  height: 150px;
-  width: 80px;
+  grid-row: 6;
+  height: 180px;
+  width: 130px;
   border: 5px dotted pink;
   }
 
   .cardUpForAuction {
   transform: scale(0.45);
   grid-column: 1;
-  grid-row: 4;
+  grid-row: 6;
   height: 70px;
   width: 50px;
   }

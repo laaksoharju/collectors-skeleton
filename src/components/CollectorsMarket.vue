@@ -10,8 +10,9 @@
 <!--    <div class = "bottleTwoFlags"></div>
     <div class = "bottleOneFlag"> </div>
     <div class = "bottleCoins"> </div>-->
-
+  <div> </div>
 <div class="buttons" v-for="(p, index) in placement" :key="index">
+
     <button
       v-if="p.playerId===null && index ===0 "
       :disabled="cannotAfford(p.cost)"
@@ -35,25 +36,51 @@
       <div class = "bottleCoins">
       </div>
    </button>
+
+   <div v-if="p.playerId !== null">
+     {{p.playerId}}
+   </div>
   </div>
+
+  <div class = "start-market" >
+    <div v-for="(card, index) in skillsOnSale" :key="index">
+      <CollectorsCard
+        :card="card"
+        :availableAction="card.available"
+        @doAction="startMarket(card)"/>
+      </div>
+  </div>
+
+<!--  <div class = "cardUpForMarket">
+    <CollectorsCard :card="card"/>
+  </div> -->
+
 </div>
 </template>
 
 <script>
+import CollectorsCard from '@/components/CollectorsCard.vue'
 
 export default {
   name: 'CollectorsMarket',
-  /*components: {
-    CollectorsCard
-  },*/
+  components: {
+  CollectorsCard
+},
   props: {
     labels: Object,
     player: Object,
     skillsOnSale: Array,
     marketValues: Object,
-    placement: Array
+    placement: Array,
   },
   methods: {
+    startMarket: function (card) {
+      if (card.available){
+        console.log("TEST");
+        this.$emit('startMarket', card);
+        this.highlightAvailableCards();
+      }
+    },
     placeBottle: function (p) {
       this.$emit('placeBottle', p.cost);
       this.highlightAvailableCards();
@@ -66,9 +93,16 @@ export default {
       }
       return (this.player.money < minCost);
     },
+<<<<<<< HEAD
   highlightAvailableCards: function () {
       for (let i = 0; i < this.skillsOnSale.length; i += 1) {
         if (i=== this.skillsOnSale.length-1) {
+=======
+    highlightAvailableCards: function () {
+
+      for (let i = 0; i < this.skillsOnSale.length; i += 1) { //här, leta reda på korten längst bak, skills, auction
+        if (this.marketValues[this.skillsOnSale[-1].item]) {
+>>>>>>> 2793aa0831b4bb3a8e75ee768f7daff74fb69ccf
           this.$set(this.skillsOnSale[i], "available", true);
         }
         else {
@@ -151,11 +185,27 @@ export default {
   }
 
   .buttons{
+    grid-row: 3;
   /*  place-self: stretch;*/
   }
 
   .buttons div:hover {
     transform: scale(1.5)translate(0,0);
+    z-index: 1;
+  }
+  .cardUpForMarket {
+  transform: scale(0.45);
+  grid-column: 1;
+  grid-row: 4;
+  height: 70px;
+  width: 50px;
+  }
+
+  .start-market{
+    transform: scale(0.25);
+  }
+  .start-market div:hover{
+    transform: scale(1.25)translate(15%,0);
     z-index: 1;
   }
 
@@ -164,23 +214,23 @@ export default {
     height:50px;
     background-image: url('/images/marketbottletwocoins.PNG');
     background-size: cover;
-    grid-column: 2;
-    grid-row: 2;
+    grid-column: 3;
+
   }
   .bottleOneFlag {
     width:50px;
     height:50px;
     background-image: url('/images/marketbottleoneflagg.PNG') ;
     background-size: cover;
-    grid-column: 3;
-    grid-row: 2;
+    grid-column: 4;
+
   }
 .bottleTwoFlags {
   width:50px;
   height:50px;
   background-image: url('/images/marketbottletwoflaggs.PNG') ;
   background-size: cover;
-  grid-column: 4;
-  grid-row: 2;
+  grid-column: 5;
+
 }
   </style>
