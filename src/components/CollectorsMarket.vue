@@ -49,13 +49,14 @@ export default {
   props: {
     labels: Object,
     player: Object,
+    skillsOnSale: Array,
     marketValues: Object,
     placement: Array
   },
   methods: {
     placeBottle: function (p) {
       this.$emit('placeBottle', p.cost);
-      this.highlightAvailableCards(p.cost);
+      this.highlightAvailableCards();
     },
     cannotAfford: function (cost) {
       let minCost = 100;
@@ -65,17 +66,19 @@ export default {
       }
       return (this.player.money < minCost);
     },
-    highlightAvailableCards: function (cost=100) {
-      for (let i = 0; i < this.itemsOnSale.length; i += 1) {
-        if (this.marketValues[this.itemsOnSale[i].item] <= this.player.money - cost) {
-          this.$set(this.itemsOnSale[i], "available", true);
+  highlightAvailableCards: function () {
+      for (let i = 0; i < this.skillsOnSale.length; i += 1) {
+        if (i=== this.skillsOnSale.length-1) {
+          this.$set(this.skillsOnSale[i], "available", true);
         }
         else {
-          this.$set(this.itemsOnSale[i], "available", false);
+          this.$set(this.skillsOnSale[i], "available", false);
         }
-        this.chosenPlacementCost = cost;
       }
     },
+
+
+
   }
 }
 
