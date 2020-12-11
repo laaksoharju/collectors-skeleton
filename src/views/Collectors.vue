@@ -30,6 +30,7 @@
           <CollectorsMarket v-if="players[playerId]"
             :labels="labels"
             :player="players[playerId]"
+            :skillsOnSale="skillsOnSale"
             :marketValues="marketValues"
             :placement="marketPlacement"
             @placeBottle="placeBottle('market', $event)"
