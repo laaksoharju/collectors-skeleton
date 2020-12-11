@@ -1,6 +1,11 @@
 <template>
   <div>
     <main>
+      <div>{{players}}</div>
+      <br>
+      <div>Mitt ID är {{this.$store.state.playerId}}</div>
+      <br>
+      <br>
       {{buyPlacement}} {{chosenPlacementCost}}
       <CollectorsBuyActions v-if="players[playerId]"
         :labels="labels"
@@ -212,7 +217,11 @@ och ville aktionera ut ngt man hade på handen så lades det i item och inte i c
 skicka @doAction till vår egen doAction, och denna skickar vidare till rätt funktion beroende på vad som placeBottle 
 har gjort true eller false. Om man börjar auction så ska auction vara true och allt annat false tex. */
     placeBottle: function (action, cost) {
-      if(action === "buy"){
+      if(this.players[this.playerId].myTurn === false){
+        console.log("place bottle säger myturn är false")
+        return
+      }
+      else if(action === "buy"){
         this.isPlacedList.item = true
       }
       else if(action === "skill"){
@@ -231,7 +240,11 @@ har gjort true eller false. Om man börjar auction så ska auction vara true och
       );
     },
     doAction: function(card){
-      if(this.isPlacedList.item===true){
+      if(this.players[this.playerId].myTurn === false){
+        console.log("do action säger myturn är false")
+        return
+      }
+      else if(this.isPlacedList.item===true){
         this.isPlacedList.item=false;
         this.buyCard(card);
       }
@@ -245,6 +258,10 @@ har gjort true eller false. Om man börjar auction så ska auction vara true och
       }
     },
     drawCard: function () {
+      if(this.players[this.playerId].myTurn === false){
+        console.log("draw card säger myturn är false")
+        return
+      }
       this.$store.state.socket.emit('collectorsDrawCard', { 
           roomId: this.$route.params.id, 
           playerId: this.playerId
@@ -252,6 +269,10 @@ har gjort true eller false. Om man börjar auction så ska auction vara true och
       );
     },
     buyCard: function (card) {
+      if(this.players[this.playerId].myTurn === false){
+        console.log("buyCard säger myturn är false")
+        return
+      }
       this.isPlacedList.item=false;
       console.log("buyCard", card);
       this.$store.state.socket.emit('collectorsBuyCard', { 
@@ -263,6 +284,10 @@ har gjort true eller false. Om man börjar auction så ska auction vara true och
       );
     },
     buySkill: function (card){
+       if(this.players[this.playerId].myTurn === false){
+        console.log("buySkill säger myturn är false")
+        return
+      }
         this.isPlacedList.skill=false;
         console.log("buySkill", card);
         this.$store.state.socket.emit('collectorsBuySkill', {
@@ -274,6 +299,10 @@ har gjort true eller false. Om man börjar auction så ska auction vara true och
       );
     },
     startAuction: function (card){
+      if(this.players[this.playerId].myTurn === false){
+        console.log("startAuction säger myturn är false")
+        return
+      }
       this.isPlacedList.auction=false;
       this.$store.state.socket.emit('collectorsStartAuction', { 
           roomId: this.$route.params.id, 

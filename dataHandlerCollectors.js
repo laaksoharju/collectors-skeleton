@@ -102,13 +102,28 @@ Data.prototype.joinGame = function (roomId, playerId) {
     }
     else if (Object.keys(room.players).length < room.playerCount) {
       console.log("Player", playerId, "joined for the first time");
+      if(Object.keys(room.players).length < 1){
       room.players[playerId] = { hand: [], 
                                  money: 1,
                                  points: 0,
                                  skills: [],
                                  items: [],
                                  income: [],
-                                 secret: [] };
+                                 secret: [],
+                                 energyBottles: 2,
+                                 myTurn: true };
+      }
+      else{
+      room.players[playerId] = { hand: [], 
+                                 money: 1,
+                                 points: 0,
+                                 skills: [],
+                                 items: [],
+                                 income: [],
+                                 secret: [],
+                                 energyBottles: 2,
+                                 myTurn: false };
+      }
       return true;
     }
     console.log("Player", playerId, "was declined due to player limit");
@@ -171,7 +186,40 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost) {
     }
     room.players[playerId].items.push(...c);
     room.players[playerId].money -= cost;
-    
+
+
+
+    // Turn-base- function
+    var aPlayer
+    for(aPlayer in room.players){
+
+      if(room.players[aPlayer].myTurn === true){
+
+        if(Object.keys(room.players).indexOf(aPlayer) === room.playerCount - 1){
+          room.players[aPlayer].myTurn = false;
+          room.players[Object.keys(room.players)[0]].myTurn = true;
+          break;
+        }
+        else{
+          room.players[aPlayer].myTurn = false;
+
+          // Följande är en black box. Men jag kan förklara:
+          // Object.keys(room.players).indexOf(aPlayer) = index av den spelare vars tur det är
+
+          // Object.keys(room.players).indexOf(aPlayer) = index av den spelare vars tur det är nästa gång, 
+          // förutsatt att spelaren vars tur det är inte är den sista spelaren. 
+
+          // Object.keys(room.players)[Object.keys(room.players).indexOf(aPlayer) + 1] = playerId:t av den spelare
+          // vars tur det är nästa gång
+
+          // room.players[Object.keys(room.players)[Object.keys(room.players).indexOf(aPlayer) + 1]] = 
+          // room.players[playerId:t av den spelare vars tur det är nästa gång]
+          room.players[Object.keys(room.players)[Object.keys(room.players).indexOf(aPlayer) + 1]].myTurn = true;
+          break;
+      } 
+      }
+    }
+
   }
 }
 
@@ -199,10 +247,44 @@ Data.prototype.buySkill=function (roomId,playerId,card,cost){
   room.players[playerId].skills.push(...c);
   room.players[playerId].money -= cost;
   }
+
+  // Turn-base- function
+  var aPlayer
+  for(aPlayer in room.players){
+
+    if(room.players[aPlayer].myTurn === true){
+
+      if(Object.keys(room.players).indexOf(aPlayer) === room.playerCount - 1){
+          room.players[aPlayer].myTurn = false;
+          room.players[Object.keys(room.players)[0]].myTurn = true;
+          break;
+      }
+      else{
+          room.players[aPlayer].myTurn = false;
+
+          // Följande är en black box. Men jag kan förklara:
+          // Object.keys(room.players).indexOf(aPlayer) = index av den spelare vars tur det är
+
+          // Object.keys(room.players).indexOf(aPlayer) = index av den spelare vars tur det är nästa gång, 
+          // förutsatt att spelaren vars tur det är inte är den sista spelaren. 
+
+          // Object.keys(room.players)[Object.keys(room.players).indexOf(aPlayer) + 1] = playerId:t av den spelare
+          // vars tur det är nästa gång
+
+          // room.players[Object.keys(room.players)[Object.keys(room.players).indexOf(aPlayer) + 1]] = 
+          // room.players[playerId:t av den spelare vars tur det är nästa gång]
+          room.players[Object.keys(room.players)[Object.keys(room.players).indexOf(aPlayer) + 1]].myTurn = true;
+          break;
+      } 
+    }
+  }
+
+
 }
 
 Data.prototype.placeBottle = function (roomId, playerId, action, cost) {
   let room = this.rooms[roomId];
+  room.players[playerId].energyBottles -= 1;
   if (typeof room !== 'undefined') {
     let activePlacement = [];
     if (action === "buy") {
@@ -256,6 +338,38 @@ Data.prototype.startAuction = function (roomId, playerId, card, cost) {
     room.players[playerId].money -= cost;
     
   }
+
+  // Turn-base- function
+  var aPlayer
+  for(aPlayer in room.players){
+  
+    if(room.players[aPlayer].myTurn === true){
+  
+      if(Object.keys(room.players).indexOf(aPlayer) === room.playerCount - 1){
+          room.players[aPlayer].myTurn = false;
+          room.players[Object.keys(room.players)[0]].myTurn = true;
+          break;
+      }
+      else{
+          room.players[aPlayer].myTurn = false;
+  
+          // Följande är en black box. Men jag kan förklara:
+          // Object.keys(room.players).indexOf(aPlayer) = index av den spelare vars tur det är
+
+          // Object.keys(room.players).indexOf(aPlayer) = index av den spelare vars tur det är nästa gång, 
+          // förutsatt att spelaren vars tur det är inte är den sista spelaren. 
+  
+          // Object.keys(room.players)[Object.keys(room.players).indexOf(aPlayer) + 1] = playerId:t av den 
+          // spelare vars tur det är nästa gång
+  
+          // room.players[Object.keys(room.players)[Object.keys(room.players).indexOf(aPlayer) + 1]] = 
+          // room.players[playerId:t av den spelare vars tur det är nästa gång]
+          room.players[Object.keys(room.players)[Object.keys(room.players).indexOf(aPlayer) + 1]].myTurn = true;
+          break;
+      } 
+    }
+  }
+
 }
 
 /* returns the hand of the player */

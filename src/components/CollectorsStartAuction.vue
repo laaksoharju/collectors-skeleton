@@ -58,23 +58,25 @@ export default {
       this.highlightAvailableCards(p.cost);
     },
     highlightAvailableCards: function (cost=100) {
-      for (let i = 0; i < this.auctionCards.length; i += 1) {
-        if (this.marketValues[this.auctionCards[i].item] <= this.player.money - cost) {
-          this.$set(this.auctionCards[i], "available", true);
+      if(this.player.myTurn === true){
+        for (let i = 0; i < this.auctionCards.length; i += 1) {
+            if (this.marketValues[this.auctionCards[i].item] <= this.player.money - cost) {
+            this.$set(this.auctionCards[i], "available", true);
+            }
+            else {
+            this.$set(this.auctionCards[i], "available", false);
+            }
+            this.chosenPlacementCost = cost; 
         }
-        else {
-          this.$set(this.auctionCards[i], "available", false);
-        }
-        this.chosenPlacementCost = cost; 
-      }
-      for (let i = 0; i < this.player.hand.length; i += 1) {
-        if (this.marketValues[this.player.hand[i].item] <= this.player.money - cost) {
-          this.$set(this.player.hand[i], "available", true);
-          this.chosenPlacementCost = cost;
-        }
-        else {
-          this.$set(this.player.hand[i], "available", false);
-          this.chosenPlacementCost = cost; 
+        for (let i = 0; i < this.player.hand.length; i += 1) {
+            if (this.marketValues[this.player.hand[i].item] <= this.player.money - cost) {
+            this.$set(this.player.hand[i], "available", true);
+            this.chosenPlacementCost = cost;
+            }
+            else {
+            this.$set(this.player.hand[i], "available", false);
+            this.chosenPlacementCost = cost; 
+            }
         }
       }
     },
