@@ -307,14 +307,12 @@ har gjort true eller false. Om man börjar auction så ska auction vara true och
     marketBottle: function(action, cost=0, twoMarket){
       console.log("marketBottle")
       for (let i = 0; i < this.players[this.playerId].hand.length; i += 1){
-
         this.$set(this.players[this.playerId].hand[i], 'available', true);
-        console.log(this.players[this.playerId].hand[i],"handen i marketbottle")
+        //console.log(this.players[this.playerId].hand[i],"handen i marketbottle")
       }
       for (let i = 0; i < this.skillsOnSale.length; i += 1){
         if(this.skillsOnSale[i].item !== undefined){
           this.$set(this.skillsOnSale[i], 'available', true);
-          console.log(this.skillsOnSale.available);
           break
         }
       }
@@ -340,13 +338,12 @@ har gjort true eller false. Om man börjar auction så ska auction vara true och
 
     marketBottleDone: function (){
       for (let i = 0; i < this.players[this.playerId].hand.length; i += 1){
-        console.log(this.players[this.playerId].hand[i],"tar bort")
         this.$set(this.players[this.playerId].hand[i], 'available', false);
       }
       for (let i = 0; i < this.skillsOnSale.length; i += 1){
         if(this.skillsOnSale[i] !== 'undefined'){
-          this.$set(this.skillsOnSale[i], 'available', false);
-
+          //this.$set(this.skillsOnSale[i], 'available', false);
+          //this.skillsOnSale[i].availableAction=true;
           break
         }
       }

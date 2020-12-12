@@ -180,11 +180,29 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost) {
         break;
       }
     }
-    console.log("datahandl");
     room.players[playerId].items.push(...c);
     Data.prototype.raiseItem(c, room, playerId);
     room.players[playerId].money -= cost;
+    Data.prototype.calculatePoints(room ,playerId);
+    console.log(room.players[playerId].points);
 }
+}
+
+Data.prototype.calculatePoints=function(room, playerId){
+  let points=0;
+  let player = room.players[playerId];
+  console.log(player);
+  /*for(let i=0;i<room.market;i +=1){
+    console.log(room.markets[i][0])
+    points+=room.market[i]*player.itemsByNumber[i];
+  }*/
+  points=room.market.music*player.itemsByNumber.music;
+  points+=room.market.fastaval*player.itemsByNumber.fastaval;
+  points+=room.market.movie*player.itemsByNumber.movie;
+  points+=room.market.figures*player.itemsByNumber.figures;
+  points+=room.market.technology*player.itemsByNumber.technology;
+  console.log(points);
+  player.points=points;
 }
 
 Data.prototype.raiseItem= function(card, room, playerId){
