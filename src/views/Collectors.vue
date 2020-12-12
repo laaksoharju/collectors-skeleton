@@ -48,12 +48,12 @@
         @placeBottle="placeBottle('startAuction', $event)"/>
 
         <div v-if="currentAuctionCard.length === 1">
-          <p>player '{{ bidArray[bidArray.length - 1]}}' is now leading the auction with a: {{ bidArray.length}}$ bid.</p>
+          <p>player {{ bidArray[bidArray.length - 1]}} is now leading the auction with a: {{ bidArray.length}}$ bid.</p>
           <button v-if="players[playerId]" :disabled="cannotRaiseBid()" @click="raiseCurrentBid()">Raise current bid!</button>
           <button v-if="bidArray[bidArray.length - 1] === this.playerId" :disabled="noMoreBidsBoolean" @click="noMoreBids()">My {{bidArray.length}}$ bid won!</button>
-          <button v-if="this.noMoreBidsBoolean" @click="endAuction('buyItem')">Use as item</button>
-          <button v-if="this.noMoreBidsBoolean" @click="endAuction('getSkill')">Use as skill</button>
-          <button v-if="this.noMoreBidsBoolean" @click="endAuction('market')">Place in the market</button>
+          <button v-if="this.noMoreBidsBoolean" @click="endAuction('buyItem')" style="background-color: #f9dcce">Use as an item</button>
+          <button v-if="this.noMoreBidsBoolean" @click="endAuction('getSkill')" style="background-color: #dfeccc">Use as a skill</button>
+          <button v-if="this.noMoreBidsBoolean" @click="endAuction('market')" style="background-color: #cfdcf2">Place in the market</button>
         </div>
       </div>
 
@@ -81,12 +81,8 @@
       </div>
 
       <div id="PlayerBoardDiv">
-        <h2>Player boards</h2>
-        <!-- Displayar current money -->
-        <p v-if="players[playerId]"> Current money: {{ players[playerId].money }} </p>
-        <!-- Displayar current money -->
-        <!-- <p> {{players}}        Tog bort denna info för tillfället, man kan kommentera tillbaka om man vill se
-            {{marketValues}}</p>  -->
+        <h2>Player board</h2>
+        <p v-if="players[playerId]"> Current money: {{ players[playerId].money }}$ </p>
         <button v-if="players[playerId]" @click="fakeMoreMoney()">
           fake more money
         </button>
@@ -652,6 +648,10 @@ footer a:visited {
 
 #container div {
   border-radius: 10px;
+}
+
+#container button {
+  border-radius: 5px;
 }
 
 .cardslots {

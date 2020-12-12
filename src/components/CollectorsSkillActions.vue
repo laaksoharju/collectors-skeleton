@@ -1,6 +1,6 @@
 <template>
   <div id="SkillActionDiv">
-    <h1 style="text-align: center">{{ labels.getSkill }}</h1>
+    <h1 style="text-align: center"><img class="title_img" src="images/skill.png">{{ labels.getSkill }}</h1>
     <div class="get-skills">
       <div v-for="(card, index) in skillsOnSale" :key="index">
         <CollectorsCard
@@ -74,6 +74,12 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+.title_img {
+  height: 65px;
+  width: 70px;
+  vertical-align: middle;
+}
 
 .get-skills {
   display: grid;

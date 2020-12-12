@@ -1,10 +1,10 @@
 <template>
   <div id="WorkActionsDiv">
-    <h1 style="text-align: center">{{ labels.doWork }}</h1>
+    <h1 style="text-align: center"><img class="title_img" src="images/work.png">{{ labels.doWork }}</h1>
       <div id="WorkContainer">
 
         <div id="PickRoundButtons" >
-            <h3>Doubleclick to change round</h3>
+            <h3>Double-click to change round</h3>
           <input type="radio" id="roundOneButton" value="Round 1" v-model="picked" v-on:dblclick="changeFirstWorkCard()" >
           <label for="roundOneButton">Round 1</label>
           <br>
@@ -91,6 +91,13 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+.title_img {
+  height: 65px;
+  width: 75px;
+  vertical-align: middle;
+  padding-right: 10px;
+}
 
 .get-skills {
   display: grid;

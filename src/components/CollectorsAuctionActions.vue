@@ -1,6 +1,6 @@
 <template>
   <div id="AuctionDiv">
-    <h1 style="text-align: center">{{ labels.auction }}</h1>
+    <h1 style="text-align: center"><img class="title_img" src="images/auction.png">{{ labels.auction }}</h1>
     <div id="AuctionCardsDiv">
       <div id="Cards">
         <div class="auction">
@@ -80,6 +80,13 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+.title_img {
+  height: 65px;
+  width: 70px;
+  vertical-align: middle;
+}
+
 .auction {
   display: grid;
   grid-template-columns: repeat(auto-fill, 100px);

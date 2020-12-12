@@ -1,6 +1,6 @@
 <template>
   <div id="BuyActionDiv">
-    <h1 style="text-align: center">{{ labels.buyCard }}</h1>
+    <h1 style="text-align: center"><img class="title_img" src="images/buy.png">{{ labels.buyCard }}</h1>
     <div class="buy-cards">
       <div v-for="(card, index) in itemsOnSale" :key="index" style="color:black">
         Value raised: +{{ cardCost(card) }}
@@ -93,6 +93,13 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+.title_img {
+  height: 65px;
+  width: 70px;
+  vertical-align: middle;
+  padding-right: 10px;
+}
 
 .buy-cards {
   display: grid;

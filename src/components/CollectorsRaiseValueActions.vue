@@ -1,6 +1,6 @@
 <template>
   <div id="RaiseValueDiv">
-    <h1 style="text-align: center">{{ labels.raiseValue }}</h1>
+    <h1 style="text-align: center"><img class="title_img" src="images/raise.png">{{ labels.raiseValue }}</h1>
     <div id="MarketDiv">
       <div id="Cards">
         <div class="raise-value">
@@ -76,6 +76,13 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+.title_img {
+  height: 65px;
+  width: 70px;
+  vertical-align: middle;
+}
+
 .raise-value {
   display: grid;
   grid-template-columns: repeat(auto-fill, 130px);
