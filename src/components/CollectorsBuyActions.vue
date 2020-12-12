@@ -3,9 +3,9 @@
       <h1>{{ labels.buyCard }}</h1>
       <div class="buy-cards">
         <div v-for="(card, index) in itemsOnSale" :key="index">
-          <CollectorsCard 
-            :card="card" 
-            :availableAction="card.available" 
+          <CollectorsCard
+            :card="card"
+            :availableAction="card.available"
             @doAction="buyCard(card)"/>
           {{ cardCost(card) }}
         </div>
@@ -14,7 +14,7 @@
         <div class="buttons" v-for="(p, index) in placement" :key="index">
           <button
             v-if="p.playerId===null"
-            :disabled="cannotAfford(p.cost)" 
+            :disabled="cannotAfford(p.cost)"
             @click="placeBottle(p)" >
             ${{p.cost}}
           </button>
@@ -57,6 +57,8 @@ export default {
       this.$emit('placeBottle', p.cost);
       this.highlightAvailableCards(p.cost);
     },
+
+
     highlightAvailableCards: function (cost=100) {
       if(this.player.myTurn === true && this.player.energyBottles > 0){
         for (let i = 0; i < this.itemsOnSale.length; i += 1) {
@@ -66,20 +68,22 @@ export default {
           else {
             this.$set(this.itemsOnSale[i], "available", false);
           }
-          this.chosenPlacementCost = cost; 
+          this.chosenPlacementCost = cost;
+      }
+      for (let i = 0; i < this.player.hand.length; i += 1) {
+        if (this.marketValues[this.player.hand[i].item] <= this.player.money - cost) {
+          this.$set(this.player.hand[i], "available", true);
+          this.chosenPlacementCost = cost;
         }
-        for (let i = 0; i < this.player.hand.length; i += 1) {
-          if (this.marketValues[this.player.hand[i].item] <= this.player.money - cost) {
-            this.$set(this.player.hand[i], "available", true);
-            this.chosenPlacementCost = cost;
-          }
-          else {
-            this.$set(this.player.hand[i], "available", false);
-            this.chosenPlacementCost = cost; 
-          }
+        else {
+          this.$set(this.player.hand[i], "available", false);
+          this.chosenPlacementCost = cost;
         }
       }
+    }
     },
+
+
     buyCard: function (card) {
       if (card.available) {
         this.$emit('buyCard', card)
