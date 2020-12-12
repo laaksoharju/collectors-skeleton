@@ -81,6 +81,7 @@
                   type="text"
                   v-bind:value="players[playerId].playerName"
                   v-on:keyup="changeName($event)"
+                  @click="selectAll"
                   autofocus="true"
                   hidden
                 /><img
@@ -92,7 +93,9 @@
               </div>
               <div class="player-coins">
                 <p>
-                  <img src="/images/player-coins.png" alt="Player Coins" />x5
+                  <img src="/images/player-coins.png" alt="Player Coins" />x{{
+                    players[playerId].money
+                  }}
                 </p>
               </div>
               <div class="player-cards-for-coins">
@@ -104,18 +107,43 @@
             </div>
             <div class="player-hand">
               <div class="secret-card">
-                <CollectorsCard v-for="(card, index) in players[playerId].secret" :card="card" :availableAction="card.available" :key="'secret'+index"/>
+                <CollectorsCard
+                  v-for="(card, index) in players[playerId].secret"
+                  :card="card"
+                  :availableAction="card.available"
+                  :key="'secret' + index"
+                />
               </div>
               <div class="cardslots" v-if="players[playerId]">
-                  <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" :key="index"/>
-                  
+                <CollectorsCard
+                  v-for="(card, index) in players[playerId].hand"
+                  :card="card"
+                  :availableAction="card.available"
+                  :key="index"
+                />
               </div>
             </div>
-            <div class="player-bottles" v-if="players.hasOwnProperty(playerId)">
+            <div
+              class="player-bottles"
+              :style="{
+                backgroundImage:
+                  'url(' + playerBoards[players[playerId].color] + ')',
+              }"
+            >
               <img
+                v-for="index in players[playerId].bottles"
+                :key="index"
+                :src="playerBottle[players[playerId].color]"
+                alt="index"
+              />
+              <!-- <img
                 v-bind:src="playerBoards[players[playerId].color]"
                 alt="Player Boards"
-              />
+              /> -->
+              <!-- <img
+                v-bind:src="playerBottle[players[playerId].color]"
+                alt="players[playerId].color"
+              /> -->
             </div>
             <div class="player-items-skills">
               <div class="player-items">
@@ -143,7 +171,9 @@
                 Player: {{ players[otherPlayerId].playerName }}
               </div>
               <div class="player-coins">
-                <img src="/images/player-coins.png" alt="Player Coins" />x5
+                <img src="/images/player-coins.png" alt="Player Coins" />x{{
+                  players[otherPlayerId].money
+                }}
               </div>
               <div class="player-cards-for-coins">
                 <img
@@ -152,11 +182,24 @@
                 />x4
               </div>
             </div>
-            <div class="player-bottles" v-if="players.hasOwnProperty(playerId)">
+            <div
+              class="player-bottles"
+              v-if="players.hasOwnProperty(playerId)"
+              :style="{
+                backgroundImage:
+                  'url(' + playerBoards[players[otherPlayerId].color] + ')',
+              }"
+            >
               <img
+                v-for="index in players[otherPlayerId].bottles"
+                :key="index"
+                :src="playerBottle[players[otherPlayerId].color]"
+                alt="index"
+              />
+              <!-- <img
                 v-bind:src="playerBoards[players[otherPlayerId].color]"
                 alt="Player Boards"
-              />
+              /> -->
             </div>
             <div class="player-items-skills">
               <div class="player-items">
@@ -176,10 +219,11 @@
       </div>
     </main>
 
-
     <footer>
-      {{ players }}
-    {{ marketValues }}
+      <br /><br />
+      <!-- {{ players }} -->
+      <!-- {{ marketValues }} -->
+      <br /><br />
       <p>
         {{ labels.invite }}
         <input
@@ -190,9 +234,9 @@
         />
       </p>
 
-      <button v-if="players[playerId]" @click="players[playerId].money += 1">
-        fake more money
-      </button>
+      <!-- <button v-if="players[playerId]" @click="players[playerId].money += 1">
+        fake more money 
+      </button> -->
     </footer>
   </div>
 </template>
@@ -251,6 +295,12 @@ export default {
         blue: "images/player-board-3.png",
         brown: "images/player-board-2.png",
         grey: "images/player-board-1.png",
+      },
+      playerBottle: {
+        violet: "images/violet_bottle.png",
+        blue: "images/blue_bottle.png",
+        brown: "images/brown_bottle.png",
+        grey: "images/grey_bottle.png",
       },
     };
   },
@@ -424,7 +474,6 @@ header {
 }
 main {
   user-select: none;
-
 }
 footer {
   position: relative;
@@ -464,9 +513,7 @@ footer a:visited {
   width: 100%;
   grid-column: 2/3;
 }
-.buy_item{
-
-
+.buy_item {
 }
 .buy_item >>> .buy-cards {
   position: relative;
@@ -556,14 +603,16 @@ footer a:visited {
   grid-template-columns: repeat(auto-fill, 80px);
   grid-template-rows: repeat(auto-fill, 100px);
 }
-.secret-card div, .cardslots div {
+.secret-card div,
+.cardslots div {
   transform: scale(0.3) translate(-110%, -110%);
   transition: 0.2s;
   transition-timing-function: ease-out;
   z-index: 0;
 }
 
-.secret-card div:hover, .cardslots div:hover {
+.secret-card div:hover,
+.cardslots div:hover {
   transform: scale(1) translate(-25%, 0);
   z-index: 1;
   opacity: 1;
@@ -597,7 +646,6 @@ footer a:visited {
   font-size: 150%;
   height: 88vh;
 }
-
 
 .player-board {
   border-radius: 5px;
@@ -657,22 +705,33 @@ footer a:visited {
   color: red;
   display: grid;
   grid-template-columns: 15% 85%;
-  
 }
 
 .player-bottles {
   grid-column: 1;
   grid-row: 3;
+  display: grid;
+  background-size: contain;
+  background-repeat: no-repeat;
+  grid-template-columns: 12% 15%;
+  /* gap: 7px; */
+}
+
+.player-bottles img {
+  height: 100%;
+}
+
+.current-player .player-bottles img:hover {
+  outline: 3px solid black;
 }
 
 .other-players .player-bottles {
   grid-column: 1;
   grid-row: 2;
-}
-
-.player-bottles img {
-  height: 100%;
-  width: 100%;
+  display: grid;
+  background-size: contain;
+  background-repeat: no-repeat;
+  grid-template-columns: 12% 15%;
 }
 
 .player-items-skills {

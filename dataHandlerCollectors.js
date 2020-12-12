@@ -121,14 +121,16 @@ Data.prototype.joinGame = function (roomId, playerId)
       room.players[playerId] = {
         playerName: playerId,
         hand: room.deck.splice(0, 2), // Two cards are kept secret and form the hands of each player
-        money: 1,
+        money: Object.keys(room.players).length + 2,
         points: 0,
         skills: [],
         items: [],
         income: [],
         secret: room.deck.splice(0, 1), // picks one card and places it face down, tucked under their player board at the position marked with a treasure chest.
-        color: room.playerColors.pop()
+        color: room.playerColors.pop(),
+        bottles: 2,
       };
+      // console.log(room.players[playerId]);
       return true;
     }
     console.log("Player", playerId, "was declined due to player limit");
@@ -183,73 +185,87 @@ Data.prototype.drawCard = function (roomId, playerId)
 }
 
 /* moves card from itemsOnSale to a player's hand */
-Data.prototype.buyCard = function (roomId, playerId, card, cost,action) {
-  
+Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
+{
   let room = this.rooms[roomId];
+  // console.log("Player from room: " + roomId + " with ID: " + playerId);
+  // console.log("wants to buy the card: " + card + " with cost: " + cost);
+  // console.log("action: " + action);
+
+  // console.log("");
+  // console.log("The player has this much money: " + room.players[playerId].money);
+  // console.log("The player has this many bottles: " + room.players[playerId].bottles);
+
   if (typeof room !== 'undefined')
   {
     let c = null;
-    /// check first if the card is among the items on sale
-    if (action==='buy')
 
+    // check first if the player has enough bottles and money to buy the card
+    if (room.players[playerId].money < cost || room.players[playerId].bottles < 1)
+    {
+      console.log("Player doesn't have enough money or bottles to buy the card");
+      return;
+    }
+
+    /// check first if the card is among the items on sale
+    if (action === 'buy')
     {
       console.log('reach buy')
 
-    for (let i = 0; i < room.itemsOnSale.length; i += 1) {
-      // since card comes from the client, it is NOT the same object (reference)
-      // so we need to compare properties for determining equality
-      if (room.itemsOnSale[i].x === card.x &&
-        room.itemsOnSale[i].y === card.y)
+      for (let i = 0; i < room.itemsOnSale.length; i += 1)
       {
-        c = room.itemsOnSale.splice(i, 1, {});
-        break;
+        // since card comes from the client, it is NOT the same object (reference)
+        // so we need to compare properties for determining equality
+        if (room.itemsOnSale[i].x === card.x &&
+          room.itemsOnSale[i].y === card.y)
+        {
+          c = room.itemsOnSale.splice(i, 1, {});
+          break;
+        }
       }
-    }
-    // ...then check if it is in the hand. It cannot be in both so it's safe
-    for (let i = 0; i < room.players[playerId].hand.length; i += 1)
-    {
-      // since card comes from the client, it is NOT the same object (reference)
-      // so we need to compare properties for determining equality
-      if (room.players[playerId].hand[i].x === card.x &&
-        room.players[playerId].hand[i].y === card.y)
+      // ...then check if it is in the hand. It cannot be in both so it's safe
+      for (let i = 0; i < room.players[playerId].hand.length; i += 1)
       {
-        c = room.players[playerId].hand.splice(i, 1);
-        break;
+        // since card comes from the client, it is NOT the same object (reference)
+        // so we need to compare properties for determining equality
+        if (room.players[playerId].hand[i].x === card.x &&
+          room.players[playerId].hand[i].y === card.y)
+        {
+          c = room.players[playerId].hand.splice(i, 1);
+          break;
+        }
       }
+      room.players[playerId].items.push(...c);
+      room.players[playerId].money -= cost;
+      room.players[playerId].bottles -= 1;
     }
-    room.players[playerId].items.push(...c);
-    room.players[playerId].money -= cost;
-
-    }
-    else if (action==='skill')
+    else if (action === 'skill')
     {
       console.log('reach skill')
-    for (let i = 0; i < room.skillsOnSale.length; i += 1) {
-      // since card comes from the client, it is NOT the same object (reference)
-      // so we need to compare properties for determining equality      
-      if (room.skillsOnSale[i].x === card.x && 
-          room.skillsOnSale[i].y === card.y) {
-        c = room.skillsOnSale.splice(i,1, {});
-        break;
+      for (let i = 0; i < room.skillsOnSale.length; i += 1)
+      {
+        // since card comes from the client, it is NOT the same object (reference)
+        // so we need to compare properties for determining equality      
+        if (room.skillsOnSale[i].x === card.x &&
+          room.skillsOnSale[i].y === card.y)
+        {
+          c = room.skillsOnSale.splice(i, 1, {});
+          break;
+        }
       }
+      // // ...then check if it is in the hand. It cannot be in both so it's safe
+      // for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
+      //   // since card comes from the client, it is NOT the same object (reference)
+      //   // so we need to compare properties for determining equality      
+      //   if (room.players[playerId].hand[i].x === card.x && 
+      //       room.players[playerId].hand[i].y === card.y) {
+      //     c = room.players[playerId].hand.splice(i,1);
+      //     break;
+      //   }
+      // }
+      room.players[playerId].skills.push(...c);
+      room.players[playerId].money -= cost;
     }
-    // // ...then check if it is in the hand. It cannot be in both so it's safe
-    // for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
-    //   // since card comes from the client, it is NOT the same object (reference)
-    //   // so we need to compare properties for determining equality      
-    //   if (room.players[playerId].hand[i].x === card.x && 
-    //       room.players[playerId].hand[i].y === card.y) {
-    //     c = room.players[playerId].hand.splice(i,1);
-    //     break;
-    //   }
-    // }
-    room.players[playerId].skills.push(...c);
-    room.players[playerId].money -= cost;
-
-    }
-
-    
-    
   }
 }
 
