@@ -123,6 +123,7 @@ export default {
   height: 240px;
   width: 180px;
   border: 3px dashed black;
+  border-radius: 10px;
 }
 
  #CurrentAuctionCard {
