@@ -60,8 +60,18 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.lang = lang;
   room.deck = this.createDeck(lang);
   room.playerCount = playerCount;
+  if(playerCount===4){
   room.itemsOnSale = room.deck.splice(0, 5);
   room.skillsOnSale = room.deck.splice(0, 5);
+  }
+  if(playerCount===3){
+  room.itemsOnSale = room.deck.splice(0, 4);
+  room.skillsOnSale = room.deck.splice(0, 4);
+  }
+  if(playerCount===2){
+  room.itemsOnSale = room.deck.splice(0, 3);
+  room.skillsOnSale = room.deck.splice(0,3);
+  }
   room.auctionCards = room.deck.splice(0, 4);
   room.currentAuction = [];
   room.market = {
@@ -122,7 +132,7 @@ Data.prototype.joinGame = function (roomId, playerId) {
                                  income: [],
                                  secret: [],
                                  energyBottles: 2,
-                                 myTurn: true };
+                                 myTurn: true};
       }
       else{
       room.players[playerId] = { hand: [],
@@ -475,11 +485,9 @@ Data.prototype.raiseMarket=function(roomId, playerId, card, cost,action){
     room.players[playerId].money -= cost;
   }
   if(action==='skill'){
-    console.log('hejhej2')
     Data.prototype.getRidOfSkill(room);
   }
   else if (action==='auction') {
-    console.log('hejhej')
     Data.prototype.getRidOfAuction(room);
   }
   else if(action==='hand'){

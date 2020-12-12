@@ -30,7 +30,7 @@ export default {
   },
     placeBottle: function(p){
       if(p.numberOfChangedMarkets===2){
-        this.$emit('changeTwoMarket')
+        this.$emit('changeTwoMarket');
         this.$emit('placeBottle', p.cost);
       }
       else {

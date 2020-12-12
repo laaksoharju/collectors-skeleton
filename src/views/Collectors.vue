@@ -427,7 +427,7 @@ har gjort true eller false. Om man börjar auction så ska auction vara true och
           playerId: this.playerId,
           card: card,
           cost: this.chosenPlacementCost
-        }
+        });
         if(this.isPlacedList.market===true){
           this.raiseMarket(card,'skill');
           this.isPlacedList.market=false;
@@ -450,19 +450,16 @@ har gjort true eller false. Om man börjar auction så ska auction vara true och
         console.log("startAuction säger myturn är false")
         return
       }
-      this.isPlacedList.auction=false;
-      this.$store.state.socket.emit('collectorsStartAuction', {
-          roomId: this.$route.params.id,
-        }
+
+
       if(this.isPlacedList.market===true){
         this.raiseMarket(card,'auction');
         this.isPlacedList.market=false;
       }
         else{
-
-      this.$store.state.socket.emit('collectorsStartAuction', {
+          this.isPlacedList.auction=false;
+          this.$store.state.socket.emit('collectorsStartAuction', {
           roomId: this.$route.params.id,
-
           playerId: this.playerId,
           card: card,
           cost: this.chosenPlacementCost
