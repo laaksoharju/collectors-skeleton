@@ -54,6 +54,7 @@ Data.prototype.getUILabels = function (roomId) {
 Data.prototype.createRoom = function (roomId, playerCount, lang = "en") {
   let room = {};
   room.players = {};
+  room.round = 1;
   room.lang = lang;
   room.deck = this.createDeck(lang);
   room.playerCount = playerCount;
@@ -128,14 +129,32 @@ Data.prototype.setNextActivePlayer = function(roomId, activePlayerId){
     if(room.playerOrder[i] == activePlayerId){
       if(i != room.playerOrder.length -1){
         let nextActivePlayer = room.playerOrder[i+1];
-        room.players[nextActivePlayer].active = true;
-        return;
+        if(room.players[nextActivePlayer].availableBottles != 0){
+          room.players[nextActivePlayer].active = true;
+          return;
+        }
       } else if( i == room.playerOrder.length -1){
         let nextActivePlayer = room.playerOrder[0];
-        room.players[nextActivePlayer].active = true;
+        if(room.players[nextActivePlayer].availableBottles != 0){
+          room.players[nextActivePlayer].active = true;
+          return;
+        }
       }
     }
   }
+  this.nextRound(roomId);
+}
+
+Data.prototype.nextRound = function(roomId){
+  let room = this.rooms[roomId];
+  room.round += 1;
+  console.log("Round"+ room.round + "started")
+
+  for(let i = 0; i < room.playerOrder.length; i++){
+    room.players[room.playerOrder[i]].availableBottles =  room.players[room.playerOrder[i]].bottles;
+  }
+  room.players[room.playerOrder[0]].active = true; //första spelaren blir aktiv igen, ändra t den som har token
+
 }
 
 Data.prototype.setActivePlayer = function(roomId){
@@ -318,10 +337,12 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost) {
     if (action === "buy") {
       activePlacement = room.buyPlacement;
       room.players[playerId].active = false;
+      room.players[playerId].availableBottles -= 1;
       this.setNextActivePlayer(roomId, playerId);
     } else if (action === "skill") {
       activePlacement = room.skillPlacement;
       room.players[playerId].active = false;
+      room.players[playerId].availableBottles -= 1;
       this.setNextActivePlayer(roomId, playerId);
     } else if (action === "auction") {
       activePlacement = room.auctionPlacement;
