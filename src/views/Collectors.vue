@@ -11,6 +11,7 @@
   />
 
   <h1>I am player {{playerId}}</h1>
+  <h1 v-if="players[playerId].active"> my turn! </h1>
   <PlayerBoard v-if="players[playerId]"
         :player ="players[playerId]"/>
   <OtherPlayerboards :Players ="players" :playerId="playerId" />

@@ -45,7 +45,7 @@ export default {
   methods: {
 
     buttonDisabled:function (cost){
-      if(this.cannotAfford(cost) || !this.player.active){
+      if(this.cannotAfford(cost) || !this.player.active || this.player.availableBottles == 0){
         return true;
       }
       else return false;
