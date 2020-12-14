@@ -5,7 +5,8 @@
           <!--<transition name="slide">-->
           <div v-on:click="playerboardClicked(index)" :style="{backgroundColor: player.color}" class="otherPlayerBoard"> 
             <h2> Player {{index}} </h2>
-            <PlayerBoard v-if="dispPlayerboard === index" :player="player" class="showPlayerBoard" />
+            <PlayerBoard :class="['playerBoard', {'showPlayerBoard': dispPlayerboard===index}]" :player="player" />
+            <!--<PlayerBoard v-if="dispPlayerboard === index" :player="player" class="showPlayerBoard" />-->
           </div>
           <!--</transition>-->
         </div>
@@ -29,12 +30,14 @@ export default {
     },
     data: function () {
     return {
-        dispPlayerboard: ""
+        dispPlayerboard: "",
+        clicked: false,
     }},
     methods: {
         playerboardClicked: function(index) {
             if(this.dispPlayerboard != index){
               this.dispPlayerboard = index;
+              this.clicked=true;
               
               /*const panel = this.$playerboardClicked({
                 component: "otherPlayerBoard",
@@ -61,6 +64,23 @@ export default {
     }
     .otherPlayerBoard:hover{
     cursor: pointer;
+    }
+
+    .playerBoard {
+      overflow: hidden;
+      height: 0;
+      transition: 1s;
+      width: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
+    .showPlayerBoard {
+      /*height: 600px;
+      width: 1000px;*/
+      height: 600px;
+      width: 1000px;
     }
 
     /*.showPlayerBoard {

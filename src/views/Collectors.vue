@@ -8,6 +8,17 @@
  :auctionCards="auctionCards"
   />-->
 
+  <ItemSection v-if="players[playerId]"
+        :labels="labels"
+        :player="players[playerId]"
+        :itemsOnSale="itemsOnSale"
+        :marketValues="marketValues"
+        :placement="buyPlacement"
+        @buyCard="buyCard($event)"
+        @placeBottle="placeBottle('buy', $event)"
+        class="gridItem"
+      />
+
      <!-- {{ buyPlacement }} {{ chosenPlacementCost }}-->
   <WorkArea :color ="players[playerId].color" class="gridWork"/>
 
@@ -15,6 +26,7 @@
   <PlayerBoard v-if="players[playerId]" class="gridPlayerboard"
         :player ="players[playerId]"/>
 
+  <!--Ta bort nedan transition runt diven-->
   <transition name="slide">
     <div class="animate">
       <OtherPlayerboards :Players ="players" :playerId="playerId" class="gridOtherBoard" />
@@ -53,16 +65,16 @@
  :auctionCards="auctionCards"
   /> -->
 
-      <WorkArea />
+     <!-- <WorkArea />-->
       <!-- <CollectorsBuyActions
         v-if="players[playerId]"
         I am player {{playerId}}
     /> -->
-  <PlayerBoard v-if="players[playerId]"
+  <!--<PlayerBoard v-if="players[playerId]"
         :player ="players[playerId]"/>
-  <OtherPlayerboards :Players ="players" :playerId="playerId" />
+  <OtherPlayerboards :Players ="players" :playerId="playerId" />-->
 
-      {{ buyPlacement }} {{ chosenPlacementCost }}
+    <!--  {{ buyPlacement }} {{ chosenPlacementCost }}-->
 
       <div class="buttons">
         <button @click="drawCard">
@@ -263,7 +275,7 @@ export default {
         this.buyPlacement = d.buyPlacement;
         this.skillPlacement = d.skillPlacement;
         this.marketPlacement = d.marketPlacement;
-        this.auctionPlacement = d.auctionPlacement;
+        this.auctionPlacement = d.auctionPlacement;   
       }.bind(this)
     );
 
@@ -353,8 +365,13 @@ main {
 
 .wrapper {
   display: grid;
-  /*grid-template-columns: 60% 30% auto;*/
-  grid-template-columns: 80% auto;
+  grid-template-columns: 60% 30% 10%;
+  /*grid-template-columns: 40% 10%;*/
+}
+
+.gridItem {
+  grid-column: 1;
+  grid-row: 1;
 }
 
 /*.gridGame {
@@ -363,14 +380,14 @@ main {
 }*/
 
 .gridWork {
-  /*grid-column: 2;*/
-  grid-row: 1;
+  grid-column: 2;
+  /*grid-column: 1;*/
 }
 
 .gridOtherBoard {
-  /*grid-column: 3;*/
-  grid-column: 2;
-  grid-row: 1;
+  grid-column: 3;
+  /*grid-column: 2;*/
+  /*grid-row: 1;*/
 }
 
 .gridPlayerboard {
@@ -379,7 +396,7 @@ main {
 }
 
 /*TRANSITION*/
-.slide-enter-activve, .slide-leave-active {
+.slide-enter-active, .slide-leave-active {
   transition: transform 0.5s ease, opacity 0.5s ease;
 }
 

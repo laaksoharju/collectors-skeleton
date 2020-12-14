@@ -1,7 +1,7 @@
 <template>
     <div>       
         <div id="workArea">
-            <h2 id=workAreaText>Work</h2>
+            <h2 id="workAreaText">Work</h2>
                 <div v-if = "round == 1" class="rectangular firstArea" >
                     <div class="workArea_circle" v-on:click = "circleClicked"></div>
                     <div class="first figures">&#9203;</div>
