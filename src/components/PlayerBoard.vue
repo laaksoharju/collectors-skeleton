@@ -19,7 +19,7 @@
         </div>
     
         <div id='actionSection'>
-            <h2>Bottles</h2>
+            <h2>Bottles {{player.availableBottles}}</h2>
             <div id ="actionGrid">
                 <div v-on:click = 'actionMade("A")' class="dot bottle" id='A'></div>
                 <div v-on:click = 'actionMade("B")' class="dot bottle" id='B'></div>

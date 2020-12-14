@@ -1,5 +1,6 @@
 <template>
-    <div>       
+    <div>  
+            
         <div id="workArea">
             <h2 id="workAreaText">Work</h2>
                 <div v-if = "round == 1" class="rectangular firstArea" >
@@ -125,6 +126,7 @@ export default {
         align-items: center;
         flex-direction: column;
     }
+
    
     /*#workArea p { gjorde att alla p taggar i hela diven blev svarta och center, inte bra dvs.
         color:black;
