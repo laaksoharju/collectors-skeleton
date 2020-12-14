@@ -126,14 +126,20 @@ export default {
   border-width: 1px;
   border-color: black;
   transition:0.15s;
-  transition-timing-function:ease-in-out ;
+  transition-timing-function: ease-in-out;
+  border-radius: 10px;
   z-index: 1;
 }
 
-.buttons  img:hover {
+.buttons img:hover {
   position: relative;
   transform: scale(1.6);
+  border-radius: 10px;
   z-index: 1;
+}
+
+.buttons button {
+  border-radius: 10px;
 }
 
 #PickRoundButtons{
