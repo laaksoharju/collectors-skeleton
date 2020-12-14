@@ -17,7 +17,9 @@
             v-if="p.playerId===null"
             :disabled="cannotAfford(p.cost) || player.bottles < 1 || currentAuctionCard.length === 1"
             @click="placeBottle(p, index)">
-            ${{p.cost}}</button>
+            <img :src='p.img' style="width:70%">
+            <!-- ${{p.cost}} -->
+          </button>
             <div v-if="p.playerId !== null" style="color:black">
               {{p.playerId}}
             </div>
