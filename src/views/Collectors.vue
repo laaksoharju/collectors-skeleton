@@ -103,17 +103,27 @@
       <div class="turnCounter">
         <h3> Who's turn? </h3>
         <button class="turnButton"  @click= "changeTurn">  <!--  @click= "changeTurn" -->
-          <h2>  Player {{currentPlayer}} </h2> <h3> Press here when you're done.</h3>
+          <div v-if="currentPlayer === '' ">
+            <h5>  {{allPlayersId[0]}} </h5> <h3> Press here when you're done.</h3>
+          </div>
+          <div v-else>
+            <h5>   {{currentPlayer}} </h5> <h3> Press here when you're done.</h3>
+          </div>
         </button>
       </div>
-<!--
+
       <div class="roundCounter">
         <h3> Round:  </h3>
         <button class="roundButton"  @click= "changeRound">
-          <h2>  Round {{currentRound}} </h2> <h3> Press here when round {{currentRound}} is over.</h3>
+          <div v-if="currentRound < 5">
+            <h5> {{currentRound}} </h5> <h3> Press here when round {{currentRound}} is over.</h3>
+          </div>
+          <div v-else>
+            <h5> Game Ended </h5>
+          </div>
         </button>
       </div>
-    -->
+
 
       <!-- Ruta för att visa vilka spelare som är i rummet -->
       <div class="showPlayers">
@@ -238,7 +248,8 @@ export default {
       market:[],
       cardUpForAuction: {},
       chosenAction: "",
-      highestBid: 0
+      highestBid: 0,
+      //randomNumber: ""
     }
   },
   computed: {
@@ -461,7 +472,12 @@ export default {
           }
         );
     },
-
+    /* försöker skapa random nummer för att slumpa vem som börjar
+    randomNumber: function(){
+      let countPlayers = (allPlayersId()).length;
+      return Math.floor(Math.random() * (countPlayers - 1 + 1)) + 1;
+    } */
+/* den här funktionen tror jag ej används:
         countRounds: function () {
           console.log("TEST RÄKNA RUNDOR");
 
@@ -472,7 +488,7 @@ export default {
 
               }
             );
-            }
+          } */
 
   }
 }
@@ -486,6 +502,14 @@ h1 {
   font-size: 50px;
   text-shadow: 2px 2px 4px blue;
   margin-bottom: 0px;
+}
+h5 {
+  text-align: center;
+  font-style:italic;
+  font-size: 30px;
+  text-shadow: 1px 2px 2px blue;
+  margin-bottom: 0px;
+  margin-top: 0px;
 }
 
   header {
@@ -609,7 +633,7 @@ h1 {
   .roundCounter {
     background-color: blue;
     color:white;
-    grid-column: 6/ span 2;
+    grid-column: 7/ span 2;
     grid-row: 16/span 2;
     text-align: center;
   }

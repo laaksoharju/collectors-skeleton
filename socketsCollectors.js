@@ -65,7 +65,7 @@ function sockets(io, socket, data) {
         players: data.getPlayers(d.roomId),
         skillsOnSale: data.getSkillsOnSale(d.roomId),
         market: data.getMarket(d.roomId),
-        marketValues: data.getMarketValues(d.roomId)   //lagt till marketValues 
+        marketValues: data.getMarketValues(d.roomId)   //lagt till marketValues
         }
       );
     });
@@ -90,11 +90,11 @@ function sockets(io, socket, data) {
       data.changeTurn(d.roomId, d.currentPlayer));
     });
     // 14/12
-    /*
+
     socket.on('collectorsChangeRound', function(d) {
       io.to(d.roomId).emit('collectorsChangedRound',
       data.changeRound(d.roomId, d.currentRound));
-    });*/
+    });
 
     socket.on('collectorsCountRounds', function(d) {
       io.to(d.roomId).emit('collectorsRoundsCounted',

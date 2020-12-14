@@ -251,16 +251,23 @@ Data.prototype.changeTurn = function (roomId, playerId) {
   }
   else return "";
 }
-/*
+
 Data.prototype.changeRound = function (roomId, currentRound) {
   let room = this.rooms[roomId];
+  let nextRound = currentRound;
   if (typeof room !== 'undefined') {
-    let nextRound = currentRound + 1;
+    if (nextRound < 4) {
+      nextRound = currentRound + 1;
+      return nextRound;
     }
-    return nextRound;
+    if (nextRound === 4) {
+      let stopGame = 5;
+      return stopGame;
+    }
+
   }
   else return 0;
-} */
+}
 
 Data.prototype.countRounds = function (roomId, playerId) {};//FORTSÄTT HÄR FÖR QUARTER TILES
 
