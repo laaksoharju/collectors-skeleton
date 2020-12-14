@@ -1,39 +1,41 @@
-<template>
+changeRoundWork<template>
   <div id="WorkActionsDiv">
     <h1 style="text-align: center"><img class="title_img" src="images/work.png">{{ labels.doWork }}</h1>
-      <div id="WorkContainer">
+    <div id="WorkContainer">
 
-        <div id="PickRoundButtons" >
-            <h3>Double-click to change round</h3>
-          <input type="radio" id="roundOneButton" value="Round 1" v-model="picked" v-on:dblclick="changeFirstWorkCard()" >
-          <label for="roundOneButton">Round 1</label>
-          <br>
-          <input type="radio" id="roundTwoButton" value="Round 2" v-model="picked" v-on:dblclick="changeFirstWorkCard()">
-          <label for="roundTwoButton">Round 2</label>
-          <br>
-          <input type="radio" id="roundThreeButton" value="Round 3" v-model="picked" v-on:dblclick="changeFirstWorkCard()">
-          <label for="roundThreeButton">Round 3</label>
-          <br>
-          <input type="radio" id="roundFourButton" value="Round 4" v-model="picked" v-on:dblclick="changeFirstWorkCard()">
-          <label for="roundFourButton">Round 4</label>
-          <br>
-          <!-- <span>Round: {{ picked }}</span> -->
-        </div>
-        <div id="WorkButtons">
-          <div class="buttons" v-for="(p, index) in placement" :key="index">
-            <button
-            v-if="p.playerId===null"
-            :disabled="cannotAfford(p.cost) || player.bottles < 1"
-            @click="placeBottle(p, index)">
-            <img :src='p.img' style="width:100%">
-          </button>
-          <div v-if="p.playerId !== null" style="color:black">
-            {{p.playerId}}
-          </div>
+      <div id="PickRoundButtons" >
+        <h3>Double-click to change round</h3>
+        <input type="radio" id="roundOneButton" value="Round 1" v-model="picked" v-on:dblclick="changeRoundWork()" >
+        <label for="roundOneButton">Round 1</label>
+        <br>
+        <input type="radio" id="roundTwoButton" value="Round 2" v-model="picked" v-on:dblclick="changeRoundWork()">
+        <label for="roundTwoButton">Round 2</label>
+        <br>
+        <input type="radio" id="roundThreeButton" value="Round 3" v-model="picked" v-on:dblclick="changeRoundWork()">
+        <label for="roundThreeButton">Round 3</label>
+        <br>
+        <input type="radio" id="roundFourButton" value="Round 4" v-model="picked" v-on:dblclick="changeRoundWork()">
+        <label for="roundFourButton">Round 4</label>
+        <br>
+        <!-- <span>Round: {{ picked }}</span> -->
+      </div>
+      <div id="WorkButtons">
+        <div class="buttons" v-for="(p, index) in placement" :key="index">
+          <button
+          v-if="p.playerId===null"
+          :disabled="cannotAfford(p.cost) || player.bottles < 1"
+          @click="placeBottle(p, index)">
+          <img v-if="index===0" :src='changeFirstWorkCard()'  style="width:100%" >
+
+          <img :src='p.img' style="width:100%">
+        </button>
+        <div v-if="p.playerId !== null" style="color:black">
+          {{p.playerId}}
         </div>
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -50,19 +52,19 @@ export default {
 
   data: function () {
     return {
-        picked:  this.picked
-      }
+      picked:  this.picked
+    }
   },
 
-    created: function () {
+  created: function () {
 
-      this.$store.state.socket.on('collectorsRoundUpdated',function(d){
-        console.log('round updated');
-        this.activeRound=d.activeRound;
-        this.picked = d.activeRound;
-        console.log(this.activeRound,  this.picked );
-      }.bind(this));
-    },
+    this.$store.state.socket.on('collectorsRoundUpdated',function(d){
+      console.log('round updated');
+      this.activeRound=d.activeRound;
+      this.picked = d.activeRound;
+      console.log(this.activeRound,  this.picked );
+    }.bind(this));
+  },
 
   methods: {
     cannotAfford: function (cost) {
@@ -74,7 +76,7 @@ export default {
       this.$emit('placeBottleWork', p);
     },
 
-    changeFirstWorkCard: function (){
+    changeRoundWork: function (){
       console.log(this.picked);
 
       alert(this.picked);
@@ -84,6 +86,26 @@ export default {
         round: this.picked
       });
     },
+
+    changeFirstWorkCard: function (){
+      let firstWorkButtonImage = ['images/Work_Round_1.png','images/Work_Round_2.png','images/Work_Round_3.png','images/Work_Round_4.png'];
+      let setImage =[];
+
+      if (this.picked === 'Round 1'){
+        setImage = firstWorkButtonImage[0];
+      }
+      else if (this.picked === 'Round 2') {
+        setImage = firstWorkButtonImage[1];
+      }
+      else if (this.picked === 'Round 3') {
+        setImage = firstWorkButtonImage[2];
+      }
+      else if (this.picked === 'Round 4') {
+        setImage = firstWorkButtonImage[3];
+      }
+      return setImage;
+    },
+
 
   }
 }

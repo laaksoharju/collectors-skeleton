@@ -85,7 +85,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.marketPlacement = [ {cost:0, playerId: null},
                            {cost:2, playerId: null},
                            {cost:0, playerId: null} ];
-  room.workPlacement = [ {cost:0, playerId: null},
+  room.workPlacement = [ {cost:0, playerId: null  },
                          {cost:-1, playerId: null, img: 'images/Static_Work_Image_001.png'},
                          {cost:1, playerId: null, img: 'images/Static_Work_Image_002.png'},
                          {cost:0, playerId: null, img: 'images/Static_Work_Image_003.png'},
@@ -376,6 +376,7 @@ Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index
     if (index === 0) {
       console.log('Work ruta index 0, variera med rundan.');
       room.workPlacement[index].playerId = playerId;
+      
     }
     if (index === 1) {
       console.log('Work ruta index 1, släng en flaska');
