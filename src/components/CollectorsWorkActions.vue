@@ -2,7 +2,6 @@ changeRoundWork<template>
   <div id="WorkActionsDiv">
     <h1 style="text-align: center"><img class="title_img" src="images/work.png">{{ labels.doWork }}</h1>
     <div id="WorkContainer">
-
       <div id="PickRoundButtons" >
         <h3>Double-click to change round</h3>
         <input type="radio" id="roundOneButton" value="Round 1" v-model="picked" v-on:dblclick="changeRoundWork()" >
@@ -17,7 +16,6 @@ changeRoundWork<template>
         <input type="radio" id="roundFourButton" value="Round 4" v-model="picked" v-on:dblclick="changeRoundWork()">
         <label for="roundFourButton">Round 4</label>
         <br>
-        <!-- <span>Round: {{ picked }}</span> -->
       </div>
       <div id="WorkButtons">
         <div class="buttons" v-for="(p, index) in placement" :key="index">
@@ -26,7 +24,6 @@ changeRoundWork<template>
           :disabled="cannotAfford(p.cost) || player.bottles < 1"
           @click="placeBottle(p, index)">
           <img v-if="index===0" :src='changeFirstWorkCard()'  style="width:100%" >
-
           <img :src='p.img' style="width:100%">
         </button>
         <div v-if="p.playerId !== null" style="color:black">
@@ -39,8 +36,6 @@ changeRoundWork<template>
 </template>
 
 <script>
-
-
 
 export default {
   name: 'CollectorsWorkActions',
@@ -57,12 +52,10 @@ export default {
   },
 
   created: function () {
-
     this.$store.state.socket.on('collectorsRoundUpdated',function(d){
       console.log('round updated');
       this.activeRound=d.activeRound;
       this.picked = d.activeRound;
-      console.log(this.activeRound,  this.picked );
     }.bind(this));
   },
 
@@ -105,8 +98,6 @@ export default {
       }
       return setImage;
     },
-
-
   }
 }
 
@@ -121,27 +112,28 @@ export default {
   padding-right: 10px;
 }
 
-.get-skills {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
-  grid-template-rows: repeat(auto-fill, 260px);
-}
-.get-skills div {
-  transform: scale(0.8)translate(-10%,-10%);
-  transition:0.2s;
-  transition-timing-function: ease-out;
-  z-index: 0;
-}
-.get-skills div:hover {
-  transform: scale(0.9)translate(-10%,-10%);
-  z-index: 1;
-}
-
 .buttons {
   display: grid;
   float:left;
   grid-template-columns: repeat(auto-fill, 130px);
-  transform: scale(0.8)translate(10%,-10%);
+  grid-template-rows: repeat(auto-fill, 55px);
+  transform: scale(0.9);
+  z-index: -1;
+}
+
+.buttons img{
+  border-style: dashed;
+  border-width: 1px;
+  border-color: black;
+  transition:0.15s;
+  transition-timing-function:ease-in-out ;
+  z-index: 1;
+}
+
+.buttons  img:hover {
+  position: relative;
+  transform: scale(1.6);
+  z-index: 1;
 }
 
 #PickRoundButtons{

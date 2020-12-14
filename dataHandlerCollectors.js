@@ -274,7 +274,6 @@ Data.prototype.addPlayerReady= function(roomId, playerId){
 }
 
 Data.prototype.changeRound= function(roomId, playerId, round){
-  console.log('!!!!changeRound fuktion');
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
      room.activeRound = round;
@@ -374,15 +373,30 @@ Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index
     }
 
     if (index === 0) {
-      console.log('Work ruta index 0, variera med rundan.');
-      room.workPlacement[index].playerId = playerId;
-      
+      if (room.activeRound ==='Round 1') {
+        console.log('2 kort till Income');
+        room.workPlacement[index].playerId = playerId;
+      }
+      else if (room.activeRound ==='Round 2') {
+        console.log('2 kort till Income + 1$');
+        room.players[playerId].money += 1;
+        room.workPlacement[index].playerId = playerId;
+      }
+      else if (room.activeRound ==='Round 3') {
+        console.log('2 kort till Income + 2$');
+        room.players[playerId].money += 2;
+        room.workPlacement[index].playerId = playerId;
+      }
+      else if (room.activeRound ==='Round 4') {
+        console.log('Släng en flaska + 3$');
+        room.players[playerId].money += 1;
+      }
     }
     if (index === 1) {
-      console.log('Work ruta index 1, släng en flaska');
+      console.log('Work ruta index 1, släng en flaska + 1$');
     }
     if (index === 2) {
-      console.log('Work ruta index 2, dra två kort');
+      console.log('Work ruta index 2, dra två kort -1$');
       room.workPlacement[index].playerId = playerId;
       let card1 = room.deck.pop();
       let card2 = room.deck.pop();
