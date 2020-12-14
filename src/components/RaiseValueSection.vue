@@ -1,11 +1,16 @@
 <template>
   <div id="RaiseValueSection" class="board-section">
     <div class="raise-value-slot-container">
-      <div class="raise-value-slot">{{marketValues.fastaval}}</div>
-      <div class="raise-value-slot">{{marketValues.movie}}</div>
-      <div class="raise-value-slot">{{marketValues.technology}}</div>
-      <div class="raise-value-slot">{{marketValues.figures}}</div>
-      <div class="raise-value-slot">{{marketValues.music}}</div>
+      <div class="raise-value-slot" id="rvFastaval"></div>
+      <div class="raise-value-slot" id="rvMovie"></div>
+      <div class="raise-value-slot" id="rvTechnology"></div>
+      <div class="raise-value-slot" id="rvFigures"></div>
+      <div class="raise-value-slot" id="rvMusic"></div>
+      <p>{{marketValues.fastaval}}</p>
+      <p>{{marketValues.movie}}</p>
+      <p>{{marketValues.technology}}</p>
+      <p>{{marketValues.figures}}</p>
+      <p>{{marketValues.music}}</p>
     </div>
 
     <div class="button-section">
@@ -118,14 +123,45 @@ export default {
 
 .raise-value-slot-container {
   width: 80%;
-  display: flex;
-  justify-content: space-around;
-}
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  text-align: center;
+  color:black;
+  font-weight: bold;
+  }
 .raise-value-slot {
   background-color: #6d9eebff;
-  width: 50px;
-  height: 50px;
+  width: 6vw;
+  height: 6vw;
   border-radius: 50%;
   border: 1px solid #19181850;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+
+}
+#rvMovie {
+  background: url("/images/RAISEVAL-FILM.png");
+  background-size: 6vw 6vw;
+}
+#rvFigures {
+  background: url("/images/RAISEVAL-ROBOT.png");
+  background-size: 6vw 6vw;
+}
+#rvTechnology {
+  background: url("/images/RAISEVAL-IT.png");
+  background-size: 6vw 6vw;
+
+}
+#rvMusic {
+  background: url("/images/RAISEVAL-MUSIC.png");
+  background-size: 6vw 6vw;
+}
+#rvFastaval {
+  background: url("/images/RAISEVAL-PINGVIN.png");
+  background-size: 6vw 6vw;
 }
 </style>

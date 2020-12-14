@@ -7,7 +7,7 @@
           :availableAction="card.available"
           @doAction="buyCard(card)"
         />
-        <!-- {{ cardCost(card) }} -->
+       <p> + {{ cardCost(card) }}</p>
       </div>
     </div>
     <div class="button-section">
@@ -59,7 +59,7 @@ export default {
       return this.player.money < minCost;
     },
     cardCost: function (card) {
-      return this.marketValues[card.market];
+      return this.marketValues[card.item];
     },
     placeBottle: function (p) {
       this.$emit("placeBottle", p.cost);

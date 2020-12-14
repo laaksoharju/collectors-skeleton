@@ -225,7 +225,7 @@ export default {
     justify-content: center;
     align-items: center;
     margin-left: auto;
-    margin-right:auto;
+    margin-right: auto;
 } 
 .income, .money {
     background-color: #ffe599ff;

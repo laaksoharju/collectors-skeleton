@@ -9,7 +9,6 @@
             :availableAction="card.available"
             @doAction="buySkillCard(card)"
           />
-          {{ cardCost(card) }}
         </div>
       </div>
       <div class='button-section'>
@@ -53,16 +52,9 @@ export default {
       else return false;
     },
     cannotAfford: function (cost) {
-      let minCost = 100;
-      for (let key in this.marketValues) {
-        if (cost + this.marketValues[key] < minCost)
-          minCost = cost + this.marketValues[key];
-      }
-      return this.player.money < minCost;
+      return this.player.money < cost;
     },
-    cardCost: function (card) {
-      return this.marketValues[card.market];
-    },
+
     placeBottle: function (p) {
       this.$emit("placeBottle", p.cost);
       this.highlightAvailableCards(p.cost);

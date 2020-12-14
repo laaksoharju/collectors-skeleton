@@ -11,10 +11,7 @@
   />
 
   <h1>I am player {{playerId}}</h1>
-  <h1 v-if="players[playerId].active"> my turn! </h1>
-  <PlayerBoard v-if="players[playerId]"
-        :player ="players[playerId]"/>
-  <OtherPlayerboards :Players ="players" :playerId="playerId" />
+  <h1 v-if="players[playerId] && players[playerId].active"> my turn! </h1>
       <div id="game-board">
         <ItemSection
           v-if="players[playerId]"
@@ -36,7 +33,7 @@
             :marketValues="marketValues"
             :placement="skillPlacement"
             @buySkillCard="buySkillCard($event)"
-            @placeBottle="placeBottle('buy', $event)"
+            @placeBottle="placeBottle('skill', $event)"
           />
           <RaiseValueSection
             v-if="players[playerId]"
@@ -46,8 +43,9 @@
             :marketValues="marketValues"
             :placement="marketPlacement"
             @buyCard="buyCard($event)"
-            @placeBottle="placeBottle('buy', $event)"
+            @placeBottle="placeBottle('buy', $event)" 
           />
+          <!-- Kom ihåg att ändra i placebottle-->
           <AuctionSection
             v-if="players[playerId]"
             :labels="labels"
