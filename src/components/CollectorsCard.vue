@@ -38,9 +38,12 @@ export default {
 }
 
 .available-to-choose {
-  animation: jiggle 1s ease-in-out;
-  animation-iteration-count: infinite;
-  box-shadow: 0 0 10px yellow;
+  /*animation: jiggle 1s ease-in-out;
+  animation-iteration-count: infinite;*/
+
+  box-shadow: 0 0 30px red;
+
+
 }
 
 @keyframes jiggle {

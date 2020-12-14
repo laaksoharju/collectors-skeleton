@@ -60,9 +60,42 @@
               @placeBottle="placeBottle('skill', $event)"
             />
           </section>
-          <section class="box market">market</section>
-          <section class="box worker">worker</section>
-          <section class="box auction">auction</section>
+            <section class="market_bottle">
+              <Bottles
+                v-if="players[playerId]"
+                :labels="labels"
+                :player="players[playerId]"
+                :itemsOnSale="itemsOnSale"
+                :marketValues="marketValues"
+                :placement="marketPlacement"
+                @placeBottle="placeBottle('market', $event)"
+              />
+
+            </section>
+
+          <section class="work_bottle">
+            <Bottles
+              v-if="players[playerId]"
+              :labels="labels"
+              :player="players[playerId]"
+              :itemsOnSale="skillsOnSale"
+              :marketValues="marketValues"
+              :placement="workPlacement"
+              @placeBottle="placeBottle('work', $event)"
+            />
+          </section>
+          <section class="auction_bottle">
+            <Bottles
+              v-if="players[playerId]"
+              :labels="labels"
+              :player="players[playerId]"
+              :itemsOnSale="skillsOnSale"
+              :marketValues="marketValues"
+              :placement="auctionPlacement"
+              @placeBottle="placeBottle('auction', $event)"
+            />
+
+          </section>
         </div>
 
         <div class="game player-board">
@@ -225,6 +258,7 @@ export default {
       skillPlacement: [],
       auctionPlacement: [],
       marketPlacement: [],
+      workPlacement: [],
       chosenPlacementCost: null,
       marketValues: {
         fastaval: 0,
@@ -290,6 +324,7 @@ export default {
         this.skillPlacement = d.placements.skillPlacement;
         this.marketPlacement = d.placements.marketPlacement;
         this.auctionPlacement = d.placements.auctionPlacement;
+        this.workPlacement = d.placements.workPlacement;
       }.bind(this)
     );
 
@@ -312,6 +347,7 @@ export default {
         this.skillPlacement = d.skillPlacement;
         this.marketPlacement = d.marketPlacement;
         this.auctionPlacement = d.auctionPlacement;
+        this.workPlacement = d.workPlacement;
       }.bind(this)
     );
 
@@ -457,10 +493,7 @@ footer a:visited {
   width: 100%;
   grid-column: 2/3;
 }
-.buy_item{
 
-
-}
 .buy_item >>> .buy-cards {
   position: relative;
   left: 16.5vw;
@@ -523,42 +556,62 @@ footer a:visited {
   grid-template-rows: repeat(5, 2rem);
   grid-gap: 0.5em;
 }
-.market {
+.market_bottle {
   grid-row: 3/4;
   grid-column: 2/4;
   background-color: rgb(171, 203, 245);
   background-image: url("/images/market.jpg");
   background-size: 100% 100%;
 }
-.worker {
+.market_bottle >>> .buttons {
+  top: 1.5vh;
+  left: 12.3vw;
+  display: grid;
+  grid-template-columns: repeat(5, 3.5rem);
+  grid-gap: 0.5em;
+
+}
+
+.marketBottle2Blue{
+  position: relative;
+  z-index: 4;
+  top: -5.5vh;
+  left: 14.4vw;
+  width: 0.5em;
+  height: 0.8em;
+}
+
+.work_bottle {
   grid-column: 2/3;
   grid-row: 2/3;
   background-color: rgb(240, 228, 195);
   background-image: url("/images/work.jpg");
   background-size: 100% 100%;
 }
-.auction {
+.work_bottle >>> .buttons {
+  top: 15vh;
+  left: 1vw;
+  display: grid;
+  grid-template-rows: repeat(5, 2rem);
+  grid-gap: 0.5em;
+}
+.auction_bottle {
   grid-column: 3/4;
   grid-row: 2/3;
   background-color: rgb(238, 245, 245);
   background-image: url("/images/auction.jpg");
   background-size: 100% 100%;
 }
-.cardslots {
+
+.auction_bottle >>> .buttons {
+  top: 2vh;
+  left: 1vw;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
-  grid-template-rows: repeat(auto-fill, 180px);
+  grid-template-rows: repeat(5, 2.5rem);
+  grid-gap: 0.5em;
 }
-.cardslots div {
-  transform: scale(0.5) translate(-50%, -50%);
-  transition: 0.2s;
-  transition-timing-function: ease-out;
-  z-index: 0;
-}
-.cardslots div:hover {
-  transform: scale(1) translate(-25%, 0);
-  z-index: 1;
-}
+
+
 
 .cardslots {
   display: grid;
