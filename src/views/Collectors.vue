@@ -160,34 +160,66 @@
               class="player-skills">
                 <div v-if="card.skill==='bottle'" class="player-skills-1">
                   <img src="/images/skills/bottle.jpg" alt="Player Skills 1" />
+                  <p v-if="countskills(players[playerId].skills,'bottle')>1 ">
+                      {{playerskill['bottle']}}
+                         </p>
                 </div>
                 <div v-if="card.skill==='workerIncome'" class="player-skills-2">
                   <img src="/images/skills/workerIncome.jpg" alt="Player Items 1" />
+                  <p v-if="countskills(players[playerId].skills,'workerIncome')>1 ">
+                      {{playerskill['workerIncome']}}
+                         </p>
+
                 </div>
                 <div v-if="card.skill==='workerCard'" class="player-skills-3">
                   <img src="/images/skills/workerCard.jpg" alt="Player Items 1" />
+                  <p v-if="countskills(players[playerId].skills,'workerCard')>1 ">
+                      {{playerskill['workerCard']}}
+                         </p>
                 </div>
-                <div v-if="card.skill==='VP-techonology'" class="player-skills-4">
-                  <img src="/images/skills/VP-techonology.jpg" alt="Player Skills 1" />
-              
+                <div v-if="card.skill==='VP-technology'" class="player-skills-4">
+                  <img src="/images/skills/VP-technology.jpg" alt="Player Skills 1" />
+                  <p v-if="countskills(players[playerId].skills,'VP-technology')>1 ">
+                      {{playerskill['VP-technology']}}
+                         </p>
                 </div>
                 <div v-if="card.skill==='VP-fastaval'" class="player-skills-5">
                   <img src="/images/skills/VP-fastaval.jpg" alt="Player Items 1" />
+                  <p v-if="countskills(players[playerId].skills,'VP-fastaval')>1 ">
+                      {{playerskill['VP-fastaval']}}
+                         </p>
                 </div>
                 <div v-if="card.skill==='VP-movie'" class="player-skills-6">
                   <img src="/images/skills/VP-movie.jpg" alt="Player Items 1" />
+                  <p v-if="countskills(players[playerId].skills,'VP-movie')>1 ">
+                      {{playerskill['VP-movie']}}
+                         </p>
+                  
                 </div>
                 <div v-if="card.skill==='VP-music'" class="player-skills-7">
                   <img src="/images/skills/VP-music.jpg" alt="Player Items 1" />
+                  <p v-if="countskills(players[playerId].skills,'VP-music')>1 ">
+                      {{playerskill['VP-music']}}
+                         </p>
                 </div>
                 <div v-if="card.skill==='VP-figure'" class="player-skills-8">
                   <img src="/images/skills/VP-figure.jpg" alt="Player Items 1" />
+                  <p v-if="countskills(players[playerId].skills,'VP-figure')>1 ">
+                      {{playerskill['VP-figure']}}
+                         </p>
                 </div>
                 <div v-if="card.skill==='VP-all'" class="player-skills-9">
                   <img src="/images/skills/VP-all.jpg" alt="Player Items 1" />
+                   <p v-if="countskills(players[playerId].skills,'VP-all')>1 ">
+                      {{playerskill['VP-all']}}
+                         </p>
+
                 </div>
                  <div v-if="card.skill==='auctionIncome'" class="player-skills-10">
                   <img src="/images/skills/auctionIncome.jpg" alt="Player Items 1" />
+                   <p v-if="countskills(players[playerId].skills,'auctionIncome')>1 ">
+                      {{playerskill['auctionIncome']}}
+                         </p>
                 </div>
 
               </div>
@@ -244,7 +276,7 @@
     <footer>
       {{ players }}
     {{ marketValues }}
-    {{'this is place'+ placement }}
+    {{ placement }}
       <p>
         {{ labels.invite }}
         <input
@@ -324,6 +356,19 @@ export default {
         figure:0,
         fastaval:0,
 
+
+      },
+      playerskill:{
+        'bottle':0,
+        'VP-all':0,
+        'VP-fastaval':0,
+        'VP-movie':0,
+        'VP-figures':0,
+        'VP-music':0,
+        'VP-technology':0,
+        'workerCard':0,
+        'workerIncome':0,
+        'auctionIncome':0
 
       }
     };
@@ -495,31 +540,25 @@ export default {
           if(items[prop]['item']===card){   
              count+=1;
              
-             }
-      
-       
+             } 
+                   });
+      this.playeritem[card]=count      
+      return count;    
 
-      });
-      this.playeritem[card]=count
-      // console.log(this.playeritem[card])
-      return count;
-      // for (var item in this.players[this.playerId].items){
-      //   console.log('inside'+ item[card])
-       
-      //   if (item[item]===card)
-      //   {
-      //     count+=1;
-      //   }
-      // }
-      // for (var kind in this.playeritem){
-      //     if(card===kind){
-      //       this.playeritem.kind=count
-      //     }
-
-      // }
+    },
+    countskills:function(skills,card){
       
-      
-      // return count
+      var count=0
+      Object.keys(skills).forEach(function(prop) {
+         
+          if(skills[prop]['skill']===card){   
+             count+=1;
+             
+             } 
+                   });
+      this.playerskill[String(card)]=count   
+      console.log(this.playerskill[card])   
+      return count;    
 
     }
   },
@@ -714,7 +753,7 @@ footer a:visited {
 
 .game {
   font-size: 150%;
-  /* height: 88vh; */
+  
   height:88vh
 }
 
@@ -817,10 +856,11 @@ footer a:visited {
   
 }
 
+
+
 .player-items-1 {
   grid-column: 1/2;
-  display:grid;
-  grid-template-rows:60% 40%
+  
   
  
 
@@ -837,8 +877,7 @@ footer a:visited {
 }
 .player-items-4 {
   grid-column: 4/5;
-  display:grid;
-  grid-template-columns:70% 30%
+ 
   
 
 }
@@ -852,19 +891,28 @@ footer a:visited {
   width: 70%;
   border-radius:0.2rem;
   
-  padding-top: 0.1em;
+  padding-top: 0.2em;
   padding-bottom:0;
   margin:0;
 
-  ;
+  
+}
+.player-items img:hover {
+  height: 150%;
+  width: 100%;
+  border-radius:0.5rem;
+  
+  outline: 1px solid rgb(221, 82, 94);
 }
 .player-items p {
   
   font-size:0.8em;
   color:#fff;
-  padding-left:0.3em;
+  padding-left:0.6em;
   
 }
+
+
   
 
 
@@ -879,8 +927,8 @@ footer a:visited {
   grid-row: 1;
   display: grid;
   grid-template-columns: repeat(10,1fr);
-  grid-gap:0.1rem;
-  align-items:center;
+  grid-gap:0.05rem;
+ 
   
 }
 
@@ -927,10 +975,31 @@ footer a:visited {
 }
 
 .player-skills img {
-  height: 70%;
-  width: 70%;
-   padding-top: 0.1em;
-  padding-bottom: 0.1em; 
+  height: 35%;
+  width: 45%;
+  border-radius:0.25rem;  
+  padding-top:0.12rem;
+
+  padding-bottom:0;
+  margin:0;
+  
+}
+.player-skills img:hover {
+  height: 100%;
+  width: 100%;
+  border-radius:1rem;  
+  outline: 1px solid rgb(139, 204, 160);
+
+
+}
+
+.player-skills p{
+  font-size:0.8em;
+  color:#fff;
+  margin:0;
+  padding-left:0.3em;
+  padding-top:0.1em;
+
 }
 
 .other-players .player-skills-1 img {
