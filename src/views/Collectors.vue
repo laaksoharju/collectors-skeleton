@@ -87,7 +87,7 @@
             :marketValues="marketValues"
             :placement="skillPlacement"
             @buySkillCard="buySkillCard($event)"
-            @placeBottle="placeBottle('buy', $event)"
+            @placeBottle="placeBottle('skill', $event)"
           />
         </div>
 
@@ -102,8 +102,9 @@
             :marketValues="marketValues"
             :placement="marketPlacement"
             @buyCard="buyCard($event)"
-            @placeBottle="placeBottle('buy', $event)"
+            @placeBottle="placeBottle('buy', $event)" 
           />
+          <!-- Kom ihåg att ändra i placebottle-->
         </div>
 
         <div class="collectorsContainer">
