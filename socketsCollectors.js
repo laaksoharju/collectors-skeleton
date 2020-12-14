@@ -2,6 +2,7 @@ function sockets(io, socket, data) {
     socket.on('setupCollectors', function(d) {
       data.createRoom(d.roomId, d.playerCount, d.lang);
     })
+
     socket.on('collectorsLoaded', function(d) {
       socket.join(d.roomId);
       if (data.joinGame(d.roomId, d.playerId)) {
@@ -14,10 +15,18 @@ function sockets(io, socket, data) {
             auctionCards: data.getAuctionCards(d.roomId),
             currentAuctionCard: data.getCurrentAuctionCard(d.roomId),
             placements: data.getPlacements(d.roomId),
-            market: data.getMarket(d.roomId)
+            market: data.getMarket(d.roomId),
+            playerCount: data.getPlayerCount(d.roomId)
           }
         );
       }
+    });
+
+    socket.on('collectorsStartGame', function(d) {
+      io.to(d.roomId).emit('collectorsGameStarted', {
+        playerBoardShown: data.getPlayerBoardShown(d.roomId),
+        playerIdArray: data.getPlayerIdArray(d.roomId)
+      });
     });
 
     socket.on('collectorsDrawCard', function(d) {
