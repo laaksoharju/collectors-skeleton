@@ -60,9 +60,42 @@
               @placeBottle="placeBottle('skill', $event)"
             />
           </section>
-          <section class="box market">market</section>
-          <section class="box worker">worker</section>
-          <section class="box auction">auction</section>
+            <section class="market_bottle">
+              <Bottles
+                v-if="players[playerId]"
+                :labels="labels"
+                :player="players[playerId]"
+                :itemsOnSale="itemsOnSale"
+                :marketValues="marketValues"
+                :placement="marketPlacement"
+                @placeBottle="placeBottle('market', $event)"
+              />
+
+            </section>
+
+          <section class="work_bottle">
+            <Bottles
+              v-if="players[playerId]"
+              :labels="labels"
+              :player="players[playerId]"
+              :itemsOnSale="skillsOnSale"
+              :marketValues="marketValues"
+              :placement="workPlacement"
+              @placeBottle="placeBottle('work', $event)"
+            />
+          </section>
+          <section class="auction_bottle">
+            <Bottles
+              v-if="players[playerId]"
+              :labels="labels"
+              :player="players[playerId]"
+              :itemsOnSale="skillsOnSale"
+              :marketValues="marketValues"
+              :placement="auctionPlacement"
+              @placeBottle="placeBottle('auction', $event)"
+            />
+
+          </section>
         </div>
 
         <div class="game player-board">
@@ -81,6 +114,7 @@
                   type="text"
                   v-bind:value="players[playerId].playerName"
                   v-on:keyup="changeName($event)"
+                  @click="selectAll"
                   autofocus="true"
                   hidden
                 /><img
@@ -92,7 +126,9 @@
               </div>
               <div class="player-coins">
                 <p>
-                  <img src="/images/player-coins.png" alt="Player Coins" />x5
+                  <img src="/images/player-coins.png" alt="Player Coins" />x{{
+                    players[playerId].money
+                  }}
                 </p>
               </div>
               <div class="player-cards-for-coins">
@@ -102,22 +138,157 @@
                 />x4
               </div>
             </div>
-            <div class="player-hand"></div>
-            <div class="player-bottles" v-if="players.hasOwnProperty(playerId)">
+            <div class="player-hand">
+              <div class="secret-card">
+                <CollectorsCard
+                  v-for="(card, index) in players[playerId].secret"
+                  :card="card"
+                  :availableAction="card.available"
+                  :key="'secret' + index"
+                />
+              </div>
+              <div class="cardslots" v-if="players[playerId]">
+                <CollectorsCard
+                  v-for="(card, index) in players[playerId].hand"
+                  :card="card"
+                  :availableAction="card.available"
+                  :key="index"
+                />
+              </div>
+            </div>
+            <div
+              class="player-bottles"
+              :style="{
+                backgroundImage:
+                  'url(' + playerBoards[players[playerId].color] + ')',
+              }"
+            >
               <img
+                v-for="index in players[playerId].bottles"
+                :key="index"
+                :src="playerBottle[players[playerId].color]"
+                alt="index"
+              />
+              <!-- <img
                 v-bind:src="playerBoards[players[playerId].color]"
                 alt="Player Boards"
-              />
+              /> -->
+              <!-- <img
+                v-bind:src="playerBottle[players[playerId].color]"
+                alt="players[playerId].color"
+              /> -->
             </div>
-            <div class="player-items-skills">
-              <div class="player-items">
-                <div class="player-items-1">
-                  <img src="/images/item-movie-icon.png" alt="Player Items 1" />
+          <div class="player-items-skills">
+            <!-- if the active player has already buy an item -->
+            <div
+              v-for ="(card,index) in players[playerId].items" :key="index"
+
+            class="player-items">
+
+                <div v-if="card.item==='movie'" class="player-items-1">
+
+
+                        <img src="/images/items/movie.jpg" alt="Player Items 1" />
+                       <p v-if="countitem(players[playerId].items,'movie')>1 ">
+                      {{playeritem['movie']}}
+                         </p>
+
+
+                </div>
+                <div v-if="card.item==='music'" class="player-items-2">
+                  <img src="/images/items/music.jpg" alt="Player Items 1" />
+                     <p v-if="countitem(players[playerId].items,'music')>1 ">
+                      {{playeritem['music']}}
+                         </p>
+                </div>
+                <div v-if="card.item==='fastaval'" class="player-items-3">
+                  <img src="/images/items/fastaval.jpg" alt="Player Items 1" />
+                     <p v-if="countitem(players[playerId].items,'fastaval')>1 ">
+                      {{playeritem['fastaval']}}
+                         </p>
+                </div>
+                <div v-if="card.item==='figures'" class="player-items-4">
+                  <img src="/images/items/figures.jpg" alt="Player Items 1" />
+                  <p v-if="countitem(players[playerId].items,'figures')>1 ">
+                      {{playeritem['figures']}}
+                         </p>
+                </div>
+                <div v-if="card.item==='technology'" class="player-items-5">
+                  <img src="/images/items/technology.jpg" alt="Player Items 1" />
+                  <p v-if="countitem(players[playerId].items,'technology')>1 ">
+                      {{playeritem['technology']}}
+                         </p>
                 </div>
               </div>
-              <div class="player-skills">
-                <div class="player-skills-1">
-                  <img src="/images/skill-bottle-icon.png" />
+
+              <!-- if the active player has already buy a skill -->
+
+              <div
+              v-for="(card,index) in players[playerId].skills"
+              :key="index"
+              class="player-skills">
+                <div v-if="card.skill==='bottle'" class="player-skills-1">
+                  <img src="/images/skills/bottle.jpg" alt="Player Skills 1" />
+                  <p v-if="countskills(players[playerId].skills,'bottle')>1 ">
+                      {{playerskill['bottle']}}
+                         </p>
+                </div>
+                <div v-if="card.skill==='workerIncome'" class="player-skills-2">
+                  <img src="/images/skills/workerIncome.jpg" alt="Player Items 1" />
+                  <p v-if="countskills(players[playerId].skills,'workerIncome')>1 ">
+                      {{playerskill['workerIncome']}}
+                         </p>
+
+                </div>
+                <div v-if="card.skill==='workerCard'" class="player-skills-3">
+                  <img src="/images/skills/workerCard.jpg" alt="Player Items 1" />
+                  <p v-if="countskills(players[playerId].skills,'workerCard')>1 ">
+                      {{playerskill['workerCard']}}
+                         </p>
+                </div>
+                <div v-if="card.skill==='VP-technology'" class="player-skills-4">
+                  <img src="/images/skills/VP-technology.jpg" alt="Player Skills 1" />
+                  <p v-if="countskills(players[playerId].skills,'VP-technology')>1 ">
+                      {{playerskill['VP-technology']}}
+                         </p>
+                </div>
+                <div v-if="card.skill==='VP-fastaval'" class="player-skills-5">
+                  <img src="/images/skills/VP-fastaval.jpg" alt="Player Items 1" />
+                  <p v-if="countskills(players[playerId].skills,'VP-fastaval')>1 ">
+                      {{playerskill['VP-fastaval']}}
+                         </p>
+                </div>
+                <div v-if="card.skill==='VP-movie'" class="player-skills-6">
+                  <img src="/images/skills/VP-movie.jpg" alt="Player Items 1" />
+                  <p v-if="countskills(players[playerId].skills,'VP-movie')>1 ">
+                      {{playerskill['VP-movie']}}
+                         </p>
+
+                </div>
+                <div v-if="card.skill==='VP-music'" class="player-skills-7">
+                  <img src="/images/skills/VP-music.jpg" alt="Player Items 1" />
+                  <p v-if="countskills(players[playerId].skills,'VP-music')>1 ">
+                      {{playerskill['VP-music']}}
+                         </p>
+                </div>
+                <div v-if="card.skill==='VP-figure'" class="player-skills-8">
+                  <img src="/images/skills/VP-figure.jpg" alt="Player Items 1" />
+                  <p v-if="countskills(players[playerId].skills,'VP-figure')>1 ">
+                      {{playerskill['VP-figure']}}
+                         </p>
+                </div>
+                <div v-if="card.skill==='VP-all'" class="player-skills-9">
+                  <img src="/images/skills/VP-all.jpg" alt="Player Items 1" />
+                   <p v-if="countskills(players[playerId].skills,'VP-all')>1 ">
+                      {{playerskill['VP-all']}}
+                         </p>
+
+                </div>
+                 <div v-if="card.skill==='auctionIncome'" class="player-skills-10">
+                  <img src="/images/skills/auctionIncome.jpg" alt="Player Items 1" />
+                   <p v-if="countskills(players[playerId].skills,'auctionIncome')>1 ">
+                      {{playerskill['auctionIncome']}}
+                         </p>
                 </div>
               </div>
             </div>
@@ -135,7 +306,9 @@
                 Player: {{ players[otherPlayerId].playerName }}
               </div>
               <div class="player-coins">
-                <img src="/images/player-coins.png" alt="Player Coins" />x5
+                <img src="/images/player-coins.png" alt="Player Coins" />x{{
+                  players[otherPlayerId].money
+                }}
               </div>
               <div class="player-cards-for-coins">
                 <img
@@ -144,14 +317,27 @@
                 />x4
               </div>
             </div>
-            <div class="player-bottles" v-if="players.hasOwnProperty(playerId)">
+            <div
+              class="player-bottles"
+              v-if="players.hasOwnProperty(playerId)"
+              :style="{
+                backgroundImage:
+                  'url(' + playerBoards[players[otherPlayerId].color] + ')',
+              }"
+            >
               <img
+                v-for="index in players[otherPlayerId].bottles"
+                :key="index"
+                :src="playerBottle[players[otherPlayerId].color]"
+                alt="index"
+              />
+              <!-- <img
                 v-bind:src="playerBoards[players[otherPlayerId].color]"
                 alt="Player Boards"
-              />
+              /> -->
             </div>
             <div class="player-items-skills">
-              <div class="player-items">
+              <div class="player-items" v-if='players[otherPlayerId].items.length !== 0 ' >
                 <div class="player-items-1">
                   <img src="/images/item-movie-icon.png" alt="Player Items 1" />
                 </div>
@@ -168,11 +354,11 @@
       </div>
     </main>
 
-
     <footer>
-      {{ players }}
-    {{ marketValues }}
-    {{'this is place'+ placement }}
+      <br /><br />
+      <!-- {{ players }} -->
+      <!-- {{ marketValues }} -->
+      <br /><br />
       <p>
         {{ labels.invite }}
         <input
@@ -183,9 +369,9 @@
         />
       </p>
 
-      <button v-if="players[playerId]" @click="players[playerId].money += 1">
+      <!-- <button v-if="players[playerId]" @click="players[playerId].money += 1">
         fake more money
-      </button>
+      </button> -->
     </footer>
   </div>
 </template>
@@ -194,14 +380,14 @@
 <script>
 // /eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }]/;
 
-// import CollectorsCard from "@/components/CollectorsCard.vue";
+import CollectorsCard from "@/components/CollectorsCard.vue";
 import CollectorsBuyActions from "@/components/CollectorsBuyActions.vue";
 import Bottles from "@/components/Bottles.vue";
 
 export default {
   name: "Collectors",
   components: {
-    // CollectorsCard,
+    CollectorsCard,
     CollectorsBuyActions,
     Bottles,
   },
@@ -225,6 +411,7 @@ export default {
       skillPlacement: [],
       auctionPlacement: [],
       marketPlacement: [],
+      workPlacement: [],
       chosenPlacementCost: null,
       marketValues: {
         fastaval: 0,
@@ -245,12 +432,40 @@ export default {
         brown: "images/player-board-2.png",
         grey: "images/player-board-1.png",
       },
+      playerBottle: {
+        violet: "images/violet_bottle.png",
+        blue: "images/blue_bottle.png",
+        brown: "images/brown_bottle.png",
+        grey: "images/grey_bottle.png",
+      },
+      playeritem:{
+        movie:0,
+        music:0,
+        technology:0,
+        figure:0,
+        fastaval:0,
+
+
+      },
+      playerskill:{
+        'bottle':0,
+        'VP-all':0,
+        'VP-fastaval':0,
+        'VP-movie':0,
+        'VP-figures':0,
+        'VP-music':0,
+        'VP-technology':0,
+        'workerCard':0,
+        'workerIncome':0,
+        'auctionIncome':0
+
+      }
     };
   },
   computed: {
     playerId: function () {
       return this.$store.state.playerId;
-    },
+    }
   },
   watch: {
     players: function (newP, oldP) {
@@ -290,6 +505,7 @@ export default {
         this.skillPlacement = d.placements.skillPlacement;
         this.marketPlacement = d.placements.marketPlacement;
         this.auctionPlacement = d.placements.auctionPlacement;
+        this.workPlacement = d.placements.workPlacement;
       }.bind(this)
     );
 
@@ -312,6 +528,7 @@ export default {
         this.skillPlacement = d.skillPlacement;
         this.marketPlacement = d.marketPlacement;
         this.auctionPlacement = d.auctionPlacement;
+        this.workPlacement = d.workPlacement;
       }.bind(this)
     );
 
@@ -405,6 +622,35 @@ export default {
         cost: this.marketValues[card.market] + this.chosenPlacementCost,
       });
     },
+    countitem:function(items,card){
+
+      var count=0
+      Object.keys(items).forEach(function(prop) {
+
+          if(items[prop]['item']===card){
+             count+=1;
+
+             }
+                   });
+      this.playeritem[card]=count
+      return count;
+
+    },
+    countskills:function(skills,card){
+
+      var count=0
+      Object.keys(skills).forEach(function(prop) {
+
+          if(skills[prop]['skill']===card){
+             count+=1;
+
+             }
+                   });
+      this.playerskill[String(card)]=count
+      console.log(this.playerskill[card])
+      return count;
+
+    }
   },
 };
 </script>
@@ -417,7 +663,6 @@ header {
 }
 main {
   user-select: none;
-
 }
 footer {
   position: relative;
@@ -457,9 +702,7 @@ footer a:visited {
   width: 100%;
   grid-column: 2/3;
 }
-.buy_item{
-
-
+.buy_item {
 }
 .buy_item >>> .buy-cards {
   position: relative;
@@ -501,7 +744,7 @@ footer a:visited {
   top: 5vh;
   left: 3vw;
   display: grid;
-  grid-template-columns: repeat(5, 2rem);
+  grid-template-columns: repeat(5, 3rem);
   grid-gap: 0.5em;
 }
 .item_bottle >>> .button {
@@ -520,60 +763,88 @@ footer a:visited {
   top: 40vh;
   left: 2.25vw;
   display: grid;
-  grid-template-rows: repeat(5, 2rem);
+  grid-template-rows: repeat(5, 3rem);
   grid-gap: 0.5em;
 }
-.market {
+.market_bottle {
   grid-row: 3/4;
   grid-column: 2/4;
   background-color: rgb(171, 203, 245);
   background-image: url("/images/market.jpg");
   background-size: 100% 100%;
 }
-.worker {
+.market_bottle >>> .buttons {
+  top: 1.5vh;
+  left: 12.3vw;
+  display: grid;
+  grid-template-columns: repeat(5, 3.5rem);
+  grid-gap: 0.5em;
+
+}
+
+.marketBottle2Blue{
+  position: relative;
+  z-index: 4;
+  top: -5.5vh;
+  left: 14.4vw;
+  width: 0.5em;
+  height: 0.8em;
+}
+
+.work_bottle {
   grid-column: 2/3;
   grid-row: 2/3;
   background-color: rgb(240, 228, 195);
   background-image: url("/images/work.jpg");
   background-size: 100% 100%;
 }
-.auction {
+.work_bottle >>> .buttons {
+  top: 15vh;
+  left: 1vw;
+  display: grid;
+  grid-template-rows: repeat(5, 2rem);
+  grid-gap: 0.5em;
+}
+.auction_bottle {
   grid-column: 3/4;
   grid-row: 2/3;
   background-color: rgb(238, 245, 245);
   background-image: url("/images/auction.jpg");
   background-size: 100% 100%;
 }
-.cardslots {
+
+.auction_bottle >>> .buttons {
+  top: 2vh;
+  left: 1vw;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
-  grid-template-rows: repeat(auto-fill, 180px);
-}
-.cardslots div {
-  transform: scale(0.5) translate(-50%, -50%);
-  transition: 0.2s;
-  transition-timing-function: ease-out;
-  z-index: 0;
-}
-.cardslots div:hover {
-  transform: scale(1) translate(-25%, 0);
-  z-index: 1;
+  grid-template-rows: repeat(5, 2.5rem);
+  grid-gap: 0.5em;
 }
 
 .cardslots {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
-  grid-template-rows: repeat(auto-fill, 180px);
+  grid-template-columns: repeat(auto-fill, 80px);
+  grid-template-rows: repeat(auto-fill, 100px);
 }
+
+.secret-card div {
+  border: dashed green;
+  opacity: 0.5;
+}
+
+.secret-card div,
 .cardslots div {
-  transform: scale(0.5) translate(-50%, -50%);
+  transform: scale(0.3) translate(-110%, -110%);
   transition: 0.2s;
   transition-timing-function: ease-out;
   z-index: 0;
 }
+
+.secret-card div:hover,
 .cardslots div:hover {
   transform: scale(1) translate(-25%, 0);
   z-index: 1;
+  opacity: 1;
 }
 
 .collectors-game {
@@ -599,7 +870,6 @@ footer a:visited {
   font-size: 150%;
   height: 88vh;
 }
-
 
 .player-board {
   border-radius: 5px;
@@ -657,55 +927,121 @@ footer a:visited {
   grid-row: 2;
   border-style: dashed;
   color: red;
+  display: grid;
+  grid-template-columns: 15% 85%;
 }
 
 .player-bottles {
   grid-column: 1;
   grid-row: 3;
+  display: grid;
+  background-size: contain;
+  background-repeat: no-repeat;
+  grid-template-columns: 12% 15%;
+  /* gap: 7px; */
+}
+
+.player-bottles img {
+  height: 100%;
+}
+
+.current-player .player-bottles img:hover {
+  outline: 3px solid black;
 }
 
 .other-players .player-bottles {
   grid-column: 1;
   grid-row: 2;
-}
-
-.player-bottles img {
-  height: 100%;
-  width: 100%;
+  display: grid;
+  background-size: contain;
+  background-repeat: no-repeat;
+  grid-template-columns: 12% 15%;
 }
 
 .player-items-skills {
-  grid-column: 1;
+
   grid-row: 4;
   display: grid;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: 40% 60%;
 }
 
 .other-players .player-items-skills {
   grid-column: 1;
   grid-row: 3;
   display: grid;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: 40% 60%;
 }
 
 .player-items {
   grid-column: 1;
   grid-row: 1;
   display: grid;
-  grid-template-columns: 20%;
+  grid-template-columns: repeat(5,1fr);
+  grid-template-rows:50%;
+
+
+
 }
+
+
 
 .player-items-1 {
-  grid-column: 1;
-  grid-row: 1;
+  grid-column: 1/2;
+
+
+
+
+}
+.player-items-2 {
+  grid-column: 2/3;
+
+
+}
+.player-items-3 {
+  grid-column: 3/4;
+
+
+}
+.player-items-4 {
+  grid-column: 4/5;
+
+
+
+}
+.player-items-5 {
+  grid-column: 5/6;
+
+
+}
+.player-items img {
+  height: 70%;
+  width: 70%;
+  border-radius:0.2rem;
+
+  padding-top: 0.2em;
+  padding-bottom:0;
+  margin:0;
+
+
+}
+.player-items img:hover {
+  height: 150%;
+  width: 100%;
+  border-radius:0.5rem;
+
+  outline: 1px solid rgb(221, 82, 94);
+}
+.player-items p {
+
+  font-size:0.8em;
+  color:#fff;
+  padding-left:0.6em;
+
 }
 
-.player-items-1 img {
-  height: 80%;
-  width: 100%;
-  padding-top: 1px;
-  padding-bottom: 3px;
-}
+
+
+
 
 .other-players .player-items-1 img {
   height: 45%;
@@ -717,19 +1053,80 @@ footer a:visited {
   grid-column: 2;
   grid-row: 1;
   display: grid;
-  grid-template-columns: 20%;
+  grid-template-columns: repeat(10,1fr);
+  grid-gap:0.05rem;
+
+
 }
 
 .player-skills-1 {
-  grid-column: 1;
-  grid-row: 1;
+  grid-column: 1/2;
+
+}
+.player-skills-2 {
+  grid-column: 2/3;
+
+}
+.player-skills-3 {
+  grid-column: 3/4;
+
+}
+.player-skills-4 {
+  grid-column: 4/5;
+
+}
+.player-skills-5 {
+  grid-column: 5/6;
+
+}
+.player-skills-6 {
+  grid-column: 6/7;
+
+}
+.player-skills-7 {
+  grid-column: 7/8;
+
+}
+.player-skills-8 {
+  grid-column: 8/9;
+
+
+}
+.player-skills-9 {
+  grid-column: 9/10;
+
+}
+.player-skills-10 {
+  grid-column: 10/11;
+
 }
 
-.player-skills-1 img {
-  height: 75%;
+.player-skills img {
+  height: 35%;
+  width: 45%;
+  border-radius:0.25rem;
+  padding-top:0.12rem;
+
+  padding-bottom:0;
+  margin:0;
+
+}
+.player-skills img:hover {
+  height: 100%;
   width: 100%;
-  padding-top: 1px;
-  padding-bottom: 3px;
+  border-radius:1rem;
+  outline: 1px solid rgb(139, 204, 160);
+
+
+}
+
+.player-skills p{
+  font-size:0.8em;
+  color:#fff;
+  margin:0;
+  padding-left:0.3em;
+  padding-top:0.1em;
+
 }
 
 .other-players .player-skills-1 img {

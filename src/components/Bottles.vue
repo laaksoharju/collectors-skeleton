@@ -1,14 +1,99 @@
 <template>
   <div class="buttons">
     <div v-for="(p, index) in placement" :key="index">
-      <button
-        class="btn-style"
-        v-if="p.playerId === null"
-        :disabled="cannotAfford(p.cost)"
-        @click="placeBottle(p)"
-      >
-        ${{ p.cost }}
-      </button>
+
+        <div v-if="p.bottleType == 'normal'">
+
+
+          <button
+            class="btn-normal"
+            v-if="p.playerId === null"
+            :disabled="cannotAfford(p.cost)"
+            @click="placeBottle(p)"
+          >
+
+            <div class = "recieveMoney" v-if="p.cost < 0 ">
+
+              ${{ p.cost*-1 }}
+            </div>
+
+            <div class = "costMoney" v-if="p.cost >= 0 ">
+
+              ${{ p.cost }}
+            </div>
+
+          </button>
+
+        </div>
+
+        <div v-if="p.bottleType == 'marketTwoBlue'">
+            <button
+              class="btn-marketTwoBlue"
+              v-if="p.playerId === null"
+              :disabled="cannotAfford(p.cost)"
+              @click="placeBottle(p)"
+            >
+            <div class = "recieveMoney" v-if="p.cost < 0 ">
+              ${{ p.cost*-1 }}
+            </div>
+
+            <div class = "costMoney" v-if="p.cost >= 0 ">
+              ${{ p.cost }}
+            </div>
+            </button>
+        </div>
+
+        <div v-if="p.bottleType == 'marketOneBlue'">
+            <button
+              class="btn-marketOneBlue"
+              v-if="p.playerId === null"
+              :disabled="cannotAfford(p.cost)"
+              @click="placeBottle(p)"
+            >
+            <div class = "recieveMoney" v-if="p.cost < 0 ">
+              ${{ p.cost*-1 }}
+            </div>
+
+            <div class = "costMoney" v-if="p.cost >= 0 ">
+              ${{ p.cost }}
+            </div>
+            </button>
+        </div>
+
+        <div v-if="p.bottleType == 'marketDollar'">
+            <button
+              class="btn-marketDollar"
+              v-if="p.playerId === null"
+              :disabled="cannotAfford(p.cost)"
+              @click="placeBottle(p)"
+            >
+            <div class = "recieveMoney" v-if="p.cost < 0 ">
+              ${{ p.cost*-1 }}
+            </div>
+
+            <div class = "costMoney" v-if="p.cost >= 0 ">
+              ${{ p.cost }}
+            </div>
+            </button>
+        </div>
+
+        <div v-if="p.bottleType == 'auctionMedal'">
+            <button
+              class="btn-auctionMedal"
+              v-if="p.playerId === null"
+              :disabled="cannotAfford(p.cost)"
+              @click="placeBottle(p)"
+            >
+            <div class = "recieveMoney" v-if="p.cost < 0 ">
+              ${{ p.cost*-1 }}
+            </div>
+
+            <div class = "costMoney" v-if="p.cost >= 0 ">
+              ${{ p.cost }}
+            </div>
+            </button>
+        </div>
+
       <div v-if="p.playerId !== null">
         {{ p.playerId }}
       </div>
@@ -32,6 +117,7 @@ export default {
     cannotAfford: function (cost) {
       let minCost = 100;
       for (let key in this.marketValues) {
+        console.log(this.marketValues)
         if (cost + this.marketValues[key] < minCost)
           minCost = cost + this.marketValues[key];
       }
@@ -94,17 +180,74 @@ export default {
   transition-timing-function: ease-out;
   z-index: 0;
 }
-.btn-style {
+.btn-normal {
   width: 5em;
   height: 5em;
-  background-image: url("/images/bottle.jpg");
   background-size: 100% 100%;
+  border-radius: 5px;
 
-  border-radius: 10px;
-  color: white;
-  text-align: center;
   padding: 0.5rem;
-
   font-size: 0.5rem;
+  background-image: url("/images/bottle.jpg");
 }
+
+.btn-marketTwoBlue {
+  width: 5em;
+  height: 5em;
+  background-size: 100% 100%;
+  border-radius: 5px;
+
+  padding: 0.5rem;
+  font-size: 0.5rem;
+  background-image: url("/images/marketBottle2Blue.jpg");
+}
+
+.btn-marketOneBlue {
+  width: 5em;
+  height: 5em;
+  background-size: 100% 100%;
+  border-radius: 5px;
+
+  padding: 0.5rem;
+  font-size: 0.5rem;
+  background-image: url("/images/marketBottle1Blue.jpg");
+}
+
+.btn-marketDollar {
+  width: 5em;
+  height: 5em;
+  background-size: 100% 100%;
+  border-radius: 5px;
+
+  padding: 0.5rem;
+  font-size: 0.5rem;
+  background-image: url("/images/marketBottleDollar.jpg");
+}
+
+.btn-auctionMedal {
+  width: 5em;
+  height: 5em;
+  background-size: 100% 100%;
+  border-radius: 5px;
+
+  padding: 0.5rem;
+  font-size: 0.5rem;
+  background-image: url("/images/auctionBottleMedal.jpg");
+}
+.recieveMoney {
+  color: LimeGreen;
+  text-indent: -2.8em;
+  font-weight: 900;
+
+
+
+}
+.costMoney {
+  color: black;
+  text-indent: -2.8em;
+  font-weight: 900;
+
+}
+
+
 </style>

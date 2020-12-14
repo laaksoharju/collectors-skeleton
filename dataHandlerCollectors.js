@@ -76,23 +76,28 @@ Data.prototype.createRoom = function (roomId, playerCount, lang = "en")
   room.skillsOnSale = room.deck.splice(0, 5);
   room.auctionCards = room.deck.splice(0, 4);
   room.market = [];
-  room.buyPlacement = [{ cost: 1, playerId: null },
-  { cost: 1, playerId: null },
-  { cost: 2, playerId: null },
-  { cost: 2, playerId: null },
-  { cost: 3, playerId: null }];
-  room.skillPlacement = [{ cost: 0, playerId: null },
-  { cost: 0, playerId: null },
-  { cost: 0, playerId: null },
-  { cost: 1, playerId: null },
-  { cost: 1, playerId: null }];
-  room.auctionPlacement = [{ cost: -2, playerId: null },
-  { cost: -1, playerId: null },
-  { cost: 0, playerId: null },
-  { cost: 0, playerId: null }];
-  room.marketPlacement = [{ cost: 0, playerId: null },
-  { cost: -2, playerId: null },
-  { cost: 0, playerId: null }];
+  room.buyPlacement = [{ cost: 1, playerId: null, bottleType: 'normal' },
+  { cost: 1, playerId: null, bottleType: 'normal' },
+  { cost: 2, playerId: null, bottleType: 'normal' },
+  { cost: 2, playerId: null, bottleType: 'normal' },
+  { cost: 3, playerId: null, bottleType: 'normal' }];
+  room.skillPlacement = [{ cost: 0, playerId: null, bottleType: 'normal' },
+  { cost: 0, playerId: null, bottleType: 'normal' },
+  { cost: 0, playerId: null, bottleType: 'normal' },
+  { cost: 1, playerId: null, bottleType: 'normal' },
+  { cost: 1, playerId: null, bottleType: 'normal' }];
+  room.workPlacement = [{ cost: -3, playerId: null, bottleType: 'normal' },
+  { cost: -1, playerId: null, bottleType: 'normal' },
+  { cost: 1, playerId: null, bottleType: 'normal' },
+  { cost: 0, playerId: null, bottleType: 'normal' },
+  { cost: 0, playerId: null, bottleType: 'normal' }];
+  room.auctionPlacement = [{ cost: -2, playerId: null, bottleType: 'normal' },
+  { cost: -1, playerId: null, bottleType: 'normal' },
+  { cost: 0, playerId: null, bottleType: 'auctionMedal' },
+  { cost: 0, playerId: null, bottleType: 'auctionMedal' }];
+  room.marketPlacement = [{ cost: 0, playerId: null, bottleType: 'marketTwoBlue' },
+  { cost: 2, playerId: null, bottleType: 'marketDollar' },
+  { cost: 0, playerId: null, bottleType: 'marketOneBlue' }];
   this.rooms[roomId] = room;
 }
 
@@ -120,14 +125,15 @@ Data.prototype.joinGame = function (roomId, playerId)
       console.log("Player", playerId, "joined for the first time");
       room.players[playerId] = {
         playerName: playerId,
-        hand: [],
-        money: 1,
+        hand: room.deck.splice(0, 2), // Two cards are kept secret and form the hands of each player
+        money: Object.keys(room.players).length + 2,
         points: 0,
         skills: [],
         items: [],
         income: [],
-        secret: [],
-        color: room.playerColors.pop()
+        secret: room.deck.splice(0, 1), // picks one card and places it face down, tucked under their player board at the position marked with a treasure chest.
+        color: room.playerColors.pop(),
+        bottles: 2,
       };
       return true;
     }
@@ -183,73 +189,80 @@ Data.prototype.drawCard = function (roomId, playerId)
 }
 
 /* moves card from itemsOnSale to a player's hand */
-Data.prototype.buyCard = function (roomId, playerId, card, cost,action) {
-  
+Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
+{
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined')
   {
     let c = null;
-    /// check first if the card is among the items on sale
-    if (action==='buy')
 
+    // check first if the player has enough bottles and money to buy the card
+    if (room.players[playerId].money < cost || room.players[playerId].bottles < 1)
+    {
+      console.log("Player doesn't have enough money or bottles to buy the card");
+      return;
+    }
+
+    /// check first if the card is among the items on sale
+    if (action === 'buy')
     {
       console.log('reach buy')
 
-    for (let i = 0; i < room.itemsOnSale.length; i += 1) {
-      // since card comes from the client, it is NOT the same object (reference)
-      // so we need to compare properties for determining equality
-      if (room.itemsOnSale[i].x === card.x &&
-        room.itemsOnSale[i].y === card.y)
+      for (let i = 0; i < room.itemsOnSale.length; i += 1)
       {
-        c = room.itemsOnSale.splice(i, 1, {});
-        break;
+        // since card comes from the client, it is NOT the same object (reference)
+        // so we need to compare properties for determining equality
+        if (room.itemsOnSale[i].x === card.x &&
+          room.itemsOnSale[i].y === card.y)
+        {
+          c = room.itemsOnSale.splice(i, 1, {});
+          break;
+        }
       }
-    }
-    // ...then check if it is in the hand. It cannot be in both so it's safe
-    for (let i = 0; i < room.players[playerId].hand.length; i += 1)
-    {
-      // since card comes from the client, it is NOT the same object (reference)
-      // so we need to compare properties for determining equality
-      if (room.players[playerId].hand[i].x === card.x &&
-        room.players[playerId].hand[i].y === card.y)
+      // ...then check if it is in the hand. It cannot be in both so it's safe
+      for (let i = 0; i < room.players[playerId].hand.length; i += 1)
       {
-        c = room.players[playerId].hand.splice(i, 1);
-        break;
+        // since card comes from the client, it is NOT the same object (reference)
+        // so we need to compare properties for determining equality
+        if (room.players[playerId].hand[i].x === card.x &&
+          room.players[playerId].hand[i].y === card.y)
+        {
+          c = room.players[playerId].hand.splice(i, 1);
+          break;
+        }
       }
+      room.players[playerId].items.push(...c);
+      room.players[playerId].money -= cost;
+      room.players[playerId].bottles -= 1;
     }
-    room.players[playerId].items.push(...c);
-    room.players[playerId].money -= cost;
-
-    }
-    else if (action==='skill')
+    else if (action === 'skill')
     {
       console.log('reach skill')
-    for (let i = 0; i < room.skillsOnSale.length; i += 1) {
-      // since card comes from the client, it is NOT the same object (reference)
-      // so we need to compare properties for determining equality      
-      if (room.skillsOnSale[i].x === card.x && 
-          room.skillsOnSale[i].y === card.y) {
-        c = room.skillsOnSale.splice(i,1, {});
-        break;
+      for (let i = 0; i < room.skillsOnSale.length; i += 1)
+      {
+        // since card comes from the client, it is NOT the same object (reference)
+        // so we need to compare properties for determining equality
+        if (room.skillsOnSale[i].x === card.x &&
+          room.skillsOnSale[i].y === card.y)
+        {
+          c = room.skillsOnSale.splice(i, 1, {});
+          break;
+        }
       }
+      // // ...then check if it is in the hand. It cannot be in both so it's safe
+      // for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
+      //   // since card comes from the client, it is NOT the same object (reference)
+      //   // so we need to compare properties for determining equality
+      //   if (room.players[playerId].hand[i].x === card.x &&
+      //       room.players[playerId].hand[i].y === card.y) {
+      //     c = room.players[playerId].hand.splice(i,1);
+      //     break;
+      //   }
+      // }
+      room.players[playerId].skills.push(...c);
+      room.players[playerId].money -= cost;
+      room.players[playerId].bottles -= 1;
     }
-    // // ...then check if it is in the hand. It cannot be in both so it's safe
-    // for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
-    //   // since card comes from the client, it is NOT the same object (reference)
-    //   // so we need to compare properties for determining equality      
-    //   if (room.players[playerId].hand[i].x === card.x && 
-    //       room.players[playerId].hand[i].y === card.y) {
-    //     c = room.players[playerId].hand.splice(i,1);
-    //     break;
-    //   }
-    // }
-    room.players[playerId].skills.push(...c);
-    room.players[playerId].money -= cost;
-
-    }
-
-    
-    
   }
 }
 
@@ -270,6 +283,10 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost)
     else if (action === "auction")
     {
       activePlacement = room.auctionPlacement;
+    }
+    else if (action === "work")
+    {
+      activePlacement = room.workPlacement;
     }
     else if (action === "market")
     {
@@ -307,7 +324,8 @@ Data.prototype.getPlacements = function (roomId)
       buyPlacement: room.buyPlacement,
       skillPlacement: room.skillPlacement,
       auctionPlacement: room.auctionPlacement,
-      marketPlacement: room.marketPlacement
+      marketPlacement: room.marketPlacement,
+      workPlacement: room.workPlacement
     }
   }
   else return {};
