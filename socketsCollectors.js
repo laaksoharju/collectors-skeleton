@@ -17,11 +17,11 @@ function sockets(io, socket, data)
         skillsOnSale: data.getSkillsOnSale(d.roomId),
         auctionCards: data.getAuctionCards(d.roomId),
         placements: data.getPlacements(d.roomId)
+
       }
-      );
-    }
-  });
-  socket.on('updatePlayerName', function (d)
+    );
+  }
+  });socket.on('updatePlayerName', function (d)
   {
     io.to(d.roomId).emit('updatePlayerName',
       data.updatePlayerName(d.roomId, d.playerId, d.playerName)

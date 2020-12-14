@@ -76,23 +76,28 @@ Data.prototype.createRoom = function (roomId, playerCount, lang = "en")
   room.skillsOnSale = room.deck.splice(0, 5);
   room.auctionCards = room.deck.splice(0, 4);
   room.market = [];
-  room.buyPlacement = [{ cost: 1, playerId: null },
-  { cost: 1, playerId: null },
-  { cost: 2, playerId: null },
-  { cost: 2, playerId: null },
-  { cost: 3, playerId: null }];
-  room.skillPlacement = [{ cost: 0, playerId: null },
-  { cost: 0, playerId: null },
-  { cost: 0, playerId: null },
-  { cost: 1, playerId: null },
-  { cost: 1, playerId: null }];
-  room.auctionPlacement = [{ cost: -2, playerId: null },
-  { cost: -1, playerId: null },
-  { cost: 0, playerId: null },
-  { cost: 0, playerId: null }];
-  room.marketPlacement = [{ cost: 0, playerId: null },
-  { cost: -2, playerId: null },
-  { cost: 0, playerId: null }];
+  room.buyPlacement = [{ cost: 1, playerId: null, bottleType: 'normal' },
+  { cost: 1, playerId: null, bottleType: 'normal' },
+  { cost: 2, playerId: null, bottleType: 'normal' },
+  { cost: 2, playerId: null, bottleType: 'normal' },
+  { cost: 3, playerId: null, bottleType: 'normal' }];
+  room.skillPlacement = [{ cost: 0, playerId: null, bottleType: 'normal' },
+  { cost: 0, playerId: null, bottleType: 'normal' },
+  { cost: 0, playerId: null, bottleType: 'normal' },
+  { cost: 1, playerId: null, bottleType: 'normal' },
+  { cost: 1, playerId: null, bottleType: 'normal' }];
+  room.workPlacement = [{ cost: -3, playerId: null, bottleType: 'normal' },
+  { cost: -1, playerId: null, bottleType: 'normal' },
+  { cost: 1, playerId: null, bottleType: 'normal' },
+  { cost: 0, playerId: null, bottleType: 'normal' },
+  { cost: 0, playerId: null, bottleType: 'normal' }];
+  room.auctionPlacement = [{ cost: -2, playerId: null, bottleType: 'normal' },
+  { cost: -1, playerId: null, bottleType: 'normal' },
+  { cost: 0, playerId: null, bottleType: 'auctionMedal' },
+  { cost: 0, playerId: null, bottleType: 'auctionMedal' }];
+  room.marketPlacement = [{ cost: 0, playerId: null, bottleType: 'marketTwoBlue' },
+  { cost: 2, playerId: null, bottleType: 'marketDollar' },
+  { cost: 0, playerId: null, bottleType: 'marketOneBlue' }];
   this.rooms[roomId] = room;
 }
 
@@ -130,7 +135,6 @@ Data.prototype.joinGame = function (roomId, playerId)
         color: room.playerColors.pop(),
         bottles: 2,
       };
-      // console.log(room.players[playerId]);
       return true;
     }
     console.log("Player", playerId, "was declined due to player limit");
@@ -188,14 +192,6 @@ Data.prototype.drawCard = function (roomId, playerId)
 Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
 {
   let room = this.rooms[roomId];
-  // console.log("Player from room: " + roomId + " with ID: " + playerId);
-  // console.log("wants to buy the card: " + card + " with cost: " + cost);
-  // console.log("action: " + action);
-
-  // console.log("");
-  // console.log("The player has this much money: " + room.players[playerId].money);
-  // console.log("The player has this many bottles: " + room.players[playerId].bottles);
-
   if (typeof room !== 'undefined')
   {
     let c = null;
@@ -245,7 +241,7 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
       for (let i = 0; i < room.skillsOnSale.length; i += 1)
       {
         // since card comes from the client, it is NOT the same object (reference)
-        // so we need to compare properties for determining equality      
+        // so we need to compare properties for determining equality
         if (room.skillsOnSale[i].x === card.x &&
           room.skillsOnSale[i].y === card.y)
         {
@@ -256,8 +252,8 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
       // // ...then check if it is in the hand. It cannot be in both so it's safe
       // for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
       //   // since card comes from the client, it is NOT the same object (reference)
-      //   // so we need to compare properties for determining equality      
-      //   if (room.players[playerId].hand[i].x === card.x && 
+      //   // so we need to compare properties for determining equality
+      //   if (room.players[playerId].hand[i].x === card.x &&
       //       room.players[playerId].hand[i].y === card.y) {
       //     c = room.players[playerId].hand.splice(i,1);
       //     break;
@@ -287,6 +283,10 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost)
     else if (action === "auction")
     {
       activePlacement = room.auctionPlacement;
+    }
+    else if (action === "work")
+    {
+      activePlacement = room.workPlacement;
     }
     else if (action === "market")
     {
@@ -324,7 +324,8 @@ Data.prototype.getPlacements = function (roomId)
       buyPlacement: room.buyPlacement,
       skillPlacement: room.skillPlacement,
       auctionPlacement: room.auctionPlacement,
-      marketPlacement: room.marketPlacement
+      marketPlacement: room.marketPlacement,
+      workPlacement: room.workPlacement
     }
   }
   else return {};
