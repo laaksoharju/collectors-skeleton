@@ -667,6 +667,18 @@ footer a:visited {
   grid-template-rows: repeat(5, 2.5rem);
   grid-gap: 0.5em;
 }
+
+.cardslots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 80px);
+  grid-template-rows: repeat(auto-fill, 100px);
+}
+
+.secret-card div {
+  border: dashed green;
+  opacity: 0.5;
+}
+
 .secret-card div,
 .cardslots div {
   transform: scale(0.3) translate(-110%, -110%);
@@ -680,11 +692,6 @@ footer a:visited {
   transform: scale(1) translate(-25%, 0);
   z-index: 1;
   opacity: 1;
-}
-
-.secret-card div {
-  border: dashed green;
-  opacity: 0.5;
 }
 
 .collectors-game {
