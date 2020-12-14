@@ -117,6 +117,7 @@ export default {
     cannotAfford: function (cost) {
       let minCost = 100;
       for (let key in this.marketValues) {
+        console.log(this.marketValues)
         if (cost + this.marketValues[key] < minCost)
           minCost = cost + this.marketValues[key];
       }
