@@ -66,25 +66,25 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.currentAuctionCard = [];
   room.bidArray = [];
   room.market = [];
-  room.playerIdArray=[];
-  room.activeRound=String;
-  room.buyPlacement = [ {cost:1, playerId: null},
-                        {cost:1, playerId: null},
-                        {cost:2, playerId: null},
-                        {cost:2, playerId: null},
-                        {cost:3, playerId: null} ];
-  room.skillPlacement = [ {cost:0, playerId: null},
-                          {cost:0, playerId: null},
-                          {cost:0, playerId: null},
-                          {cost:1, playerId: null},
-                          {cost:1, playerId: null} ];
-  room.auctionPlacement = [ {cost:-2, playerId: null},
-                            {cost:-1, playerId: null},
-                            {cost:0, playerId: null},
-                            {cost:0, playerId: null} ];
-  room.marketPlacement = [ {cost:0, playerId: null},
-                           {cost:2, playerId: null},
-                           {cost:0, playerId: null} ];
+  room.playerIdArray = [];
+  room.activeRound = String;
+  room.buyPlacement = [ {cost:1, playerId: null, img: 'images/buy1$.png'},
+                        {cost:1, playerId: null, img: 'images/buy1$.png'},
+                        {cost:2, playerId: null, img: 'images/buy2$.png'},
+                        {cost:2, playerId: null, img: 'images/buy2$.png'},
+                        {cost:3, playerId: null, img: 'images/buy3$.png'} ];
+  room.skillPlacement = [ {cost:0, playerId: null, img: 'images/skill0$.png'},
+                          {cost:0, playerId: null, img: 'images/skill0$.png'},
+                          {cost:0, playerId: null, img: 'images/skill0$.png'},
+                          {cost:1, playerId: null, img: 'images/skill1$.png'},
+                          {cost:1, playerId: null, img: 'images/skill1$.png'} ];
+  room.auctionPlacement = [ {cost:-2, playerId: null, img: 'images/auction-2$.png'},
+                            {cost:-1, playerId: null, img: 'images/auction-1$.png'},
+                            {cost:0, playerId: null, img: 'images/auction0$.png'},
+                            {cost:0, playerId: null, img: 'images/auction0$.png'} ];
+  room.marketPlacement = [ {cost:0, playerId: null, img: 'images/market_2_0$.png'},
+                           {cost:2, playerId: null, img: 'images/market2$.png'},
+                           {cost:0, playerId: null, img: 'images/market0$.png'} ];
   room.workPlacement = [ {cost:0, playerId: null},
                          {cost:-1, playerId: null, img: 'images/Static_Work_Image_001.png'},
                          {cost:1, playerId: null, img: 'images/Static_Work_Image_002.png'},
