@@ -105,6 +105,15 @@ export default {
   transform: scale(0.8)translate(10%,-10%);
 }
 
+.buttons button {
+  border-radius: 10px;
+}
+
+.buttons button:hover {
+  transform: scale(1.05);
+  transition:0.2s;
+  transition-timing-function: ease-in-out;
+}
 
 #SkillActionDiv  h1, h2, h3, p  {
   color: black;
