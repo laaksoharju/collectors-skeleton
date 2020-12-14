@@ -250,8 +250,17 @@ Data.prototype.changeTurn = function (roomId, playerId) {
     return nextPlayer;
   }
   else return "";
-
 }
+/*
+Data.prototype.changeRound = function (roomId, currentRound) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    let nextRound = currentRound + 1;
+    }
+    return nextRound;
+  }
+  else return 0;
+} */
 
 Data.prototype.countRounds = function (roomId, playerId) {};//FORTSÄTT HÄR FÖR QUARTER TILES
 

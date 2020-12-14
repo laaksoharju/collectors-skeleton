@@ -106,6 +106,15 @@
           <h2>  Player {{currentPlayer}} </h2> <h3> Press here when you're done.</h3>
         </button>
       </div>
+<!--
+      <div class="roundCounter">
+        <h3> Round:  </h3>
+        <button class="roundButton"  @click= "changeRound">
+          <h2>  Round {{currentRound}} </h2> <h3> Press here when round {{currentRound}} is over.</h3>
+        </button>
+      </div>
+    -->
+
       <!-- Ruta för att visa vilka spelare som är i rummet -->
       <div class="showPlayers">
         The players in this room:
@@ -203,6 +212,7 @@ export default {
       labels: {},
       players: {},
       currentPlayer: "",
+      currentRound: 1, //lagt till 14/12
       // playerId: {
       //   hand: [],
       //   money: 1,
@@ -309,6 +319,12 @@ export default {
           this.currentPlayer = d;
       }.bind(this)
     );
+    this.$store.state.socket.on('collectorsChangedRound',
+      function(d) {
+          console.log( "Changed round");
+          this.currentRound = d;
+      }.bind(this)
+    );
 
     this.$store.state.socket.on('collectorsAuctionStarted',
     function(d) {
@@ -326,6 +342,7 @@ export default {
     this.players = d.players;
     this.skillsOnSale = d.skillsOnSale;
     this.market = d.market;
+    this.marketValues = d.marketValues;  //lagt till marketValues
   }.bind(this)
 );
 
@@ -430,13 +447,20 @@ export default {
         );
   },
     changeTurn: function () {
-      console.log("TEST");
       this.$store.state.socket.emit('collectorsChangeTurn', {
           roomId: this.$route.params.id,
           currentPlayer: this.currentPlayer
           }
         );
       },
+
+    changeRound: function () {
+      this.$store.state.socket.emit('collectorsChangeRound', {
+          roomId: this.$route.params.id,
+          currentRound: this.currentRound
+          }
+        );
+    },
 
         countRounds: function () {
           console.log("TEST RÄKNA RUNDOR");
@@ -582,6 +606,14 @@ h1 {
     grid-row: 16/span 2;
     text-align: center;
   }
+  .roundCounter {
+    background-color: blue;
+    color:white;
+    grid-column: 6/ span 2;
+    grid-row: 16/span 2;
+    text-align: center;
+  }
+
   .showPlayers {
     background-color: #406c72;
     color: white;
@@ -602,10 +634,19 @@ h1 {
     text-align: center;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
   }
-  .turnButton:hover {
-  background-color: green;
+  .roundButton:hover {
+  background-color: blue;
   color: white;
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  }
+  .roundButton {
+    grid-column: 4/ span 1;
+    grid-row: 16/span 1;
+    background-color: lightblue;
+    cursor: pointer;
+    border: 10px dotted blue ;
+    text-align: center;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
   }
   footer {
     margin-top: 5em auto;

@@ -1,7 +1,7 @@
 <template>
   <div class = "marketPool">
     Market Pool
-    {{market}}
+    {{market}} {{marketValues}} <!-- marketValues visar hur de olika kategoriernas valuen är -->
     <div class = "iconBird"></div>
     <div class = "iconRobot"></div>
     <div class = "iconMusic"></div>
@@ -79,14 +79,16 @@ export default {
       return (this.player.money < minCost);
     },
 
-  highlightAvailableCards: function () {           //problemet är  if vilkoret!!!!!!!!!!!! highlitar sista kortet i skill men bara första gången! sidan måste laddas om
-      for (let i = 0; i < this.skillsOnSale.length; i += 1) {
-        if (i=== this.skillsOnSale.length-1) {
+  highlightAvailableCards: function () {           //LÖST!! :D : problemet är  if vilkoret! highlitar sista kortet bara första gången!
+      //for (let i = 0; i < this.skillsOnSale.length; i += 1) { gamla villkoret
+      for (let i = this.skillsOnSale.length -1 ; i >= 0 ; i -= 1) {     //kollar baklänges!
+        if (this.skillsOnSale[i].x > 0) {                  // if-sats som undersöker om platsen i array är tom = kort taget
           this.$set(this.skillsOnSale[i], "available", true);
+          break;
         }
-        else {
+      /*  else {
           this.$set(this.skillsOnSale[i], "available", false);
-        }
+        } behöver vi ej ha denna else nu med ändrat villkor*/
       }
     }
 
