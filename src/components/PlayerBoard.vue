@@ -170,9 +170,10 @@ export default {
     grid-gap: 10px;
     text-align: center;
     color: black;
-    margin: 5px;
+    border: 1px solid black;
+    /*margin: 5px;*/
     padding: 5px;
-    border-radius: 3px;
+    /*border-radius: 3px;*/
 }
 #mainBoard h2{
     font-size: 90%;
