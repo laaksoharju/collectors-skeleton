@@ -1,7 +1,10 @@
 <template>
-    <div>       
+    <div>  
+            
         <div id="workArea">
+            
             <p id=workAreaText>WORK</p>
+            
                 <div v-if = "round == 1" class="rectangular firstArea" >
                     <div class="circle" v-on:click = "circleClicked"></div>
                     <div class="first figures">&#9203;</div>
@@ -56,11 +59,12 @@
 <script>
 export default {
     name: "WorkArea",
+    
     data: function() {
         return {
             round: 4,
             clicked: false,
-            color: "blue"
+            color: "blue",
         }
     },
     methods: {
@@ -94,6 +98,7 @@ export default {
         align-items: center;
         flex-direction: column;
     }
+
    
     /*#workArea p { gjorde att alla p taggar i hela diven blev svarta och center, inte bra dvs.
         color:black;

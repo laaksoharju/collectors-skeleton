@@ -13,7 +13,7 @@
                 <div class="modal" v-if="showModal">
                     <h1>{{ modalProps.title }}</h1>
                     <p>{{ modalProps.text }}</p>
-                    <button class="button green" @click="toggleModal">Close</button>
+                    <button class="button red" @click="toggleModal">Close</button>
                 </div>
               </transition>
           </div>        
@@ -23,7 +23,7 @@
 
 <script>
 export default {
-  name: "InfoButtons",
+  name: 'InfoButtons',
   props: {modalProps: Object},
 
   data: function() {
@@ -125,23 +125,18 @@ body{
   .button:hover {
     box-shadow: 6px 6px rgba(0, 0, 0, 0.6);
     } 
-
   .green {
     background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(50,172,109,1) 0%, rgba(209,251,155,1) 100.2% );
   }
-
   .blue {
     background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(147,230,241,1) 0%, rgba(145,192,241,1) 45.5% );
   }
-
   .red {
     background-image: linear-gradient( 143.3deg,  rgba(216,27,96,1) 33.1%, rgba(237,107,154,1) 74.9% );
   }
-
   .yellow {
     background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(255,252,200,1) 0%, rgba(255,247,94,1) 90% );
   }
-    
     
     .modal-overlay {
       position: absolute;
@@ -166,8 +161,6 @@ body{
      background-color: #FFF;
      padding: 25px;
      border-radius: 8px;
-     
-     
    }
    
  h1{

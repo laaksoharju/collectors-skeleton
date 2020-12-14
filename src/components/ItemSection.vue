@@ -1,5 +1,8 @@
 <template>
   <div id="item-section" class="board-section">
+    <InfoButtons
+      :modalProps='buyItemProps'
+    />
     <div class="buy-cards">
       <div class="cardslots" v-for="(card, index) in itemsOnSale" :key="index">
         <CollectorsCard
@@ -28,12 +31,14 @@
 </template>
 
 <script>
+import InfoButtons from "../components/InfoButtons.vue";
 import CollectorsCard from "@/components/CollectorsCard.vue";
 
 export default {
   name: "ItemSection",
   components: {
     CollectorsCard,
+    InfoButtons
   },
   props: {
     labels: Object,
@@ -42,6 +47,19 @@ export default {
     marketValues: Object,
     placement: Array,
   },
+
+  data: function() {
+    return {
+      buyItemProps: {
+        value: 'Buy Items',
+        text: 'Pick one card from the item pool or from your hand. Tuck the chosen card under your player board from above to show that this card represents an item you have bought. In addition to the cost in the action space, you must pay $1 per card in the Market pool that has the same symbol as the item you just bought. There is no upper limit in the number of items you may own.',
+        title: 'Buy Items',
+        classes: 'button red'
+      }
+    }
+    
+  },
+
   methods: {
 
     buttonDisabled:function (cost){
