@@ -1,5 +1,8 @@
 <template>
   <div id="RaiseValueSection" class="board-section">
+    <InfoButtons
+      :modalProps='raiseValueProps'
+    />
     <div class="raise-value-slot-container">
       <div class="raise-value-slot" id="rvFastaval"></div>
       <div class="raise-value-slot" id="rvMovie"></div>
@@ -31,15 +34,31 @@
 </template>
 
 <script>
+
+import InfoButtons from "../components/InfoButtons.vue";
+
 export default {
   name: "RaiseValueSection",
-  components: {},
+  components: {
+    InfoButtons
+  },
   props: {
     labels: Object,
     player: Object,
     itemsOnSale: Array,
     marketValues: Object,
     placement: Array,
+  },
+  data: function() {
+    return {
+      raiseValueProps: {
+        value: 'Raise Value',
+        text: 'When executing this action, you must place cards in the market pool equal to the number of seals on your action space (one or two cards). You may place cards from your hand, from the card in the lowest position in the skill pool, or from the lowest card in the auction pool. When you place a card in the market pool, you tuck the cards under the icon on the game board that matches the icon on the bottom left of the card',
+        title: 'Raise Value',
+        classes: 'button blue'
+      }
+    }
+    
   },
   methods: {
     cannotAfford: function (cost) {

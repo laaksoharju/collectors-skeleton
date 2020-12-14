@@ -1,52 +1,70 @@
 <template>
-    <div>       
+    <div>  
+            
         <div id="workArea">
-            <p id=workAreaText>WORK</p>
+            <h2 id="workAreaText">Work</h2>
                 <div v-if = "round == 1" class="rectangular firstArea" >
-                    <div class="circle" v-on:click = "circleClicked"></div>
+                    <div class="workArea_circle" v-on:click = "circleClicked"></div>
                     <div class="first figures">&#9203;</div>
                     <div class="second figures">&#9203;</div>
                     <p>ROUND 1</p>  
                 </div>
                 <div v-if = "round == 2" class="rectangular firstArea">
-                    <div class="circle" v-on:click = "circleClicked"></div>
-                    <div class="dollarCircles">&#36;1</div>
+                    <div class="workArea_circle" v-on:click = "circleClicked"></div>
+                    <div class="workArea_component">
+                    <CircleComponent v-bind:value=-1 />
+                    </div>
                     <div class="first figures">&#9203;</div>
                     <div class="second figures">&#9203;</div>
                     <p>ROUND 2</p>
                 </div>
                 <div v-if = "round == 3" class="rectangular firstArea">
-                    <div class="circle" v-on:click = "circleClicked"></div>
-                    <div class="dollarCircles">&#36;2</div>
+                    <div class="workArea_circle" v-on:click = "circleClicked"></div>
+                    <div class="workArea_component">
+                        <CircleComponent v-bind:value=2 />
+                    </div>
                     <div class="first figures">&#9203;</div>
                     <div class="second figures">&#9203;</div>
                     <p>ROUND 3</p>
                 </div>
                 <div v-if = "round == 4" class="rectangular firstArea">
-                    <div class="circle" v-on:click = "circleClicked"></div>
-                    <div class="dollarCircles">&#36;3</div>
+                    <div class="workArea_circle" v-on:click = "circleClicked"></div>
+                    <div class="workArea_component">
+                        <CircleComponent v-bind:value=3 />
+                    </div>
                     <div class="first figures">&#x267B;</div>
                     <p>ROUND 4</p>
                 </div>
             <div class="rectangular secondArea">
-                <div class="circle" v-on:click = "circleClicked"></div>
-                <div class="dollarCircles">&#36;1</div>
+                <div class="workArea_circle" v-on:click = "circleClicked"></div>
+                <div class="workArea_component">
+                    <CircleComponent v-bind:value=1 />
+                </div>
                 <div class="first figures">&#x267B;</div>
             </div>
             <div class="rectangular thirdArea">
-                <div class="circle" v-on:click = "circleClicked"></div>
-                <div class="dollarCircles">&#36;-1</div>
-                <div class="first figures">&#127183;</div>
-                <div class="second figures">&#127183;</div>
+                <div class="workArea_circle" v-on:click = "circleClicked"></div>
+                <div class="workArea_component">
+                    <CircleComponent v-bind:value=-1 />
+                </div>
+                <!--Här ska bilden in-->
+                <div class="first" id="getCard"></div>
+                <!--<div class="first figures">&#127183;</div>-->
+                <!--<div class="second figures">&#127183;</div>-->
+                <div class="second" id="getCard"></div>
             </div>
             <div class="rectangular fourthArea">
-                <div class="circle" v-on:click = "circleClicked"></div>
-                <div class="first figures">&#127183;</div>
-                <div>In med Bobs 1st player</div>
+                <div class="workArea_circle" v-on:click = "circleClicked"></div>
+                <div class="first" id="getCard"></div>
+                <!--<div class="first figures">&#127183;</div>-->
+                <div class="workArea_token">
+                    <FirstPlayerToken/>
+                </div>
             </div>
             <div class="rectangular fifthArea">
-                <div class="circle" v-on:click = "circleClicked"></div>
-                <div class="first figures">&#127183;</div>
+                <div class="workArea_circle" v-on:click = "circleClicked"></div>
+                <!--<div class="first figures">&#127183;</div>-->
+                <div class="first" id="getCard"></div>
                 <div class="second figures">&#9203;</div>
             </div>
         </div>
@@ -54,26 +72,40 @@
 </template>
 
 <script>
+import CircleComponent from '@/components/CircleComponent.vue'
+import FirstPlayerToken from '@/components/FirstPlayerToken.vue'
+
 export default {
     name: "WorkArea",
+
+    components: {
+        CircleComponent,
+        FirstPlayerToken,
+    },
+
+    props: {
+        color: String
+    },
+
     data: function() {
         return {
             round: 4,
             clicked: false,
-            color: "blue"
+            /*color: "blue",*/
         }
     },
     methods: {
         circleClicked: function(e) {
             if(!this.clicked){
                 let clickedEl = e.target;
-                clickedEl.style.backgroundColor = this.color;
+                /*clickedEl.style.backgroundColor = this.color;*/
+                clickedEl.setAttribute("style", "background-color:"+this.color);
                 this.clicked = true;
+                console.log("färg")
             }
             else{
                 let clickedEl = e.target;
                 clickedEl.setAttribute("style", "background-color:white");
-
                 this.clicked = false;
             }
             
@@ -87,13 +119,14 @@ export default {
 <style scoped>
     #workArea {
         /*background-color: rgb(235, 235, 109);*/
-        background-color: #ffe599ff;
-        width: 80%;
-        border: 5px solid black;
+        background-color: #F5F2CC; /* #ffe599ff;*/
+        width: 100%;
+        border: 1px solid black;
         display: flex;
         align-items: center;
         flex-direction: column;
     }
+
    
     /*#workArea p { gjorde att alla p taggar i hela diven blev svarta och center, inte bra dvs.
         color:black;
@@ -104,22 +137,23 @@ export default {
 
     #workAreaText {
         color:black;
-        font-size: 30px;
+        /*font-size: 30px;*/
         font-weight: bold;
         text-align: center;
     }
 
     .rectangular {
-        margin: 10px;
-        height: 200px;
+        margin: 7px;
+        height: 120px;
         width: 90%;
         color: black;
-        background-color: #ffe599ff;
+        background-color: #F5F2CC; /* #ffe599ff;*/
         border: 3px solid grey;
         /*display: flex;
         justify-content: space-around;*/
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+
     }
 
     .firstArea {
@@ -130,13 +164,15 @@ export default {
 
     .firstArea p {
         color: black;
-        font-size: 20px;
+        font-size: 14px;
         font-weight: bold;
         text-align: right;
         grid-column: 5;
+        margin-top: 10px;
+        margin-right: 10px;
     }
 
-    .circle {
+    .workArea_circle {
         text-align: center;
         font-size: 50px;
         width: 100px;
@@ -145,36 +181,40 @@ export default {
         background-color: white;
         border-radius: 50%;
         border: 1px solid black;
-        margin-top: 50px;
+        margin-top: 8px;
+        margin-left: 10px;
         grid-column: 1;
     }
 
-    /*Lägg in Bobs circles istället för denna kod*/
-    .dollarCircles {
-        align-items: center;
-        width: 40px;
-        height: 40px;
-        color: black;
-        border: 1px solid black;
-        text-align: center;
-        background-color: white;
-        border-radius: 50%;
-        margin-top: 80px;
+    .workArea_component {
         grid-column: 2;
+        margin-top: 40px;
     }
 
+    .workArea_token {
+        grid-column: 4;
+        margin-top: 40px;
+    }
+
+    /*kke ta bort nedan*/
     .figures {
         font-size: 50px;
-        margin-top: 60px;
+        margin-top: 40px;
     }
 
     .first {
         grid-column: 3;
+        margin-top: 20px;
     }
 
     .second {
         grid-column: 4;
+        margin-top: 20px;
     }
-    
 
+    #getCard {
+        background: url("/images/getCardInWorkArea.PNG");
+        background-size: 70px 75px;
+        background-repeat: no-repeat;
+    }
 </style>

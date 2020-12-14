@@ -81,6 +81,8 @@ Data.prototype.createRoom = function (roomId, playerCount, lang = "en") {
   { cost: -2, playerId: null },
   { cost: 0, playerId: null }];
   this.rooms[roomId] = room;
+
+  /*skriv kod för färg i workarea*/ 
 }
 
 Data.prototype.createDeck = function () {

@@ -1,18 +1,13 @@
 <template>
   <div>
     <main>
+      <div class="wrapper">
+        <!--<GameBoard class="gridGame"
+  :itemsOnSale="itemsOnSale"
+ :skillsOnSale="skillsOnSale"
+ :auctionCards="auctionCards"
+  />-->
 
-  <InfoButtons
-    :modalProps='modalProps'
-  />
-
-  <InfoButtons
-    :modalProps='modalProps2'
-  />
-
-  <h1>I am player {{playerId}}</h1>
-  <h1 v-if="players[playerId] && players[playerId].active"> my turn! </h1>
-      <div id="game-board">
         <ItemSection
           v-if="players[playerId]"
           :labels="labels"
@@ -22,9 +17,68 @@
           :placement="buyPlacement"
           @buyCard="buyCard($event)"
           @placeBottle="placeBottle('buy', $event)"
+          class="gridItem"
         />
-        <div>
-          <!-- {{ skillPlacement }} {{ chosenPlacementCost }} -->
+
+        <!-- {{ buyPlacement }} {{ chosenPlacementCost }}-->
+        <WorkArea :color="players[playerId].color" class="gridWork" />
+
+        <!--<h1>I am player {{playerId}}</h1>-->
+        <PlayerBoard
+          v-if="players[playerId]"
+          class="gridPlayerboard"
+          :player="players[playerId]"
+        />
+
+        <!--Ta bort nedan transition runt diven-->
+        <transition name="slide">
+          <div class="animate">
+            <OtherPlayerboards
+              :Players="players"
+              :playerId="playerId"
+              class="gridOtherBoard"
+            />
+          </div>
+        </transition>
+      </div>
+      <!-- <div id="game-board">
+      <ItemSection v-if="players[playerId]"
+        :labels="labels"
+        :player="players[playerId]"
+        :itemsOnSale="itemsOnSale"
+        :marketValues="marketValues"
+        :placement="buyPlacement"
+        @buyCard="buyCard($event)"
+        @placeBottle="placeBottle('buy', $event)"
+      />-->
+      <!--<div>-->
+      <!--{{ skillPlacement }} {{ chosenPlacementCost }}
+        <CollectorsBuySkill /> -->
+
+      <h1>I am player {{ playerId }}</h1>
+      <h1 v-if="players[playerId].active">my turn!</h1>
+      <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
+      <OtherPlayerboards :Players="players" :playerId="playerId" />
+      <div id="game-board">
+        <div class="collectorsContainer">
+          <InfoButtons :modalProps="buyItemProps" />
+
+          <ItemSection
+            v-if="players[playerId]"
+            :labels="labels"
+            :player="players[playerId]"
+            :itemsOnSale="itemsOnSale"
+            :marketValues="marketValues"
+            :placement="buyPlacement"
+            @buyCard="buyCard($event)"
+            @placeBottle="placeBottle('buy', $event)"
+          />
+        </div>
+
+        <!-- {{ skillPlacement }} {{ chosenPlacementCost }} -->
+        <div class="collectorsContainer">
+          <InfoButtons :modalProps="gainSkillProps" />
+
           <CollectorsBuySkill
             v-if="players[playerId]"
             :labels="labels"
@@ -35,6 +89,11 @@
             @buySkillCard="buySkillCard($event)"
             @placeBottle="placeBottle('skill', $event)"
           />
+        </div>
+
+        <div class="collectorsContainer">
+          <InfoButtons :modalProps="raiseValueProps" />
+
           <RaiseValueSection
             v-if="players[playerId]"
             :labels="labels"
@@ -46,6 +105,11 @@
             @placeBottle="placeBottle('buy', $event)" 
           />
           <!-- Kom ihåg att ändra i placebottle-->
+        </div>
+
+        <div class="collectorsContainer">
+          <InfoButtons :modalProps="auctionProps" />
+
           <AuctionSection
             v-if="players[playerId]"
             :labels="labels"
@@ -65,7 +129,7 @@
  :auctionCards="auctionCards"
   /> -->
 
-      <WorkArea />
+      <!-- <WorkArea />-->
       <!-- <CollectorsBuyActions
         v-if="players[playerId]"
         I am player {{playerId}}
@@ -73,7 +137,7 @@
       <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
       <OtherPlayerboards :Players="players" :playerId="playerId" />
 
-      {{ buyPlacement }} {{ chosenPlacementCost }}
+      <!--  {{ buyPlacement }} {{ chosenPlacementCost }}-->
 
       <div class="buttons">
         <button @click="drawCard">
@@ -159,6 +223,8 @@
 /*eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }]*/
 
 import CollectorsCard from "@/components/CollectorsCard.vue";
+/*import GameBoard from "@/components/GameBoard.vue";*/
+import OtherPlayerboards from "@/components/OtherPlayerboards.vue";
 //import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
 import CollectorsBuySkill from "@/components/CollectorsBuySkill.vue";
 //import CollectorsBuyActions from "@/components/CollectorsBuyActions.vue";
@@ -166,14 +232,17 @@ import CollectorsBuySkill from "@/components/CollectorsBuySkill.vue";
 import WorkArea from "@/components/WorkArea.vue";
 import ItemSection from "@/components/ItemSection.vue";
 import PlayerBoard from "@/components/PlayerBoard.vue";
-import OtherPlayerboards from "../components/OtherPlayerboards.vue";
+/*import OtherPlayerboards from "../components/OtherPlayerboards.vue";*/
 import RaiseValueSection from "../components/RaiseValueSection.vue";
 import AuctionSection from "../components/AuctionSection.vue";
+import InfoButtons from "../components/InfoButtons.vue";
 
 export default {
   name: "Collectors",
   components: {
     CollectorsCard,
+    /*GameBoard,*/
+    /*OtherPlayerboards,*/
     //CollectorsBuyActions,
     CollectorsBuySkill,
     //CollectorsBuyActions,
@@ -184,6 +253,7 @@ export default {
     OtherPlayerboards,
     RaiseValueSection,
     AuctionSection,
+    InfoButtons,
   },
   data: function () {
     return {
@@ -223,18 +293,45 @@ export default {
       skillsOnSale: [],
       auctionCards: [],
       playerid: 0,
-      modalProps: {
-        value: 'Items',
-        text: 'hej hej det här är en knapp',
-        title: 'Item2',
-        classes: 'button green'
+
+      buyItemProps: {
+        value: "Buy Items",
+        text:
+          "Pick one card from the item pool or from your hand. Tuck the chosen card under your player board from above to show that this card represents an item you have bought. In addition to the cost in the action space, you must pay $1 per card in the Market pool that has the same symbol as the item you just bought. There is no upper limit in the number of items you may own.",
+        title: "Buy Items",
+        classes: "button red",
       },
-      modalProps2: {
-        value: 'Skills',
-        text: 'hej hej det här är en knapp2',
-        title: 'Skills2',
-        classes: 'button red'
-      }
+      gainSkillProps: {
+        value: "Gain Skills",
+        text:
+          "Take one of the cards from the skill pool or from your hand and tuck it under your player board from the left. This card will grant you skills for the rest of the game as detailed in the Special skills section below",
+        title: "Gain Skills",
+        classes: "button green",
+      },
+
+      raiseValueProps: {
+        value: "Raise Value",
+        text:
+          "When executing this action, you must place cards in the market pool equal to the number of seals on your action space (one or two cards). You may place cards from your hand, from the card in the lowest position in the skill pool, or from the lowest card in the auction pool. When you place a card in the market pool, you tuck the cards under the icon on the game board that matches the icon on the bottom left of the card",
+        title: "Raise Value",
+        classes: "button blue",
+      },
+
+      workProps: {
+        value: "Work",
+        text:
+          "In the work area, you perform actions to increase your income, recycle bottles, draw cards and become the first player. If you place your bottle in the uppermost action space (on the quarter tile), you must place two cards upside down from your hand next to your player board on its right side. Note that this action space changes characteristics during the fourth quarter to resemble the action spot below it",
+        title: "Work",
+        classes: "button yellow",
+      },
+
+      auctionProps: {
+        value: "Auction",
+        text:
+          "Choose one of the four cards in the Auction pool or one card from your hand and place it in the space reserved for auctioned items. If you placed a card from your hand, you may place it face down. The card remains face down and the auction is performed without any other players knowing what kind of card it is. The player who chose this action may bid any number of coins with a minimum of one. Now the player to their left must place a higher bid or pass. Continue in clockwise order until all players but one has passed. The player that won the auction must pay the bid amount to the supply. When paying for the auction you may use cards from your hands as coins. Cards can be worth $1 or $2 as depicted in the upper right corner of the cards. Note that cards can only be used as coins during an auction. If the card just won was placed face down, the winning player may look at the card without showing it to other players. The player that wins the auction may place the card wherever they want; as an item under their player board, as a market share in the market pool, or as a skill under their player board. If the newly won card was face down, the auction winner may place the card face down as a secret item (next to the one that was chosen during the setup).",
+        title: "Auction",
+        classes: "button",
+      },
     };
   },
   computed: {
@@ -313,7 +410,6 @@ export default {
         this.skillsOnSale = d.rotatedCards.skillsOnSale;
         this.auctionCards = d.rotatedCards.auctionCards;
         this.marketValues = d.marketValues;
-
       }.bind(this)
     );
 
@@ -392,6 +488,44 @@ main {
   user-select: none;
 }
 
+.wrapper {
+  display: grid;
+  grid-template-columns: 60% 30% 10%;
+  /*grid-template-columns: 40% 10%;*/
+}
+
+.gridItem {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+/*.gridGame {
+  grid-column: 1;
+  grid-row: 1;
+}*/
+
+.gridWork {
+  grid-column: 2;
+  /*grid-column: 1;*/
+}
+
+.gridOtherBoard {
+  grid-column: 3;
+  /*grid-column: 2;*/
+  /*grid-row: 1;*/
+}
+
+.gridPlayerboard {
+  grid-column: 1 / span 2;
+  grid-row: 2;
+}
+
+/*TRANSITION*/
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
 footer {
   margin-top: 5em auto;
 }
@@ -444,6 +578,106 @@ footer a:visited {
 .cardslots div:hover {
   transform: scale(1) translate(-25%, 0);
   z-index: 1;
+}
+
+.collectorsContainer {
+  margin: 5px;
+  padding: 4px;
+}
+
+.collectorsContainer div {
+  margin: 5px;
+}
+
+.button:hover {
+  box-shadow: 6px 6px rgba(0, 0, 0, 0.6);
+}
+.green {
+  background-image: radial-gradient(
+    circle farthest-corner at 10% 20%,
+    rgba(50, 172, 109, 1) 0%,
+    rgba(209, 251, 155, 1) 100.2%
+  );
+}
+.blue {
+  background-image: radial-gradient(
+    circle farthest-corner at 10% 20%,
+    rgba(147, 230, 241, 1) 0%,
+    rgba(145, 192, 241, 1) 45.5%
+  );
+}
+.red {
+  background-image: linear-gradient(
+    143.3deg,
+    rgba(216, 27, 96, 1) 33.1%,
+    rgba(237, 107, 154, 1) 74.9%
+  );
+}
+.yellow {
+  background-image: radial-gradient(
+    circle farthest-corner at 10% 20%,
+    rgba(255, 252, 200, 1) 0%,
+    rgba(255, 247, 94, 1) 90%
+  );
+}
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 98;
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+
+  width: 100%;
+  max-width: 400px;
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 8px;
+}
+
+h1 {
+  color: #222;
+  font-size: 32px;
+  font-weight: 900;
+  margin-bottom: 15px;
+}
+
+p {
+  color: #666;
+  font-size: 18px;
+  font-weight: 400;
+  margin-bottom: 15px;
+}
+
+.fade-enter-active,
+.fade-leave.active {
+  transition: opacity 1.5s;
+  /* opacity: 0.9; */
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-enter-active,
+.slide-leave.active {
+  transition: transform 0.5s;
+}
+
+.slide-enter,
+.slide-leave-to {
+  transform: translateY(-50%) translateX(100vw);
 }
 
 @media screen and (max-width: 800px) {
