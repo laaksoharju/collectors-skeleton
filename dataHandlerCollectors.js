@@ -87,10 +87,10 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
                            {cost:2, playerId: null, img: 'images/market2$.png'},
                            {cost:0, playerId: null, img: 'images/market0$.png'} ];
   room.workPlacement = [ {cost:0, playerId: null},
-                         {cost:-1, playerId: null, img: 'images/Static_Work_Image_001.png'},
-                         {cost:1, playerId: null, img: 'images/Static_Work_Image_002.png'},
-                         {cost:0, playerId: null, img: 'images/Static_Work_Image_003.png'},
-                         {cost:0, playerId: null, img: 'images/Static_Work_Image_004.png'} ];
+                         {cost:-1, playerId: null, img: 'images/Static_Work_Image_001.png', info_text: '+1$, discard 1 bottle'},
+                         {cost:1, playerId: null, img: 'images/Static_Work_Image_002.png', info_text: '-1$, draw 2 cards to hand'},
+                         {cost:0, playerId: null, img: 'images/Static_Work_Image_003.png', info_text: 'draw one card to hand, beacome 1st player'},
+                         {cost:0, playerId: null, img: 'images/Static_Work_Image_004.png', info_text: 'draw 1 card to hand, and 1 to income'} ];
   this.rooms[roomId] = room;
 }
 
@@ -113,7 +113,7 @@ Data.prototype.joinGame = function (roomId, playerId) {
       console.log("Player", playerId, "joined for the first time");
       room.players[playerId] = { hand: [],
                                  money: 1,
-                                 bottles: 2,
+                                 bottles: 8, //-------- Start Bottles -------- 
                                  points: 0,
                                  skills: [],
                                  items: [],

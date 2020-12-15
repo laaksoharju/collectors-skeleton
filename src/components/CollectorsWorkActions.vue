@@ -25,6 +25,7 @@ changeRoundWork<template>
           @click="placeBottle(p, index)">
           <img v-if="index===0" :src='changeFirstWorkCard()'  style="width:100%" >
           <img :src='p.img' style="width:100%">
+          <p id='info_text' :src='p.info_text'> {{p.info_text}} </p>
         </button>
         <div v-if="p.playerId !== null" style="color:black">
           {{p.playerId}}
@@ -121,26 +122,37 @@ export default {
   z-index: -1;
 }
 
-.buttons img{
-  border-style: dashed;
-  border-width: 1px;
-  border-color: black;
-  transition:0.15s;
-  transition-timing-function: ease-in-out;
-  border-radius: 10px;
-  z-index: 1;
-}
-
-.buttons img:hover {
-  position: relative;
-  transform: scale(1.6);
-  border-radius: 10px;
-  z-index: 1;
+.buttons {
+  display: grid;
+  float:center;
+  grid-template-columns: repeat(auto-fill, 130px);
+  grid-template-rows: repeat(auto-fill, 60px);
+  margin: 5px;
+  transform: scale(1);
 }
 
 .buttons button {
   border-radius: 10px;
 }
+
+.buttons button:hover {
+  transform: scale(1.1);
+  transition:0.2s;
+  transition-timing-function: ease-in-out;
+}
+
+/* .buttons #info_text {
+  transform: scale(1);
+  transition:0.2s;
+  transition-timing-function: ease-in-out;
+}
+
+.buttons #info_text:hover {
+  transform: scale(1.1);
+  transition:0.2s;
+  transition-timing-function: ease-in-out;
+} */
+
 
 #PickRoundButtons{
   grid-area: pickRoundButtons;
