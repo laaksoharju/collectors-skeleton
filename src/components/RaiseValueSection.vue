@@ -130,16 +130,6 @@ export default {
   grid-template-columns: repeat(auto-fill, 130px);
 }
 
-.board-section {
-  min-height: 100px;
-  width: 50%;
-  padding: 10px;
-  align-items: center;
-  display: flex;
-  flex-direction: row-reverse;
-  border: 1px solid #19181850;
-}
-
 .raise-value-slot-container {
   width: 80%;
   display: grid;

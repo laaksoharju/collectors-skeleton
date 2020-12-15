@@ -1,68 +1,11 @@
 <template>
   <div>
     <main>
-      <div class="wrapper">
-        <!--<GameBoard class="gridGame"
-  :itemsOnSale="itemsOnSale"
- :skillsOnSale="skillsOnSale"
- :auctionCards="auctionCards"
-  />-->
-
-        <ItemSection
-          v-if="players[playerId]"
-          :labels="labels"
-          :player="players[playerId]"
-          :itemsOnSale="itemsOnSale"
-          :marketValues="marketValues"
-          :placement="buyPlacement"
-          @buyCard="buyCard($event)"
-          @placeBottle="placeBottle('buy', $event)"
-          class="gridItem"
-        />
-
-        <!-- {{ buyPlacement }} {{ chosenPlacementCost }}-->
-        <WorkArea :color="players[playerId].color" class="gridWork" />
-
-        <!--<h1>I am player {{playerId}}</h1>-->
-        <PlayerBoard
-          v-if="players[playerId]"
-          class="gridPlayerboard"
-          :player="players[playerId]"
-        />
-
-        <!--Ta bort nedan transition runt diven-->
-        <transition name="slide">
-          <div class="animate">
-            <OtherPlayerboards
-              :Players="players"
-              :playerId="playerId"
-              class="gridOtherBoard"
-            />
-          </div>
-        </transition>
-      </div>
-      <!-- <div id="game-board">
-      <ItemSection v-if="players[playerId]"
-        :labels="labels"
-        :player="players[playerId]"
-        :itemsOnSale="itemsOnSale"
-        :marketValues="marketValues"
-        :placement="buyPlacement"
-        @buyCard="buyCard($event)"
-        @placeBottle="placeBottle('buy', $event)"
-      />-->
-      <!--<div>-->
-      <!--{{ skillPlacement }} {{ chosenPlacementCost }}
-        <CollectorsBuySkill /> -->
-
       <h1>I am player {{ playerId }}</h1>
       <h1 v-if="players[playerId].active">my turn!</h1>
-      <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
-      <OtherPlayerboards :Players="players" :playerId="playerId" />
-      <div id="game-board">
-        <div class="collectorsContainer">
-          <InfoButtons :modalProps="buyItemProps" />
 
+      <div class="layout_wrapper">
+        <div id="game-board">
           <ItemSection
             v-if="players[playerId]"
             :labels="labels"
@@ -73,12 +16,6 @@
             @buyCard="buyCard($event)"
             @placeBottle="placeBottle('buy', $event)"
           />
-        </div>
-
-        <!-- {{ skillPlacement }} {{ chosenPlacementCost }} -->
-        <div class="collectorsContainer">
-          <InfoButtons :modalProps="gainSkillProps" />
-
           <CollectorsBuySkill
             v-if="players[playerId]"
             :labels="labels"
@@ -89,11 +26,6 @@
             @buySkillCard="buySkillCard($event)"
             @placeBottle="placeBottle('skill', $event)"
           />
-        </div>
-
-        <div class="collectorsContainer">
-          <InfoButtons :modalProps="raiseValueProps" />
-
           <RaiseValueSection
             v-if="players[playerId]"
             :labels="labels"
@@ -102,14 +34,8 @@
             :marketValues="marketValues"
             :placement="marketPlacement"
             @buyCard="buyCard($event)"
-            @placeBottle="placeBottle('buy', $event)" 
+            @placeBottle="placeBottle('buy', $event)"
           />
-          <!-- Kom ihåg att ändra i placebottle-->
-        </div>
-
-        <div class="collectorsContainer">
-          <InfoButtons :modalProps="auctionProps" />
-
           <AuctionSection
             v-if="players[playerId]"
             :labels="labels"
@@ -121,19 +47,9 @@
             @placeBottle="placeBottle('buy', $event)"
           />
         </div>
+        <WorkArea :color="players[playerId].color" class="gridWork" />
       </div>
 
-      <!-- <GameBoard 
-  :itemsOnSale="itemsOnSale"
- :skillsOnSale="skillsOnSale"
- :auctionCards="auctionCards"
-  /> -->
-
-      <!-- <WorkArea />-->
-      <!-- <CollectorsBuyActions
-        v-if="players[playerId]"
-        I am player {{playerId}}
-    /> -->
       <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
       <OtherPlayerboards :Players="players" :playerId="playerId" />
 
@@ -223,37 +139,25 @@
 /*eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }]*/
 
 import CollectorsCard from "@/components/CollectorsCard.vue";
-/*import GameBoard from "@/components/GameBoard.vue";*/
 import OtherPlayerboards from "@/components/OtherPlayerboards.vue";
-//import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
 import CollectorsBuySkill from "@/components/CollectorsBuySkill.vue";
-//import CollectorsBuyActions from "@/components/CollectorsBuyActions.vue";
-// import GameBoard from "@/components/GameBoard.vue";
 import WorkArea from "@/components/WorkArea.vue";
 import ItemSection from "@/components/ItemSection.vue";
 import PlayerBoard from "@/components/PlayerBoard.vue";
-/*import OtherPlayerboards from "../components/OtherPlayerboards.vue";*/
 import RaiseValueSection from "../components/RaiseValueSection.vue";
 import AuctionSection from "../components/AuctionSection.vue";
-import InfoButtons from "../components/InfoButtons.vue";
 
 export default {
   name: "Collectors",
   components: {
     CollectorsCard,
-    /*GameBoard,*/
-    /*OtherPlayerboards,*/
-    //CollectorsBuyActions,
     CollectorsBuySkill,
-    //CollectorsBuyActions,
-    //GameBoard,
     WorkArea,
     ItemSection,
     PlayerBoard,
     OtherPlayerboards,
     RaiseValueSection,
     AuctionSection,
-    InfoButtons,
   },
   data: function () {
     return {
@@ -478,6 +382,15 @@ export default {
 </script>
 
 <style scoped>
+.board-section {
+  width: 100%;
+  padding: 10px;
+  align-items: center;
+  display: flex;
+  flex-direction: row-reverse;
+  border: 1px solid #19181850;
+}
+
 header {
   user-select: none;
   position: fixed;
@@ -488,9 +401,9 @@ main {
   user-select: none;
 }
 
-.wrapper {
+.layout_wrapper {
   display: grid;
-  grid-template-columns: 60% 30% 10%;
+  grid-template-columns: 70% 30%;
   /*grid-template-columns: 40% 10%;*/
 }
 
@@ -578,15 +491,6 @@ footer a:visited {
 .cardslots div:hover {
   transform: scale(1) translate(-25%, 0);
   z-index: 1;
-}
-
-.collectorsContainer {
-  margin: 5px;
-  padding: 4px;
-}
-
-.collectorsContainer div {
-  margin: 5px;
 }
 
 .button:hover {
