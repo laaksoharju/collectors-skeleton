@@ -103,6 +103,23 @@
 
       <div id="PlayerBoardDiv">
         <h2>Player board</h2>
+        <div id="bottleSlotsDiv">
+            <input type="hidden" name="bottleSlot" value="bottleSlot_1">
+            <input class="bottleSlots" type="image" src="images/bottleSlot_1.png">
+
+            <input type="hidden" name="bottleSlot" value="bottleSlot_2">
+            <input class="bottleSlots" type="image" src="images/bottleSlot_2.png">
+
+            <input type="hidden" name="bottleSlot" value="bottleSlot_3">
+            <input class="bottleSlots" type="image" src="images/bottleSlot_3.png">
+
+            <input type="hidden" name="bottleSlot" value="bottleSlot_4">
+            <input class="bottleSlots" type="image" src="images/bottleSlot_4.png">
+
+            <input type="hidden" name="bottleSlot" value="bottleSlot_5">
+            <input class="bottleSlots" type="image" src="images/bottleSlot_5.png">
+
+        </div>
 
         <div id="AllPlayerCardsDiv" v-if="playerBoardShown">
 
@@ -652,6 +669,14 @@ footer a:visited {
   margin: 5px;
 }
 
+#bottleSlotsDiv {
+  grid-area: bottleSlotsDiv;
+  align-self: center;
+  background: #e4e4e3;
+  margin: 5px;
+  text-align: center;
+}
+
 #AllPlayerCardsDiv {
   grid-area: AllPlayerCardsDiv;
   align-self: center;
@@ -674,6 +699,7 @@ footer a:visited {
   "BuySkillDiv BuySkillDiv AuctionDiv AuctionDiv"
   "BuySkillDiv BuySkillDiv AuctionDiv AuctionDiv"
   "GameOperations WorkDiv WorkDiv ."
+  "bottleSlotsDiv bottleSlotsDiv bottleSlotsDiv bottleSlotsDiv"
   "PlayerBoardDiv PlayerBoardDiv PlayerBoardDiv PlayerBoardDiv"
 }
 
@@ -689,6 +715,12 @@ footer a:visited {
   border-radius: 5px;
 }
 
+.bottleSlots{
+  width: 10%;
+  margin: 0em 1.5em 0em 1.5em;
+  display: inline-block;
+  position: relative;
+}
 #drawCard_button_img {
   width: 3.5em;
   vertical-align: middle;
