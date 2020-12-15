@@ -142,6 +142,12 @@ function sockets(io, socket, data) {
       );
     });
 
+    socket.on('collectorsRetrieveBottles', function(d) {
+      io.to(d.roomId).emit('collectorsBottlesRetrieved',
+      data.retrieveBottles(d.roomId, d.playerId)
+      );
+    });
+
     socket.on('collectorsRaiseCurrentBid', function(d) {
 	     io.to(d.roomId).emit('collectorsBidRaised',
 			 data.raiseCurrentBid(d.roomId, d.playerId)
