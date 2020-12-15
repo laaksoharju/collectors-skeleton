@@ -67,6 +67,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.bidArray = [];
   room.market = [];
   room.playerIdArray = [];
+  room.playerBoardShown = true;
   room.activeRound = String;
   room.buyPlacement = [ {cost:1, playerId: null, img: 'images/buy1$.png'},
                         {cost:1, playerId: null, img: 'images/buy1$.png'},
@@ -264,14 +265,18 @@ Data.prototype.raiseValue = function (roomId, playerId, card, cost) {
   }
 }
 
-Data.prototype.addPlayerReady= function(roomId, playerId){
+Data.prototype.addPlayerReady = function(roomId, playerId){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
 
-    shuffle(room.playerIdArray).push(playerId);
-
+    console.log(room.playerIdArray);
+    room.playerIdArray.push(playerId);
+    console.log(room.playerIdArray);
+    shuffle(room.playerIdArray);
+    console.log(room.playerIdArray);
   }
 }
+
 
 Data.prototype.changeRound= function(roomId, playerId, round){
   let room = this.rooms[roomId];
@@ -420,6 +425,14 @@ Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index
   else return [];
 }
 
+Data.prototype.getPlayerCount = function (roomId) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    return room.playerCount;
+  }
+  else return 0;
+}
+
 Data.prototype.fakeMoreMoney = function (roomId, playerId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
@@ -438,7 +451,6 @@ Data.prototype.raiseCurrentBid = function (roomId, playerId) {
   else return [];
 }
 
-/* returns the hand of the player */
 Data.prototype.getCards = function (roomId, playerId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
@@ -538,6 +550,14 @@ Data.prototype.getBidArray = function(roomId){
     return room.bidArray;
   }
   else return [];
+}
+
+Data.prototype.getPlayerBoardShown = function(roomId) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    return room.playerBoardShown;
+  }
+  else return false;
 }
 
 module.exports = Data;
