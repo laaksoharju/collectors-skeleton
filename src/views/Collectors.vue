@@ -60,27 +60,30 @@
       <div id="GameOperations">
         <h2>Game operations</h2>
         <div id='readyGameButton'>
-          <button v-on:click="readyGame()" @click="playerReady = true" :disabled="playerReady">
+          <button class="start_buttons" v-on:click="readyGame()" @click="playerReady = true" :disabled="playerReady">
             Click here if you are ready!
             </button>
         </div>
         <div id='startGameButton'>
-          <button v-on:click="startGame()" :disabled="playerBoardShown">
+          <button class="start_buttons" v-on:click="startGame()" :disabled="playerBoardShown">
             Press here when everyone is ready, here you find your play order.
             </button>
         </div>
         <p v-if="players[playerId]"> Current money: {{ players[playerId].money }}$ </p>
-        <button v-if="players[playerId]" @click="fakeMoreMoney()">
+        <button class="function_buttons" v-if="players[playerId]" @click="fakeMoreMoney()">
           Fake more money
+            <img class="function_button_img" src="images/fakeMoreMoney.png">
         </button>
         <div class="buttons">
-          <button @click="drawCard">
+          <button class="function_buttons" @click="drawCard">
             {{ labels.draw }}
+            <img id="drawCard_button_img" src="images/drawCards.png">
           </button>
         </div>
         <div class="buttons">
-          <button v-if="players[playerId]" @click="retrieveBottles()">
+          <button class="function_buttons" v-if="players[playerId]" @click="retrieveBottles()">
             Retrieve bottles
+            <img class="function_button_img" src="images/retrieveBottles.png">
           </button>
         </div>
 
@@ -715,9 +718,31 @@ footer a:visited {
 .bottleSlots{
   width: 10%;
   margin: 0em 1.5em 0em 1.5em;
-
   display: inline-block;
   position: relative;
+}
+#drawCard_button_img {
+  width: 3.5em;
+  vertical-align: middle;
+}
+
+.function_buttons {
+  width: 12em;
+  margin-bottom: 0.5em;
+  margin-left: 1em;
+  padding: 10px 0px 10px 0px;
+}
+
+.function_button_img {
+  width: 2em;
+  vertical-align: middle;
+}
+
+.start_buttons {
+  width: 18em;
+  margin-bottom: 0.5em;
+  margin-left: 1em;
+  padding: 10px 0px 10px 0px;
 }
 
 .cardslots {
@@ -754,9 +779,30 @@ footer a:visited {
   z-index: 1;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1400px) {
   main {
-    width:90vw;
+    zoom: 0.7;
+    -moz-transform: scale(0.7);
+  }
+}
+
+@media screen and (max-width: 980px) {
+  main {
+    zoom: 0.6;
+    -moz-transform: scale(0.6);
+  }
+}
+
+@media screen and (max-width: 850px) {
+  main {
+    zoom: 0.5;
+    -moz-transform: scale(0.5);
+  }
+}
+@media screen and (max-width: 700px) {
+  main {
+    zoom: 0.4;
+    -moz-transform: scale(0.4);
   }
 }
 </style>
