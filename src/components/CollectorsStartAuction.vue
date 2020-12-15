@@ -17,9 +17,9 @@
   <label for="bidSquare">Place bid:</label>
   <input type="text" id="bidSquare" name="bidSquare">
   </form>
-  <button id = "bidPlacement" @click="startBidding()">Place bid!</button>
-</div>
 
+</div>
+<button id = "bidPlacement" @click="startBidding()">Place bid!</button>
   <div class = "EnergyBottleCoinWhiteTwo"></div> <!-- Olika flaskor med vita coins, 1 2 eller 0 -->
   <div class = "EnergyBottleCoinWhiteOne"></div>
   <div class = "EnergyBottleCoinWhiteNoll"></div>
@@ -95,7 +95,7 @@ export default {
 }
 
 .titleAuctionPool{
-grid-column: 3;
+grid-column: 1;
 grid-row: 1;
 }
 
@@ -106,11 +106,11 @@ grid-row: 1;
   background-image:  url('/images/Coin-white.png');
   background-size: cover;
   grid-column: 1;
-  grid-row: 3;
+  grid-row: 4;
 }
 .second{
   grid-column: 1;
-  grid-row: 4;
+  grid-row: 5;
 }
 
 .EnergyBottleCoinWhiteTwo{
@@ -119,7 +119,7 @@ grid-row: 1;
   background-image:  url('/images/Coin-white-2.png');
   background-size: cover;
   grid-column: 1;
-  grid-row: 1;
+  grid-row: 2;
 }
 
 .EnergyBottleCoinWhiteOne{
@@ -128,7 +128,7 @@ grid-row: 1;
   background-image:  url('/images/Coin-white-1.png');
   background-size: cover;
   grid-column: 1;
-  grid-row: 2;
+  grid-row: 3;
 }
 
   .auctionCard {
@@ -147,6 +147,23 @@ grid-row: 1;
   height: 180px;
   width: 130px;
   border: 5px dotted pink;
+  }
+
+  .bidSquare {
+    grid-column: 1;
+    grid-row: 9;
+
+  }
+#bidSquare {
+  width: 25px;
+  grid-column: 2;
+
+}
+#bidPlacement {
+    grid-column: 2;
+    grid-row: 9;
+    background-color: lightpink;
+
   }
 
   .cardUpForAuction {

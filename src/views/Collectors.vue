@@ -624,16 +624,16 @@ h5 {
     grid-row: 8/span 4;
   }
   .turnCounter {
-    background-color: green;
+    background-color: #60AB4D;
     color:white;
-    grid-column: 4/ span 2;
+    grid-column: 3/ span 2;
     grid-row: 16/span 2;
     text-align: center;
   }
   .roundCounter {
-    background-color: blue;
+    background-color: #4C7B80;
     color:white;
-    grid-column: 7/ span 2;
+    grid-column: 6/ span 2;
     grid-row: 16/span 2;
     text-align: center;
   }
@@ -641,34 +641,36 @@ h5 {
   .showPlayers {
     background-color: #406c72;
     color: white;
-    grid-column: 1/ span 2;
-    grid-row: 16/span 2;
+    grid-column: 1;
+    grid-row: 16/span 4;
     text-align: center;
+    border: 5px dotted pink ;
   }
   .buttons{
     grid-column: 1;
     grid-row: 10;
   }
   .turnButton {
-    grid-column: 4/ span 1;
-    grid-row: 16/span 1;
-    background-color: lightgreen;
+    background-color: #B1E168;
     cursor: pointer;
-    border: 10px dotted green ;
+    border: 10px dotted #60AB4D ;
     text-align: center;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
   }
+  .turnButton:hover {
+  background-color: #60AB4D;
+  color: white;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  }
   .roundButton:hover {
-  background-color: blue;
+  background-color: #4C7B80;
   color: white;
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
   }
   .roundButton {
-    grid-column: 4/ span 1;
-    grid-row: 16/span 1;
     background-color: lightblue;
     cursor: pointer;
-    border: 10px dotted blue ;
+    border: 10px dotted #4C7B80 ;
     text-align: center;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
   }
