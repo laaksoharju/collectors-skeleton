@@ -724,9 +724,30 @@ footer a:visited {
   z-index: 1;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1400px) {
   main {
-    width:90vw;
+    zoom: 0.7;
+    -moz-transform: scale(0.7);
+  }
+}
+
+@media screen and (max-width: 980px) {
+  main {
+    zoom: 0.6;
+    -moz-transform: scale(0.6);
+  }
+}
+
+@media screen and (max-width: 850px) {
+  main {
+    zoom: 0.5;
+    -moz-transform: scale(0.5);
+  }
+}
+@media screen and (max-width: 700px) {
+  main {
+    zoom: 0.4;
+    -moz-transform: scale(0.4);
   }
 }
 </style>
