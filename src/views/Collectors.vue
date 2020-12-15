@@ -83,6 +83,17 @@
               :placement="workPlacement"
               @placeBottle="placeBottle('work', $event)"
             />
+            <QuarterTiles
+              v-if="players[playerId]"
+              :labels="labels"
+              :player="players[playerId]"
+              :itemsOnSale="skillsOnSale"
+              :marketValues="marketValues"
+              :placement="workPlacement"
+              @placeBottle="placeBottle('work', $event)"
+            />
+            
+            
           </section>
           <section class="auction_bottle">
             <Bottles
@@ -368,6 +379,7 @@
           readonly="readonly"
         />
       </p>
+      <p>{{round}}</p>
 
       <!-- <button v-if="players[playerId]" @click="players[playerId].money += 1">
         fake more money
@@ -383,6 +395,7 @@
 import CollectorsCard from "@/components/CollectorsCard.vue";
 import CollectorsBuyActions from "@/components/CollectorsBuyActions.vue";
 import Bottles from "@/components/Bottles.vue";
+import QuarterTiles from "@/components/QuarterTiles.vue";
 
 export default {
   name: "Collectors",
@@ -390,6 +403,7 @@ export default {
     CollectorsCard,
     CollectorsBuyActions,
     Bottles,
+    QuarterTiles
   },
   data: function () {
     return {
@@ -443,9 +457,7 @@ export default {
         music:0,
         technology:0,
         figure:0,
-        fastaval:0,
-
-
+        fastaval:0
       },
       playerskill:{
         'bottle':0,
@@ -458,8 +470,8 @@ export default {
         'workerCard':0,
         'workerIncome':0,
         'auctionIncome':0
-
-      }
+      },
+      round: 0
     };
   },
   computed: {
@@ -506,6 +518,7 @@ export default {
         this.marketPlacement = d.placements.marketPlacement;
         this.auctionPlacement = d.placements.auctionPlacement;
         this.workPlacement = d.placements.workPlacement;
+        this.round = d.round;
       }.bind(this)
     );
 
@@ -851,7 +864,7 @@ footer a:visited {
   position: absolute;
   display: grid;
   grid-gap: 5px;
-  grid-template-columns: 60% 40%;
+  grid-template-columns: 55% 45%;
   background: rgb(92, 160, 170);
   background: linear-gradient(
     0deg,

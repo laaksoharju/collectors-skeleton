@@ -98,6 +98,7 @@ Data.prototype.createRoom = function (roomId, playerCount, lang = "en")
   room.marketPlacement = [{ cost: 0, playerId: null, bottleType: 'marketTwoBlue' },
   { cost: 2, playerId: null, bottleType: 'marketDollar' },
   { cost: 0, playerId: null, bottleType: 'marketOneBlue' }];
+  room.round = 1;
   this.rooms[roomId] = room;
 }
 
@@ -148,6 +149,16 @@ Data.prototype.getPlayers = function (id)
   if (typeof room !== 'undefined')
   {
     return room.players;
+  }
+  else return {};
+}
+
+Data.prototype.getRound = function (id)
+{
+  let room = this.rooms[id]
+  if (typeof room !== 'undefined')
+  {
+    return room.round;
   }
   else return {};
 }

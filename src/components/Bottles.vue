@@ -1,98 +1,70 @@
 <template>
   <div class="buttons">
     <div v-for="(p, index) in placement" :key="index">
+      <div v-if="p.bottleType == 'normal'">
+        <button
+          class="btn-normal"
+          v-if="p.playerId === null"
+          :disabled="cannotAfford(p.cost)"
+          @click="placeBottle(p)"
+        >
+          <div class="recieveMoney" v-if="p.cost < 0">${{ p.cost * -1 }}</div>
 
-        <div v-if="p.bottleType == 'normal'">
+          <div class="costMoney" v-if="p.cost >= 0">${{ p.cost }}</div>
+        </button>
+      </div>
 
+      <div v-if="p.bottleType == 'marketTwoBlue'">
+        <button
+          class="btn-marketTwoBlue"
+          v-if="p.playerId === null"
+          :disabled="cannotAfford(p.cost)"
+          @click="placeBottle(p)"
+        >
+          <div class="recieveMoney" v-if="p.cost < 0">${{ p.cost * -1 }}</div>
 
-          <button
-            class="btn-normal"
-            v-if="p.playerId === null"
-            :disabled="cannotAfford(p.cost)"
-            @click="placeBottle(p)"
-          >
+          <div class="costMoney" v-if="p.cost >= 0">${{ p.cost }}</div>
+        </button>
+      </div>
 
-            <div class = "recieveMoney" v-if="p.cost < 0 ">
+      <div v-if="p.bottleType == 'marketOneBlue'">
+        <button
+          class="btn-marketOneBlue"
+          v-if="p.playerId === null"
+          :disabled="cannotAfford(p.cost)"
+          @click="placeBottle(p)"
+        >
+          <div class="recieveMoney" v-if="p.cost < 0">${{ p.cost * -1 }}</div>
 
-              ${{ p.cost*-1 }}
-            </div>
+          <div class="costMoney" v-if="p.cost >= 0">${{ p.cost }}</div>
+        </button>
+      </div>
 
-            <div class = "costMoney" v-if="p.cost >= 0 ">
+      <div v-if="p.bottleType == 'marketDollar'">
+        <button
+          class="btn-marketDollar"
+          v-if="p.playerId === null"
+          :disabled="cannotAfford(p.cost)"
+          @click="placeBottle(p)"
+        >
+          <div class="recieveMoney" v-if="p.cost < 0">${{ p.cost * -1 }}</div>
 
-              ${{ p.cost }}
-            </div>
+          <div class="costMoney" v-if="p.cost >= 0">${{ p.cost }}</div>
+        </button>
+      </div>
 
-          </button>
+      <div v-if="p.bottleType == 'auctionMedal'">
+        <button
+          class="btn-auctionMedal"
+          v-if="p.playerId === null"
+          :disabled="cannotAfford(p.cost)"
+          @click="placeBottle(p)"
+        >
+          <div class="recieveMoney" v-if="p.cost < 0">${{ p.cost * -1 }}</div>
 
-        </div>
-
-        <div v-if="p.bottleType == 'marketTwoBlue'">
-            <button
-              class="btn-marketTwoBlue"
-              v-if="p.playerId === null"
-              :disabled="cannotAfford(p.cost)"
-              @click="placeBottle(p)"
-            >
-            <div class = "recieveMoney" v-if="p.cost < 0 ">
-              ${{ p.cost*-1 }}
-            </div>
-
-            <div class = "costMoney" v-if="p.cost >= 0 ">
-              ${{ p.cost }}
-            </div>
-            </button>
-        </div>
-
-        <div v-if="p.bottleType == 'marketOneBlue'">
-            <button
-              class="btn-marketOneBlue"
-              v-if="p.playerId === null"
-              :disabled="cannotAfford(p.cost)"
-              @click="placeBottle(p)"
-            >
-            <div class = "recieveMoney" v-if="p.cost < 0 ">
-              ${{ p.cost*-1 }}
-            </div>
-
-            <div class = "costMoney" v-if="p.cost >= 0 ">
-              ${{ p.cost }}
-            </div>
-            </button>
-        </div>
-
-        <div v-if="p.bottleType == 'marketDollar'">
-            <button
-              class="btn-marketDollar"
-              v-if="p.playerId === null"
-              :disabled="cannotAfford(p.cost)"
-              @click="placeBottle(p)"
-            >
-            <div class = "recieveMoney" v-if="p.cost < 0 ">
-              ${{ p.cost*-1 }}
-            </div>
-
-            <div class = "costMoney" v-if="p.cost >= 0 ">
-              ${{ p.cost }}
-            </div>
-            </button>
-        </div>
-
-        <div v-if="p.bottleType == 'auctionMedal'">
-            <button
-              class="btn-auctionMedal"
-              v-if="p.playerId === null"
-              :disabled="cannotAfford(p.cost)"
-              @click="placeBottle(p)"
-            >
-            <div class = "recieveMoney" v-if="p.cost < 0 ">
-              ${{ p.cost*-1 }}
-            </div>
-
-            <div class = "costMoney" v-if="p.cost >= 0 ">
-              ${{ p.cost }}
-            </div>
-            </button>
-        </div>
+          <div class="costMoney" v-if="p.cost >= 0">${{ p.cost }}</div>
+        </button>
+      </div>
 
       <div v-if="p.playerId !== null">
         {{ p.playerId }}
@@ -117,7 +89,6 @@ export default {
     cannotAfford: function (cost) {
       let minCost = 100;
       for (let key in this.marketValues) {
-        console.log(this.marketValues)
         if (cost + this.marketValues[key] < minCost)
           minCost = cost + this.marketValues[key];
       }
@@ -164,7 +135,7 @@ export default {
 };
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style >
+<style>
 .buy-cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, 130px);
@@ -238,16 +209,10 @@ export default {
   color: LimeGreen;
   text-indent: -2.8em;
   font-weight: 900;
-
-
-
 }
 .costMoney {
   color: black;
   text-indent: -2.8em;
   font-weight: 900;
-
 }
-
-
 </style>
