@@ -60,27 +60,30 @@
       <div id="GameOperations">
         <h2>Game operations</h2>
         <div id='readyGameButton'>
-          <button v-on:click="readyGame()" @click="playerReady = true" :disabled="playerReady">
+          <button class="start_buttons" v-on:click="readyGame()" @click="playerReady = true" :disabled="playerReady">
             Click here if you are ready!
             </button>
         </div>
         <div id='startGameButton'>
-          <button v-on:click="startGame()" :disabled="playerBoardShown">
+          <button class="start_buttons" v-on:click="startGame()" :disabled="playerBoardShown">
             Press here when everyone is ready, here you find your play order.
             </button>
         </div>
         <p v-if="players[playerId]"> Current money: {{ players[playerId].money }}$ </p>
-        <button v-if="players[playerId]" @click="fakeMoreMoney()">
+        <button class="function_buttons" v-if="players[playerId]" @click="fakeMoreMoney()">
           Fake more money
+            <img class="function_button_img" src="images/fakeMoreMoney.png">
         </button>
         <div class="buttons">
-          <button @click="drawCard">
+          <button class="function_buttons" @click="drawCard">
             {{ labels.draw }}
+            <img id="drawCard_button_img" src="images/drawCards.png">
           </button>
         </div>
         <div class="buttons">
-          <button v-if="players[playerId]" @click="retrieveBottles()">
+          <button class="function_buttons" v-if="players[playerId]" @click="retrieveBottles()">
             Retrieve bottles
+            <img class="function_button_img" src="images/retrieveBottles.png">
           </button>
         </div>
 
@@ -686,8 +689,28 @@ footer a:visited {
   border-radius: 5px;
 }
 
-.use_as {
+#drawCard_button_img {
+  width: 3.5em;
+  vertical-align: middle;
+}
 
+.function_buttons {
+  width: 12em;
+  margin-bottom: 0.5em;
+  margin-left: 1em;
+  padding: 10px 0px 10px 0px;
+}
+
+.function_button_img {
+  width: 2em;
+  vertical-align: middle;
+}
+
+.start_buttons {
+  width: 18em;
+  margin-bottom: 0.5em;
+  margin-left: 1em;
+  padding: 10px 0px 10px 0px;
 }
 
 .cardslots {
