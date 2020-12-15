@@ -51,9 +51,9 @@
           <p>player {{ bidArray[bidArray.length - 1]}} is now leading the auction with a: {{ bidArray.length}}$ bid.</p>
           <button v-if="players[playerId]" :disabled="cannotRaiseBid()" @click="raiseCurrentBid()">Raise current bid!</button>
           <button v-if="bidArray[bidArray.length - 1] === this.playerId" :disabled="noMoreBidsBoolean" @click="noMoreBids()">My {{bidArray.length}}$ bid won!</button>
-          <button v-if="this.noMoreBidsBoolean" @click="endAuction('buyItem')" style="background-color: #f9dcce">Use as an item</button>
-          <button v-if="this.noMoreBidsBoolean" @click="endAuction('getSkill')" style="background-color: #dfeccc">Use as a skill</button>
-          <button v-if="this.noMoreBidsBoolean" @click="endAuction('market')" style="background-color: #cfdcf2">Place in the market</button>
+          <button v-if="this.noMoreBidsBoolean" @click="endAuction('buyItem')" style="background-color: #f9dcce">Use as an item <br><img class="use_as" src="images/use_as_item.png" width="33%"></button>
+          <button v-if="this.noMoreBidsBoolean" @click="endAuction('getSkill')" style="background-color: #dfeccc">Use as a skill <br><img class="use_as" src="images/use_as_skill.png" width="33%"></button>
+          <button v-if="this.noMoreBidsBoolean" @click="endAuction('market')" style="background-color: #cfdcf2">Place in the market <br><img class="use_as" src="images/use_as_market.png" width="30%"></button>
         </div>
       </div>
 
@@ -678,6 +678,10 @@ footer a:visited {
 
 #container button {
   border-radius: 5px;
+}
+
+.use_as {
+
 }
 
 .cardslots {

@@ -15,7 +15,8 @@
         v-if="p.playerId===null"
         :disabled="cannotAfford(p.cost) || player.bottles < 1"
         @click="placeBottle(p)" >
-        ${{p.cost}}
+        <!-- ${{p.cost}} -->
+        <img :src='p.img' style="width:55%">
       </button>
       <div v-if="p.playerId !== null" style="color:black">
         {{p.playerId}}
@@ -104,6 +105,15 @@ export default {
   transform: scale(0.8)translate(10%,-10%);
 }
 
+.buttons button {
+  border-radius: 10px;
+}
+
+.buttons button:hover {
+  transform: scale(1.05);
+  transition:0.2s;
+  transition-timing-function: ease-in-out;
+}
 
 #SkillActionDiv  h1, h2, h3, p  {
   color: black;

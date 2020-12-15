@@ -69,23 +69,23 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.playerIdArray = [];
   room.playerBoardShown = true;
   room.activeRound = String;
-  room.buyPlacement = [ {cost:1, playerId: null},
-                        {cost:1, playerId: null},
-                        {cost:2, playerId: null},
-                        {cost:2, playerId: null},
-                        {cost:3, playerId: null} ];
-  room.skillPlacement = [ {cost:0, playerId: null},
-                          {cost:0, playerId: null},
-                          {cost:0, playerId: null},
-                          {cost:1, playerId: null},
-                          {cost:1, playerId: null} ];
-  room.auctionPlacement = [ {cost:-2, playerId: null},
-                            {cost:-1, playerId: null},
-                            {cost:0, playerId: null},
-                            {cost:0, playerId: null} ];
-  room.marketPlacement = [ {cost:0, playerId: null},
-                           {cost:2, playerId: null},
-                           {cost:0, playerId: null} ];
+  room.buyPlacement = [ {cost:1, playerId: null, img: 'images/buy1$.png'},
+                        {cost:1, playerId: null, img: 'images/buy1$.png'},
+                        {cost:2, playerId: null, img: 'images/buy2$.png'},
+                        {cost:2, playerId: null, img: 'images/buy2$.png'},
+                        {cost:3, playerId: null, img: 'images/buy3$.png'} ];
+  room.skillPlacement = [ {cost:0, playerId: null, img: 'images/skill0$.png'},
+                          {cost:0, playerId: null, img: 'images/skill0$.png'},
+                          {cost:0, playerId: null, img: 'images/skill0$.png'},
+                          {cost:1, playerId: null, img: 'images/skill1$.png'},
+                          {cost:1, playerId: null, img: 'images/skill1$.png'} ];
+  room.auctionPlacement = [ {cost:-2, playerId: null, img: 'images/auction-2$.png'},
+                            {cost:-1, playerId: null, img: 'images/auction-1$.png'},
+                            {cost:0, playerId: null, img: 'images/auction0$.png'},
+                            {cost:0, playerId: null, img: 'images/auction0$.png'} ];
+  room.marketPlacement = [ {cost:0, playerId: null, img: 'images/market_2_0$.png'},
+                           {cost:2, playerId: null, img: 'images/market2$.png'},
+                           {cost:0, playerId: null, img: 'images/market0$.png'} ];
   room.workPlacement = [ {cost:0, playerId: null},
                          {cost:-1, playerId: null, img: 'images/Static_Work_Image_001.png'},
                          {cost:1, playerId: null, img: 'images/Static_Work_Image_002.png'},
@@ -277,8 +277,8 @@ Data.prototype.addPlayerReady = function(roomId, playerId){
   }
 }
 
-Data.prototype.changeRound = function(roomId, playerId, round){
-  console.log('!!!!changeRound fuktion');
+
+Data.prototype.changeRound= function(roomId, playerId, round){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
      room.activeRound = round;
@@ -378,14 +378,30 @@ Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index
     }
 
     if (index === 0) {
-      console.log('Work ruta index 0, variera med rundan.');
-      room.workPlacement[index].playerId = playerId;
+      if (room.activeRound ==='Round 1') {
+        console.log('2 kort till Income');
+        room.workPlacement[index].playerId = playerId;
+      }
+      else if (room.activeRound ==='Round 2') {
+        console.log('2 kort till Income + 1$');
+        room.players[playerId].money += 1;
+        room.workPlacement[index].playerId = playerId;
+      }
+      else if (room.activeRound ==='Round 3') {
+        console.log('2 kort till Income + 2$');
+        room.players[playerId].money += 2;
+        room.workPlacement[index].playerId = playerId;
+      }
+      else if (room.activeRound ==='Round 4') {
+        console.log('Släng en flaska + 3$');
+        room.players[playerId].money += 1;
+      }
     }
     if (index === 1) {
-      console.log('Work ruta index 1, släng en flaska');
+      console.log('Work ruta index 1, släng en flaska + 1$');
     }
     if (index === 2) {
-      console.log('Work ruta index 2, dra två kort');
+      console.log('Work ruta index 2, dra två kort -1$');
       room.workPlacement[index].playerId = playerId;
       let card1 = room.deck.pop();
       let card2 = room.deck.pop();

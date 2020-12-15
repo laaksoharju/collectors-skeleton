@@ -15,7 +15,8 @@
             v-if="p.playerId===null"
             :disabled="cannotAfford(p.cost) || player.bottles < 1"
             @click="placeBottle(p, index)">
-            ${{p.cost}}
+            <!-- ${{p.cost}} -->
+            <img :src='p.img' style="width:75%">
           </button>
           <div v-if="p.playerId !== null" style="color:black">
             {{p.playerId}}
@@ -106,6 +107,16 @@ export default {
   float:left;
   grid-template-columns: repeat(auto-fill, 130px);
   transform: scale(0.8)translate(10%,-10%);
+}
+
+.buttons button {
+  border-radius: 10px;
+}
+
+.buttons button:hover {
+  transform: scale(1.05);
+  transition:0.2s;
+  transition-timing-function: ease-in-out;
 }
 
 #Cards {
