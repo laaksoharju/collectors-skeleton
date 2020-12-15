@@ -41,21 +41,6 @@
         </div>
       </div>
 
-      <div id="actionSection">
-        <div class="button">
-          <InfoButtons :modalProps="myBottlesProps" />
-        </div>
-
-        <h2>Number of bottles: {{ player.availableBottles }}</h2>
-        <div id="actionGrid">
-          <div v-on:click="actionMade('A')" class="dot bottle" id="A"></div>
-          <div v-on:click="actionMade('B')" class="dot bottle" id="B"></div>
-          <div v-on:click="actionMade('C')" class="dot bottle" id="C"></div>
-          <div v-on:click="actionMade('D')" class="dot bottle" id="D"></div>
-          <div v-on:click="actionMade('E')" class="dot bottle" id="E"></div>
-        </div>
-      </div>
-
       <div id="skillSection">
         <!-- <h2>Skills</h2> -->
         <div class="button">
@@ -389,10 +374,11 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #mainBoard {
+  width: 50%;
   height: fit-content;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 1.5fr;
   grid-gap: 10px;
   text-align: center;
   color: black;
@@ -409,26 +395,23 @@ export default {
   font-weight: bold;
 }
 #itemSection {
-  grid-row: 1/3;
-  grid-column: 1/4;
-}
-#actionSection {
-  grid-row: 1/3;
-  grid-column: 4/6;
+  grid-row: 1/2;
+  grid-column: 1/2;
 }
 #skillSection {
-  grid-row: 3/6;
-  grid-column: 1/4;
+  grid-row: 2/3;
+  grid-column: 1/2;
 }
 #infoSection {
-  grid-row: 3/6;
-  grid-column: 4/6;
+  grid-row: 1/3;
+  grid-column: 2/3;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
 }
 #secretSection {
-  grid-column: 1/3;
+  grid-column: 1/2;
+  grid-row: 3/4;
 }
 #itemGrid {
   display: grid;
@@ -438,15 +421,9 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }
-#actionGrid {
-  align-items: center;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 5px;
-}
 .dot {
-  width: 6vw;
-  height: 6vw;
+  width: 3vw;
+  height: 3vw;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -457,77 +434,69 @@ export default {
 .income,
 .money {
   background-color: #ffe599ff;
-  height: 8vw;
-  width: 8vw;
+  height: 5vw;
+  width: 5vw;
 }
-.bottle {
-  height: 8vw;
-  width: 8vw;
-  background-color: whitesmoke;
-}
-.bottle:hover {
-  background-color: red;
-  transition: 0.3s;
-}
+
 .music {
   background: url("/images/ITEM-MUSIC.png");
-  background-size: 6vw 6vw;
+  background-size: 3vw 3vw;
 }
 .movie {
   background: url("/images/ITEM-FILM.png");
-  background-size: 6vw 6vw;
+  background-size:  3vw 3vw;
 }
 .technology {
   background: url("/images/ITEM-IT.png");
-  background-size: 6vw 6vw;
+  background-size:  3vw 3vw;
 }
 .figures {
   background: url("/images/ITEM-ROBOT.png");
-  background-size: 6vw 6vw;
+  background-size:  3vw 3vw;
 }
 .fastaval {
   background: url("/images/ITEM-PINGVIN.png");
-  background-size: 6vw 6vw;
+  background-size:  3vw 3vw;
 }
 .bottleSkill {
   background: url("/images/SKILL-FLASKA.png");
-  background-size: 6vw 6vw;
+  background-size:  3vw 3vw;
 }
 .workerIncomeSkill {
   background: url("/images/SKILL-GUBBE2PENG.png");
-  background-size: 6vw 6vw;
+  background-size:  3vw 3vw;
 }
 .workerCardSkill {
   background: url("/images/SKILL-GUBBEKORT.png");
-  background-size: 6vw 6vw;
+  background-size: 3vw 3vw;
 }
 .auctionIncomeSkill {
   background: url("/images/SKILL-1PENG.png");
-  background-size: 6vw 6vw;
+  background-size:  3vw 3vw;
 }
 .VP-allSkill {
   background: url("/images/SKILL-5STARS.png");
-  background-size: 6vw 6vw;
+  background-size:  3vw 3vw;
 }
 .VP-fastavalSkill {
   background: url("/images/SKILL-PINGVINEX.png");
-  background-size: 6vw 6vw;
+  background-size:  3vw 3vw;
 }
 .VP-figuresSkill {
   background: url("/images/SKILL-ROBOTEX.png");
-  background-size: 6vw 6vw;
+  background-size:  3vw 3vw;
 }
 .VP-movieSkill {
   background: url("/images/SKILL-FILMEX.png");
-  background-size: 6vw 6vw;
+  background-size:  3vw 3vw;
 }
 .VP-technologySkill {
   background: url("/images/SKILL-ITEX.png");
-  background-size: 6vw 6vw;
+  background-size:  3vw 3vw;
 }
 .VP-musicSkill {
   background: url("/images/SKILL-MUSICEX.png");
-  background-size: 6vw 6vw;
+  background-size:  3vw 3vw;
 }
 
 .button {

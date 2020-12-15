@@ -1,9 +1,14 @@
 <template>
   <div>
     <main>
-      <h1>I am player {{ playerId }}</h1>
-      <h1 v-if="players[playerId].active">my turn!</h1>
-
+      <h1> Round {{round}}</h1>
+      <div class = "topp">
+        <h1  v-if="players[playerId]" >I am player {{ playerId }}</h1>
+        <div v-for="(player, index) in players" :player="player" :key="index">
+          <h1 v-if="player.active">It's {{index}}'s turn!</h1>
+        </div>
+        <OtherPlayerboards v-if="players[playerId]" :Players="players" :playerId="playerId" />
+      </div>
       <div class="layout_wrapper">
         <div id="game-board">
           <ItemSection
@@ -47,11 +52,11 @@
             @placeBottle="placeBottle('buy', $event)"
           />
         </div>
-        <WorkArea :color="players[playerId].color" class="gridWork" />
+        <WorkArea v-if="players[playerId]" :color="players[playerId].color" class="gridWork" />
       </div>
 
       <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
-      <OtherPlayerboards :Players="players" :playerId="playerId" />
+      <OtherPlayerboards  v-if="players[playerId]" :Players="players" :playerId="playerId" />
 
       <!--  {{ buyPlacement }} {{ chosenPlacementCost }}-->
 
@@ -163,7 +168,8 @@ export default {
     return {
       publicPath: "localhost:8080/#", //"collectors-groupxx.herokuapp.com/#",
       touchScreen: false,
-      nextRound:Boolean,
+      nextRound: Boolean,
+      round: 1,
       myCards: [],
       maxSizes: { x: 0, y: 0 },
       labels: {},
@@ -326,6 +332,7 @@ export default {
         this.skillPlacement = d.placement.skillPlacement;
         this.marketPlacement = d.placement.marketPlacement;
         this.auctionPlacement = d.placement.auctionPlacement;
+        this.round = d.round;
       }.bind(this)
     );
 
@@ -397,6 +404,11 @@ export default {
 </script>
 
 <style scoped>
+.topp{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+}
 .board-section {
   width: 100%;
   padding: 10px;

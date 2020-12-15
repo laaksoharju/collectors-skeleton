@@ -29,7 +29,8 @@ function sockets(io, socket, data) {
       marketValues: data.getMarketValues(d.roomId),
       nextRound: data.getNextRound(d.roomId),
       placement: data.getPlacements(d.roomId),
-      players: data.getPlayers(d.roomId)
+      players: data.getPlayers(d.roomId),
+      round: data.getRound(d.roomId)
     });
   });
 
