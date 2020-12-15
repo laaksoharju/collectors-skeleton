@@ -1,15 +1,11 @@
-function sockets(io, socket, data)
-{
-  socket.on('setupCollectors', function (d)
-  {
+function sockets(io, socket, data) {
+  socket.on("setupCollectors", function(d) {
     data.createRoom(d.roomId, d.playerCount, d.lang);
-  })
-  socket.on('collectorsLoaded', function (d)
-  {
+  });
+  socket.on("collectorsLoaded", function(d) {
     socket.join(d.roomId);
-    if (data.joinGame(d.roomId, d.playerId))
-    {
-      socket.emit('collectorsInitialize', {
+    if (data.joinGame(d.roomId, d.playerId)) {
+      socket.emit("collectorsInitialize", {
         labels: data.getUILabels(d.roomId),
         players: data.getPlayers(d.roomId),
         itemsOnSale: data.getItemsOnSale(d.roomId),
@@ -17,47 +13,46 @@ function sockets(io, socket, data)
         skillsOnSale: data.getSkillsOnSale(d.roomId),
         auctionCards: data.getAuctionCards(d.roomId),
         placements: data.getPlacements(d.roomId),
-        round: data.getRound(d.roomId)
-      }
-    );
-  }
-  });socket.on('updatePlayerName', function (d)
-  {
-    io.to(d.roomId).emit('updatePlayerName',
+        round: data.getRound(d.roomId),
+      });
+    }
+  });
+  socket.on("updatePlayerName", function(d) {
+    io.to(d.roomId).emit(
+      "updatePlayerName",
       data.updatePlayerName(d.roomId, d.playerId, d.playerName)
     );
   });
-  socket.on('notifyPlayers', function (d)
-  {
-    io.to(d.roomId).emit('notifyPlayers',
-      data.getPlayers(d.roomId)
-    );
+  socket.on("nextRound", function(d) {
+    io.to(d.roomId).emit("nextRound", data.nextRound(d.roomId));
   });
-  socket.on('collectorsDrawCard', function (d)
-  {
-    io.to(d.roomId).emit('collectorsCardDrawn',
+
+  socket.on("notifyPlayers", function(d) {
+    io.to(d.roomId).emit("notifyPlayers", data.getPlayers(d.roomId));
+  });
+  socket.on("collectorsDrawCard", function(d) {
+    io.to(d.roomId).emit(
+      "collectorsCardDrawn",
       data.drawCard(d.roomId, d.playerId)
     );
   });
-  socket.on('collectorsBuyCard', function (d)
-  {
-    console.log('rich socket')
+  socket.on("collectorsBuyCard", function(d) {
+    console.log("rich socket");
 
-    data.buyCard(d.roomId, d.playerId, d.card, d.cost, d.action)
-    io.to(d.roomId).emit('collectorsCardBought', {
+    data.buyCard(d.roomId, d.playerId, d.card, d.cost, d.action);
+    io.to(d.roomId).emit("collectorsCardBought", {
       playerId: d.playerId,
       players: data.getPlayers(d.roomId),
       itemsOnSale: data.getItemsOnSale(d.roomId),
-      skillsOnSale: data.getSkillsOnSale(d.roomId)
-    }
-    );
+      skillsOnSale: data.getSkillsOnSale(d.roomId),
+    });
   });
-  socket.on('collectorsPlaceBottle', function (d)
-  {
+  socket.on("collectorsPlaceBottle", function(d) {
     data.placeBottle(d.roomId, d.playerId, d.action, d.cost);
-    io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId)
+    io.to(d.roomId).emit(
+      "collectorsBottlePlaced",
+      data.getPlacements(d.roomId)
     );
   });
-
 }
 module.exports = sockets;

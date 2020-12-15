@@ -186,6 +186,19 @@ Data.prototype.updatePlayerName = function (roomId, playerId, playerName)
   // console.log("From data handler, Room Id: " + roomId + ", player Id: " + playerId + ", new name: " + playerName);
 }
 
+Data.prototype.nextRound = function (roomId)
+{
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined')
+  {
+    room.round = room.round + 1;
+    console.log("From data handler, Room Id: " + roomId + ", Round: " + room.round);
+    return room.round;   
+  }
+  else return {};
+  
+}
+
 /* returns players after a new card is drawn */
 Data.prototype.drawCard = function (roomId, playerId)
 {
