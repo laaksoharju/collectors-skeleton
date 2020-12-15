@@ -71,13 +71,19 @@
         </div>
         <p v-if="players[playerId]"> Current money: {{ players[playerId].money }}$ </p>
         <button v-if="players[playerId]" @click="fakeMoreMoney()">
-          fake more money
+          Fake more money
         </button>
         <div class="buttons">
           <button @click="drawCard">
             {{ labels.draw }}
           </button>
         </div>
+        <div class="buttons">
+          <button v-if="players[playerId]" @click="retrieveBottles()">
+            Retrieve bottles
+          </button>
+        </div>
+
         <p>
           {{ labels.invite }}
           <input type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
@@ -94,6 +100,7 @@
 
       <div id="PlayerBoardDiv">
         <h2>Player board</h2>
+
         <div id="AllPlayerCardsDiv" v-if="playerBoardShown">
 
           <div id="AllPlayerIdDiv">
@@ -456,6 +463,13 @@ methods: {
 
   fakeMoreMoney: function () {
     this.$store.state.socket.emit('collectorsFakeMoreMoney', {
+      roomId: this.$route.params.id,
+      playerId: this.playerId
+    });
+  },
+
+  retrieveBottles: function () {
+    this.$store.state.socket.emit('collectorsRetrieveBottles', {
       roomId: this.$route.params.id,
       playerId: this.playerId
     });
