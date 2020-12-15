@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <h1>{{ labels.buySkillCard }}</h1> -->
     <div id="skill-section" class="board-section">
       <InfoButtons
       :modalProps='gainSkillProps'
@@ -126,7 +125,7 @@ export default {
 }
 
 .board-section {
-  width: 50%;
+  width: 100%;
   padding: 10px;
   align-items: center;
   display: flex;

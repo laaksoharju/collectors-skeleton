@@ -127,15 +127,6 @@ export default {
   grid-template-columns: repeat(auto-fill, 130px);
 }
 
-.board-section {
-  width: 50%;
-  padding: 10px;
-  align-items: center;
-  display: flex;
-  flex-direction: row-reverse;
-  border: 1px solid #19181850;
-}
-
 #item-section {
   background-color: #ea9999ff;
 }
