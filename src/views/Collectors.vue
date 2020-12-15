@@ -57,31 +57,18 @@
         </div>
       </div>
 
-      <div id="WorkDiv">
-        <CollectorsWorkActions v-if="players[playerId]"
-        :labels="labels"
-        :player="players[playerId]"
-        :placement="workPlacement"
-        @placeBottleWork="placeBottleWork('doWork', $event)"/>
-      </div>
-
-      <div id="HandDiv" class="cardslots" v-if="players[playerId]">
-        <h2>Hand</h2>
-        <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="handleAction(card)" :key="index"/>
-      </div>
-
-      <div id="PlayerItemsDiv" class="cardslots" v-if="players[playerId]">
-        <h2>Items</h2>
-        <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
-      </div>
-
-      <div id="PlayerSkillsDiv" class="cardslots" v-if="players[playerId]">
-        <h2>Skills</h2>
-        <CollectorsCard v-for="(card, index) in players[playerId].skills" :card="card" :key="index"/>
-      </div>
-
-      <div id="PlayerBoardDiv">
-        <h2>Player board</h2>
+      <div id="GameOperations">
+        <h2>Game operations</h2>
+        <div id='readyGameButton'>
+          <button v-on:click="readyGame()" @click="playerReady = true" :disabled="playerReady">
+            Click here if you are ready!
+            </button>
+        </div>
+        <div id='startGameButton'>
+          <button v-on:click="startGame()" :disabled="playerBoardShown">
+            Press here when everyone is ready, here you find your play order.
+            </button>
+        </div>
         <p v-if="players[playerId]"> Current money: {{ players[playerId].money }}$ </p>
         <button v-if="players[playerId]" @click="fakeMoreMoney()">
           fake more money
@@ -91,7 +78,22 @@
             {{ labels.draw }}
           </button>
         </div>
+        <p>
+          {{ labels.invite }}
+          <input type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
+        </p>
+      </div>
 
+      <div id="WorkDiv">
+        <CollectorsWorkActions v-if="players[playerId]"
+        :labels="labels"
+        :player="players[playerId]"
+        :placement="workPlacement"
+        @placeBottleWork="placeBottleWork('doWork', $event)"/>
+      </div>
+
+      <div id="PlayerBoardDiv">
+        <h2>Player board</h2>
         <div id="AllPlayerCardsDiv" v-if="playerBoardShown">
 
           <div id="AllPlayerIdDiv">
@@ -122,23 +124,8 @@
             </div>
           </div>
         </div>
-
         <footer>
-          <p>
-            {{ labels.invite }}
-            <input type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
-          </p>
         </footer>
-      </div>
-      <div id='readyGameButton'>
-        <button v-on:click="readyGame()" @click="playerReady = true" :disabled="playerReady">
-          Click here if you are ready!
-          </button>
-      </div>
-      <div id='startGameButton'>
-        <button v-on:click="startGame()" :disabled="playerBoardShown">
-          Press here when everyone is ready, here you find your play order.
-          </button>
       </div>
     </div>
   </main>
@@ -205,7 +192,8 @@ export default {
         noMoreBidsBoolean: false,
         playerid: 0,
         playerCount: 0,
-        playerIdArray: []
+        playerIdArray: [],
+        roundNumber: 0,
         }
       },
       computed: {
@@ -340,7 +328,13 @@ export default {
             this.bidArray = d;
           }.bind(this));
 
-},
+          this.$store.state.socket.on('collectorsRoundUpdated',function(d){
+            console.log('round updated');
+            this.activeRound = d.activeRound;
+            this.picked = d.activeRound;
+          }.bind(this));
+        },
+
 methods: {
   readyGame: function() {
     alert('You are ready, wait for the rest of the players to ready up. If all are ready hit "start game"');
@@ -662,10 +656,8 @@ footer a:visited {
   "BuyItemDiv BuyItemDiv RaiseValueDiv RaiseValueDiv"
   "BuySkillDiv BuySkillDiv AuctionDiv AuctionDiv"
   "BuySkillDiv BuySkillDiv AuctionDiv AuctionDiv"
-  ". WorkDiv WorkDiv ."
-  "PlayerItemsDiv PlayerItemsDiv PlayerBoardDiv PlayerBoardDiv"
-  "PlayerSkillsDiv PlayerSkillsDiv PlayerBoardDiv PlayerBoardDiv"
-  "HandDiv HandDiv PlayerBoardDiv PlayerBoardDiv"
+  "GameOperations WorkDiv WorkDiv ."
+  "PlayerBoardDiv PlayerBoardDiv PlayerBoardDiv PlayerBoardDiv"
 }
 
 #container h1, h2, h3, p, label, span  {
