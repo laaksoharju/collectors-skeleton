@@ -1,7 +1,17 @@
 <template>
   <div class = "marketPool">
+
     <div class= "titleMarketPool" >Market Pool</div>
-    {{market}} {{marketValues}} <!-- marketValues visar hur de olika kategoriernas valuen är -->
+  <!--  {{market}} {{marketValues}} --> <!-- marketValues visar hur de olika kategoriernas valuen är -->
+
+
+    <div class="chategoryValues" v-for="(value,chategory) in marketValues" :key = "chategory">
+      <div>
+        {{chategory}}: <br>
+        {{value}}
+      </div>
+    </div>
+
     <div class = "iconBird"></div>
     <div class = "iconRobot"></div>
     <div class = "iconMusic"></div>
@@ -37,9 +47,9 @@
       </div>
    </button>
 
-   <div v-if="p.playerId !== null">
+   <!-- <div v-if="p.playerId !== null">
      {{p.playerId}}
-   </div>
+   </div> -->
 
   </div>
 
@@ -91,15 +101,10 @@ export default {
         } behöver vi ej ha denna else nu med ändrat villkor*/
       }
     }
-
-
-
   }
 }
 
 </script>
-
-
 
 
 <style scoped>
@@ -126,6 +131,12 @@ export default {
 
   }
 
+.chategoryValues {
+  grid-column: auto;
+  grid-row: 5;
+  font-size: 90%;
+}
+
   .iconBird {
     width: 30px;
     height: 40px;
@@ -142,7 +153,7 @@ export default {
     background-image: url('/images/iconRobot.PNG');
     background-size: cover;
     place-self: center;
-    grid-column: 2;
+    grid-column: 4;
     grid-row: 10;
   }
 
@@ -152,7 +163,7 @@ export default {
     background-image: url('/images/iconMusic.PNG');
     background-size: cover;
     place-self: center;
-    grid-column: 3;
+    grid-column: 5;
     grid-row: 10;
   }
   .iconFilm {
@@ -161,7 +172,7 @@ export default {
     background-image: url('/images/iconFilm.PNG');
     background-size: cover;
     place-self: center;
-    grid-column: 4;
+    grid-column: 2;
     grid-row: 10;
   }
   .iconTech {
@@ -170,7 +181,7 @@ export default {
     background-image: url('/images/iconTech.PNG');
     background-size: cover;
     place-self: center;
-    grid-column: 5;
+    grid-column: 3;
     grid-row: 10;
   }
 
