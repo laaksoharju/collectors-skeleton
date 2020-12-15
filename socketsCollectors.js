@@ -23,10 +23,15 @@ function sockets(io, socket, data) {
     });
 
     socket.on('collectorsStartGame', function(d) {
+      data.changeRound(d.roomId, d.playerId, d.activeRound);
+      console.log(data.getActiveRound(d.roomId));
       io.to(d.roomId).emit('collectorsGameStarted', {
         playerBoardShown: data.getPlayerBoardShown(d.roomId),
         playerIdArray: data.getPlayerIdArray(d.roomId),
-        players: data.getPlayers(d.roomId)
+        players: data.getPlayers(d.roomId),
+      });
+      io.to(d.roomId).emit('collectorsRoundUpdated', {
+        activeRound: data.getActiveRound(d.roomId)
       });
     });
 
@@ -51,9 +56,7 @@ function sockets(io, socket, data) {
       data.addPlayerReady(d.roomId, d.playerId);
       io.to(d.roomId).emit('collectorsPlayerArrayFinished', {
         playerIdArray: data.getPlayerIdArray(d.roomId)
-      }
-    );
-
+      });
     });
 
     socket.on('collectorsChangeRound', function(d) {
@@ -68,6 +71,7 @@ function sockets(io, socket, data) {
       io.to(d.roomId).emit('collectorsBottlePlaced', {
         placements: data.getPlacements(d.roomId),
         players: data.getPlayers(d.roomId),
+        playerIdArray: data.getPlayerIdArray(d.roomId)
       });
     });
 
@@ -75,7 +79,8 @@ function sockets(io, socket, data) {
       data.placeBottleRaiseValue(d.roomId, d.playerId, d.action, d.cost, d.index);
       io.to(d.roomId).emit('collectorsBottlePlaced', {
         placements: data.getPlacements(d.roomId),
-        players: data.getPlayers(d.roomId)
+        players: data.getPlayers(d.roomId),
+        playerIdArray: data.getPlayerIdArray(d.roomId)
       });
     });
 
@@ -83,7 +88,8 @@ function sockets(io, socket, data) {
       data.placeBottleWork(d.roomId, d.playerId, d.action, d.cost, d.index);
       io.to(d.roomId).emit('collectorsBottlePlaced', {
         placements: data.getPlacements(d.roomId),
-        players: data.getPlayers(d.roomId)
+        players: data.getPlayers(d.roomId),
+        playerIdArray: data.getPlayerIdArray(d.roomId)
       });
     });
 

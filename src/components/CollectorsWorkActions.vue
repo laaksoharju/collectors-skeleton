@@ -45,6 +45,7 @@ export default {
     labels: Object,
     player: Object,
     placement: Array,
+
   },
 
   data: function () {

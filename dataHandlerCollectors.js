@@ -68,7 +68,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.market = [];
   room.playerIdArray = [];
   room.playerBoardShown = true;
-  room.activeRound = String;
+  room.activeRound = 0;
   room.buyPlacement = [ {cost:1, playerId: null, img: 'images/buy1$.png'},
                         {cost:1, playerId: null, img: 'images/buy1$.png'},
                         {cost:2, playerId: null, img: 'images/buy2$.png'},
@@ -113,7 +113,7 @@ Data.prototype.joinGame = function (roomId, playerId) {
       console.log("Player", playerId, "joined for the first time");
       room.players[playerId] = { hand: [],
                                  money: 1,
-                                 bottles: 8, //-------- Start Bottles -------- 
+                                 bottles: 8, //-------- Start Bottles --------
                                  points: 0,
                                  skills: [],
                                  items: [],
@@ -278,11 +278,13 @@ Data.prototype.addPlayerReady = function(roomId, playerId){
 }
 
 
-Data.prototype.changeRound= function(roomId, playerId, round){
+Data.prototype.changeRound= function(roomId, playerId, activeRound){
   let room = this.rooms[roomId];
+  console.log(activeRound);
   if (typeof room !== 'undefined') {
-     room.activeRound = round;
+     room.activeRound = activeRound;
   }
+  console.log(room.activeRound);
 }
 
 Data.prototype.startAuction = function (roomId, playerId, card, cost) {
@@ -413,6 +415,15 @@ Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index
       room.workPlacement[index].playerId = playerId;
       let card1 = room.deck.pop();
       room.players[playerId].hand.push(card1);
+
+      for (let i in room.playerIdArray) {
+        if (room.playerIdArray[i] === playerId) {
+          let playerName = room.playerIdArray.splice(i, 1).toString();
+          room.playerIdArray.splice(0, 0, playerName);
+          console.log("Bytte plats på spelare");
+        }
+      }
+
     }
     if (index === 4) {
       console.log('Work ruta index 4, dra ett kort och placera ett från handen på income');
@@ -420,9 +431,7 @@ Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index
       let card1 = room.deck.pop();
       room.players[playerId].hand.push(card1);
     }
-    return room.players;
   }
-  else return [];
 }
 
 Data.prototype.getPlayerCount = function (roomId) {
@@ -520,12 +529,12 @@ Data.prototype.getPlayerIdArray = function(roomId){
 }
 
 Data.prototype.getActiveRound = function(roomId){
-  console.log('getActiveRound funktion');
   let room = this.rooms[roomId];
+  console.log(room.activeRound);
   if (typeof room !== 'undefined') {
     return room.activeRound;
   }
-  else return String;
+  else return 0;
 }
 
 Data.prototype.getAuctionCards = function(roomId){

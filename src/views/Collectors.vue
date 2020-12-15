@@ -57,31 +57,34 @@
         </div>
       </div>
 
-      <div id="GameOperations">
+      <div id="GameOperationsDiv">
         <h2>Game operations</h2>
         <div id='readyGameButton'>
           <button v-on:click="readyGame()" @click="playerReady = true" :disabled="playerReady">
-            Click here if you are ready!
+            I'm ready!
             </button>
         </div>
-        <div id='startGameButton'>
+        <div id="startGameButton">
           <button v-on:click="startGame()" :disabled="playerBoardShown">
-            Press here when everyone is ready, here you find your play order.
-            </button>
+            Start game!
+          </button>
         </div>
-        <p v-if="players[playerId]"> Current money: {{ players[playerId].money }}$ </p>
-        <button v-if="players[playerId]" @click="fakeMoreMoney()">
-          fake more money
-        </button>
+        <div id="NextRoundButton" v-if="playerBoardShown">
+          <button v-on:click="changeRound()" :disabled="notLastPlayer()">Next round</button>
+        </div>
+        <div>
+          <p v-if="players[playerId]"> Current money: {{ players[playerId].money }}$ </p>
+          <button v-if="players[playerId]" @click="fakeMoreMoney()">Fake more money</button>
+        </div>
         <div class="buttons">
           <button @click="drawCard">
             {{ labels.draw }}
           </button>
         </div>
-        <p>
+        <div>
           {{ labels.invite }}
           <input type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
-        </p>
+        </div>
       </div>
 
       <div id="WorkDiv">
@@ -193,9 +196,11 @@ export default {
         playerid: 0,
         playerCount: 0,
         playerIdArray: [],
-        roundNumber: 0,
+        activeRound: 0,
+        activeRound2: 0,
         }
       },
+
       computed: {
         playerId: function() { return this.$store.state.playerId}
       },
@@ -256,6 +261,7 @@ export default {
             this.auctionPlacement = d.placements.auctionPlacement;
             this.workPlacement = d.placements.workPlacement;
             this.players = d.players;
+            this.playerIdArray = d.playerIdArray;
           }.bind(this));
 
           this.$store.state.socket.on('collectorsPlayerArrayFinished',function(d) {
@@ -328,16 +334,14 @@ export default {
             this.bidArray = d;
           }.bind(this));
 
-          this.$store.state.socket.on('collectorsRoundUpdated',function(d){
-            console.log('round updated');
+          this.$store.state.socket.on('collectorsRoundUpdated', function(d) {
             this.activeRound = d.activeRound;
-            this.picked = d.activeRound;
           }.bind(this));
         },
 
 methods: {
   readyGame: function() {
-    alert('You are ready, wait for the rest of the players to ready up. If all are ready hit "start game"');
+    alert('You are ready, wait for the rest of the players to ready up. If everyone is ready hit "Start game"');
     this.$store.state.socket.emit('collectorsPlayerReady', {
       playerId: this.playerId,
       roomId: this.$route.params.id
@@ -349,12 +353,15 @@ methods: {
     if (allPlayersReady) {
       this.$store.state.socket.emit('collectorsStartGame', {
         roomId: this.$route.params.id,
-        playerIdArray: this.playerIdArray
+        playerId: this.playerId,
+        playerIdArray: this.playerIdArray,
+        activeRound: 1,
       });
     }
     else {
       alert("All players are not ready yet. Ready up everyone!")
     }
+    console.log(this.activeRound);
   },
 
   checkAllPlayersReady: function() {
@@ -365,6 +372,15 @@ methods: {
     }
     else {
       return false;
+    }
+  },
+
+  notLastPlayer: function() {
+    if (this.playerId === this.playerIdArray[this.playerIdArray.length-1]) {
+      return false;
+    }
+    else {
+      return true;
     }
   },
 
@@ -599,6 +615,15 @@ footer a:visited {
   margin: 5px;
 }
 
+#GameOperationsDiv {
+  grid-area: GameOperationsDiv;
+  align-self: center;
+  text-align: center;
+  color: black;
+  background: #ceedeb;
+  margin: 5px;
+}
+
 #WorkDiv {
   grid-area: WorkDiv;
   align-self: center;
@@ -656,7 +681,7 @@ footer a:visited {
   "BuyItemDiv BuyItemDiv RaiseValueDiv RaiseValueDiv"
   "BuySkillDiv BuySkillDiv AuctionDiv AuctionDiv"
   "BuySkillDiv BuySkillDiv AuctionDiv AuctionDiv"
-  "GameOperations WorkDiv WorkDiv ."
+  "GameOperationsDiv WorkDiv WorkDiv ."
   "PlayerBoardDiv PlayerBoardDiv PlayerBoardDiv PlayerBoardDiv"
 }
 
@@ -672,6 +697,10 @@ footer a:visited {
   border-radius: 5px;
 }
 
+#GameOperationsDiv button {
+  font-size: 15px;
+}
+
 .use_as {
 
 }
@@ -681,12 +710,14 @@ footer a:visited {
   grid-template-columns: repeat(auto-fill, 130px);
   grid-template-rows: repeat(auto-fill, 180px);
 }
+
 .cardslots div {
   transform: scale(0.5)translate(-50%,-50%);
   transition:0.2s;
   transition-timing-function: ease-out;
   z-index: 0;
 }
+
 .cardslots div:hover {
   transform: scale(0.8)translate(-25%,-25%);
   z-index: 1;
