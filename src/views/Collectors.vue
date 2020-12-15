@@ -92,34 +92,33 @@
           </button>
         </div>
 
-        <div id="AllPlayerCardsDiv">
+        <div id="AllPlayerCardsDiv" v-if="playerBoardShown">
 
           <div id="AllPlayerIdDiv">
             <h3>Names</h3>
-            <div class="playercards" v-for="(player, key) in players" :key="key">
-              <p>{{ key }}</p>
-
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+              <p>{{ player }}</p>
             </div>
           </div>
 
           <div id="AllPlayerHandsDiv">
             <h3>Hands</h3>
-            <div class="playercards" v-for="(player, key) in players" :key="key">
-              <CollectorsCard v-for="(card, index) in player.hand" :card="card" :key="index"/>
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+              <CollectorsCard v-for="(card, index) in players[player].hand" :card="card" :key="index"/>
             </div>
           </div>
 
           <div id="AllPlayerItemsDiv">
             <h3>Items</h3>
-            <div class="playercards" v-for="(player, key) in players" :key="key">
-              <CollectorsCard v-for="(card, index) in player.items" :card="card" :key="index"/>
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+              <CollectorsCard v-for="(card, index) in players[player].items" :card="card" :key="index"/>
             </div>
           </div>
 
           <div id="AllPlayerSkillsDiv">
             <h3>Skills</h3>
-            <div class="playercards" v-for="(player, key) in players" :key="key">
-              <CollectorsCard v-for="(card, index) in player.skills" :card="card" :key="index"/>
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+              <CollectorsCard v-for="(card, index) in players[player].skills" :card="card" :key="index"/>
             </div>
           </div>
         </div>
@@ -132,12 +131,12 @@
         </footer>
       </div>
       <div id='readyGameButton'>
-        <button v-on:click="readyGame()" @click="isActive = true" :disabled="isActive">
+        <button v-on:click="readyGame()" @click="playerReady = true" :disabled="playerReady">
           Click here if you are ready!
           </button>
       </div>
       <div id='startGameButton'>
-        <button v-on:click="startGame()">
+        <button v-on:click="startGame()" :disabled="playerBoardShown">
           Press here when everyone is ready, here you find your play order.
           </button>
       </div>
@@ -166,7 +165,8 @@ export default {
   },
   data: function () {
     return {
-      isActive: false,
+      playerReady: false,
+      playerBoardShown: false,
       publicPath: "localhost:8080/#", //"collectors-groupxx.herokuapp.com/#",
       touchScreen: false,
       maxSizes: { x: 0,
@@ -204,12 +204,14 @@ export default {
         currentAuctionCard: [],
         noMoreBidsBoolean: false,
         playerid: 0,
+        playerCount: 0,
         playerIdArray: []
         }
       },
       computed: {
         playerId: function() { return this.$store.state.playerId}
       },
+
       watch: {
         players: function(newP, oldP) {
           console.log(newP, oldP)
@@ -248,6 +250,14 @@ export default {
             this.marketPlacement = d.placements.marketPlacement;
             this.auctionPlacement = d.placements.auctionPlacement;
             this.workPlacement = d.placements.workPlacement;
+            this.playerCount = d.playerCount;
+          }.bind(this));
+
+          this.$store.state.socket.on('collectorsGameStarted',
+          function(d) {
+            this.playerBoardShown = d.playerBoardShown;
+            this.playerIdArray = d.playerIdArray;
+            this.players = d.players;
           }.bind(this));
 
           this.$store.state.socket.on('collectorsBottlePlaced',
@@ -260,11 +270,9 @@ export default {
             this.players = d.players;
           }.bind(this));
 
-          this.$store.state.socket.on('collectorsPlayerArrayFinished',function(d){
-            this.playerIdArray=d.playerIdArray;
+          this.$store.state.socket.on('collectorsPlayerArrayFinished',function(d) {
+            this.playerIdArray = d.playerIdArray;
           }.bind(this));
-
-
 
           this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
 
@@ -334,20 +342,38 @@ export default {
 
 },
 methods: {
-  readyGame: function(){
+  readyGame: function() {
     alert('You are ready, wait for the rest of the players to ready up. If all are ready hit "start game"');
     this.$store.state.socket.emit('collectorsPlayerReady', {
       playerId: this.playerId,
       roomId: this.$route.params.id
-
     });
-    },
-    startGame: function(){
-      alert("This is the playing order"),
-      alert(this.playerIdArray)
-      console.log(this.playerIdArray);
+  },
 
-    },
+  startGame: function() {
+    let allPlayersReady = this.checkAllPlayersReady();
+    if (allPlayersReady) {
+      this.$store.state.socket.emit('collectorsStartGame', {
+        roomId: this.$route.params.id,
+        playerIdArray: this.playerIdArray
+      });
+    }
+    else {
+      alert("All players are not ready yet. Ready up everyone!")
+    }
+  },
+
+  checkAllPlayersReady: function() {
+    console.log(this.playerCount);
+    console.log(this.playerIdArray.length);
+    if (this.playerCount === this.playerIdArray.length) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  },
+
     // console.log(this.playerIdArray);
   selectAll: function (n) {
     n.target.select();
