@@ -24,8 +24,9 @@ changeRoundWork<template>
           :disabled="cannotAfford(p.cost) || player.bottles < 1"
           @click="placeBottle(p, index)">
           <img v-if="index===0" :src='changeFirstWorkCard()'  style="width:100%" >
+          <p v-if="index===0"> {{changeFirstWorkCardInfoText()}} </p>
           <img :src='p.img' style="width:100%">
-          <p id='info_text' :src='p.info_text'> {{p.info_text}} </p>
+          <p id='info_text'> {{p.info_text}} </p>
         </button>
         <div v-if="p.playerId !== null" style="color:black">
           {{p.playerId}}
@@ -83,7 +84,7 @@ export default {
 
     changeFirstWorkCard: function (){
       let firstWorkButtonImage = ['images/Work_Round_1.png','images/Work_Round_2.png','images/Work_Round_3.png','images/Work_Round_4.png'];
-      let setImage =[];
+      let setImage = [];
 
       if (this.picked === 'Round 1'){
         setImage = firstWorkButtonImage[0];
@@ -98,6 +99,24 @@ export default {
         setImage = firstWorkButtonImage[3];
       }
       return setImage;
+    },
+    changeFirstWorkCardInfoText: function (){
+      let firstWorkButtonInfoText = ['Draw 2 cards to Income', 'Draw 2 cards to Income, +1$', 'Draw 2 cards to Income, +2$', 'Discard 1 bottle, +1$']
+      let setInfoText = [];
+
+      if (this.picked === 'Round 1'){
+        setInfoText = firstWorkButtonInfoText[0];
+      }
+      else if (this.picked === 'Round 2') {
+        setInfoText = firstWorkButtonInfoText[1];
+      }
+      else if (this.picked === 'Round 3') {
+        setInfoText = firstWorkButtonInfoText[2];
+      }
+      else if (this.picked === 'Round 4') {
+        setInfoText = firstWorkButtonInfoText[3];
+      }
+      return setInfoText
     },
   }
 }
