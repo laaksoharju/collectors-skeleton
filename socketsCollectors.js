@@ -25,7 +25,8 @@ function sockets(io, socket, data) {
     socket.on('collectorsStartGame', function(d) {
       io.to(d.roomId).emit('collectorsGameStarted', {
         playerBoardShown: data.getPlayerBoardShown(d.roomId),
-        playerIdArray: data.getPlayerIdArray(d.roomId)
+        playerIdArray: data.getPlayerIdArray(d.roomId),
+        players: data.getPlayers(d.roomId)
       });
     });
 

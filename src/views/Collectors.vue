@@ -96,30 +96,29 @@
 
           <div id="AllPlayerIdDiv">
             <h3>Names</h3>
-            <div class="playercards" v-for="(player, key) in players" :key="key">
-              <p>{{ key }}</p>
-
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+              <p>{{ player }}</p>
             </div>
           </div>
 
           <div id="AllPlayerHandsDiv">
             <h3>Hands</h3>
-            <div class="playercards" v-for="(player, key) in players" :key="key">
-              <CollectorsCard v-for="(card, index) in player.hand" :card="card" :key="index"/>
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+              <CollectorsCard v-for="(card, index) in players[player].hand" :card="card" :key="index"/>
             </div>
           </div>
 
           <div id="AllPlayerItemsDiv">
             <h3>Items</h3>
-            <div class="playercards" v-for="(player, key) in players" :key="key">
-              <CollectorsCard v-for="(card, index) in player.items" :card="card" :key="index"/>
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+              <CollectorsCard v-for="(card, index) in players[player].items" :card="card" :key="index"/>
             </div>
           </div>
 
           <div id="AllPlayerSkillsDiv">
             <h3>Skills</h3>
-            <div class="playercards" v-for="(player, key) in players" :key="key">
-              <CollectorsCard v-for="(card, index) in player.skills" :card="card" :key="index"/>
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+              <CollectorsCard v-for="(card, index) in players[player].skills" :card="card" :key="index"/>
             </div>
           </div>
         </div>
@@ -258,6 +257,7 @@ export default {
           function(d) {
             this.playerBoardShown = d.playerBoardShown;
             this.playerIdArray = d.playerIdArray;
+            this.players = d.players;
           }.bind(this));
 
           this.$store.state.socket.on('collectorsBottlePlaced',
