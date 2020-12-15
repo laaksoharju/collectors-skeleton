@@ -4,11 +4,15 @@
 
       <div class="table">
           <h1>COLLECTORS</h1>
+
           <label for="Name">Username</label><br>
           <input type="text" id="userName" placeholder="Username">
           <button id="userNameButton" type='submit' @click="changeUserName()" >
             Change Name
           </button>
+
+          {{ labels.invite }}
+          <input id="linkSquare" type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
 
       <div class="board">
 <!-- TEST ATT PUSHA -->
@@ -43,16 +47,24 @@
             @startMarket="startMarket($event)"
             />
 
-
-
        <div class = "workPool">
-  <div class= "titleWorkPool" >Work Pool</div>
+         <div class= "titleWorkPool" >Work Pool</div>
+
+         <div class = "quarterImage">
+           <div class= "quarter1" v-if="currentRound === 1" >
+          </div>
+           <div class= "quarter2" v-if="currentRound === 2" >
+           </div>
+           <div class= "quarter3" v-if="currentRound === 3" >
+           </div>
+           <div class= "quarter4" v-if="currentRound === 4" >
+           </div>
+         </div>
 
          <div class = "Alt1"></div>
          <div class = "Alt2"></div>
          <div class = "Alt3"></div>
          <div class = "Alt4"></div>
-
        </div>
 
        <CollectorsStartAuction v-if="players[playerId]"
@@ -64,10 +76,8 @@
             @startBidding="startBidding($event)"
             />
 
-
        <div v-if="players[playerId]" class="playerBoard">
          <div class="playerTitle"> Player {{playerId}}'s Board </div>
-
           <!--    <div v-if="players[playerId]">-->
                 <div class="chosenSkillCard" v-for="(card, index) in players[playerId].skills" :card="card" :key="index">
                 <CollectorsCard
@@ -88,8 +98,8 @@
         <div class="cardslots" v-if="players[playerId]">
           <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="buyCard(card)" :key="index"/>
         </div>
-        <!-- visa hur mycket pengar man har -->
 
+        <!-- visa hur mycket pengar man har -->
           <ul>
             <li v-for="(value, key) in players" :key = "key">
               <div v-for="(valuevalue,keykey) in value" :key ="keykey">
@@ -103,7 +113,6 @@
             </li>
           </ul>
       </div>
-
 
       <!-- Vems tur? Start på ruta för att visa vems tur -->
       <div class="turnCounter">
@@ -130,7 +139,6 @@
         </button>
       </div>
 
-
       <!-- Ruta för att visa vilka spelare som är i rummet -->
       <div class="showPlayers">
         The players in this room:
@@ -140,19 +148,26 @@
           </div>
         </div>
       </div>
-
      </div>
     </div>
+
+    <button title="Rules!" type="button" id="rulesButton" class="rulesButton" v-on:click="ruleFunction">
+      <h2>Click here to read the rules!</h2>
+    </button>
+    <div id="ruleContent">
+    </div>
+    <div> <img id="myImage" src="/images/backgroundblue.png" height="50" > </div>
+
      <!-- FRÅN DRAWCARD SOM VI FICK FRÅN BÖRJAN, KOPPLAT TILL PLAYERID
      <div class="itemCard" v-if="players[playerId]">
        <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
      </div> -->
 
-
+<!--
   Här : {{allPlayersId}}
 
     {{buyPlacement}} {{chosenPlacementCost}}
-
+-->
 
       <CollectorsBuyActions v-if="players[playerId]"
         :labels="labels"
@@ -162,11 +177,12 @@
         :placement="buyPlacement"
         @buyCard="buyCard($event)"
         @placeBottle="placeBottle('buy', $event)"/>
-      <div class="buttons">
+<!--      <div class="buttons">
         <button @click="drawCard">
           {{ labels.draw }}
         </button>
       </div>
+-->
 
     <!--  <div class="cardslots">
         <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
@@ -190,10 +206,10 @@
       fake more money
     </button>
     <footer>
-        <p>
+      <!--  <p>
           {{ labels.invite }}
           <input type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
-        </p>
+        </p> -->
     </footer>
 </div>
 </template>
@@ -255,6 +271,7 @@ export default {
       cardUpForAuction: {},
       chosenAction: "",
       highestBid: 0,
+      rules: ""
       //randomNumber: ""
     }
   },
@@ -487,6 +504,68 @@ export default {
           }
         );
     },
+    ruleFunction: function() {
+      var placement = document.getElementById("ruleContent");
+      var rules1=
+      ["Collectors is a game for 2-4 players and the winning player is " +
+      "the one with the most valuable collection of rare collectables " +
+      "in the end. The game board is divided into 5 different areas, " +
+      "item pool, skill pool, auction pool, work pool and market pool."];
+      var rules2 = ["ITEM POOL. You use Buy Item if you want to buy one card from the item pool " +
+        "(the red ish area) or from your own hand. The cost will depend on " +
+        "how many cards there are with the same symbol in the Market pool " +
+        "(the blue ish area). The cost will also contain the cost for where " +
+        "the bottle was placed. "];
+      var rules3 = ["SKILL POOL. The Skill area is used if you want to grant skills for the rest " +
+      "of the game. You gain skill by taking one of the cards from the skill " +
+      "pool or from your hand and place it in the gain skill area " +
+      "(the green ish area). There are different skills available in Collectors " +
+      "and these are explained on the player board. "];
+      var rules4 = ["WORK POOL. In the Work area you perform actions to increase your income, " +
+      "recycle bottles, draw cards and become the first player. You use this " +
+      "area by placing bottles in the action space, depending on which place "+
+      "you choose you get and have to do different things. For example if you "+
+      "put your bottle on the second space you get to draw two cards from the " +
+      "deck to your hand. "];
+      var rules5 = ["AUCTION POOL. The Auction area is used when you want to do an auction, you can" +
+      "choose a card from your own hand or from the Auction area. If you take" +
+      "a card from your hand then you may place it face down so the other" +
+      "players do not know what kind of card it is when they bid on it. " +
+      "The first player can bid any number of coins with a minimum of one then " +
+      "the second player must place a higher bid or pass. The winner gets the " +
+      "card and must pay the bid amount. When paying in an auction you can use " +
+      "cards from your hand as coins, then there is the worth as depicted in " +
+      "the upper right corner of the card. "];
+      var rules6 = ["MARKET POOL. The last area is Raise Value where you must place cards in the market " +
+      "area that are equal to the number of seals on your action space. "+
+      "You may place cards from your hand, from the card in the lowest position " +
+      "in the skill pool or from the lowest card in the auction pool. "];
+      var rules7 = ["The cards used in Collectors have multiple functions, " +
+      "see the picture below for an explanation:"]
+      let pic = ['/images/kort.png'];
+      document.getElementById("myImage").src = pic[0];
+      document.getElementById("myImage").height = 350;
+      var linebreak0 = document.createElement("p"); var linebreak1 = document.createElement("p");
+      var linebreak2 = document.createElement("p"); var linebreak3 = document.createElement("p");
+      var linebreak4 = document.createElement("p");  var linebreak5 = document.createElement("p");
+      var linebreak6 = document.createElement("p");
+      var text= document.createElement("div");
+      var output1 = document.createTextNode(rules1);
+      var output2 = document.createTextNode(rules2);
+      var output3 = document.createTextNode(rules3);
+      var output4 = document.createTextNode(rules4);
+      var output5 = document.createTextNode(rules5);
+      var output6 = document.createTextNode(rules6);
+      var output7 = document.createTextNode(rules7);
+      text.appendChild(output1); text.appendChild(linebreak0);
+      text.appendChild(output2); text.appendChild(linebreak1);
+      text.appendChild(output3); text.appendChild(linebreak2);
+      text.appendChild(output4); text.appendChild(linebreak3);
+      text.appendChild(output5); text.appendChild(linebreak4);
+      text.appendChild(output6); text.appendChild(linebreak5);
+      text.appendChild(output7); text.appendChild(linebreak6);
+      placement.appendChild(text);
+    }
     /* försöker skapa random nummer för att slumpa vem som börjar
     randomNumber: function(){
       let countPlayers = (allPlayersId()).length;
@@ -546,6 +625,7 @@ h5 {
   .table {
     padding-left: 50px;
     padding-right: 50px;
+
   }
   .board {
 	display: grid;
@@ -553,8 +633,6 @@ h5 {
 	grid-template-rows: repeat(20, 45px);
 	grid-gap: 0px;
 	margin: 20px ;
-	width: 994px;
-	height: 994px;
 	background: $black;
 	border: 2px solid $black;
   }
@@ -576,13 +654,50 @@ h5 {
     width: auto;
     height: auto;
     display:grid;
-    grid-template-columns: repeat(3, 150px);
+    grid-template-columns: repeat(2, 224px);
     grid-template-rows: repeat(3,50px);
     background-color: #f5f2cc;
     color: black;
     /*border: 3px solid #4C7B80;*/
-
+    border-top: 2px solid #4C7B80;
   }
+  .quarterImage {
+    grid-column: 2;
+    grid-row: 3;
+  }
+  .quarter1 {
+    grid-column: 2 ;
+    grid-row: 1;
+    width: 140px;
+    height: 62px;
+    background-image: url('/images/quarterTile1.png');
+    background-size: cover;
+  }
+  .quarter2 {
+    grid-column: 2 ;
+    grid-row: 1;
+    width: 140px;
+    height: 62px;
+    background-image: url('/images/quarterTile2.png');
+    background-size: cover;
+  }
+  .quarter3 {
+    grid-column: 2 ;
+    grid-row: 1;
+    width: 140px;
+    height: 62px;
+    background-image: url('/images/quarterTile3.png');
+    background-size: cover;
+  }
+  .quarter4 {
+    grid-column: 2 ;
+    grid-row: 1;
+    width: 140px;
+    height: 62px;
+    background-image: url('/images/quarterTile4.png');
+    background-size: cover;
+  }
+
   .Alt1 {
     grid-column: 1 ;
     grid-row: 1;
@@ -657,22 +772,34 @@ h5 {
   .turnCounter {
     background-color: #60AB4D;
     color:white;
-    grid-column: 3/ span 2;
+    grid-column: 5/ span 2;
     grid-row: 16/span 2;
     text-align: center;
   }
   .roundCounter {
     background-color: #4C7B80;
     color:white;
-    grid-column: 6/ span 2;
+    grid-column: 8/ span 2;
     grid-row: 16/span 2;
     text-align: center;
+  }
+
+#userName {
+  background-color: #76B0B7;
+}
+#linkSquare {
+  background-color: #76B0B7;
+}
+  #userNameButton {
+    grid-column: 1;
+    grid-row: 1;
+    background-color: #5A99A1;
   }
 
   .showPlayers {
     background-color: #406c72;
     color: white;
-    grid-column: 1;
+    grid-column: 1/span 2;
     grid-row: 16/span 4;
     text-align: center;
     border: 5px dotted pink ;
@@ -704,6 +831,23 @@ h5 {
     border: 10px dotted #4C7B80 ;
     text-align: center;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  }
+  #rulesButton {
+    margin: 5px 50px 5px 50px;
+    padding: 1px 100px 1px;
+    cursor:pointer;
+    transition-duration: 0.4s;
+    background-color: #f08080 ;
+    color:white;
+
+  }
+
+  #ruleContent {
+    margin: 50px 50px 50px 50px;
+    padding: 10px 10px;
+    font-size: 20px;
+    font-style: oblique;
+
   }
   footer {
     margin-top: 5em auto;

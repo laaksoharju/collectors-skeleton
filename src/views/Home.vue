@@ -186,7 +186,7 @@ color:white;
 }
 
 #ruleContent {
-  marging: 50px 50px 50px 50px;
+  margin: 50px 50px 50px 50px;
   padding: 10px 10px;
   font-size: 20px;
   font-style: oblique;

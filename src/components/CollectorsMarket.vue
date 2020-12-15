@@ -52,11 +52,6 @@
    </div> -->
 
   </div>
-
-
-
-
-
 </div>
 </template>
 
@@ -143,7 +138,7 @@ export default {
     background-position:center;
     background-image: url('/images/iconBird.PNG');
     background-size: cover;
-    place-self: center;
+    place-self: center; 
     grid-column: 1;
     grid-row: 10;
   }

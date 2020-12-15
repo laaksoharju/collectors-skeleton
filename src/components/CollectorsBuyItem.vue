@@ -130,7 +130,7 @@ export default {
   padding-left: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
-  border-bottom: 2px solid #4C7B80;
+
   border-top: 2px solid #4C7B80;
 }
 
@@ -146,9 +146,9 @@ export default {
 }
 
 .itemCard {
-  grid-row: 3;
+  grid-row: 2;
   transform: scale(0.25);
-  place-self:center;
+/*  place-self:center; */
 }
 
 .itemCard div:hover{
