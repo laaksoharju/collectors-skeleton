@@ -59,17 +59,19 @@
 
       <div id="GameOperationsDiv">
         <h2>Game operations</h2>
-        <div id='readyGameButton'>
+        <div id='readyGameButton' v-if="!playerBoardShown">
           <button v-on:click="readyGame()" @click="playerReady = true" :disabled="playerReady">
             I'm ready!
             </button>
         </div>
-        <div id="startGameButton">
-          <button v-on:click="startGame()" :disabled="playerBoardShown">
+        <div id="startGameButton" v-if="!playerBoardShown">
+          <button v-on:click="startGame()">
             Start game!
           </button>
         </div>
         <div id="NextRoundButton" v-if="playerBoardShown">
+          The current round is round {{ activeRound }}.
+          When the last player is finished, he or she can switch to the next round.
           <button v-on:click="changeRound()" :disabled="notLastPlayer()">Next round</button>
         </div>
         <div>
@@ -92,13 +94,13 @@
         :labels="labels"
         :player="players[playerId]"
         :placement="workPlacement"
+        :activeRound="activeRound"
         @placeBottleWork="placeBottleWork('doWork', $event)"/>
       </div>
 
       <div id="PlayerBoardDiv">
         <h2>Player board</h2>
         <div id="AllPlayerCardsDiv" v-if="playerBoardShown">
-
           <div id="AllPlayerIdDiv">
             <h3>Names</h3>
             <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
@@ -109,7 +111,7 @@
           <div id="AllPlayerHandsDiv">
             <h3>Hands</h3>
             <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
-              <CollectorsCard v-for="(card, index) in players[player].hand" :card="card" :key="index"/>
+              <CollectorsCard v-for="(card, index) in players[player].hand" :card="card" :availableAction="card.available" @handleAction="handleAction($event)" :key="index"/>
             </div>
           </div>
 
@@ -196,8 +198,7 @@ export default {
         playerid: 0,
         playerCount: 0,
         playerIdArray: [],
-        activeRound: 0,
-        activeRound2: 0,
+        activeRound: 0
         }
       },
 
@@ -334,7 +335,8 @@ export default {
             this.bidArray = d;
           }.bind(this));
 
-          this.$store.state.socket.on('collectorsRoundUpdated', function(d) {
+          this.$store.state.socket.on('collectorsRoundUpdated',
+          function(d) {
             this.activeRound = d.activeRound;
           }.bind(this));
         },
@@ -355,18 +357,17 @@ methods: {
         roomId: this.$route.params.id,
         playerId: this.playerId,
         playerIdArray: this.playerIdArray,
-        activeRound: 1,
+        activeRound: 1
       });
     }
     else {
       alert("All players are not ready yet. Ready up everyone!")
     }
-    console.log(this.activeRound);
+    this.activeRound = 1;
+    console.log(this.activeRound, "aktiv runda i spelet efter startGame och manuell ansättning");
   },
 
   checkAllPlayersReady: function() {
-    console.log(this.playerCount);
-    console.log(this.playerIdArray.length);
     if (this.playerCount === this.playerIdArray.length) {
       return true;
     }
@@ -384,7 +385,15 @@ methods: {
     }
   },
 
-    // console.log(this.playerIdArray);
+  changeRound: function() {
+    console.log(this.activeRound+1);
+    this.$store.state.socket.emit('collectorsChangeRound', {
+      roomId: this.$route.params.id,
+      playerId: this.playerId,
+      activeRound: this.activeRound+1
+    });
+  },
+
   selectAll: function (n) {
     n.target.select();
   },
@@ -428,11 +437,11 @@ methods: {
   },
 
   drawCard: function () {
-    console.log(this.market)
     this.$store.state.socket.emit('collectorsDrawCard', {
       roomId: this.$route.params.id,
       playerId: this.playerId
     });
+    // console.log(this.players.[this.playerId].hand);
   },
 
   buyItem: function (card) {
@@ -592,6 +601,7 @@ footer a:visited {
   align-self: center;
   background: #f9dcce;
   margin: 5px;
+  height: 100%
 }
 
 #BuySkillDiv {
@@ -599,6 +609,7 @@ footer a:visited {
   align-self: center;
   background: #dfeccc;
   margin: 5px;
+  height: 100%
 }
 
 #AuctionDiv {
@@ -622,6 +633,7 @@ footer a:visited {
   color: black;
   background: #ceedeb;
   margin: 5px;
+  height: 100%
 }
 
 #WorkDiv {
