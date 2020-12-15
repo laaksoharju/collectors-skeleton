@@ -1,6 +1,6 @@
 <template>
   <div class = "skillPool">
-    Skill Pool
+  <div class= "titleSkillPool" >Skill Pool</div>
 
 
 <div class="buttons" v-for="(p, index) in placement" :key="index">
@@ -97,6 +97,13 @@ export default {
 
 <style scoped>
 
+.titleSkillPool {
+  grid-column: 1 / span 2;
+  font-style: italic;
+  font-size: 50px;
+  text-shadow: 2px 2px 4px green;
+  font-size: 20px;
+}
 .skillPool{
   grid-column: 1 / span 2;
   grid-row: 2/span 13 ;
@@ -111,6 +118,8 @@ export default {
   grid-row-gap: 25px;
   grid-column-gap: 10px;
   grid-auto-flow: column;
+  border: 2px solid #4C7B80;
+
   }
 
 .EnergyBottles{
@@ -128,6 +137,7 @@ export default {
 }
 .get-skill{
   transform: scale(0.25);
+  grid-row: 2;
 }
 .get-skill div:hover{
   transform: scale(1.25)translate(15%,0);

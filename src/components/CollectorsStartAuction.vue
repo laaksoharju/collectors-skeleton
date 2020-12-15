@@ -2,8 +2,7 @@
 <template>
 
 <div class = "auctionPool">
- <div class= "titleAuctionPool" > Auction Pool
- </div>
+ <div class= "titleAuctionPool" > Auction Pool</div>
 
 <div class = "auctionSquare">
   Auction Square
@@ -17,8 +16,8 @@
   <label for="bidSquare">Place bid:</label>
   <input type="text" id="bidSquare" name="bidSquare">
   </form>
-
 </div>
+
 <button id = "bidPlacement" @click="startBidding()">Place bid!</button>
   <div class = "EnergyBottleCoinWhiteTwo"></div> <!-- Olika flaskor med vita coins, 1 2 eller 0 -->
   <div class = "EnergyBottleCoinWhiteOne"></div>
@@ -91,12 +90,17 @@ export default {
   display: grid;
   grid-template-columns: repeat(3, 60px);
   grid-template-rows: repeat(10,48.5px);
-  grid-row-gap: 20px;
+  grid-row-gap: 18px;
+  border: 2px solid #4C7B80;
 }
 
 .titleAuctionPool{
 grid-column: 1;
 grid-row: 1;
+font-style: italic;
+font-size: 50px;
+text-shadow: 2px 2px 4px pink;
+font-size: 20px;
 }
 
 
@@ -108,6 +112,7 @@ grid-row: 1;
   grid-column: 1;
   grid-row: 4;
 }
+
 .second{
   grid-column: 1;
   grid-row: 5;
@@ -131,22 +136,26 @@ grid-row: 1;
   grid-row: 3;
 }
 
-  .auctionCard {
+.auctionCard {
     transform: scale(0.25);
     grid-column: 2;
   }
 
-  .auctionCard div:hover{
+.auctionCard div:hover{
     transform: scale(2)translate(-25%,0);
     z-index: 1;
   }
 
-  .auctionSquare{
+.auctionSquare{
   grid-column: 1;
   grid-row: 6;
   height: 180px;
   width: 130px;
   border: 5px dotted pink;
+  font-style: italic;
+  font-size: 50px;
+  text-shadow: 2px 2px 4px pink;
+  font-size: 14px;
   }
 
   .bidSquare {
@@ -155,11 +164,20 @@ grid-row: 1;
 
   }
 #bidSquare {
-  width: 25px;
+  width: 40px;
+  height: 20px;
   grid-column: 2;
-
 }
+
+form {
+  grid-column: 1;
+  grid-row: 8;
+  font-size: 13px;
+}
+
 #bidPlacement {
+  height: 30px;
+  width: 100px;
     grid-column: 2;
     grid-row: 9;
     background-color: lightpink;
@@ -178,7 +196,7 @@ grid-row: 1;
     transform: scale(0.25);
   }
   .start-auction div:hover{
-    transform: scale(2)translate(-25%,0);
+    transform: scale(1.25)translate(-15%,0);
     z-index: 1;
   }
 

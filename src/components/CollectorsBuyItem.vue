@@ -1,7 +1,7 @@
 <template>
 
   <div class = "itemPool">
-   Item Pool
+    <div class= "titleItemPool" > Item Pool</div>
 
 <!--Ser till att alt hamnar i en rad, med en tom column innan -->
 <div></div>
@@ -104,7 +104,13 @@ export default {
 </script>
 
 <style scoped>
-
+.titleItemPool {
+  grid-column: 6 / span 2;
+  font-style: italic;
+  font-size: 50px;
+  text-shadow: 2px 2px 4px red;
+  font-size: 20px;
+}
 
 .itemPool{
   grid-column: 3/span 5 ;
@@ -124,6 +130,8 @@ export default {
   padding-left: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
+  border-bottom: 2px solid #4C7B80;
+  border-top: 2px solid #4C7B80;
 }
 
 .buttons{
@@ -144,7 +152,7 @@ export default {
 }
 
 .itemCard div:hover{
-  transform: scale(2)translate(-25%,0);
+  transform: scale(1.5)translate(-25%,0);
   z-index: 1;
 }
 

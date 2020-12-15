@@ -4,7 +4,6 @@
 
       <div class="table">
           <h1>COLLECTORS</h1>
-
           <label for="Name">Username</label><br>
           <input type="text" id="userName" placeholder="Username">
           <button id="userNameButton" type='submit' @click="changeUserName()" >
@@ -47,7 +46,8 @@
 
 
        <div class = "workPool">
-         Work Pool
+  <div class= "titleWorkPool" >Work Pool</div>
+
          <div class = "Alt1"></div>
          <div class = "Alt2"></div>
          <div class = "Alt3"></div>
@@ -511,6 +511,13 @@ export default {
 
 <style scoped>
 
+.titleWorkPool {
+  font-style: italic;
+  font-size: 50px;
+  text-shadow: 2px 2px 4px yellow;
+  font-size: 20px;
+}
+
 h1 {
   text-align: center;
   font-style:italic;
@@ -551,6 +558,7 @@ h5 {
 	background: $black;
 	border: 2px solid $black;
   }
+
   /*.marketPool{
     grid-column: 3/span 5;
     grid-row: 11/span 4;
@@ -572,6 +580,8 @@ h5 {
     grid-template-rows: repeat(3,50px);
     background-color: #f5f2cc;
     color: black;
+    /*border: 3px solid #4C7B80;*/
+
   }
   .Alt1 {
     grid-column: 1 ;
@@ -621,10 +631,16 @@ h5 {
     grid-template-rows: repeat(3,60px);
     grid-auto-flow: row;
     grid-column-gap: 25px;
+    border: 2px solid #4C7B80;
+
   }
 .playerTitle {
   grid-row: 1;
-  grid-column: 1 / span 2;
+  grid-column: 1 / span 3;
+  font-style: italic;
+  font-size: 50px;
+  text-shadow: 2px 2px 4px red;
+  font-size: 20px;
 }
   .chosenSkillCard {
     grid-row: 3;

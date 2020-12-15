@@ -1,6 +1,6 @@
 <template>
   <div class = "marketPool">
-    Market Pool
+    <div class= "titleMarketPool" >Market Pool</div>
     {{market}} {{marketValues}} <!-- marketValues visar hur de olika kategoriernas valuen är -->
     <div class = "iconBird"></div>
     <div class = "iconRobot"></div>
@@ -104,6 +104,12 @@ export default {
 
 <style scoped>
 
+.titleMarketPool {
+  font-style: italic;
+  font-size: 50px;
+  text-shadow: 2px 2px 4px blue;
+  font-size: 20px;
+}
 
 .marketPool{
   grid-column: 3/span 5;
@@ -115,6 +121,9 @@ export default {
   display: grid;
   grid-template-columns: repeat(5, 90px);
   grid-template-rows: repeat(5, 27.5px);
+  border-bottom: 2px solid #4C7B80;
+  border-top: 2px solid #4C7B80;
+
   }
 
   .iconBird {
