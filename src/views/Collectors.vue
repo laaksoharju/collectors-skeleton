@@ -4,8 +4,14 @@
 
       <div class="table">
           <h1>COLLECTORS</h1>
-      <div class="board">
 
+          <label for="Name">Username</label><br>
+          <input type="text" id="userName" placeholder="Username">
+          <button id="userNameButton" type='submit' @click="changeUserName()" >
+            Change Name
+          </button>
+
+      <div class="board">
 <!-- TEST ATT PUSHA -->
         <CollectorsGetSkills v-if="players[playerId]"
              :labels="labels"
@@ -371,6 +377,15 @@ export default {
   methods: {
     selectAll: function (n) {
       n.target.select();
+    },
+    changeUserName: function() {
+     var userName = document.getElementById('userName').value;
+      console.log(userName);
+      //var name = playerId();
+      this.$store.state.playerId = userName;
+    //  this.players[playerId] = userName;
+      console.log(this.$store.state.playerId);
+
     },
     placeBottle: function (action, cost) {
       this.chosenPlacementCost = cost;
