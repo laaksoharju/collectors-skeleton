@@ -26,6 +26,7 @@
             :skillsOnSale="skillsOnSale"
             :marketValues="marketValues"
             :placement="skillPlacement"
+            :players="players"
             @selectAction="selectAction($event)"
             @placeBottle="placeBottle('skillType','skill', $event)"
           />
@@ -37,6 +38,7 @@
             :marketValues="marketValues"
             :auctionCards="auctionCards"
             :placement="marketPlacement"
+            :players="players"
             @selectAction="selectAction($event)"
             @placeBottle="placeBottle('marketType','buy', $event)"
           />
@@ -47,6 +49,7 @@
             :auctionCards="auctionCards"
             :marketValues="marketValues"
             :placement="auctionPlacement"
+            :players="players"
             @selectAction="selectAction($event)"
             @placeBottle="placeBottle('auctionType','buy', $event)"
 

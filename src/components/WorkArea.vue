@@ -5,80 +5,83 @@
         <InfoButtons :modalProps="workProps" />
       </div>
       <div v-if="round == 1" class="rectangular firstArea">
+        <div class="infoB">
+          <InfoButtons :modalProps="work8Props" />
+        </div>
         <button class="buttonTest" @click="circleClicked" />
-        <div class="first figures">&#9203;</div>
-        <div class="second figures">&#9203;</div>
+        <div class="first" id="upsideDown"></div>
+        <div class="second" id="upsideDown"></div>
         <p>ROUND 1</p>
       </div>
       <div v-if="round == 2" class="rectangular firstArea">
+          <div class="infoB">
+          <InfoButtons :modalProps="work7Props" />
+        </div>
         <button class="buttonTest" @click="circleClicked" />
-        <!--<div class="workArea_component">
-          <CircleComponent v-bind:value="-1" />
-        </div>-->
-        <div class="first figures">&#9203;</div>
-        <div class="second figures">&#9203;</div>
+        <div class="first" id="upsideDown"></div>
+        <div class="second" id="upsideDown"></div>
         <p>ROUND 2</p>
       </div>
       <div v-if="round == 3" class="rectangular firstArea">
+        <div class="infoB">
+          <InfoButtons :modalProps="work6Props" />
+        </div>
         <button class="buttonTest" @click="circleClicked" />
-        <!--<div class="workArea_component">
-          <CircleComponent v-bind:value="2" />
-        </div>-->
-        <div class="first figures">&#9203;</div>
-        <div class="second figures">&#9203;</div>
+        <div class="first" id="upsideDown"></div>
+        <div class="second" id="upsideDown"></div>
         <p>ROUND 3</p>
       </div>
       <div v-if="round == 4" class="rectangular firstArea">
+        <div class="infoB">
+          <InfoButtons :modalProps="work5Props" />
+        </div>
         <button class="buttonTest" @click="circleClicked" />
-        <!--<div class="workArea_component">
-          <CircleComponent v-bind:value="3" />
-        </div>-->
-        <!--<div class="first figures">&#x267B;</div>-->
         <div class="first" id="recycledCard"></div>
         <p>ROUND 4</p>
       </div>
       <div class="rectangular secondArea">
+          <div class="infoB">
+          <InfoButtons :modalProps="work4Props" />
+        </div>
         <button class="buttonTest" @click="circleClicked" />
-        <!--<div class="workArea_component">
-          <CircleComponent v-bind:value="1" />
-        </div>-->
-        <!--<div class="first figures">&#x267B;</div>-->
         <div class="first" id="recycledCard"></div>
       </div>
       <div class="rectangular thirdArea">
+        <div class="infoB">
+          <InfoButtons :modalProps="work3Props" />
+        </div>
         <button class="buttonTest" @click="circleClicked" />
-        <!--<div class="workArea_component">
-          <CircleComponent v-bind:value="-1" />
-        </div>-->
         <div class="first" id="getCard"></div>
-        <!--<div class="first figures">&#127183;</div>-->
-        <!--<div class="second figures">&#127183;</div>-->
         <div class="second" id="getCard"></div>
       </div>
       <div class="rectangular fourthArea">
+          <div class="infoB">
+          <InfoButtons :modalProps="work2Props" />
+        </div>
         <button class="buttonTest" @click="circleClicked" />
-
         <div class="first" id="getCard"></div>
-        <!--<div class="first figures">&#127183;</div>-->
         <div class="workArea_token">
           <FirstPlayerToken />
         </div>
       </div>
       <div class="rectangular fifthArea">
-        <button class="buttonTest" @click="circleClicked" />
-
-        <div class="first" id="getCard"></div>
-        <!--<div class="second figures">&#9203;</div>-->
         <div class="infoB">
-                    <InfoButtons
-                :modalProps=' work1Props'
-                />
+          <InfoButtons :modalProps="work1Props" />
         </div>
-
-        <!--GAMMAL CIRCKEL SOM JAG SPARAR
-            <div class="workArea_circle" v-on:click = "circleClicked"></div>-->
+        <button class="buttonTest" @click="circleClicked" />
+        <div class="first" id="getCard"></div>
+        <div class="second" id="upsideDown"></div>
+        <!--<div class="second figures">&#9203;</div>-->
       </div>
     </div>
+     <!--GAMMAL CIRCKEL SOM JAG SPARAR
+            <div class="workArea_circle" v-on:click = "circleClicked"></div>
+            BOBS COMPONENT PENG
+            <<div class="workArea_component">
+          <CircleComponent v-bind:value="-1" />
+        </div>
+        RECYCLED PREFIX
+        <div class="first figures">&#x267B;</div>-->
   </div>
 </template>
 
@@ -105,18 +108,59 @@ export default {
 
   data: function () {
     return {
-      round: 4,
+      round: 1,
       clicked: false,
       workProps: {
         value: "Work",
-        text:
-          "In the work area, you perform actions to increase your income, recycle bottles, draw cards and become the first player. If you place your bottle in the uppermost action space (on the quarter tile), you must place two cards upside down from your hand next to your player board on its right side. Note that this action space changes characteristics during the fourth quarter to resemble the action spot below it.",
+        text: "In the work area, you perform actions to increase your income, recycle bottles, draw cards and become the first player. If you place your bottle in the uppermost action space (on the quarter tile), you must place two cards upside down from your hand next to your player board on its right side. Note that this action space changes characteristics during the fourth quarter to resemble the action spot below it.",
         title: "Work",
         classes: "button yellow",
       },
       work1Props: {
         value: "i",
-        text: "",
+        text: "Draw a card and place one of the cards on your hand upside down to work (your income will then increase). Cost is 0$.",
+        title: "",
+        classes: "yellow smallButton",
+      },
+      work2Props: {
+         value: "i",
+        text: "Draw a card and get the 1st player token. This token means that you will be the first player every round until someone else gets the 1st player token. Cost is 0$.",
+        title: "",
+        classes: "yellow smallButton", 
+      },
+      work3Props: {
+        value: "i",
+        text: "Draw two cards. Cost is 1$.",
+        title: "",
+        classes: "yellow smallButton",
+      },
+      work4Props: {
+        value: "i",
+        text: "Recycle one bottle and gain 1$.",
+        title: "",
+        classes: "yellow smallButton",
+      },
+      work5Props: {
+        value: "i",
+        text: "Recycle one bottle and gain 3$.",
+        title: "",
+        classes: "yellow smallButton",
+      },
+      work6Props: {
+        value: "i",
+        text: "Place two of the cards on your hand upside down to work (your income will then increase) and gain 2$.",
+        title: "",
+        classes: "yellow smallButton",
+      },
+      work7Props: {
+        value: "i",
+        text: "Place two of the cards on your hand upside down to work (your income will then increase) and gain 1$.",
+        title: "",
+        classes: "yellow smallButton",
+      },
+      work8Props: {
+        value: "i",
+        text: "Place two of the cards on your hand upside down to work (your income will then increase). Cost is 0$.",
         title: "",
         classes: "yellow smallButton",
       },
@@ -161,8 +205,11 @@ export default {
   /*display: flex;
             justify-content: space-around;*/
   display: grid;
-  
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.info {
+    margin-top: 5px;
 }
 
 .buttonTest {
@@ -175,13 +222,12 @@ export default {
   font-size: 50px;
   border: 1px solid black;
   margin-top: 25px;
-  margin-left: 10px;
 }
 
 /*#workAreaText {
   color: black;
   /*font-size: 30px;*/
-  /*font-weight: bold;
+/*font-weight: bold;
   text-align: center;
 }*/
 
@@ -223,16 +269,20 @@ export default {
 
 .infoB {
   grid-column: 1;
+  margin-top: 20px;
+  margin-left: 5px;
 }
 
 .first {
   grid-column: 3;
   margin-top: 10px;
+  margin-left: 10px;
 }
 
 .second {
   grid-column: 4;
   margin-top: 10px;
+  margin-left: 10px;
 }
 
 .workArea_token {
@@ -242,13 +292,22 @@ export default {
 
 #getCard {
   background: url("/images/getCardInWorkArea.PNG");
-  background-size: 40px 45px;
+  background-size: 3vw 3vw;
+  /*background-size: 40px 45px;*/
   background-repeat: no-repeat;
 }
 
 #recycledCard {
   background: url("/images/bottleRecycled.PNG");
-  background-size: 38px 55px;
+  background-size: 2.5vw 3vw;
+  /*background-size: 38px 55px;*/
   background-repeat: no-repeat;
 }
+
+#upsideDown {
+    background: url("/images/baksida.png");
+  background-size: 2.5vw 3vw;
+  background-repeat: no-repeat;
+}
+
 </style>
