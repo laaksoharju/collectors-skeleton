@@ -81,10 +81,12 @@ export default {
     labels: Object,
     player: Object,
     itemsOnSale: Array,
+    typeofaction: String,
 
     marketValues: Object,
     placement: Array,
   },
+
   methods: {
     cannotAfford: function (cost) {
       let minCost = 100;
@@ -99,6 +101,7 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
+      console.log(this.typeofaction);
       this.$emit("placeBottle", p.cost);
 
       this.highlightAvailableCards(p.cost);
@@ -113,16 +116,8 @@ export default {
     highlightAvailableCards: function (cost = 100) {
       for (let i = 0; i < this.itemsOnSale.length; i += 1) {
         this.isAvailableCards(this.itemsOnSale[i], cost);
-        // if (
-        //   this.marketValues[this.itemsOnSale[i].item] <=
-        //   this.player.money - cost
-        // ) {
-        //   this.$set(this.itemsOnSale[i], "available", true);
-        // } else {
-        //   this.$set(this.itemsOnSale[i], "available", false);
-        // }
-        // this.chosenPlacementCost = cost;
       }
+
       for (let i = 0; i < this.player.hand.length; i += 1) {
         this.isAvailableCards(this.player.hand[i], cost);
       }
