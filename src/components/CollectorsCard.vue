@@ -42,8 +42,6 @@ export default {
   animation-iteration-count: infinite;*/
 
   box-shadow: 0 0 30px red;
-
-
 }
 
 @keyframes jiggle {

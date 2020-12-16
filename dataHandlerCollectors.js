@@ -237,7 +237,7 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
     }
     else if (action === 'skill')
     {
-      console.log('reach skill')
+      
       for (let i = 0; i < room.skillsOnSale.length; i += 1)
       {
         // since card comes from the client, it is NOT the same object (reference)
@@ -249,17 +249,28 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
           break;
         }
       }
-      // // ...then check if it is in the hand. It cannot be in both so it's safe
-      // for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
-      //   // since card comes from the client, it is NOT the same object (reference)
-      //   // so we need to compare properties for determining equality
-      //   if (room.players[playerId].hand[i].x === card.x &&
-      //       room.players[playerId].hand[i].y === card.y) {
-      //     c = room.players[playerId].hand.splice(i,1);
-      //     break;
-      //   }
-      // }
+     
       room.players[playerId].skills.push(...c);
+      room.players[playerId].money -= cost;
+      room.players[playerId].bottles -= 1;
+    }
+    else if (action === 'auction')    
+    {
+      
+      for (let i = 0; i < room.auctionCards.length; i += 1)
+      {
+        // since card comes from the client, it is NOT the same object (reference)
+        // so we need to compare properties for determining equality
+        if (room.auctionCards[i].x === card.x &&
+          room.auctionCards[i].y === card.y)
+        {
+          c = room.auctionCards.splice(i, 1, {});
+          console.log('rich data with auction')
+          break;
+        }
+      }
+     
+      room.players[playerId].items.push(...c);
       room.players[playerId].money -= cost;
       room.players[playerId].bottles -= 1;
     }
@@ -283,6 +294,7 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost)
     else if (action === "auction")
     {
       activePlacement = room.auctionPlacement;
+    
     }
     else if (action === "work")
     {

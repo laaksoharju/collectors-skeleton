@@ -39,6 +39,7 @@ export default {
     },
     placeBottle: function (p) {
       this.$emit("placeBottle", p.cost);
+
       this.highlightAvailableCards(p.cost);
     },
     isAvailableCards: function (card, cost) {
@@ -78,10 +79,9 @@ export default {
 <style scoped>
 .buy-cards {
   display: grid;
-  grid-template-columns:repeat(5,1fr);
+  grid-template-columns: repeat(5, 1fr);
   grid-gap: 1rem;
 }
-
 
 .cardslots div {
   transform: scale(0.5) translate(-50%, -50%);

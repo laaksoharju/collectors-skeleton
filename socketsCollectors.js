@@ -41,16 +41,21 @@ function sockets(io, socket, data)
   });
   socket.on('collectorsBuyCard', function (d)
   {
-    console.log('rich socket')
+    console.log('rich socket with auction')
 
     data.buyCard(d.roomId, d.playerId, d.card, d.cost, d.action)
     io.to(d.roomId).emit('collectorsCardBought', {
       playerId: d.playerId,
       players: data.getPlayers(d.roomId),
       itemsOnSale: data.getItemsOnSale(d.roomId),
-      skillsOnSale: data.getSkillsOnSale(d.roomId)
+      skillsOnSale: data.getSkillsOnSale(d.roomId),
+      auctionCards: data.getAuctionCards(d.roomId),
+     
+      
     }
-    );
+ 
+    )
+    console.log('josi');
   });
   socket.on('collectorsPlaceBottle', function (d)
   {
