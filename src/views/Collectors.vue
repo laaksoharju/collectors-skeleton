@@ -1,11 +1,15 @@
 <template>
-  <div>
+  <div class="collectorsWrapper">
     <main>
       <h1>I am player {{ playerId }}</h1>
       <h1 v-if="players[playerId].active">my turn!</h1>
+      <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
+      <OtherPlayerboards :Players="players" :playerId="playerId" />
+      <div id="game-board">
+    
 
       <div class="layout_wrapper">
-        <div id="game-board">
+        
           <ItemSection
             v-if="players[playerId]"
             :labels="labels"
@@ -17,6 +21,10 @@
             @selectAction="selectAction($event)"
             @placeBottle="placeBottle('itemType','buy', $event)"
           />
+      
+
+        <!-- {{ skillPlacement }} {{ chosenPlacementCost }} -->
+
           <CollectorsBuySkill
             v-if="players[playerId]"
             :labels="labels"
@@ -27,6 +35,7 @@
             @selectAction="selectAction($event)"
             @placeBottle="placeBottle('skillType','skill', $event)"
           />
+
           <RaiseValueSection
             v-if="players[playerId]"
             :labels="labels"
@@ -38,6 +47,7 @@
             @selectAction="selectAction($event)"
             @placeBottle="placeBottle('marketType','buy', $event)"
           />
+
           <AuctionSection
             v-if="players[playerId]"
             :labels="labels"
@@ -202,44 +212,6 @@ export default {
       auctionCards: [],
       playerid: 0,
 
-      buyItemProps: {
-        value: "Buy Items",
-        text:
-          "Pick one card from the item pool or from your hand. Tuck the chosen card under your player board from above to show that this card represents an item you have bought. In addition to the cost in the action space, you must pay $1 per card in the Market pool that has the same symbol as the item you just bought. There is no upper limit in the number of items you may own.",
-        title: "Buy Items",
-        classes: "button red",
-      },
-      gainSkillProps: {
-        value: "Gain Skills",
-        text:
-          "Take one of the cards from the skill pool or from your hand and tuck it under your player board from the left. This card will grant you skills for the rest of the game as detailed in the Special skills section below",
-        title: "Gain Skills",
-        classes: "button green",
-      },
-
-      raiseValueProps: {
-        value: "Raise Value",
-        text:
-          "When executing this action, you must place cards in the market pool equal to the number of seals on your action space (one or two cards). You may place cards from your hand, from the card in the lowest position in the skill pool, or from the lowest card in the auction pool. When you place a card in the market pool, you tuck the cards under the icon on the game board that matches the icon on the bottom left of the card",
-        title: "Raise Value",
-        classes: "button blue",
-      },
-
-      workProps: {
-        value: "Work",
-        text:
-          "In the work area, you perform actions to increase your income, recycle bottles, draw cards and become the first player. If you place your bottle in the uppermost action space (on the quarter tile), you must place two cards upside down from your hand next to your player board on its right side. Note that this action space changes characteristics during the fourth quarter to resemble the action spot below it",
-        title: "Work",
-        classes: "button yellow",
-      },
-
-      auctionProps: {
-        value: "Auction",
-        text:
-          "Choose one of the four cards in the Auction pool or one card from your hand and place it in the space reserved for auctioned items. If you placed a card from your hand, you may place it face down. The card remains face down and the auction is performed without any other players knowing what kind of card it is. The player who chose this action may bid any number of coins with a minimum of one. Now the player to their left must place a higher bid or pass. Continue in clockwise order until all players but one has passed. The player that won the auction must pay the bid amount to the supply. When paying for the auction you may use cards from your hands as coins. Cards can be worth $1 or $2 as depicted in the upper right corner of the cards. Note that cards can only be used as coins during an auction. If the card just won was placed face down, the winning player may look at the card without showing it to other players. The player that wins the auction may place the card wherever they want; as an item under their player board, as a market share in the market pool, or as a skill under their player board. If the newly won card was face down, the auction winner may place the card face down as a secret item (next to the one that was chosen during the setup).",
-        title: "Auction",
-        classes: "button",
-      },
     };
   },
   computed: {
@@ -436,6 +408,10 @@ export default {
 </script>
 
 <style scoped>
+
+.collectorsWrapper {
+background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);}
+
 .board-section {
   width: 100%;
   padding: 10px;
@@ -547,96 +523,16 @@ footer a:visited {
   z-index: 1;
 }
 
-.button:hover {
-  box-shadow: 6px 6px rgba(0, 0, 0, 0.6);
-}
-.green {
-  background-image: radial-gradient(
-    circle farthest-corner at 10% 20%,
-    rgba(50, 172, 109, 1) 0%,
-    rgba(209, 251, 155, 1) 100.2%
-  );
-}
-.blue {
-  background-image: radial-gradient(
-    circle farthest-corner at 10% 20%,
-    rgba(147, 230, 241, 1) 0%,
-    rgba(145, 192, 241, 1) 45.5%
-  );
-}
-.red {
-  background-image: linear-gradient(
-    143.3deg,
-    rgba(216, 27, 96, 1) 33.1%,
-    rgba(237, 107, 154, 1) 74.9%
-  );
-}
-.yellow {
-  background-image: radial-gradient(
-    circle farthest-corner at 10% 20%,
-    rgba(255, 252, 200, 1) 0%,
-    rgba(255, 247, 94, 1) 90%
-  );
+.collectorsContainer {
+  margin: 5px;
+  padding: 4px;
 }
 
-.modal-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 98;
-  background-color: rgba(0, 0, 0, 0.9);
+.collectorsContainer div {
+  margin: 5px;
 }
 
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 99;
 
-  width: 100%;
-  max-width: 400px;
-  background-color: #fff;
-  padding: 25px;
-  border-radius: 8px;
-}
-
-h1 {
-  color: #222;
-  font-size: 32px;
-  font-weight: 900;
-  margin-bottom: 15px;
-}
-
-p {
-  color: #666;
-  font-size: 18px;
-  font-weight: 400;
-  margin-bottom: 15px;
-}
-
-.fade-enter-active,
-.fade-leave.active {
-  transition: opacity 1.5s;
-  /* opacity: 0.9; */
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.slide-enter-active,
-.slide-leave.active {
-  transition: transform 0.5s;
-}
-
-.slide-enter,
-.slide-leave-to {
-  transform: translateY(-50%) translateX(100vw);
-}
 
 @media screen and (max-width: 800px) {
   main {

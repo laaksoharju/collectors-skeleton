@@ -107,7 +107,7 @@ body {
   color: #fff;
   font-weight: 700;
   box-shadow: 3px 3px rgba(0, 0, 0, 0.4);
-  transition: 0.4s ease-out;
+  transition: 0.3s ease-out;
 }
 
 .smallButton {
@@ -122,8 +122,12 @@ body {
   border-radius: 8px;
   color: #fff;
   font-weight: 700;
-  box-shadow: 3px 3px rgba(0, 0, 0, 0.4);
-  transition: 0.4s ease-out;
+  box-shadow: 2px 2px rgba(0, 0, 0, 0.4);
+  transition: 0.2s ease-out;
+}
+
+.smallButton:hover {
+  box-shadow: 4px 4px rgba(0, 0, 0, 0.6);
 }
 
 .button:hover {
@@ -192,6 +196,7 @@ body {
 
 .modal-overlay {
   position: absolute;
+  height: 6050px; /* ändra så att den bara är hela sidan!! */
   top: 0;
   left: 0;
   right: 0;
