@@ -10,11 +10,12 @@
             v-if="players[playerId]"
             :labels="labels"
             :player="players[playerId]"
+            :currentAction="currentAction"
             :itemsOnSale="itemsOnSale"
             :marketValues="marketValues"
             :placement="buyPlacement"
-            @buyCard="buyCard($event)"
-            @placeBottle="placeBottle('buy', $event)"
+            @selectAction="selectAction($event)"
+            @placeBottle="placeBottle('itemType','buy', $event)"
           />
           <CollectorsBuySkill
             v-if="players[playerId]"
@@ -23,18 +24,19 @@
             :skillsOnSale="skillsOnSale"
             :marketValues="marketValues"
             :placement="skillPlacement"
-            @buySkillCard="buySkillCard($event)"
-            @placeBottle="placeBottle('skill', $event)"
+            @selectAction="selectAction($event)"
+            @placeBottle="placeBottle('skillType','skill', $event)"
           />
           <RaiseValueSection
             v-if="players[playerId]"
             :labels="labels"
             :player="players[playerId]"
-            :itemsOnSale="itemsOnSale"
+            :skillsOnSale="skillsOnSale"
             :marketValues="marketValues"
+            :auctionCards="auctionCards"
             :placement="marketPlacement"
-            @buyCard="buyCard($event)"
-            @placeBottle="placeBottle('buy', $event)"
+            @selectAction="selectAction($event)"
+            @placeBottle="placeBottle('marketType','buy', $event)"
           />
           <AuctionSection
             v-if="players[playerId]"
@@ -43,8 +45,8 @@
             :auctionCards="auctionCards"
             :marketValues="marketValues"
             :placement="auctionPlacement"
-            @buyCard="buyCard($event)"
-            @placeBottle="placeBottle('buy', $event)"
+            @selectAction="selectAction($event)"
+            @placeBottle="placeBottle('auctionType','buy', $event)"
           />
         </div>
         <WorkArea :color="players[playerId].color" class="gridWork" />
@@ -187,6 +189,7 @@ export default {
       auctionPlacement: [],
       marketPlacement: [],
       chosenPlacementCost: null,
+      currentAction: String,
       marketValues: {
         fastaval: 0,
         movie: 0,
@@ -252,6 +255,15 @@ export default {
           if (typeof this.players[p].hand[c].item !== "undefined")
             this.$set(this.players[p].hand[c], "available", false);
         }
+
+      for (let c = 0; c < this.skillsOnSale.length; c += 1) {
+        if (typeof this.skillsOnSale[c].item !== "undefined")
+          this.$set(this.skillsOnSale[c], "available", false);
+      }
+      for (let c = 0; c < this.auctionCards.length; c += 1) {
+        if (typeof this.auctionCards[c].item !== "undefined")
+          this.$set(this.auctionCards[c], "available", false);
+      }
       }
     },
     nextRound: function(){
@@ -339,11 +351,22 @@ export default {
         this.nextRound = d.nextRound;
       }.bind(this)
     );
+   this.$store.state.socket.on(
+      "raiseValueBought",
+      function (d) {
+        console.log(d.playerId, "bought a Raise Value");
+        this.players = d.players;
+        this.skillsOnSale = d.skillsOnSale;
+        this.auctionCards = d.auctionCards;
+        this.marketValues = d.marketValues;
+      }.bind(this)
+    );
+    
 
     this.$store.state.socket.on(
       "collectorsSkillCardBought",
       function (d) {
-        console.log(d.playerId, "bought a card");
+        console.log(d.playerId, "bought a skill card");
         this.players = d.players;
         this.skillsOnSale = d.skillsOnSale;
         this.nextRound = d.nextRound;
@@ -354,7 +377,14 @@ export default {
     selectAll: function (n) {
       n.target.select();
     },
-    placeBottle: function (action, cost) {
+    selectAction: function(card){
+      this.currentAction == 'itemType' ? this.buyCard(card) : null
+      this.currentAction == 'skillType' ? this.buySkillCard(card) : null
+      this.currentAction == 'marketType' ? this.buyRaiseValue(card) : null
+      this.currentAction == 'auctionType' ? this.startAuction(card) : null //Funktionen existerar inte än
+    },
+    placeBottle: function (type, action, cost) {
+      this.currentAction = type;
       this.chosenPlacementCost = cost;
       this.$store.state.socket.emit("collectorsPlaceBottle", {
         roomId: this.$route.params.id,
@@ -369,8 +399,17 @@ export default {
         playerId: this.playerId,
       });
     },
+
+    buyRaiseValue: function (card) {
+      this.$store.state.socket.emit("buyRaiseValue", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        card: card,
+        cost: this.chosenPlacementCost,
+      });
+    },
+
     buyCard: function (card) {
-      console.log("buyCard", card);
       this.$store.state.socket.emit("collectorsBuyCard", {
         roomId: this.$route.params.id,
         playerId: this.playerId,

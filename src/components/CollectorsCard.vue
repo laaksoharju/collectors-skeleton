@@ -12,12 +12,13 @@ export default {
   name: 'CollectorsCard',
   props: {
     card: Object,
-    availableAction: Boolean
+    availableAction: Boolean,
+    actionType: String,
   },
   methods: {
     doAction: function() {
       this.$emit('doAction');
-    }
+    },
   }
 }
 </script>
