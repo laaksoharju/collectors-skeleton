@@ -1,10 +1,35 @@
 {
-	"draw": "Draw card",
+	"buyCard": "Buy an item",
+
+	"getSkill": "Get a skill",
+
+	"raiseValue": "Raise a value",
+	"currentlyRaisedValues": "Currently raised values",
+
+	"auction": "Auction",
+	"raiseCurrentBid": "Raise bid with 1$",
+	"player": "Player",
+	"isNowLeading": "is now leading the auction with a:",
+	"bid": " bid",
+	"my": "My",
+	"dollarBidWon": "$ bid won!",
+
+	"doWork": "Work",
+
+	"gameOperations": "Game Operations",
+	"draw": "Draw a card",
 	"invite": "Invite other players with this link:",
 	"endTurn": "End turn",
-	"buyCard": "Buy an item",
-	"getSkill": "Get a skill",
-	"raiseValue": "Raise a value",
-	"auction": "Auction",
-	"doWork": "Work"
+	"ready": "I'm ready!",
+	"start": "Start the game",
+	"retrieve": "Retrieve bottles",
+
+	"playerBoard": "Player board",
+	"names": "Names",
+	"hands": "Hands",
+	"items": "Items",
+	"skills": "Skills",
+	"income": "Income",
+	"money": "Money",
+	"bottles": "Bottles"
 }

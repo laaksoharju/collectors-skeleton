@@ -48,9 +48,9 @@
         @placeBottle="placeBottle('startAuction', $event)"/>
 
         <div v-if="currentAuctionCard.length === 1">
-          <p>player {{ bidArray[bidArray.length - 1]}} is now leading the auction with a: {{ bidArray.length}}$ bid.</p>
-          <button v-if="players[playerId]" :disabled="cannotRaiseBid()" @click="raiseCurrentBid()">Raise current bid!</button>
-          <button v-if="bidArray[bidArray.length - 1] === this.playerId" :disabled="noMoreBidsBoolean" @click="noMoreBids()">My {{bidArray.length}}$ bid won!</button>
+          <p>{{labels.player}} {{ bidArray[bidArray.length - 1]}} {{labels.isNowLeading}} {{ bidArray.length}}${{labels.bid}}.</p>
+          <button v-if="players[playerId]" :disabled="cannotRaiseBid()" @click="raiseCurrentBid()">{{labels.raiseCurrentBid}}</button>
+          <button v-if="bidArray[bidArray.length - 1] === this.playerId" :disabled="noMoreBidsBoolean" @click="noMoreBids()">{{labels.my}} {{bidArray.length}}{{labels.dollarBidWon}}</button>
           <button v-if="this.noMoreBidsBoolean" @click="endAuction('buyItem')" style="background-color: #f9dcce">Use as an item <br><img class="use_as" src="images/use_as_item.png" width="33%"></button>
           <button v-if="this.noMoreBidsBoolean" @click="endAuction('getSkill')" style="background-color: #dfeccc">Use as a skill <br><img class="use_as" src="images/use_as_skill.png" width="33%"></button>
           <button v-if="this.noMoreBidsBoolean" @click="endAuction('market')" style="background-color: #cfdcf2">Place in the market <br><img class="use_as" src="images/use_as_market.png" width="30%"></button>
@@ -58,15 +58,15 @@
       </div>
 
       <div id="GameOperationsDiv">
-        <h2>Game operations</h2>
+        <h2>{{labels.gameOperations}}</h2>
         <div id='readyGameButton' v-if="!playerBoardShown">
           <button class="ready" v-on:click="readyGame()" @click="playerReady = true" :disabled="playerReady">
-            I'm ready!
+            {{labels.ready}}
             </button>
         </div>
         <div id="startGameButton" v-if="!playerBoardShown">
           <button class="ready" v-on:click="startGame()">
-            Start game!
+            {{labels.start}}
           </button>
         </div>
         <div id="NextRoundButton" v-if="playerBoardShown">
@@ -86,7 +86,7 @@
 
         <div class="buttons">
           <button class="function_buttons" v-if="players[playerId]" @click="retrieveBottles()">
-            Retrieve bottles
+            {{labels.retrieve}}
             <img class="function_button_img" src="images/retrieveBottles.png">
           </button>
         </div>
@@ -107,7 +107,7 @@
       </div>
 
       <div id="PlayerBoardDiv">
-        <h2>Player board</h2>
+        <h2>{{labels.playerBoard}}</h2>
         <div id="bottleSlotsDiv">
             <input type="hidden" name="bottleSlot" value="bottleSlot_1">
             <input class="bottleSlots" type="image" src="images/bottleSlot_1.png">
@@ -128,50 +128,49 @@
 
         <div id="AllPlayerCardsDiv" v-if="playerBoardShown">
           <div id="AllPlayerIdDiv">
-            <h3>Names</h3>
+            <h3>{{labels.names}}</h3>
             <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
               <p>{{ player }}</p>
             </div>
           </div>
 
           <div id="AllPlayerHandsDiv">
-            <h3>Hands</h3>
+            <h3>{{labels.hands}}</h3>
             <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
               <CollectorsCard v-for="(card, index) in players[player].hand" :card="card" :availableAction="card.available" @doAction="handleAction(card)" :key="index"/>
-              {{ players[player].hand }}
             </div>
           </div>
 
           <div id="AllPlayerItemsDiv">
-            <h3>Items</h3>
+            <h3>{{labels.items}}</h3>
             <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
               <CollectorsCard v-for="(card, index) in players[player].items" :card="card" :key="index"/>
             </div>
           </div>
 
           <div id="AllPlayerSkillsDiv">
-            <h3>Skills</h3>
+            <h3>{{labels.skills}}</h3>
             <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
               <CollectorsCard v-for="(card, index) in players[player].skills" :card="card" :key="index"/>
             </div>
           </div>
 
           <div id="AllPlayerIncomeDiv">
-            <h3>Income</h3>
+            <h3>{{labels.income}}</h3>
             <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
               <CollectorsCard v-for="(card, index) in players[player].income" :card="card" :key="index"/>
             </div>
           </div>
 
           <div id="AllPlayerMoneyDiv">
-            <h3>Money</h3>
+            <h3>{{labels.money}}</h3>
             <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
               <p>{{ players[player].money }}</p>
             </div>
           </div>
 
           <div id="AllPlayerBottlesDiv">
-            <h3>Bottles</h3>
+            <h3>{{labels.bottles}}</h3>
             <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
               <p>{{ players[player].bottles }}</p>
             </div>
@@ -310,6 +309,8 @@ export default {
             this.auctionPlacement = d.placements.auctionPlacement;
             this.workPlacement = d.placements.workPlacement;
             this.players[this.playerId].bottles = d.players[this.playerId].bottles;
+            this.players[this.playerId].income = d.players[this.playerId].income;
+            this.players[this.playerId].money = d.players[this.playerId].money;
             this.playerIdArray = d.playerIdArray;
           }.bind(this));
 
@@ -397,7 +398,6 @@ export default {
 
 methods: {
   readyGame: function() {
-    alert('You are ready, wait for the rest of the players to ready up. If everyone is ready hit "Start game"');
     this.$store.state.socket.emit('collectorsPlayerReady', {
       playerId: this.playerId,
       roomId: this.$route.params.id
@@ -739,14 +739,13 @@ footer a:visited {
   grid-area: PlayerBoardDiv;
   align-self: center;
   /* background: url("https://previews.123rf.com/images/prapann/prapann1606/prapann160600110/58202559-old-wood-vintage-wood-wall-texture-wood-background-old-panels.jpg"); */
-  background: #ffd0a7;
+  background: pink;
   margin: 5px;
 }
 
 #bottleSlotsDiv {
   grid-area: bottleSlotsDiv;
   align-self: center;
-  background: #ffd0a7;
   margin: 5px;
   text-align: center;
 }

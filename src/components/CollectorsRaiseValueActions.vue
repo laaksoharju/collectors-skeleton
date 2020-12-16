@@ -24,7 +24,7 @@
       </div>
     </div>
     <div id="ValueStats">
-      <h3>Currently raised values</h3>
+      <h3>{{labels.currentlyRaisedValues}}</h3>
       <div v-for="(type, index) in marketValues" :key="index">
         <p> {{ index }} : {{ type }} </p>
       </div>

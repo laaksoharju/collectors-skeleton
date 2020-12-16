@@ -1,10 +1,35 @@
 {
-	"draw": "Dra kort",
-	"invite": "Bjud in andra spelare med den här länken:",
-	"endTurn": "Avsluta runda",
 	"buyCard": "Köp ett föremål",
+
 	"getSkill": "Skaffa en skicklighet",
+
 	"raiseValue": "Öka ett värde",
+	"currentlyRaisedValues": "Nuvarande ökade värden",
+
 	"auction": "Auktion",
-	"doWork": "Arbeta"
+	"raiseCurrentBid": "Höj budet med 1$",
+	"player": "Spelare",
+	"isNowLeading": "leder nu auktionen med ett",
+	"bid": "-bud",
+	"my": "Mitt",
+	"dollarBidWon": "$-bud vann!",
+
+	"doWork": "Arbeta",
+
+	"gameOperations": "Spelhantering",
+	"draw": "Dra ett kort",
+	"invite": "Bjud in andra spelare med den här länken:",
+	"endTurn": "Avsluta rundan",
+	"ready": "Jag är redo!",
+	"start": "Starta spelet",
+	"retrieve": "Återta flaskor",
+
+	"playerBoard": "Spelarbräde",
+	"names": "Namn",
+	"hands": "Händer",
+	"items": "Föremål",
+	"skills": "Skickligheter",
+	"income": "Inkomst",
+	"money": "Pengar",
+	"bottles": "Flaskor"
 }
