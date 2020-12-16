@@ -281,10 +281,17 @@ Data.prototype.refillAuction = function (room) {
   for (let i in room.auctionCards) {
     if (room.auctionCards[i].item == undefined) {
       room.auctionCards.splice(i, 1);
-      let card = room.deck.pop();
-      room.auctionCards.unshift(card);
     }
   }
+  while(room.auctionCards.length < 4){
+    let card = room.deck.pop();
+    room.auctionCards.unshift(card);
+  } 
+}
+
+Data.prototype.getRound = function(roomId){
+  let room = this.rooms[roomId];
+  return room.round
 }
 
 

@@ -55,6 +55,12 @@ export default {
 };
 </script>
 <style scoped>
+    #AllOtherPlayerboards{
+      display:flex;
+      justify-content: flex-end;
+      flex-direction: row;
+    }
+
     .otherPlayerBoard {
     margin: 5px;
     padding: 5px;
@@ -62,6 +68,7 @@ export default {
     text-align: center;
     color: black;
     }
+    
     .otherPlayerBoard:hover{
     cursor: pointer;
     }
