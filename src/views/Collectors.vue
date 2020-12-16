@@ -262,7 +262,13 @@ export default {
     },
     nextRound: function(){
       if(this.nextRound){
-        this.startNextRound();
+        if(this.round<4){
+          /*Komponent (eller funktion?) med popup 
+          för att placera ut flaskorna*/
+          this.startNextRound();
+        }else{
+          //avsluta genom funktion här!!!
+        }
       }
     }
   },
