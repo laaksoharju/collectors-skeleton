@@ -8,7 +8,7 @@
         <CollectorsCard
           :card="card"
           :availableAction="card.available"
-          @doAction="buyCard(card)"
+          @doAction="selectAction(card)"
         />
         <!-- {{ cardCost(card) }} -->
       </div>
@@ -101,9 +101,9 @@ export default {
         }
       }
     },
-    buyCard: function (card) {
+    selectAction: function (card) {
       if (card.available) {
-        this.$emit("buyCard", card);
+        this.$emit("selectAction", card);
         this.highlightAvailableCards();
       }
     },
@@ -125,15 +125,6 @@ export default {
 .buttons {
   display: grid;
   grid-template-columns: repeat(auto-fill, 130px);
-}
-
-.board-section {
-  width: 50%;
-  padding: 10px;
-  align-items: center;
-  display: flex;
-  flex-direction: row-reverse;
-  border: 1px solid #19181850;
 }
 
 #item-section {

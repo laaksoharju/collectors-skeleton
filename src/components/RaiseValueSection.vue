@@ -1,14 +1,17 @@
 <template>
   <div id="RaiseValueSection" class="board-section">
-    <InfoButtons
-      :modalProps='raiseValueProps'
-    />
+    <InfoButtons :modalProps="raiseValueProps" />
     <div class="raise-value-slot-container">
-      <div class="raise-value-slot">{{marketValues.fastaval}}</div>
-      <div class="raise-value-slot">{{marketValues.movie}}</div>
-      <div class="raise-value-slot">{{marketValues.technology}}</div>
-      <div class="raise-value-slot">{{marketValues.figures}}</div>
-      <div class="raise-value-slot">{{marketValues.music}}</div>
+      <div class="raise-value-slot" id="rvFastaval"></div>
+      <div class="raise-value-slot" id="rvMovie"></div>
+      <div class="raise-value-slot" id="rvTechnology"></div>
+      <div class="raise-value-slot" id="rvFigures"></div>
+      <div class="raise-value-slot" id="rvMusic"></div>
+      <p>{{ marketValues.fastaval }}</p>
+      <p>{{ marketValues.movie }}</p>
+      <p>{{ marketValues.technology }}</p>
+      <p>{{ marketValues.figures }}</p>
+      <p>{{ marketValues.music }}</p>
     </div>
 
     <div class="button-section">
@@ -29,31 +32,31 @@
 </template>
 
 <script>
-
 import InfoButtons from "../components/InfoButtons.vue";
 
 export default {
   name: "RaiseValueSection",
   components: {
-    InfoButtons
+    InfoButtons,
   },
   props: {
     labels: Object,
     player: Object,
-    itemsOnSale: Array,
+    skillsOnSale: Array,
+    auctionCards: Array,
     marketValues: Object,
     placement: Array,
   },
-  data: function() {
+  data: function () {
     return {
       raiseValueProps: {
-        value: 'Raise Value',
-        text: 'When executing this action, you must place cards in the market pool equal to the number of seals on your action space (one or two cards). You may place cards from your hand, from the card in the lowest position in the skill pool, or from the lowest card in the auction pool. When you place a card in the market pool, you tuck the cards under the icon on the game board that matches the icon on the bottom left of the card',
-        title: 'Raise Value',
-        classes: 'button blue'
-      }
-    }
-    
+        value: "Raise Value",
+        text:
+          "When executing this action, you must place cards in the market pool equal to the number of seals on your action space (one or two cards). You may place cards from your hand, from the card in the lowest position in the skill pool, or from the lowest card in the auction pool. When you place a card in the market pool, you tuck the cards under the icon on the game board that matches the icon on the bottom left of the card",
+        title: "Raise Value",
+        classes: "button blue",
+      },
+    };
   },
   methods: {
     cannotAfford: function (cost) {
@@ -71,21 +74,35 @@ export default {
       this.$emit("placeBottle", p.cost);
       this.highlightAvailableCards(p.cost);
     },
-    highlightAvailableCards: function (cost = 100) { //Vilka kort ska vara väljbara här? Skick in rätt props
-      for (let i = 0; i < this.itemsOnSale.length; i += 1) {
-        if (
-          this.marketValues[this.itemsOnSale[i].item] <=
-          this.player.money - cost
-        ) {
-          this.$set(this.itemsOnSale[i], "available", true);
-        } else {
-          this.$set(this.itemsOnSale[i], "available", false);
-        }
-        this.chosenPlacementCost = cost;
+    highlightAvailableCards: function (cost = 100) {
+      let lastSkill;
+      let lastAction;
+
+      //Ta fram sista kortet i skills
+      for (let card of this.skillsOnSale) {
+        card.item != undefined ? (lastSkill = card) : null;
       }
+      if (this.marketValues[lastSkill.item] <= this.player.money - cost) {
+        this.$set(lastSkill, "available", true);
+      } else {
+        this.$set(lastSkill, "available", false);
+      }
+      this.chosenPlacementCost = cost;
+
+      //Ta fram sista kortet i auction
+      for (let card of this.auctionCards) {
+        card.item != undefined ? (lastAction = card) : null;
+      }
+      if (this.marketValues[lastAction.item] <= this.player.money - cost) {
+        this.$set(lastAction, "available", true);
+      } else {
+        this.$set(lastAction, "available", false);
+      }
+      this.chosenPlacementCost = cost;
+
       for (let i = 0; i < this.player.hand.length; i += 1) {
         if (
-          this.marketValues[this.player.hand[i].item] <=
+          this.marketValues[this.player.hand[i].market] <=
           this.player.money - cost
         ) {
           this.$set(this.player.hand[i], "available", true);
@@ -94,12 +111,6 @@ export default {
           this.$set(this.player.hand[i], "available", false);
           this.chosenPlacementCost = cost;
         }
-      }
-    },
-    buyCard: function (card) { // Kortet ska hamna ner på raise-value-area, inte till item on hand. Ny funktion.
-      if (card.available) {
-        this.$emit("buyCard", card);
-        this.highlightAvailableCards();
       }
     },
   },
@@ -125,26 +136,45 @@ export default {
   grid-template-columns: repeat(auto-fill, 130px);
 }
 
-.board-section {
-  min-height: 100px;
-  width: 50%;
-  padding: 10px;
-  align-items: center;
-  display: flex;
-  flex-direction: row-reverse;
-  border: 1px solid #19181850;
-}
-
 .raise-value-slot-container {
   width: 80%;
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  text-align: center;
+  color: black;
+  font-weight: bold;
 }
 .raise-value-slot {
   background-color: #6d9eebff;
-  width: 50px;
-  height: 50px;
+  width: 6vw;
+  height: 6vw;
   border-radius: 50%;
   border: 1px solid #19181850;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+#rvMovie {
+  background: url("/images/RAISEVAL-FILM.png");
+  background-size: 6vw 6vw;
+}
+#rvFigures {
+  background: url("/images/RAISEVAL-ROBOT.png");
+  background-size: 6vw 6vw;
+}
+#rvTechnology {
+  background: url("/images/RAISEVAL-IT.png");
+  background-size: 6vw 6vw;
+}
+#rvMusic {
+  background: url("/images/RAISEVAL-MUSIC.png");
+  background-size: 6vw 6vw;
+}
+#rvFastaval {
+  background: url("/images/RAISEVAL-PINGVIN.png");
+  background-size: 6vw 6vw;
 }
 </style>
