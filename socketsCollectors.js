@@ -23,14 +23,16 @@ function sockets(io, socket, data) {
       data.updatePlayerName(d.roomId, d.playerId, d.playerName)
     );
   });
-  
+
   socket.on("nextRound", function(d) {
-    if(data.nextRound(d.roomId)) {
-      socket.emit("updateQuarter", {
+    if (data.nextRound(d.roomId)) {
+      io.to(d.roomId).emit("updateQuarter", {
+        players: data.getPlayers(d.roomId),
         itemsOnSale: data.getItemsOnSale(d.roomId),
         skillsOnSale: data.getSkillsOnSale(d.roomId),
         auctionCards: data.getAuctionCards(d.roomId),
         marketValues: data.getMarketValues(d.roomId),
+        placements: data.getPlacements(d.roomId),
         round: data.getRound(d.roomId),
       });
     }

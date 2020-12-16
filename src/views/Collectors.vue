@@ -82,14 +82,14 @@
               :placement="workPlacement"
               @placeBottle="placeBottle('work', $event)"
             />
-            <div v-if="round>0 && round<4" 
-                class="quarter-tiles"
-                :style="{
-                backgroundImage:
-                  'url(/images/quarter_tiles/' + round + '.png)',
-                }"
-                @click="nextRound()">
-            </div>
+            <div
+              v-if="round > 0 && round < 4"
+              class="quarter-tiles"
+              :style="{
+                backgroundImage: 'url(/images/quarter_tiles/' + round + '.png)',
+              }"
+              @click="nextRound()"
+            ></div>
           </section>
           <section class="auction_bottle">
             <Bottles
@@ -434,7 +434,7 @@
           readonly="readonly"
         />
       </p>
-      <p>{{marketValues}}</p>
+      <p>{{ marketValues }}</p>
       <!-- <button v-if="players[playerId]" @click="players[playerId].money += 1">
         fake more money
       </button> -->
@@ -573,18 +573,24 @@ export default {
         this.round = d.round;
       }.bind(this)
     );
-    
+
     this.$store.state.socket.on(
       "updateQuarter",
       function (d) {
+        this.players = d.players;
         this.itemsOnSale = d.itemsOnSale;
         this.skillsOnSale = d.skillsOnSale;
         this.auctionCards = d.auctionCards;
         this.marketValues = d.marketValues;
-        this.round = d.round;    
+        this.buyPlacement = d.placements.buyPlacement;
+        this.skillPlacement = d.placements.skillPlacement;
+        this.marketPlacement = d.placements.marketPlacement;
+        this.auctionPlacement = d.placements.auctionPlacement;
+        this.workPlacement = d.placements.workPlacement;
+        this.round = d.round;
       }.bind(this)
     );
-    
+
     this.$store.state.socket.emit("notifyPlayers", {
       roomId: this.$route.params.id,
       playerId: this.playerId,
@@ -674,8 +680,8 @@ export default {
     nextRound: function () {
       alert("Are you sure you want to go to next round?");
       this.$store.state.socket.emit("nextRound", {
-            roomId: this.$route.params.id
-          });
+        roomId: this.$route.params.id,
+      });
     },
     getOtherPlayerIds: function () {
       var otherPlayers = [];
@@ -1203,12 +1209,11 @@ p {
   height: 2.5em;
   background-size: 100% 100%;
   border-radius: 5px;
-  cursor:pointer;
+  cursor: pointer;
   /* border:none; */
 }
 
 .quarter-tiles:hover {
   outline: 2px dashed black;
 }
-
 </style>

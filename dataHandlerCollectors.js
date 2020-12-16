@@ -185,7 +185,6 @@ Data.prototype.nextRound = function(roomId) {
         break;
       }
     }
-
     // Step 1: Move the remaining cards in the skill pool to the lowest empty positions in the skill pool
     const pool = room.skillsOnSale.map((object) => ({ ...object }));
     room.skillsOnSale = [{}, {}, {}, {}, {}];
@@ -196,7 +195,6 @@ Data.prototype.nextRound = function(roomId) {
         saleIndex--;
       }
     }
-
     // Step 2: Take the leftmost card in the item pool and place it in the lowest free position in the skill pool
     const itemPool = room.itemsOnSale.map((object) => ({ ...object }));
     room.itemsOnSale = [{}, {}, {}, {}, {}];
@@ -226,7 +224,6 @@ Data.prototype.nextRound = function(roomId) {
         }
       }
     }
-
     // Step3: Take the “lowest” card in the auction pool and place it in the market pool
     for (let index = room.auctionCards.length - 1; index > -1; index--) {
       if (Object.keys(room.auctionCards[index]).length != 0) {
@@ -237,7 +234,6 @@ Data.prototype.nextRound = function(roomId) {
         break;
       }
     }
-
     // Move the remaining cards in the auction pool to the lowest empty positions in the Auction pool
     const auctionPool = room.auctionCards.map((object) => ({ ...object }));
     room.auctionCards = [{}, {}, {}, {}];
@@ -248,7 +244,6 @@ Data.prototype.nextRound = function(roomId) {
         auctionIndex--;
       }
     }
-
     // Step 4: Now refill all pools
     for (let index = 0; index < 5; index++) {
       // Fill items pool
@@ -266,7 +261,44 @@ Data.prototype.nextRound = function(roomId) {
         room.auctionCards[index] = room.deck.pop();
       }
     }
-
+    // PHASE 3: RETRIEVE BOTTLES
+    // player takes their bottles from the game board and places them on their player board
+    for (let index = 0; index < 5; index++) {
+      if (room.buyPlacement[index].playerId != null) {
+        // give the bottle back to the player
+        room.players[room.buyPlacement[index].playerId].bottles += 1;
+        // remove the player name from the position
+        room.buyPlacement[index].playerId = null;
+      }
+      if (room.skillPlacement[index].playerId != null) {
+        // give the bottle back to the player
+        room.players[room.skillPlacement[index].playerId].bottles += 1;
+        // remove the player name from the position
+        room.skillPlacement[index].playerId = null;
+      }
+      if (room.workPlacement[index].playerId != null) {
+        // give the bottle back to the player
+        room.players[room.workPlacement[index].playerId].bottles += 1;
+        // remove the player name from the position
+        room.workPlacement[index].playerId = null;
+      }
+      if (index < 3) {
+        if (room.marketPlacement[index].playerId != null) {
+          // give the bottle back to the player
+          room.players[room.marketPlacement[index].playerId].bottles += 1;
+          // remove the player name from the position
+          room.marketPlacement[index].playerId = null;
+        }
+      }
+      if (index < 4) {
+        if (room.auctionPlacement[index].playerId != null) {
+          // give the bottle back to the player
+          room.players[room.auctionPlacement[index].playerId].bottles += 1;
+          // remove the player name from the position
+          room.auctionPlacement[index].playerId = null;
+        }
+      }
+    }
     // PHASE 5: REMOVE A QUARTER TILE
     room.round = room.round + 1;
     return true;
