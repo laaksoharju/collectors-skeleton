@@ -579,6 +579,7 @@ export default {
       function (d) {
         this.itemsOnSale = d.itemsOnSale;
         this.skillsOnSale = d.skillsOnSale;
+        this.auctionCards = d.auctionCards;
         this.marketValues = d.marketValues;
         this.round = d.round;    
       }.bind(this)

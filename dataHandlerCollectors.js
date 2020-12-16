@@ -176,58 +176,98 @@ Data.prototype.nextRound = function(roomId) {
   if (typeof room !== "undefined") {
     // PHASE 2: FILL POOLS
     // Step 1: Take the lowest card in the skill pool and place it in the market pool.
-    for (let index = room.skillsOnSale.length-1; index > -1; index--){
-      if (Object.keys(room.skillsOnSale[index]).length !=0 ) {
-       // Push that into market pool
-       room.market.push(room.skillsOnSale[index]);
-       // Remove that card from skill pool
-       room.skillsOnSale[index] = {};
-       break;
+    for (let index = room.skillsOnSale.length - 1; index > -1; index--) {
+      if (Object.keys(room.skillsOnSale[index]).length != 0) {
+        // Push that into market pool
+        room.market.push(room.skillsOnSale[index]);
+        // Remove that card from skill pool
+        room.skillsOnSale[index] = {};
+        break;
       }
     }
-    
+
     // Step 1: Move the remaining cards in the skill pool to the lowest empty positions in the skill pool
-    const pool = room.skillsOnSale.map(object => ({ ...object }));
-    room.skillsOnSale = [{},{},{},{},{}];
+    const pool = room.skillsOnSale.map((object) => ({ ...object }));
+    room.skillsOnSale = [{}, {}, {}, {}, {}];
     let saleIndex = 4;
-    for (let index = pool.length-1; index > -1; index--){
-      if (Object.keys(pool[index]).length !=0 ) {
-      room.skillsOnSale[saleIndex] = pool[index];
-      saleIndex--;
+    for (let index = pool.length - 1; index > -1; index--) {
+      if (Object.keys(pool[index]).length != 0) {
+        room.skillsOnSale[saleIndex] = pool[index];
+        saleIndex--;
       }
     }
 
     // Step 2: Take the leftmost card in the item pool and place it in the lowest free position in the skill pool
-    const itemPool = room.itemsOnSale.map(object => ({ ...object }));
-    room.itemsOnSale = [{},{},{},{},{}];
+    const itemPool = room.itemsOnSale.map((object) => ({ ...object }));
+    room.itemsOnSale = [{}, {}, {}, {}, {}];
     saleIndex = 4;
     let firstEmptyPosition = 4;
-    for (let index = room.skillsOnSale.length-1 ; index > -1; index--){
-      if (Object.keys(room.skillsOnSale[index]).length ==0 ) {
+    for (let index = room.skillsOnSale.length - 1; index > -1; index--) {
+      if (Object.keys(room.skillsOnSale[index]).length == 0) {
         firstEmptyPosition = index;
         break;
       }
     }
     // Repeat this process until the item pool is empty
     let itemPosition = 0;
-    for (let index = 0; index < itemPool.length; index++){
-      if (Object.keys(itemPool[index]).length !=0 ) {
+    for (let index = 0; index < itemPool.length; index++) {
+      if (Object.keys(itemPool[index]).length != 0) {
         // Repeat this process until the skill pool is full
-        if (firstEmptyPosition > -1 ) {
+        if (firstEmptyPosition > -1) {
           room.skillsOnSale[firstEmptyPosition] = itemPool[index];
           firstEmptyPosition--;
         }
-        // Move any remaining cards in the item pool to the leftmost empty positions in the item pool. 
-        else if (itemPosition<5) {
-            room.itemsOnSale[itemPosition] = itemPool[index];
-            itemPosition++;  
-        }
-        else {
-          console.log('Issue in Step 2 of Phase 2: Fill Pools');
+        // Move any remaining cards in the item pool to the leftmost empty positions in the item pool.
+        else if (itemPosition < 5) {
+          room.itemsOnSale[itemPosition] = itemPool[index];
+          itemPosition++;
+        } else {
+          console.log("Issue in Step 2 of Phase 2: Fill Pools");
         }
       }
     }
 
+    // Step3: Take the “lowest” card in the auction pool and place it in the market pool
+    for (let index = room.auctionCards.length - 1; index > -1; index--) {
+      if (Object.keys(room.auctionCards[index]).length != 0) {
+        // Push that into market pool
+        room.market.push(room.auctionCards[index]);
+        // Remove that card from auction pool
+        room.auctionCards[index] = {};
+        break;
+      }
+    }
+
+    // Move the remaining cards in the auction pool to the lowest empty positions in the Auction pool
+    const auctionPool = room.auctionCards.map((object) => ({ ...object }));
+    room.auctionCards = [{}, {}, {}, {}];
+    let auctionIndex = 3;
+    for (let index = auctionPool.length - 1; index > -1; index--) {
+      if (Object.keys(auctionPool[index]).length != 0) {
+        room.auctionCards[auctionIndex] = auctionPool[index];
+        auctionIndex--;
+      }
+    }
+
+    // Step 4: Now refill all pools
+    for (let index = 0; index < 5; index++) {
+      // Fill items pool
+      if (Object.keys(room.itemsOnSale[index]).length == 0) {
+        room.itemsOnSale[index] = room.deck.pop();
+      }
+      // Fill skills pool
+      if (Object.keys(room.skillsOnSale[index]).length == 0) {
+        room.skillsOnSale[index] = room.deck.pop();
+      }
+    }
+    // Fill auctions pool
+    for (let index = 0; index < 4; index++) {
+      if (Object.keys(room.auctionCards[index]).length == 0) {
+        room.auctionCards[index] = room.deck.pop();
+      }
+    }
+
+    // PHASE 5: REMOVE A QUARTER TILE
     room.round = room.round + 1;
     return true;
   } else {

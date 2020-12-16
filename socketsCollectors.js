@@ -29,6 +29,7 @@ function sockets(io, socket, data) {
       socket.emit("updateQuarter", {
         itemsOnSale: data.getItemsOnSale(d.roomId),
         skillsOnSale: data.getSkillsOnSale(d.roomId),
+        auctionCards: data.getAuctionCards(d.roomId),
         marketValues: data.getMarketValues(d.roomId),
         round: data.getRound(d.roomId),
       });
