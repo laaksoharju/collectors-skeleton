@@ -155,6 +155,13 @@
               <CollectorsCard v-for="(card, index) in players[player].skills" :card="card" :key="index"/>
             </div>
           </div>
+
+          <div id="AllPlayerIncomeDiv">
+            <h3>Income</h3>
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+              <CollectorsCard v-for="(card, index) in players[player].income" :card="card" :key="index"/>
+            </div>
+          </div>
         </div>
         <footer>
         </footer>
@@ -384,7 +391,8 @@ methods: {
         roomId: this.$route.params.id,
         playerId: this.playerId,
         playerIdArray: this.playerIdArray,
-        activeRound: 1
+        activeRound: 1,
+        players: this.players
       });
     }
     else {
@@ -417,7 +425,8 @@ methods: {
     this.$store.state.socket.emit('collectorsChangeRound', {
       roomId: this.$route.params.id,
       playerId: this.playerId,
-      activeRound: this.activeRound+1
+      activeRound: this.activeRound+1,
+      players: this.players
     });
   },
 
@@ -719,9 +728,9 @@ footer a:visited {
   grid-area: AllPlayerCardsDiv;
   align-self: center;
   display: grid;
-  grid-template-columns: 25% 25% 25% 25%;
+  grid-template-columns: 20% 20% 20% 20% 20%;
   grid-template-areas:
-  "AllPlayerIdDiv AllPlayerHandsDiv AllPlayerItemsDiv AllPlayerSkillsDiv"
+  "AllPlayerIdDiv AllPlayerHandsDiv AllPlayerItemsDiv AllPlayerSkillsDiv AllPlayerIncomeDiv"
 }
 
 #container {

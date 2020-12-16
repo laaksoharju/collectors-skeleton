@@ -280,11 +280,18 @@ Data.prototype.addPlayerReady = function(roomId, playerId) {
 }
 
 
-Data.prototype.changeRound= function(roomId, playerId, nextRound) {
+Data.prototype.changeRound= function(roomId, playerId, nextRound, players) {
   let room = this.rooms[roomId];
   console.log(nextRound);
   if (typeof room !== 'undefined') {
      room.activeRound = nextRound;
+
+  // for (var i = 0; i < players.length; i++) {
+  //
+  //     for (var i = 0; i < room.players.income.length; i++) {
+  //      room.players[playerId].money += income[i.auctionValue]
+  //    }
+  //   }
   }
 }
 
@@ -383,16 +390,28 @@ Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index
     if (index === 0) {
       if (room.activeRound === 1) {
         console.log('2 kort till Income');
+        let card1 = room.deck.pop();
+        let card2 = room.deck.pop();
+        room.players[playerId].income.push(card1);
+        room.players[playerId].income.push(card2);
         room.workPlacement[index].playerId = playerId;
       }
       else if (room.activeRound === 2) {
         console.log('2 kort till Income + 1$');
         room.players[playerId].money += 1;
+        let card1 = room.deck.pop();
+        let card2 = room.deck.pop();
+        room.players[playerId].income.push(card1);
+        room.players[playerId].income.push(card2);
         room.workPlacement[index].playerId = playerId;
       }
       else if (room.activeRound === 3) {
         console.log('2 kort till Income + 2$');
         room.players[playerId].money += 2;
+        let card1 = room.deck.pop();
+        let card2 = room.deck.pop();
+        room.players[playerId].income.push(card1);
+        room.players[playerId].income.push(card2);
         room.workPlacement[index].playerId = playerId;
       }
       else if (room.activeRound === 4) {
@@ -427,10 +446,12 @@ Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index
 
     }
     if (index === 4) {
-      console.log('Work ruta index 4, dra ett kort och placera ett från handen på income');
+      console.log('Work ruta index 4, dra ett kort till handen, och ett till Income');
       room.workPlacement[index].playerId = playerId;
       let card1 = room.deck.pop();
+      let card2 = room.deck.pop();
       room.players[playerId].hand.push(card1);
+      room.players[playerId].income.push(card2);
     }
   }
 }

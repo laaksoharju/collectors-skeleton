@@ -23,7 +23,7 @@ function sockets(io, socket, data) {
     });
 
     socket.on('collectorsStartGame', function(d) {
-      data.changeRound(d.roomId, d.playerId, d.activeRound);
+      data.changeRound(d.roomId, d.playerId, d.activeRound, d.players);
       console.log(data.getActiveRound(d.roomId));
       io.to(d.roomId).emit('collectorsGameStarted', {
         playerBoardShown: data.getPlayerBoardShown(d.roomId),
@@ -64,7 +64,7 @@ function sockets(io, socket, data) {
 
     socket.on('collectorsChangeRound', function(d) {
       console.log("ändrar runda i sockets")
-      data.changeRound(d.roomId, d.playerId, d.activeRound);
+      data.changeRound(d.roomId, d.playerId, d.activeRound, d.players);
       io.to(d.roomId).emit('collectorsRoundUpdated', {
         activeRound: data.getActiveRound(d.roomId)
       });
