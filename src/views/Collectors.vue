@@ -79,10 +79,19 @@
           <button v-if="players[playerId]" @click="fakeMoreMoney()">Fake more money</button>
         </div>
         <div class="buttons">
-          <button @click="drawCard">
+          <button class="function_buttons" @click="drawCard">
             {{ labels.draw }}
+            <img id="drawCard_button_img" src="images/drawCards.png">
           </button>
         </div>
+
+        <div class="buttons">
+          <button class="function_buttons" v-if="players[playerId]" @click="retrieveBottles()">
+            Retrieve bottles
+            <img class="function_button_img" src="images/retrieveBottles.png">
+          </button>
+        </div>
+
         <div>
           {{ labels.invite }}
           <input type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
@@ -100,6 +109,24 @@
 
       <div id="PlayerBoardDiv">
         <h2>Player board</h2>
+        <div id="bottleSlotsDiv">
+            <input type="hidden" name="bottleSlot" value="bottleSlot_1">
+            <input class="bottleSlots" type="image" src="images/bottleSlot_1.png">
+
+            <input type="hidden" name="bottleSlot" value="bottleSlot_2">
+            <input class="bottleSlots" type="image" src="images/bottleSlot_2.png">
+
+            <input type="hidden" name="bottleSlot" value="bottleSlot_3">
+            <input class="bottleSlots" type="image" src="images/bottleSlot_3.png">
+
+            <input type="hidden" name="bottleSlot" value="bottleSlot_4">
+            <input class="bottleSlots" type="image" src="images/bottleSlot_4.png">
+
+            <input type="hidden" name="bottleSlot" value="bottleSlot_5">
+            <input class="bottleSlots" type="image" src="images/bottleSlot_5.png">
+
+        </div>
+
         <div id="AllPlayerCardsDiv" v-if="playerBoardShown">
           <div id="AllPlayerIdDiv">
             <h3>Names</h3>
@@ -486,6 +513,13 @@ methods: {
     });
   },
 
+  retrieveBottles: function () {
+    this.$store.state.socket.emit('collectorsRetrieveBottles', {
+      roomId: this.$route.params.id,
+      playerId: this.playerId
+    });
+  },
+
   startAuction: function (card) {
     if (this.currentAuctionCard.length === 0) {
       this.$store.state.socket.emit('collectorsStartAuction', {
@@ -672,6 +706,14 @@ footer a:visited {
   margin: 5px;
 }
 
+#bottleSlotsDiv {
+  grid-area: bottleSlotsDiv;
+  align-self: center;
+  background: #e4e4e3;
+  margin: 5px;
+  text-align: center;
+}
+
 #AllPlayerCardsDiv {
   grid-area: AllPlayerCardsDiv;
   align-self: center;
@@ -694,6 +736,7 @@ footer a:visited {
   "BuySkillDiv BuySkillDiv AuctionDiv AuctionDiv"
   "BuySkillDiv BuySkillDiv AuctionDiv AuctionDiv"
   "GameOperationsDiv WorkDiv WorkDiv ."
+  "bottleSlotsDiv bottleSlotsDiv bottleSlotsDiv bottleSlotsDiv"
   "PlayerBoardDiv PlayerBoardDiv PlayerBoardDiv PlayerBoardDiv"
 }
 
@@ -709,12 +752,57 @@ footer a:visited {
   border-radius: 5px;
 }
 
+
 #GameOperationsDiv button {
   font-size: 15px;
 }
 
-.use_as {
+.bottleSlots {
+  width: 10%;
+  margin: 0em 1.5em 0em 1.5em;
+  display: inline-block;
+  position: relative;
+}
 
+#bottleSlotsDiv input:hover {
+  transform: scale(1.1);
+  transition: all 0.3s ease-in-out 0s;
+}
+
+#bottleSlotsDiv input {
+  transition: all 0.2s ease-in-out 0s;
+}
+
+#drawCard_button_img {
+  width: 3.5em;
+  vertical-align: middle;
+}
+
+.function_buttons {
+  width: 12em;
+  margin-bottom: 0.5em;
+  margin-left: 1em;
+  padding: 10px 0px 10px 0px;
+  transition: 0.15s;
+  transition-timing-function: ease-in-out;
+}
+
+.function_buttons:hover{
+  transform: scale(1.05);
+  transition: 0.15s;
+  transition-timing-function: ease-in-out;
+}
+
+.function_button_img {
+  width: 2em;
+  vertical-align: middle;
+}
+
+.start_buttons {
+  width: 18em;
+  margin-bottom: 0.5em;
+  margin-left: 1em;
+  padding: 10px 0px 10px 0px;
 }
 
 .cardslots {
@@ -753,9 +841,30 @@ footer a:visited {
   z-index: 1;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1400px) {
   main {
-    width:90vw;
+    zoom: 0.7;
+    -moz-transform: scale(0.7);
+  }
+}
+
+@media screen and (max-width: 980px) {
+  main {
+    zoom: 0.6;
+    -moz-transform: scale(0.6);
+  }
+}
+
+@media screen and (max-width: 850px) {
+  main {
+    zoom: 0.5;
+    -moz-transform: scale(0.5);
+  }
+}
+@media screen and (max-width: 700px) {
+  main {
+    zoom: 0.4;
+    -moz-transform: scale(0.4);
   }
 }
 </style>

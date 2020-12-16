@@ -113,7 +113,8 @@ Data.prototype.joinGame = function (roomId, playerId) {
       console.log("Player", playerId, "joined for the first time");
       room.players[playerId] = { hand: [],
                                  money: 1,
-                                 bottles: 8, //-------- Start Bottles --------
+                                 bottles: 2, // -------- Bottles to place --------
+                                 bottleCount: 2, // -------- Number of bottles you own --------
                                  points: 0,
                                  skills: [],
                                  items: [],
@@ -225,6 +226,7 @@ Data.prototype.getSkill = function (roomId, playerId, card, cost) {
 
     if (card.skill === "bottle") {
       room.players[playerId].bottles += 1;
+      room.players[playerId].bottleCount += 1;
     }
   }
 }
@@ -445,6 +447,19 @@ Data.prototype.fakeMoreMoney = function (roomId, playerId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     room.players[playerId].money += 1;
+    return room.players;
+  }
+  else return [];
+}
+
+Data.prototype.retrieveBottles = function (roomId, playerId) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    console.log(room.players[playerId].bottleCount, "bottleCount före retrieve");
+    console.log(room.players[playerId].bottles, "bottles före retrieve");
+    room.players[playerId].bottles = room.players[playerId].bottleCount;
+    console.log(room.players[playerId].bottleCount, "bottleCount");
+    console.log(room.players[playerId].bottles, "bottles");
     return room.players;
   }
   else return [];

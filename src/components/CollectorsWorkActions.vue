@@ -114,6 +114,8 @@ export default {
 
 .buttons button {
   border-radius: 10px;
+  transition: 0.15s;
+  transition-timing-function: ease-in-out;
 }
 
 .buttons button:hover {
@@ -144,6 +146,13 @@ export default {
 
 #WorkActionsDiv  h1, h2, h3, p, label, span  {
   color: black;
+}
+
+@media screen and (max-width: 1700px) {
+#WorkButtons {
+    zoom: 0.8;
+    -moz-transform: scale(0.8);
+  }
 }
 
 </style>

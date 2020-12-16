@@ -111,6 +111,8 @@ export default {
 
 .buttons button {
   border-radius: 10px;
+  transition: 0.15s;
+  transition-timing-function: ease-in-out;
 }
 
 .buttons button:hover {
