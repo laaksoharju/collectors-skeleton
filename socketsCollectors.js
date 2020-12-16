@@ -29,7 +29,8 @@ function sockets(io, socket, data) {
       marketValues: data.getMarketValues(d.roomId),
       nextRound: data.getNextRound(d.roomId),
       placement: data.getPlacements(d.roomId),
-      players: data.getPlayers(d.roomId)
+      players: data.getPlayers(d.roomId),
+      round: data.getRound(d.roomId)
     });
   });
 
@@ -70,6 +71,13 @@ function sockets(io, socket, data) {
     data.placeBottle(d.roomId, d.playerId, d.action, d.cost);
     io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId));
   });
+
+  socket.on('placeBottlePlayerboard', function (d) {
+    data.placeBottle(d.roomId, d.playerId, d.action, d.cost);
+    io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId));
+  });
+
+
 
 }
 
