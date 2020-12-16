@@ -174,7 +174,8 @@ Data.prototype.updatePlayerName = function(roomId, playerId, playerName) {
 Data.prototype.nextRound = function(roomId) {
   let room = this.rooms[roomId];
   if (typeof room !== "undefined") {
-    // Take the lowest card in the skill pool and place it in the market pool.
+    // PHASE 2: FILL POOLS
+    // Step 1: Take the lowest card in the skill pool and place it in the market pool.
     for (let index = room.skillsOnSale.length-1; index > -1; index--){
       if (Object.keys(room.skillsOnSale[index]).length !=0 ) {
        // Push that into market pool
@@ -184,17 +185,49 @@ Data.prototype.nextRound = function(roomId) {
        break;
       }
     }
-    // Move the remaining cards in the skill pool to the lowest empty positions in the skill pool
-    const skillsPool = room.skillsOnSale.map(object => ({ ...object }));
+    
+    // Step 1: Move the remaining cards in the skill pool to the lowest empty positions in the skill pool
+    const pool = room.skillsOnSale.map(object => ({ ...object }));
     room.skillsOnSale = [{},{},{},{},{}];
-    let skillSaleIndex = 4;
-    for (let index = skillsPool.length-1; index > -1; index--){
-      if (Object.keys(skillsPool[index]).length !=0 ) {
-      room.skillsOnSale[skillSaleIndex] = skillsPool[index];
-      skillSaleIndex--;
+    let saleIndex = 4;
+    for (let index = pool.length-1; index > -1; index--){
+      if (Object.keys(pool[index]).length !=0 ) {
+      room.skillsOnSale[saleIndex] = pool[index];
+      saleIndex--;
       }
     }
-    
+
+    // Step 2: Take the leftmost card in the item pool and place it in the lowest free position in the skill pool
+    const itemPool = room.itemsOnSale.map(object => ({ ...object }));
+    room.itemsOnSale = [{},{},{},{},{}];
+    saleIndex = 4;
+    let firstEmptyPosition = 4;
+    for (let index = room.skillsOnSale.length-1 ; index > -1; index--){
+      if (Object.keys(room.skillsOnSale[index]).length ==0 ) {
+        firstEmptyPosition = index;
+        break;
+      }
+    }
+    // Repeat this process until the item pool is empty
+    let itemPosition = 0;
+    for (let index = 0; index < itemPool.length; index++){
+      if (Object.keys(itemPool[index]).length !=0 ) {
+        // Repeat this process until the skill pool is full
+        if (firstEmptyPosition > -1 ) {
+          room.skillsOnSale[firstEmptyPosition] = itemPool[index];
+          firstEmptyPosition--;
+        }
+        // Move any remaining cards in the item pool to the leftmost empty positions in the item pool. 
+        else if (itemPosition<5) {
+            room.itemsOnSale[itemPosition] = itemPool[index];
+            itemPosition++;  
+        }
+        else {
+          console.log('Issue in Step 2 of Phase 2: Fill Pools');
+        }
+      }
+    }
+
     room.round = room.round + 1;
     return true;
   } else {

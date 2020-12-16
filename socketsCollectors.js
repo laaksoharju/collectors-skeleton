@@ -27,6 +27,7 @@ function sockets(io, socket, data) {
   socket.on("nextRound", function(d) {
     if(data.nextRound(d.roomId)) {
       socket.emit("updateQuarter", {
+        itemsOnSale: data.getItemsOnSale(d.roomId),
         skillsOnSale: data.getSkillsOnSale(d.roomId),
         marketValues: data.getMarketValues(d.roomId),
         round: data.getRound(d.roomId),

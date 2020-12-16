@@ -577,6 +577,7 @@ export default {
     this.$store.state.socket.on(
       "updateQuarter",
       function (d) {
+        this.itemsOnSale = d.itemsOnSale;
         this.skillsOnSale = d.skillsOnSale;
         this.marketValues = d.marketValues;
         this.round = d.round;    
