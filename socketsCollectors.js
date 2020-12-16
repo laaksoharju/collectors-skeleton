@@ -72,6 +72,13 @@ function sockets(io, socket, data) {
     io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId));
   });
 
+  socket.on('placeBottlePlayerboard', function (d) {
+    data.placeBottle(d.roomId, d.playerId, d.action, d.cost);
+    io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId));
+  });
+
+
+
 }
 
 module.exports = sockets;
