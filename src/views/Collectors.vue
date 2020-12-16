@@ -165,6 +165,7 @@ export default {
     return {
       publicPath: "localhost:8080/#", //"collectors-groupxx.herokuapp.com/#",
       touchScreen: false,
+      nextRound:Boolean,
       myCards: [],
       maxSizes: { x: 0, y: 0 },
       labels: {},
@@ -265,6 +266,11 @@ export default {
       }
       }
     },
+    nextRound: function(){
+      if(this.nextRound){
+        this.startNextRound();
+      }
+    }
   },
   created: function () {
     this.$store.commit("SET_PLAYER_ID", this.$route.query.id);
@@ -320,14 +326,21 @@ export default {
     );
 
     this.$store.state.socket.on(
-      "cardsRotated",
+      "nextRoundStarted",
       function (d) {
         this.itemsOnSale = d.rotatedCards.itemsOnSale;
         this.skillsOnSale = d.rotatedCards.skillsOnSale;
         this.auctionCards = d.rotatedCards.auctionCards;
         this.marketValues = d.marketValues;
+        this.nextRound = d.nextRound;
+        this.players = d.players;
+        this.buyPlacement = d.placement.buyPlacement;
+        this.skillPlacement = d.placement.skillPlacement;
+        this.marketPlacement = d.placement.marketPlacement;
+        this.auctionPlacement = d.placement.auctionPlacement;
       }.bind(this)
     );
+
 
     this.$store.state.socket.on(
       "collectorsCardBought",
@@ -335,6 +348,7 @@ export default {
         console.log(d.playerId, "bought a card");
         this.players = d.players;
         this.itemsOnSale = d.itemsOnSale;
+        this.nextRound = d.nextRound;
       }.bind(this)
     );
    this.$store.state.socket.on(
@@ -355,6 +369,7 @@ export default {
         console.log(d.playerId, "bought a card");
         this.players = d.players;
         this.skillsOnSale = d.skillsOnSale;
+        this.nextRound = d.nextRound;
       }.bind(this)
     );
   },
@@ -415,8 +430,8 @@ export default {
         cost: this.marketValues[card.market] + this.chosenPlacementCost,
       });
     },
-    rotateCards: function () {
-      this.$store.state.socket.emit("rotateCards", {
+    startNextRound: function () {
+      this.$store.state.socket.emit("startNextRound", {
         roomId: this.$route.params.id,
         playerId: this.playerId,
       });
