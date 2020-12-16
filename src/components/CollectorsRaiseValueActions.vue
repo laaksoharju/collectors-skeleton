@@ -5,8 +5,7 @@
       <div id="Cards">
         <div class="raise-value">
           <div v-for="(card, index) in market" :key="index">
-            <CollectorsCard
-            :card="card"/>
+            <CollectorsCard :card="card"/>
           </div>
         </div>
         <div>
@@ -25,6 +24,7 @@
       </div>
     </div>
     <div id="ValueStats">
+      <h3>Currently raised values</h3>
       <div v-for="(type, index) in marketValues" :key="index">
         <p> {{ index }} : {{ type }} </p>
       </div>
@@ -68,8 +68,10 @@ export default {
       if (this.auctionCards.length === 4) {
         this.$set(this.auctionCards[3], "available", true);
       }
-      for (let i = 0; i < this.player.hand.length; i += 1) {
-        this.$set(this.player.hand[i], "available", true);
+      if (this.player.hand.length > 0) {
+        for (let i = 0; i < this.player.hand.length; i += 1) {
+          this.$set(this.player.hand[i], "available", true);
+        }
       }
     },
   },

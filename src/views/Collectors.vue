@@ -75,7 +75,6 @@
           <button id="nextRound" v-on:click="changeRound()" :disabled="notLastPlayer()">Next round</button>
         </div>
         <div>
-          <p v-if="players[playerId]"> Current money: {{ players[playerId].money }}$ </p>
           <button id="money" v-if="players[playerId]" @click="fakeMoreMoney()">Fake more money</button>
         </div>
         <div class="buttons">
@@ -138,7 +137,8 @@
           <div id="AllPlayerHandsDiv">
             <h3>Hands</h3>
             <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
-              <CollectorsCard v-for="(card, index) in players[player].hand" :card="card" :availableAction="card.available" @handleAction="handleAction($event)" :key="index"/>
+              <CollectorsCard v-for="(card, index) in players[player].hand" :card="card" :availableAction="card.available" @doAction="handleAction(card)" :key="index"/>
+              {{ players[player].hand }}
             </div>
           </div>
 
@@ -160,6 +160,20 @@
             <h3>Income</h3>
             <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
               <CollectorsCard v-for="(card, index) in players[player].income" :card="card" :key="index"/>
+            </div>
+          </div>
+
+          <div id="AllPlayerMoneyDiv">
+            <h3>Money</h3>
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+              <p>{{ players[player].money }}</p>
+            </div>
+          </div>
+
+          <div id="AllPlayerBottlesDiv">
+            <h3>Bottles</h3>
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+              <p>{{ players[player].bottles }}</p>
             </div>
           </div>
         </div>
@@ -295,7 +309,7 @@ export default {
             this.marketPlacement = d.placements.marketPlacement;
             this.auctionPlacement = d.placements.auctionPlacement;
             this.workPlacement = d.placements.workPlacement;
-            this.players = d.players;
+            this.players[this.playerId].bottles = d.players[this.playerId].bottles;
             this.playerIdArray = d.playerIdArray;
           }.bind(this));
 
@@ -357,6 +371,12 @@ export default {
             this.players = d;
           }.bind(this));
 
+          this.$store.state.socket.on('collectorsBottlesRetrieved',
+          function(d) {
+            console.log(d.playerId, "retrieved bottles");
+            this.players = d;
+          }.bind(this));
+
           this.$store.state.socket.on('collectorsBidRaised',
           function(d) {
             console.log(d.playerId, "bid is raised");
@@ -398,8 +418,6 @@ methods: {
     else {
       alert("All players are not ready yet. Ready up everyone!")
     }
-    this.activeRound = 1;
-    console.log(this.activeRound, "aktiv runda i spelet efter startGame och manuell ansättning");
   },
 
   checkAllPlayersReady: function() {
@@ -478,6 +496,7 @@ methods: {
       playerId: this.playerId
     });
     // console.log(this.players.[this.playerId].hand);
+    console.log(this.activeRound);
   },
 
   buyItem: function (card) {
@@ -516,6 +535,7 @@ methods: {
   },
 
   fakeMoreMoney: function () {
+    console.log(this.players[this.playerId].hand[0].available);
     this.$store.state.socket.emit('collectorsFakeMoreMoney', {
       roomId: this.$route.params.id,
       playerId: this.playerId
@@ -701,6 +721,13 @@ footer a:visited {
   margin: 5px;
 }
 
+#TestDiv {
+  grid-area: TestDiv;
+  align-self: center;
+  background: #e4e4e3;
+  margin: 5px;
+}
+
 #PlayerSkillsDiv {
   grid-area: PlayerSkillsDiv;
   align-self: center;
@@ -712,14 +739,14 @@ footer a:visited {
   grid-area: PlayerBoardDiv;
   align-self: center;
   /* background: url("https://previews.123rf.com/images/prapann/prapann1606/prapann160600110/58202559-old-wood-vintage-wood-wall-texture-wood-background-old-panels.jpg"); */
-  background: #e4e4e3;
+  background: #ffd0a7;
   margin: 5px;
 }
 
 #bottleSlotsDiv {
   grid-area: bottleSlotsDiv;
   align-self: center;
-  background: #e4e4e3;
+  background: #ffd0a7;
   margin: 5px;
   text-align: center;
 }
@@ -728,9 +755,9 @@ footer a:visited {
   grid-area: AllPlayerCardsDiv;
   align-self: center;
   display: grid;
-  grid-template-columns: 20% 20% 20% 20% 20%;
+  grid-template-columns: 15% 15% 15% 15% 15% 12,5% 12,5%;
   grid-template-areas:
-  "AllPlayerIdDiv AllPlayerHandsDiv AllPlayerItemsDiv AllPlayerSkillsDiv AllPlayerIncomeDiv"
+  "AllPlayerIdDiv AllPlayerHandsDiv AllPlayerItemsDiv AllPlayerSkillsDiv AllPlayerIncomeDiv AllPlayerMoneyDiv AllPlayerBottlesDiv"
 }
 
 #container {

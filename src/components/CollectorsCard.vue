@@ -4,6 +4,7 @@
       {{card.skill}}
       {{card.market}}
       {{card.auctionValue}}
+      {{card.available}}
     </div>
 </template>
 
