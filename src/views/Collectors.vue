@@ -60,23 +60,23 @@
       <div id="GameOperationsDiv">
         <h2>Game operations</h2>
         <div id='readyGameButton' v-if="!playerBoardShown">
-          <button v-on:click="readyGame()" @click="playerReady = true" :disabled="playerReady">
+          <button class="ready" v-on:click="readyGame()" @click="playerReady = true" :disabled="playerReady">
             I'm ready!
             </button>
         </div>
         <div id="startGameButton" v-if="!playerBoardShown">
-          <button v-on:click="startGame()">
+          <button class="ready" v-on:click="startGame()">
             Start game!
           </button>
         </div>
         <div id="NextRoundButton" v-if="playerBoardShown">
           The current round is round {{ activeRound }}.
           When the last player is finished, he or she can switch to the next round.
-          <button v-on:click="changeRound()" :disabled="notLastPlayer()">Next round</button>
+          <button id="nextRound" v-on:click="changeRound()" :disabled="notLastPlayer()">Next round</button>
         </div>
         <div>
           <p v-if="players[playerId]"> Current money: {{ players[playerId].money }}$ </p>
-          <button v-if="players[playerId]" @click="fakeMoreMoney()">Fake more money</button>
+          <button id="money" v-if="players[playerId]" @click="fakeMoreMoney()">Fake more money</button>
         </div>
         <div class="buttons">
           <button class="function_buttons" @click="drawCard">
@@ -758,13 +758,6 @@ footer a:visited {
   font-size: 15px;
 }
 
-.bottleSlots {
-  width: 10%;
-  margin: 0em 1.5em 0em 1.5em;
-  display: inline-block;
-  position: relative;
-}
-
 #bottleSlotsDiv input:hover {
   transform: scale(1.1);
   transition: all 0.3s ease-in-out 0s;
@@ -779,10 +772,28 @@ footer a:visited {
   vertical-align: middle;
 }
 
+#nextRound {
+  width: 7em;
+  margin-bottom: 0.5em;
+  padding: 10px 0px 10px 0px;
+}
+
+#money {
+  width: 9em;
+  margin-bottom: 0.5em;
+  padding: 10px 0px 10px 0px;
+}
+
+.bottleSlots {
+  width: 10%;
+  margin: 0em 1.5em 0em 1.5em;
+  display: inline-block;
+  position: relative;
+}
+
 .function_buttons {
   width: 12em;
   margin-bottom: 0.5em;
-  margin-left: 1em;
   padding: 10px 0px 10px 0px;
   transition: 0.15s;
   transition-timing-function: ease-in-out;
@@ -799,11 +810,10 @@ footer a:visited {
   vertical-align: middle;
 }
 
-.start_buttons {
-  width: 18em;
+.ready {
+  width: 7em;
   margin-bottom: 0.5em;
-  margin-left: 1em;
-  padding: 10px 0px 10px 0px;
+  padding: 5px 0px 5px 0px;
 }
 
 .cardslots {
