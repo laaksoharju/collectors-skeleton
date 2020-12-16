@@ -24,18 +24,16 @@ function sockets(io, socket, data) {
 
     socket.on('collectorsStartGame', function(d) {
       data.changeRound(d.roomId, d.playerId, d.activeRound, d.players);
-      console.log(data.getActiveRound(d.roomId));
       io.to(d.roomId).emit('collectorsGameStarted', {
         playerBoardShown: data.getPlayerBoardShown(d.roomId),
         playerIdArray: data.getPlayerIdArray(d.roomId),
         players: data.getPlayers(d.roomId),
-        activeRound: data.getActiveRound(d.roomId)
       });
       io.to(d.roomId).emit('collectorsRoundUpdated', {
         activeRound: data.getActiveRound(d.roomId)
       });
       console.log(d.activeRound, "aktiv runda som skickas in")
-      console.log(data.getActiveRound(d.roomId), "aktiv runda i datahandlern")
+      console.log(data.getActiveRound(d.roomId), "aktiv runda i datahandlern efter förändring")
     });
 
     socket.on('collectorsDrawCard', function(d) {

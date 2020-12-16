@@ -272,9 +272,11 @@ Data.prototype.addPlayerReady = function(roomId, playerId) {
   if (typeof room !== 'undefined') {
 
     console.log(room.playerIdArray);
-    room.playerIdArray.push(playerId);
-    console.log(room.playerIdArray);
-    shuffle(room.playerIdArray);
+    console.log(!room.playerIdArray.includes(playerId));
+    if (!room.playerIdArray.includes(playerId)) {
+      room.playerIdArray.push(playerId);
+      shuffle(room.playerIdArray);
+    }
     console.log(room.playerIdArray);
   }
 }

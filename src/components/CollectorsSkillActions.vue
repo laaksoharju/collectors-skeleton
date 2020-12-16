@@ -57,11 +57,12 @@ export default {
         else {
           this.$set(this.skillsOnSale[i], "available", false);
         }
-        this.chosenPlacementCost = cost;
       }
       for (let i = 0; i < this.player.hand.length; i += 1) {
         this.$set(this.player.hand[i], "available", true);
       }
+      this.chosenPlacementCost = cost;
+      console.log(this.player.hand);
     },
     getSkill: function (card) {
       if (card.available) {
