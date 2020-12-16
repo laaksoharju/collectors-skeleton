@@ -387,21 +387,8 @@
                 :src="playerBottle[players[otherPlayerId].color]"
                 alt="index"
               />
-              <!-- <img
-                v-bind:src="playerBoards[players[otherPlayerId].color]"
-                alt="Player Boards"
-              /> -->
             </div>
             <div class="player-items-skills">
-              <div
-                class="player-items"
-                v-if="players[otherPlayerId].items.length !== 0"
-              >
-                <div class="player-items-1">
-                  <img src="/images/item-movie-icon.png" alt="Player Items 1" />
-                </div>
-              </div>
-              -->
               <div
                 v-for="(card, index) in players[otherPlayerId].items"
                 :key="index"
@@ -409,25 +396,37 @@
               >
                 <div v-if="card.item === 'movie'" class="player-items-1">
                   <img src="/images/items/movie.jpg" alt="Player Items 1" />
-                  <p v-if="countitem(players[playerId].items, 'movie') > 1">
+                  <p
+                    v-if="countitem(players[otherPlayerId].items, 'movie') > 1"
+                  >
                     {{ playeritem["movie"] }}
                   </p>
                 </div>
                 <div v-if="card.item === 'music'" class="player-items-2">
                   <img src="/images/items/music.jpg" alt="Player Items 1" />
-                  <p v-if="countitem(players[playerId].items, 'music') > 1">
+                  <p
+                    v-if="countitem(players[otherPlayerId].items, 'music') > 1"
+                  >
                     {{ playeritem["music"] }}
                   </p>
                 </div>
                 <div v-if="card.item === 'fastaval'" class="player-items-3">
                   <img src="/images/items/fastaval.jpg" alt="Player Items 1" />
-                  <p v-if="countitem(players[playerId].items, 'fastaval') > 1">
+                  <p
+                    v-if="
+                      countitem(players[otherPlayerId].items, 'fastaval') > 1
+                    "
+                  >
                     {{ playeritem["fastaval"] }}
                   </p>
                 </div>
                 <div v-if="card.item === 'figures'" class="player-items-4">
                   <img src="/images/items/figures.jpg" alt="Player Items 1" />
-                  <p v-if="countitem(players[playerId].items, 'figures') > 1">
+                  <p
+                    v-if="
+                      countitem(players[otherPlayerId].items, 'figures') > 1
+                    "
+                  >
                     {{ playeritem["figures"] }}
                   </p>
                 </div>
@@ -437,7 +436,9 @@
                     alt="Player Items 1"
                   />
                   <p
-                    v-if="countitem(players[playerId].items, 'technology') > 1"
+                    v-if="
+                      countitem(players[otherPlayerId].items, 'technology') > 1
+                    "
                   >
                     {{ playeritem["technology"] }}
                   </p>
@@ -451,7 +452,11 @@
               >
                 <div v-if="card.skill === 'bottle'" class="player-skills-1">
                   <img src="/images/skills/bottle.jpg" alt="Player Skills 1" />
-                  <p v-if="countskills(players[playerId].skills, 'bottle') > 1">
+                  <p
+                    v-if="
+                      countskills(players[otherPlayerId].skills, 'bottle') > 1
+                    "
+                  >
                     {{ playerskill["bottle"] }}
                   </p>
                 </div>
@@ -465,7 +470,10 @@
                   />
                   <p
                     v-if="
-                      countskills(players[playerId].skills, 'workerIncome') > 1
+                      countskills(
+                        players[otherPlayerId].skills,
+                        'workerIncome'
+                      ) > 1
                     "
                   >
                     {{ playerskill["workerIncome"] }}
@@ -478,7 +486,8 @@
                   />
                   <p
                     v-if="
-                      countskills(players[playerId].skills, 'workerCard') > 1
+                      countskills(players[otherPlayerId].skills, 'workerCard') >
+                      1
                     "
                   >
                     {{ playerskill["workerCard"] }}
@@ -494,7 +503,10 @@
                   />
                   <p
                     v-if="
-                      countskills(players[playerId].skills, 'VP-technology') > 1
+                      countskills(
+                        players[otherPlayerId].skills,
+                        'VP-technology'
+                      ) > 1
                     "
                   >
                     {{ playerskill["VP-technology"] }}
@@ -510,7 +522,10 @@
                   />
                   <p
                     v-if="
-                      countskills(players[playerId].skills, 'VP-fastaval') > 1
+                      countskills(
+                        players[otherPlayerId].skills,
+                        'VP-fastaval'
+                      ) > 1
                     "
                   >
                     {{ playerskill["VP-fastaval"] }}
@@ -519,7 +534,9 @@
                 <div v-if="card.skill === 'VP-movie'" class="player-skills-6">
                   <img src="/images/skills/VP-movie.jpg" alt="Player Items 1" />
                   <p
-                    v-if="countskills(players[playerId].skills, 'VP-movie') > 1"
+                    v-if="
+                      countskills(players[otherPlayerId].skills, 'VP-movie') > 1
+                    "
                   >
                     {{ playerskill["VP-movie"] }}
                   </p>
@@ -527,7 +544,9 @@
                 <div v-if="card.skill === 'VP-music'" class="player-skills-7">
                   <img src="/images/skills/VP-music.jpg" alt="Player Items 1" />
                   <p
-                    v-if="countskills(players[playerId].skills, 'VP-music') > 1"
+                    v-if="
+                      countskills(players[otherPlayerId].skills, 'VP-music') > 1
+                    "
                   >
                     {{ playerskill["VP-music"] }}
                   </p>
@@ -539,7 +558,8 @@
                   />
                   <p
                     v-if="
-                      countskills(players[playerId].skills, 'VP-figure') > 1
+                      countskills(players[otherPlayerId].skills, 'VP-figure') >
+                      1
                     "
                   >
                     {{ playerskill["VP-figure"] }}
@@ -547,7 +567,11 @@
                 </div>
                 <div v-if="card.skill === 'VP-all'" class="player-skills-9">
                   <img src="/images/skills/VP-all.jpg" alt="Player Items 1" />
-                  <p v-if="countskills(players[playerId].skills, 'VP-all') > 1">
+                  <p
+                    v-if="
+                      countskills(players[otherPlayerId].skills, 'VP-all') > 1
+                    "
+                  >
                     {{ playerskill["VP-all"] }}
                   </p>
                 </div>
@@ -561,7 +585,10 @@
                   />
                   <p
                     v-if="
-                      countskills(players[playerId].skills, 'auctionIncome') > 1
+                      countskills(
+                        players[otherPlayerId].skills,
+                        'auctionIncome'
+                      ) > 1
                     "
                   >
                     {{ playerskill["auctionIncome"] }}
