@@ -180,10 +180,21 @@ Data.prototype.nextRound = function(roomId) {
        // Push that into market pool
        room.market.push(room.skillsOnSale[index]);
        // Remove that card from skill pool
-       room.skillsOnSale[index] = [];
+       room.skillsOnSale[index] = {};
        break;
       }
     }
+    // Move the remaining cards in the skill pool to the lowest empty positions in the skill pool
+    const skillsPool = room.skillsOnSale.map(object => ({ ...object }));
+    room.skillsOnSale = [{},{},{},{},{}];
+    let skillSaleIndex = 4;
+    for (let index = skillsPool.length-1; index > -1; index--){
+      if (Object.keys(skillsPool[index]).length !=0 ) {
+      room.skillsOnSale[skillSaleIndex] = skillsPool[index];
+      skillSaleIndex--;
+      }
+    }
+    
     room.round = room.round + 1;
     return true;
   } else {
