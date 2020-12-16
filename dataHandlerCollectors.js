@@ -63,23 +63,23 @@ Data.prototype.createRoom = function (roomId, playerCount, lang = "en") {
   room.skillsOnSale = room.deck.splice(0, 5);
   room.auctionCards = room.deck.splice(0, 4);
   room.market = [];
-  room.buyPlacement = [{ cost: 1, playerId: null },
-  { cost: 1, playerId: null },
-  { cost: 2, playerId: null },
-  { cost: 2, playerId: null },
-  { cost: 3, playerId: null }];
-  room.skillPlacement = [{ cost: 0, playerId: null },
-  { cost: 0, playerId: null },
-  { cost: 0, playerId: null },
-  { cost: 1, playerId: null },
-  { cost: 1, playerId: null }];
-  room.auctionPlacement = [{ cost: -2, playerId: null },
-  { cost: -1, playerId: null },
-  { cost: 0, playerId: null },
-  { cost: 0, playerId: null }];
-  room.marketPlacement = [{ cost: 0, playerId: null },
-  { cost: -2, playerId: null },
-  { cost: 0, playerId: null }];
+  room.buyPlacement = [{ cost: 1, playerId: null, type: "itemType" },
+  { cost: 1, playerId: null, type: "itemType" },
+  { cost: 2, playerId: null, type: "itemType" },
+  { cost: 2, playerId: null, type: "itemType" },
+  { cost: 3, playerId: null, type: "itemType" }];
+  room.skillPlacement = [{ cost: 0, playerId: null, type: "skillType" },
+  { cost: 0, playerId: null, type: "skillType" },
+  { cost: 0, playerId: null, type: "skillType" },
+  { cost: 1, playerId: null, type: "skillType" },
+  { cost: 1, playerId: null, type: "skillType" }];
+  room.auctionPlacement = [{ cost: -2, playerId: null, type: "auctionType" },
+  { cost: -1, playerId: null, type: "auctionType" },
+  { cost: 0, playerId: null, type: "auctionType" },
+  { cost: 0, playerId: null, type: "auctionType" }];
+  room.marketPlacement = [{ cost: 0, playerId: null, type: "marketType" },
+  { cost: -2, playerId: null, type: "marketType"  },
+  { cost: 0, playerId: null, type: "marketType"  }];
   this.rooms[roomId] = room;
 
   /*skriv kod för färg i workarea*/ 
@@ -326,6 +326,55 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost) {
     room.players[playerId].items.push(...c);
     room.players[playerId].money -= cost;
 
+  }
+}
+Data.prototype.buyRaiseValue = function (roomId, playerId, card, cost) {
+
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    let c = null;
+    /// check first if the card is among the skills on sale
+    for (let i = 0; i < room.skillsOnSale.length; i += 1) {
+      // since card comes from the client, it is NOT the same object (reference)
+      // so we need to compare properties for determining equality      
+      if (room.skillsOnSale[i].x === card.x &&
+        room.skillsOnSale[i].y === card.y) {
+        c = room.skillsOnSale.splice(i, 1, {});
+        break;
+      }
+    }
+
+    for (let i = 0; i < room.auctionCards.length; i += 1) {
+      // since card comes from the client, it is NOT the same object (reference)
+      // so we need to compare properties for determining equality      
+      if (room.auctionCards[i].x === card.x &&
+        room.auctionCards[i].y === card.y) {
+        c = room.auctionCards.splice(i, 1, {});
+        break;
+      }
+    }
+
+    // ...then check if it is in the hand. It cannot be in both so it's safe
+    for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
+      // since card comes from the client, it is NOT the same object (reference)
+      // so we need to compare properties for determining equality      
+      if (room.players[playerId].hand[i].x === card.x &&
+        room.players[playerId].hand[i].y === card.y) {
+        c = room.players[playerId].hand.splice(i, 1);
+        break;
+      }
+    }
+    console.log("Det nuvarande kortet som ska till raiseValue: ");
+
+    room.market.push(c[0]);
+    // c[0].market == "fastaval" ? room.market.fastaval += 1 : null
+    // c[0].market == "movie" ? room.market.movie += 1 : null
+    // c[0].market == "technology" ? room.market.technology += 1 : null
+    // c[0].market == "figures" ? room.market.figures += 1 : null
+    // c[0].market == "music" ? room.market.music += 1 : null
+
+    console.log(room.market);
+    room.players[playerId].money -= cost;
   }
 }
 

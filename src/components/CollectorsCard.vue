@@ -12,12 +12,20 @@ export default {
   name: 'CollectorsCard',
   props: {
     card: Object,
-    availableAction: Boolean
+    availableAction: Boolean,
+    actionType: String,
   },
   methods: {
     doAction: function() {
+      // this.chooseAction();
       this.$emit('doAction');
-    }
+    },
+    // chooseAction: function() {
+    //   if (this.actionType == "item"){
+    //     console.log(this.actionType);
+    //     console.log("NU ÄR DET ITEM SOM GÄLLER")
+    //   }
+    // }
   }
 }
 </script>

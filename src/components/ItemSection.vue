@@ -1,18 +1,17 @@
 <template>
   <div id="item-section" class="board-section">
-    <InfoButtons
-      :modalProps='buyItemProps'
-    />
+    <InfoButtons :modalProps="buyItemProps" />
     <div class="buy-cards">
       <div class="cardslots" v-for="(card, index) in itemsOnSale" :key="index">
         <CollectorsCard
           :card="card"
           :availableAction="card.available"
-          @doAction="buyCard(card)"
+          @doAction="selectAction(card)"
         />
-       <!-- <p> + {{ cardCost(card) }}</p> -->
+        <!-- <p> + {{ cardCost(card) }}</p> -->
       </div>
     </div>
+
     <div class="button-section">
       <div class="buttons" v-for="(p, index) in placement" :key="index">
         <button
@@ -23,7 +22,7 @@
           ${{ p.cost }}
         </button>
         <div v-if="p.playerId !== null">
-            {{ p.playerId }}
+          {{ p.playerId }}
         </div>
       </div>
     </div>
@@ -38,7 +37,7 @@ export default {
   name: "ItemSection",
   components: {
     CollectorsCard,
-    InfoButtons
+    InfoButtons,
   },
   props: {
     labels: Object,
@@ -48,27 +47,29 @@ export default {
     placement: Array,
   },
 
-  data: function() {
+  data: function () {
     return {
       buyItemProps: {
-        value: 'Buy Items',
-        text: 'Pick one card from the item pool or from your hand. Tuck the chosen card under your player board from above to show that this card represents an item you have bought. In addition to the cost in the action space, you must pay $1 per card in the Market pool that has the same symbol as the item you just bought. There is no upper limit in the number of items you may own.',
-        title: 'Buy Items',
-        classes: 'button red'
-      }
-    }
-    
+        value: "Buy Items",
+        text:
+          "Pick one card from the item pool or from your hand. Tuck the chosen card under your player board from above to show that this card represents an item you have bought. In addition to the cost in the action space, you must pay $1 per card in the Market pool that has the same symbol as the item you just bought. There is no upper limit in the number of items you may own.",
+        title: "Buy Items",
+        classes: "button red",
+      },
+    };
   },
 
   methods: {
-
-    buttonDisabled:function (cost){
-      if(this.cannotAfford(cost) || !this.player.active || this.player.availableBottles == 0){
+    buttonDisabled: function (cost) {
+      if (
+        this.cannotAfford(cost) ||
+        !this.player.active ||
+        this.player.availableBottles == 0
+      ) {
         return true;
-      }
-      else return false;
+      } else return false;
     },
-    cannotAfford:function (cost) {
+    cannotAfford: function (cost) {
       let minCost = 100;
       for (let key in this.marketValues) {
         if (cost + this.marketValues[key] < minCost)
@@ -80,6 +81,7 @@ export default {
       return this.marketValues[card.item];
     },
     placeBottle: function (p) {
+
       this.$emit("placeBottle", p.cost);
       this.highlightAvailableCards(p.cost);
     },
@@ -108,9 +110,9 @@ export default {
         }
       }
     },
-    buyCard: function (card) {
+    selectAction: function (card) {
       if (card.available) {
-        this.$emit("buyCard", card);
+        this.$emit("selectAction", card);
         this.highlightAvailableCards();
       }
     },
