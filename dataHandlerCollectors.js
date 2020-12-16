@@ -299,8 +299,10 @@ Data.prototype.nextRound = function(roomId) {
         }
       }
     }
+    // TODO: PHASE 4: GET INCOME
     // PHASE 5: REMOVE A QUARTER TILE
     room.round = room.round + 1;
+    room.workPlacement[0].cost +=1;
     return true;
   } else {
     console.log("Error moving to next round");
