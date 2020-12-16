@@ -207,6 +207,11 @@ Data.prototype.drawCard = function (roomId, playerId) {
   } else return [];
 }
 
+Data.prototype.bottlesPlacedPlayerboard = function(roomId, playerId){
+  console.log("placera flaskor på playerboard")
+}
+
+
 Data.prototype.rotateCards = function (roomId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
@@ -233,11 +238,21 @@ Data.prototype.rotateCards = function (roomId) {
 }
 
 Data.prototype.rotateSkills = function (room) {
+  for (let i in room.skillsOnSale) {
+    if (room.skillsOnSale[i].item == undefined) {
+      room.skillsOnSale.splice(i, 1);
+    }
+  }
   let card = room.skillsOnSale.pop();
   room.market.push(card);
 }
 
 Data.prototype.rotateAuction = function (room) {
+  for (let i in room.auctionCards) {
+    if (room.auctionCards[i].item == undefined) {
+      room.auctionCards.splice(i, 1);
+    }
+  }
   let card = room.auctionCards.pop();
   room.market.push(card);
 

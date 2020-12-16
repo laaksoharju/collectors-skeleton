@@ -2,7 +2,8 @@
   <div>
     <main>
       <h1>I am player {{ playerId }}</h1>
-      <h1 v-if="players[playerId] && players[playerId].active">my turn!</h1>
+      <h1> Round {{round}} </h1>
+      <h1 v-if="players[playerId].active">my turn!</h1>
 
       <div class="layout_wrapper">
         <div id="game-board">
@@ -181,6 +182,7 @@ export default {
       publicPath: "localhost:8080/#", //"collectors-groupxx.herokuapp.com/#",
       touchScreen: false,
       nextRound:Boolean,
+      round: 1,
       myCards: [],
       maxSizes: { x: 0, y: 0 },
       labels: {},
@@ -283,7 +285,13 @@ export default {
     },
     nextRound: function(){
       if(this.nextRound){
-        this.startNextRound();
+        if(this.round < 4){
+          //this.placeBottlesPlayerboard()
+          this.startNextRound();
+        }else{
+          //funktion som avslutar spelet
+        }
+        
       }
     }
   },
@@ -353,9 +361,9 @@ export default {
         this.skillPlacement = d.placement.skillPlacement;
         this.marketPlacement = d.placement.marketPlacement;
         this.auctionPlacement = d.placement.auctionPlacement;
+        this.round = d.round
       }.bind(this)
     );
-
 
     this.$store.state.socket.on(
       "collectorsCardBought",
@@ -376,7 +384,6 @@ export default {
         this.marketValues = d.marketValues;
       }.bind(this)
     );
-    
 
     this.$store.state.socket.on(
       "collectorsSkillCardBought",
@@ -437,7 +444,7 @@ export default {
         roomId: this.$route.params.id,
         playerId: this.playerId,
         card: card,
-        cost: this.marketValues[card.market] + this.chosenPlacementCost,
+        cost: this.chosenPlacementCost,
       });
     },
     startNextRound: function () {
@@ -446,6 +453,12 @@ export default {
         playerId: this.playerId,
       });
     },
+    placeBottlesPlayerboard: function () {
+      this.$store.state.socket.emit("placeBottlesPlayerboard", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+      });
+    }
   },
 };
 </script>
