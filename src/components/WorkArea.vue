@@ -101,7 +101,6 @@ export default {
                 /*clickedEl.style.backgroundColor = this.color;*/
                 clickedEl.setAttribute("style", "background-color:"+this.color);
                 this.clicked = true;
-                console.log("färg")
             }
             else{
                 let clickedEl = e.target;

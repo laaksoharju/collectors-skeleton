@@ -183,22 +183,21 @@ export default {
 
       myIncomeProps: {
         value: "Income",
-        text:
-          "This is the income you earn every round. You can raise the income by ",
+        text: "This is the income you earn every round. You can raise the income by (1) remove excess bottles that block your income or (2) place a card on the workarea on your playerboard.",
         title: "Income",
         classes: `${this.player.color} button`,
       },
 
       myMoneyProps: {
         value: "Money",
-        text: "",
+        text: "You can use your money to purchase items, skills, raise value or work when it's required of you to pay an extra fee when placing a bottle.",
         title: "Money",
         classes: `${this.player.color} button`,
       },
 
       mySecretCardProps: {
         value: "Secret Card",
-        text: "",
+        text: "The secret card is ",
         title: "Secret Card",
         classes: `${this.player.color} button`,
       },
@@ -219,7 +218,7 @@ export default {
 
       skill3Props: {
         value: "i",
-        text: "Draw ar card whenever you place a worker in the work area.",
+        text: "Draw a card whenever you place a worker in the work area.",
         title: "",
         classes: `${this.player.color} smallButton`,
       },
