@@ -2,21 +2,6 @@ changeRoundWork<template>
   <div id="WorkActionsDiv">
     <h1 style="text-align: center"><img class="title_img" src="images/work.png">{{ labels.doWork }}</h1>
     <div id="WorkContainer">
-      <div id="PickRoundButtons" >
-        <h3>Double-click to change round</h3>
-        <input type="radio" id="roundOneButton" value="Round 1" v-model="picked" v-on:dblclick="changeRoundWork()" >
-        <label for="roundOneButton">Round 1</label>
-        <br>
-        <input type="radio" id="roundTwoButton" value="Round 2" v-model="picked" v-on:dblclick="changeRoundWork()">
-        <label for="roundTwoButton">Round 2</label>
-        <br>
-        <input type="radio" id="roundThreeButton" value="Round 3" v-model="picked" v-on:dblclick="changeRoundWork()">
-        <label for="roundThreeButton">Round 3</label>
-        <br>
-        <input type="radio" id="roundFourButton" value="Round 4" v-model="picked" v-on:dblclick="changeRoundWork()">
-        <label for="roundFourButton">Round 4</label>
-        <br>
-      </div>
       <div id="WorkButtons">
         <div class="buttons" v-for="(p, index) in placement" :key="index">
           <button
@@ -45,20 +30,7 @@ export default {
     labels: Object,
     player: Object,
     placement: Array,
-  },
-
-  data: function () {
-    return {
-      picked:  this.picked
-    }
-  },
-
-  created: function () {
-    this.$store.state.socket.on('collectorsRoundUpdated',function(d){
-      console.log('round updated');
-      this.activeRound=d.activeRound;
-      this.picked = d.activeRound;
-    }.bind(this));
+    activeRound: Number,
   },
 
   methods: {
@@ -71,49 +43,39 @@ export default {
       this.$emit('placeBottleWork', p);
     },
 
-    changeRoundWork: function (){
-      console.log(this.picked);
-
-      alert(this.picked);
-      this.$store.state.socket.emit('collectorsChangeRound', {
-        playerId: this.playerId,
-        roomId: this.$route.params.id,
-        round: this.picked
-      });
-    },
-
     changeFirstWorkCard: function (){
       let firstWorkButtonImage = ['images/Work_Round_1.png','images/Work_Round_2.png','images/Work_Round_3.png','images/Work_Round_4.png'];
       let setImage = [];
 
-      if (this.picked === 'Round 1'){
+      if (this.activeRound === 1) {
         setImage = firstWorkButtonImage[0];
       }
-      else if (this.picked === 'Round 2') {
+      else if (this.activeRound === 2) {
         setImage = firstWorkButtonImage[1];
       }
-      else if (this.picked === 'Round 3') {
+      else if (this.activeRound === 3) {
         setImage = firstWorkButtonImage[2];
       }
-      else if (this.picked === 'Round 4') {
+      else if (this.activeRound === 4) {
         setImage = firstWorkButtonImage[3];
       }
       return setImage;
     },
+
     changeFirstWorkCardInfoText: function (){
       let firstWorkButtonInfoText = ['Draw 2 cards to Income', 'Draw 2 cards to Income, +1$', 'Draw 2 cards to Income, +2$', 'Discard 1 bottle, +1$']
       let setInfoText = [];
 
-      if (this.picked === 'Round 1'){
+      if (this.activeRound === 1){
         setInfoText = firstWorkButtonInfoText[0];
       }
-      else if (this.picked === 'Round 2') {
+      else if (this.activeRound === 2) {
         setInfoText = firstWorkButtonInfoText[1];
       }
-      else if (this.picked === 'Round 3') {
+      else if (this.activeRound === 3) {
         setInfoText = firstWorkButtonInfoText[2];
       }
-      else if (this.picked === 'Round 4') {
+      else if (this.activeRound === 4) {
         setInfoText = firstWorkButtonInfoText[3];
       }
       return setInfoText
@@ -174,21 +136,12 @@ export default {
   transition-timing-function: ease-in-out;
 } */
 
-
-#PickRoundButtons{
-  grid-area: pickRoundButtons;
-  align-self: center;
-}
-
 #WorkButtons{
   grid-area: workButtons;
   align-self: center;
 }
 #WorkContainer{
   display: grid;
-  grid-template-columns: 15% 85% ;
-  grid-template-areas:
-  "pickRoundButtons workButtons"
 }
 
 #WorkActionsDiv  h1, h2, h3, p, label, span  {

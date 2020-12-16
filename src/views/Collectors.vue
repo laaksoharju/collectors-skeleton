@@ -57,29 +57,34 @@
         </div>
       </div>
 
-      <div id="GameOperations">
+      <div id="GameOperationsDiv">
         <h2>Game operations</h2>
-        <div id='readyGameButton'>
-          <button class="start_buttons" v-on:click="readyGame()" @click="playerReady = true" :disabled="playerReady">
-            Click here if you are ready!
+        <div id='readyGameButton' v-if="!playerBoardShown">
+          <button v-on:click="readyGame()" @click="playerReady = true" :disabled="playerReady">
+            I'm ready!
             </button>
         </div>
-        <div id='startGameButton'>
-          <button class="start_buttons" v-on:click="startGame()" :disabled="playerBoardShown">
-            Press here when everyone is ready, here you find your play order.
-            </button>
+        <div id="startGameButton" v-if="!playerBoardShown">
+          <button v-on:click="startGame()">
+            Start game!
+          </button>
         </div>
-        <p v-if="players[playerId]"> Current money: {{ players[playerId].money }}$ </p>
-        <button class="function_buttons" v-if="players[playerId]" @click="fakeMoreMoney()">
-          Fake more money
-            <img class="function_button_img" src="images/fakeMoreMoney.png">
-        </button>
+        <div id="NextRoundButton" v-if="playerBoardShown">
+          The current round is round {{ activeRound }}.
+          When the last player is finished, he or she can switch to the next round.
+          <button v-on:click="changeRound()" :disabled="notLastPlayer()">Next round</button>
+        </div>
+        <div>
+          <p v-if="players[playerId]"> Current money: {{ players[playerId].money }}$ </p>
+          <button v-if="players[playerId]" @click="fakeMoreMoney()">Fake more money</button>
+        </div>
         <div class="buttons">
           <button class="function_buttons" @click="drawCard">
             {{ labels.draw }}
             <img id="drawCard_button_img" src="images/drawCards.png">
           </button>
         </div>
+
         <div class="buttons">
           <button class="function_buttons" v-if="players[playerId]" @click="retrieveBottles()">
             Retrieve bottles
@@ -87,10 +92,10 @@
           </button>
         </div>
 
-        <p>
+        <div>
           {{ labels.invite }}
           <input type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
-        </p>
+        </div>
       </div>
 
       <div id="WorkDiv">
@@ -98,6 +103,7 @@
         :labels="labels"
         :player="players[playerId]"
         :placement="workPlacement"
+        :activeRound="activeRound"
         @placeBottleWork="placeBottleWork('doWork', $event)"/>
       </div>
 
@@ -122,7 +128,6 @@
         </div>
 
         <div id="AllPlayerCardsDiv" v-if="playerBoardShown">
-
           <div id="AllPlayerIdDiv">
             <h3>Names</h3>
             <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
@@ -133,7 +138,7 @@
           <div id="AllPlayerHandsDiv">
             <h3>Hands</h3>
             <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
-              <CollectorsCard v-for="(card, index) in players[player].hand" :card="card" :key="index"/>
+              <CollectorsCard v-for="(card, index) in players[player].hand" :card="card" :availableAction="card.available" @handleAction="handleAction($event)" :key="index"/>
             </div>
           </div>
 
@@ -220,9 +225,10 @@ export default {
         playerid: 0,
         playerCount: 0,
         playerIdArray: [],
-        roundNumber: 0,
+        activeRound: 0
         }
       },
+
       computed: {
         playerId: function() { return this.$store.state.playerId}
       },
@@ -283,6 +289,7 @@ export default {
             this.auctionPlacement = d.placements.auctionPlacement;
             this.workPlacement = d.placements.workPlacement;
             this.players = d.players;
+            this.playerIdArray = d.playerIdArray;
           }.bind(this));
 
           this.$store.state.socket.on('collectorsPlayerArrayFinished',function(d) {
@@ -355,16 +362,15 @@ export default {
             this.bidArray = d;
           }.bind(this));
 
-          this.$store.state.socket.on('collectorsRoundUpdated',function(d){
-            console.log('round updated');
+          this.$store.state.socket.on('collectorsRoundUpdated',
+          function(d) {
             this.activeRound = d.activeRound;
-            this.picked = d.activeRound;
           }.bind(this));
         },
 
 methods: {
   readyGame: function() {
-    alert('You are ready, wait for the rest of the players to ready up. If all are ready hit "start game"');
+    alert('You are ready, wait for the rest of the players to ready up. If everyone is ready hit "Start game"');
     this.$store.state.socket.emit('collectorsPlayerReady', {
       playerId: this.playerId,
       roomId: this.$route.params.id
@@ -376,17 +382,19 @@ methods: {
     if (allPlayersReady) {
       this.$store.state.socket.emit('collectorsStartGame', {
         roomId: this.$route.params.id,
-        playerIdArray: this.playerIdArray
+        playerId: this.playerId,
+        playerIdArray: this.playerIdArray,
+        activeRound: 1
       });
     }
     else {
       alert("All players are not ready yet. Ready up everyone!")
     }
+    this.activeRound = 1;
+    console.log(this.activeRound, "aktiv runda i spelet efter startGame och manuell ansättning");
   },
 
   checkAllPlayersReady: function() {
-    console.log(this.playerCount);
-    console.log(this.playerIdArray.length);
     if (this.playerCount === this.playerIdArray.length) {
       return true;
     }
@@ -395,7 +403,24 @@ methods: {
     }
   },
 
-    // console.log(this.playerIdArray);
+  notLastPlayer: function() {
+    if (this.playerId === this.playerIdArray[this.playerIdArray.length-1]) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  },
+
+  changeRound: function() {
+    console.log(this.activeRound+1);
+    this.$store.state.socket.emit('collectorsChangeRound', {
+      roomId: this.$route.params.id,
+      playerId: this.playerId,
+      activeRound: this.activeRound+1
+    });
+  },
+
   selectAll: function (n) {
     n.target.select();
   },
@@ -439,11 +464,11 @@ methods: {
   },
 
   drawCard: function () {
-    console.log(this.market)
     this.$store.state.socket.emit('collectorsDrawCard', {
       roomId: this.$route.params.id,
       playerId: this.playerId
     });
+    // console.log(this.players.[this.playerId].hand);
   },
 
   buyItem: function (card) {
@@ -610,6 +635,7 @@ footer a:visited {
   align-self: center;
   background: #f9dcce;
   margin: 5px;
+  height: 100%
 }
 
 #BuySkillDiv {
@@ -617,6 +643,7 @@ footer a:visited {
   align-self: center;
   background: #dfeccc;
   margin: 5px;
+  height: 100%
 }
 
 #AuctionDiv {
@@ -631,6 +658,16 @@ footer a:visited {
   align-self: center;
   background: #cfdcf2;
   margin: 5px;
+}
+
+#GameOperationsDiv {
+  grid-area: GameOperationsDiv;
+  align-self: center;
+  text-align: center;
+  color: black;
+  background: #ceedeb;
+  margin: 5px;
+  height: 100%
 }
 
 #WorkDiv {
@@ -698,7 +735,7 @@ footer a:visited {
   "BuyItemDiv BuyItemDiv RaiseValueDiv RaiseValueDiv"
   "BuySkillDiv BuySkillDiv AuctionDiv AuctionDiv"
   "BuySkillDiv BuySkillDiv AuctionDiv AuctionDiv"
-  "GameOperations WorkDiv WorkDiv ."
+  "GameOperationsDiv WorkDiv WorkDiv ."
   "bottleSlotsDiv bottleSlotsDiv bottleSlotsDiv bottleSlotsDiv"
   "PlayerBoardDiv PlayerBoardDiv PlayerBoardDiv PlayerBoardDiv"
 }
@@ -713,6 +750,11 @@ footer a:visited {
 
 #container button {
   border-radius: 5px;
+}
+
+
+#GameOperationsDiv button {
+  font-size: 15px;
 }
 
 .bottleSlots {
@@ -768,12 +810,14 @@ footer a:visited {
   grid-template-columns: repeat(auto-fill, 130px);
   grid-template-rows: repeat(auto-fill, 180px);
 }
+
 .cardslots div {
   transform: scale(0.5)translate(-50%,-50%);
   transition:0.2s;
   transition-timing-function: ease-out;
   z-index: 0;
 }
+
 .cardslots div:hover {
   transform: scale(0.8)translate(-25%,-25%);
   z-index: 1;

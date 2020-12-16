@@ -68,7 +68,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.market = [];
   room.playerIdArray = [];
   room.playerBoardShown = true;
-  room.activeRound = String;
+  room.activeRound = 0,
   room.buyPlacement = [ {cost:1, playerId: null, img: 'images/buy1$.png'},
                         {cost:1, playerId: null, img: 'images/buy1$.png'},
                         {cost:2, playerId: null, img: 'images/buy2$.png'},
@@ -267,7 +267,7 @@ Data.prototype.raiseValue = function (roomId, playerId, card, cost) {
   }
 }
 
-Data.prototype.addPlayerReady = function(roomId, playerId){
+Data.prototype.addPlayerReady = function(roomId, playerId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
 
@@ -280,10 +280,11 @@ Data.prototype.addPlayerReady = function(roomId, playerId){
 }
 
 
-Data.prototype.changeRound= function(roomId, playerId, round){
+Data.prototype.changeRound= function(roomId, playerId, nextRound) {
   let room = this.rooms[roomId];
+  console.log(nextRound);
   if (typeof room !== 'undefined') {
-     room.activeRound = round;
+     room.activeRound = nextRound;
   }
 }
 
@@ -380,21 +381,21 @@ Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index
     }
 
     if (index === 0) {
-      if (room.activeRound ==='Round 1') {
+      if (room.activeRound === 1) {
         console.log('2 kort till Income');
         room.workPlacement[index].playerId = playerId;
       }
-      else if (room.activeRound ==='Round 2') {
+      else if (room.activeRound === 2) {
         console.log('2 kort till Income + 1$');
         room.players[playerId].money += 1;
         room.workPlacement[index].playerId = playerId;
       }
-      else if (room.activeRound ==='Round 3') {
+      else if (room.activeRound === 3) {
         console.log('2 kort till Income + 2$');
         room.players[playerId].money += 2;
         room.workPlacement[index].playerId = playerId;
       }
-      else if (room.activeRound ==='Round 4') {
+      else if (room.activeRound === 4) {
         console.log('Släng en flaska + 3$');
         room.players[playerId].money += 1;
       }
@@ -415,6 +416,15 @@ Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index
       room.workPlacement[index].playerId = playerId;
       let card1 = room.deck.pop();
       room.players[playerId].hand.push(card1);
+
+      for (let i in room.playerIdArray) {
+        if (room.playerIdArray[i] === playerId) {
+          let playerName = room.playerIdArray.splice(i, 1).toString();
+          room.playerIdArray.splice(0, 0, playerName);
+          console.log("Bytte plats på spelare");
+        }
+      }
+
     }
     if (index === 4) {
       console.log('Work ruta index 4, dra ett kort och placera ett från handen på income');
@@ -422,9 +432,7 @@ Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index
       let card1 = room.deck.pop();
       room.players[playerId].hand.push(card1);
     }
-    return room.players;
   }
-  else return [];
 }
 
 Data.prototype.getPlayerCount = function (roomId) {
@@ -535,12 +543,11 @@ Data.prototype.getPlayerIdArray = function(roomId){
 }
 
 Data.prototype.getActiveRound = function(roomId){
-  console.log('getActiveRound funktion');
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     return room.activeRound;
   }
-  else return String;
+  else return 0;
 }
 
 Data.prototype.getAuctionCards = function(roomId){
