@@ -1,19 +1,22 @@
 <template>
-  <div class="center">
-    <div>
+  <div class="container">
+
+      <img src="images\CollectorsStartMenuImage-removebg-preview (1).png" alt="">
       <h1>Collectors</h1>
-      <ul>
-        <li v-for="i in 3" :key="i">
-          <a @click="setupCollectors(i+1, 'en')">Set up a game of Collectors for {{i+1}} players</a>.
-        </li>
+
+  <div class="buttons">
+      <button v-for="i in 3" :key="i">
+        <a @click="setupCollectors(i+1, 'en')">Set up a game of Collectors for {{i+1}} players</a>.
+      </button>
+      <button>
         <a href="/rules_collectors.pdf" target="_blank">Rules</a>
-      </ul>
-      <ul>
-        <li v-for="i in 3" :key="i">
-          <a @click="setupCollectors(i+1, 'se')">Spela Collectors med {{i+1}} spelare</a>.
-        </li>
+      </button>
+      <button v-for="i in 3" :key="i">
+        <a @click="setupCollectors(i+1, 'se')">Spela Collectors med {{i+1}} spelare</a>.
+      </button>
+      <button>
         <a href="rules_collectors.pdf" text-decoration="none" target="_blank">Spelregler</a>
-      </ul>
+      </button>
     </div>
   </div>
 </template>
@@ -31,17 +34,38 @@ export default {
       this.$store.commit('SETUP_GAME', {roomId: this.$store.state.roomId,
         playerCount: playerCount,
         lang: lang });
-      this.$router.push("/room/" + this.$store.state.roomId);
-    },
+        this.$router.push("/room/" + this.$store.state.roomId);
+      },
+    }
   }
+
+  </script>
+  <style scoped>
+
+.container {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
-</script>
-<style scoped>
-  .center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    padding: 1em;
-  }
+
+button {
+margin:auto;
+display:block;
+width: 400px;
+height: 40px;
+border-radius: 10px;
+}
+
+button:hover{
+  color: green;
+  transform: scale(1.3);
+  transition:0.2s;
+  background-color: white;
+  border-radius: 10px;
+  transition-timing-function: ease-in-out;
+  z-index: 2;
+}
+
+
 </style>
