@@ -1,26 +1,30 @@
 <template>
   <div id="item-section" class="board-section">
+    <InfoButtons :modalProps="buyItemProps" />
     <div class="buy-cards">
       <div class="cardslots" v-for="(card, index) in itemsOnSale" :key="index">
         <CollectorsCard
           :card="card"
           :availableAction="card.available"
-          @doAction="buyCard(card)"
+          @doAction="selectAction(card)"
         />
-        <!-- {{ cardCost(card) }} -->
+        <!-- <p> + {{ cardCost(card) }}</p> -->
       </div>
     </div>
+
     <div class="button-section">
       <div class="buttons" v-for="(p, index) in placement" :key="index">
         <button
           v-if="p.playerId === null"
-          :disabled="cannotAfford(p.cost)"
+          :disabled="buttonDisabled(p.cost)"
           @click="placeBottle(p)"
         >
           ${{ p.cost }}
         </button>
-        <div v-if="p.playerId !== null">
-          <!-- {{ p.playerId }} -->
+        <div class="clickedButton" v-if="p.playerId !== null && typeof players !== 'undefined'" :style="{backgroundColor: players[p.playerId].color}">
+          
+            {{ p.playerId }}
+          
         </div>
       </div>
     </div>
@@ -28,12 +32,14 @@
 </template>
 
 <script>
+import InfoButtons from "../components/InfoButtons.vue";
 import CollectorsCard from "@/components/CollectorsCard.vue";
 
 export default {
   name: "ItemSection",
   components: {
     CollectorsCard,
+    InfoButtons,
   },
   props: {
     labels: Object,
@@ -41,8 +47,31 @@ export default {
     itemsOnSale: Array,
     marketValues: Object,
     placement: Array,
+    players: Object,
   },
+
+  data: function () {
+    return {
+      buyItemProps: {
+        value: "Buy Items",
+        text:
+          "Pick one card from the item pool or from your hand. Tuck the chosen card under your player board from above to show that this card represents an item you have bought. In addition to the cost in the action space, you must pay $1 per card in the Market pool that has the same symbol as the item you just bought. There is no upper limit in the number of items you may own.",
+        title: "Buy Items",
+        classes: "button red",
+      },
+    };
+  },
+
   methods: {
+    buttonDisabled: function (cost) {
+      if (
+        this.cannotAfford(cost) ||
+        !this.player.active ||
+        this.player.availableBottles == 0
+      ) {
+        return true;
+      } else return false;
+    },
     cannotAfford: function (cost) {
       let minCost = 100;
       for (let key in this.marketValues) {
@@ -52,9 +81,10 @@ export default {
       return this.player.money < minCost;
     },
     cardCost: function (card) {
-      return this.marketValues[card.market];
+      return this.marketValues[card.item];
     },
     placeBottle: function (p) {
+
       this.$emit("placeBottle", p.cost);
       this.highlightAvailableCards(p.cost);
     },
@@ -83,9 +113,9 @@ export default {
         }
       }
     },
-    buyCard: function (card) {
+    selectAction: function (card) {
       if (card.available) {
-        this.$emit("buyCard", card);
+        this.$emit("selectAction", card);
         this.highlightAvailableCards();
       }
     },
@@ -107,6 +137,14 @@ export default {
 .buttons {
   display: grid;
   grid-template-columns: repeat(auto-fill, 130px);
+}
+
+.clickedButton {
+  border: 1px solid rgb(118, 118, 118);
+  border-radius: 2px;
+  text-align: center;
+  align-items: flex-start;
+  color: black;
 }
 
 .board-section {
