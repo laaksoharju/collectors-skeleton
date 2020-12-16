@@ -135,7 +135,7 @@ body{
     background-image: linear-gradient( 143.3deg,  rgba(216,27,96,1) 33.1%, rgba(237,107,154,1) 74.9% );
   }
   .yellow {
-    background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(255,252,200,1) 0%, rgba(255,247,94,1) 90% );
+    background-image: radial-gradient( circle farthest-corner at 10% 20%, rgba(255,247,94,1) 0%, gold 90% );
   }
     
     .modal-overlay {

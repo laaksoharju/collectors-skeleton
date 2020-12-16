@@ -2,11 +2,6 @@
   <div>
     <main>
 <div class="wrapper">      
- <!--<GameBoard class="gridGame"
-  :itemsOnSale="itemsOnSale"
- :skillsOnSale="skillsOnSale"
- :auctionCards="auctionCards"
-  />-->
 
   <ItemSection v-if="players[playerId]"
         :labels="labels"
@@ -14,13 +9,20 @@
         :itemsOnSale="itemsOnSale"
         :marketValues="marketValues"
         :placement="buyPlacement"
+        :players="players"
         @buyCard="buyCard($event)"
         @placeBottle="placeBottle('buy', $event)"
         class="gridItem"
       />
 
      <!-- {{ buyPlacement }} {{ chosenPlacementCost }}-->
-  <WorkArea :color ="players[playerId].color" class="gridWork"/>
+  <WorkArea v-if="players[playerId]"
+        :color ="players[playerId].color" 
+        :labels="labels"
+        :player="players[playerId]"
+        :placement="buyPlacement"
+        @circleClicked="circleClicked($event)" 
+        class="gridWork"/>
 
   <!--<h1>I am player {{playerId}}</h1>-->
   <PlayerBoard v-if="players[playerId]" class="gridPlayerboard"
@@ -33,24 +35,10 @@
     </div>
   </transition>
 
-</div>
-         <!-- <div id="game-board">
-      <ItemSection v-if="players[playerId]"
-        :labels="labels"
-        :player="players[playerId]"
-        :itemsOnSale="itemsOnSale"
-        :marketValues="marketValues"
-        :placement="buyPlacement"
-        @buyCard="buyCard($event)"
-        @placeBottle="placeBottle('buy', $event)"
-      />-->
-      <!--<div>-->
-        <!--{{ skillPlacement }} {{ chosenPlacementCost }}
-        <CollectorsBuySkill /> -->
-        
+</div>  
     
   <h1>I am player {{playerId}}</h1>
-  <h1 v-if="players[playerId].active"> my turn! </h1>
+  <h1 v-if="players[playerId] && players[playerId].active"> my turn! </h1>
   <PlayerBoard v-if="players[playerId]"
         :player ="players[playerId]"/>
   <OtherPlayerboards :Players ="players" :playerId="playerId" />
@@ -68,6 +56,7 @@
           :itemsOnSale="itemsOnSale"
           :marketValues="marketValues"
           :placement="buyPlacement"
+          :players="players"
           @buyCard="buyCard($event)"
           @placeBottle="placeBottle('buy', $event)"
         />
@@ -134,17 +123,7 @@
         
       </div>
 
-      <!-- <GameBoard 
-  :itemsOnSale="itemsOnSale"
- :skillsOnSale="skillsOnSale"
- :auctionCards="auctionCards"
-  /> -->
-
-     <!-- <WorkArea />-->
-      <!-- <CollectorsBuyActions
-        v-if="players[playerId]"
-        I am player {{playerId}}
-    /> -->
+  
       <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
       <OtherPlayerboards :Players="players" :playerId="playerId" />
 
@@ -238,12 +217,9 @@ import CollectorsCard from "@/components/CollectorsCard.vue";
 import OtherPlayerboards from '@/components/OtherPlayerboards.vue';
 //import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
 import CollectorsBuySkill from "@/components/CollectorsBuySkill.vue";
-//import CollectorsBuyActions from "@/components/CollectorsBuyActions.vue";
-// import GameBoard from "@/components/GameBoard.vue";
 import WorkArea from "@/components/WorkArea.vue";
 import ItemSection from "@/components/ItemSection.vue";
 import PlayerBoard from "@/components/PlayerBoard.vue";
-/*import OtherPlayerboards from "../components/OtherPlayerboards.vue";*/
 import RaiseValueSection from "../components/RaiseValueSection.vue";
 import AuctionSection from "../components/AuctionSection.vue";
 import InfoButtons from "../components/InfoButtons.vue";
@@ -394,7 +370,7 @@ export default {
         this.buyPlacement = d.buyPlacement;
         this.skillPlacement = d.skillPlacement;
         this.marketPlacement = d.marketPlacement;
-        this.auctionPlacement = d.auctionPlacement;   
+        this.auctionPlacement = d.auctionPlacement;
       }.bind(this)
     );
 
