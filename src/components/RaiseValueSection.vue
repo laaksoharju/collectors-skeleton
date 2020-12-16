@@ -75,37 +75,36 @@ export default {
       this.highlightAvailableCards(p.cost);
     },
     highlightAvailableCards: function (cost = 100) {
-      // let lastSkill = null;
-      // let lastAuction = null;
+      let lastSkill;
+      let lastAction;
 
-      // Kollar efter sista kortet i skills som inte är "tomt"
-
-      // for (let i in this.skillsOnSale) {
-      //   if (this.skillsOnSale[i].item != undefined) {
-      //     lastSkill = this.skillsOnSale[i];
-
-      //   } else {
-      //     this.$set(this.itemsOnSale[i], "available", false);
-      //   }
-      //   this.chosenPlacementCost = cost;
-      // }
-      // lastSkill ? this.$set(lastSkill, "available", true) : null
-
-      for (let i = 0; i < this.skillsOnSale.length; i += 1) {
-        if (
-          this.marketValues[this.skillsOnSale[i].item] <=
-          this.player.money - cost
-        ) {
-          this.$set(this.skillsOnSale[i], "available", true);
-        } else {
-          this.$set(this.skillsOnSale[i], "available", false);
-        }
-        this.chosenPlacementCost = cost;
+      //Ta fram sista kortet i skills
+      for (let card of this.skillsOnSale) {
+        card.item != undefined ? (lastSkill = card) : null;
       }
+      if (this.marketValues[lastSkill.item] <= this.player.money - cost) {
+        this.$set(lastSkill, "available", true);
+      } else {
+        this.$set(lastSkill, "available", false);
+      }
+      this.chosenPlacementCost = cost;
+      console.log(lastSkill);
+      console.log("INNTE I HIGHLIGTHT CARDS");
+
+      //Ta fram sista kortet i auction
+      for (let card of this.auctionCards) {
+        card.item != undefined ? (lastAction = card) : null;
+      }
+      if (this.marketValues[lastAction.item] <= this.player.money - cost) {
+        this.$set(lastAction, "available", true);
+      } else {
+        this.$set(lastAction, "available", false);
+      }
+      this.chosenPlacementCost = cost;
 
       for (let i = 0; i < this.player.hand.length; i += 1) {
         if (
-          this.marketValues[this.player.hand[i].item] <=
+          this.marketValues[this.player.hand[i].market] <=
           this.player.money - cost
         ) {
           this.$set(this.player.hand[i], "available", true);

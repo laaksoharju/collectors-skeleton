@@ -254,6 +254,15 @@ export default {
           if (typeof this.players[p].hand[c].item !== "undefined")
             this.$set(this.players[p].hand[c], "available", false);
         }
+
+      for (let c = 0; c < this.skillsOnSale.length; c += 1) {
+        if (typeof this.skillsOnSale[c].item !== "undefined")
+          this.$set(this.skillsOnSale[c], "available", false);
+      }
+      for (let c = 0; c < this.auctionCards.length; c += 1) {
+        if (typeof this.auctionCards[c].item !== "undefined")
+          this.$set(this.auctionCards[c], "available", false);
+      }
       }
     },
   },
