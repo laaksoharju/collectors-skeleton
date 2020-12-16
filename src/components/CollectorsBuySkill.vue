@@ -24,7 +24,7 @@
           >
             ${{ p.cost }}
           </button>
-          <div v-if="p.playerId !== null">
+          <div class="clickedButton" v-if="p.playerId !== null && typeof players !== 'undefined'" :style="{backgroundColor: players[p.playerId].color}">
             {{ p.playerId }}
           </div>
         </div>
@@ -49,6 +49,7 @@ export default {
     skillsOnSale: Array,
     marketValues: Object,
     placement: Array,
+    players: Object,
   },
 
   data: function () {
@@ -254,4 +255,13 @@ p {
 .slide-leave-to {
   transform: translateY(-50%) translateX(100vw);
 }
+
+.clickedButton {
+  border: 1px solid rgb(118, 118, 118);
+  border-radius: 2px;
+  text-align: center;
+  align-items: flex-start;
+  color: black;
+}
+
 </style>

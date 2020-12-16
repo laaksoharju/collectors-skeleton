@@ -2,7 +2,7 @@
   <div>
     <main>
       <h1>I am player {{ playerId }}</h1>
-      <h1 v-if="players[playerId].active">my turn!</h1>
+      <h1 v-if="players[playerId] && players[playerId].active">my turn!</h1>
 
       <div class="layout_wrapper">
         <div id="game-board">
@@ -25,6 +25,7 @@
             :skillsOnSale="skillsOnSale"
             :marketValues="marketValues"
             :placement="skillPlacement"
+            :players="players"
             @selectAction="selectAction($event)"
             @placeBottle="placeBottle('skillType','skill', $event)"
           />
@@ -36,6 +37,7 @@
             :marketValues="marketValues"
             :auctionCards="auctionCards"
             :placement="marketPlacement"
+            :players="players"
             @selectAction="selectAction($event)"
             @placeBottle="placeBottle('marketType','buy', $event)"
           />
@@ -46,6 +48,7 @@
             :auctionCards="auctionCards"
             :marketValues="marketValues"
             :placement="auctionPlacement"
+            :players="players"
             @selectAction="selectAction($event)"
             @placeBottle="placeBottle('auctionType','buy', $event)"
 
