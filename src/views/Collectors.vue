@@ -89,7 +89,7 @@
               v-if="players[playerId]"
               :labels="labels"
               :player="players[playerId]"
-              :itemsOnSale="skillsOnSale"
+              :itemsOnSale="auctionCards"
               :marketValues="marketValues"
               :placement="auctionPlacement"
               @placeBottle="placeBottle('auction', $event)"
