@@ -22,7 +22,7 @@
             :marketValues="marketValues"
             :placement="skillPlacement"
             @buySkillCard="buySkillCard($event)"
-            @placeBottle="placeBottle('buy', $event)"
+            @placeBottle="placeBottle('skill', $event)"
           />
           <RaiseValueSection
             v-if="players[playerId]"
@@ -41,8 +41,11 @@
             :auctionCards="auctionCards"
             :marketValues="marketValues"
             :placement="auctionPlacement"
-            @buyCard="buyAuctionCard($event)"
-            @placeBottle="placeBottle('buy', $event)"
+            :upForAuction="upForAuction"
+            @buyAuctionCard="buyAuctionCard($event)"
+            @placeBottle="placeBottle('auction', $event)"
+            @placeBid="placeBid($event)"
+            @passed="passed($event)"
           />
         </div>
       </div>
@@ -210,6 +213,7 @@ export default {
       itemsOnSale: [],
       skillsOnSale: [],
       auctionCards: [],
+      upForAuction: [],
       playerid: 0,
     };
   },
@@ -289,7 +293,6 @@ export default {
         this.skillsOnSale = d.rotatedCards.skillsOnSale;
         this.auctionCards = d.rotatedCards.auctionCards;
         this.marketValues = d.marketValues;
-
       }.bind(this)
     );
 
@@ -308,6 +311,16 @@ export default {
         console.log(d.playerId, "bought a card");
         this.players = d.players;
         this.skillsOnSale = d.skillsOnSale;
+      }.bind(this)
+    );
+
+    this.$store.state.socket.on(
+      "collectorsAuctionCardBought",
+      function (d) {
+        console.log(d.playerId, "Started an Auction");
+        this.players = d.players;
+        this.auctionCards = d.auctionCards;
+        this.upForAuction = d.upForAuction;
       }.bind(this)
     );
   },
@@ -345,6 +358,28 @@ export default {
         playerId: this.playerId,
         card: card,
         cost: this.marketValues[card.market] + this.chosenPlacementCost,
+      });
+    },
+    buyAuctionCard: function (card) {
+      this.$store.state.socket.emit("collectorsBuyAuctionCard", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        card: card,
+        cost: this.marketValues[card.market] + this.chosenPlacementCost,
+      });
+    },
+    placeBid: function () {
+      this.$store.state.socket.emit("collectorsPlaceBid", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        cost: this.playerId.bid,
+      });
+    },
+    passed: function () {
+      this.$store.state.socket.emit("collectorsPassed", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        cost: 10,
       });
     },
     rotateCards: function () {

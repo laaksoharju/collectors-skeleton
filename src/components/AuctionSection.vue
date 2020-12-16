@@ -1,26 +1,51 @@
 <template>
-  <div id="auction-section" class="board-section">
-    <div class="buy-cards">
-      <div class="cardslots" v-for="(card, index) in auctionCards" :key="index">
-        <CollectorsCard
-          :card="card"
-          :availableAction="card.available"
-          @doAction="buyAuctionCard(card)"
-        />
-        <!-- {{ cardCost(card) }} -->
-      </div>
-    </div>
-    <div class="button-section">
-      <div class="buttons" v-for="(p, index) in placement" :key="index">
-        <button
-          v-if="p.playerId === null"
-          :disabled="cannotAfford(p.cost)"
-          @click="placeBottle(p)"
+  <div>
+    <!-- <h1>{{ labels.buySkillCard }}</h1> -->
+    <div id="auction-section" class="board-section">
+      <div class="buy-cards">
+        <div
+          class="cardslots"
+          v-for="(card, index) in auctionCards"
+          :key="index"
         >
-          ${{ p.cost }}
-        </button>
-        <div v-if="p.playerId !== null">
-          <!-- {{ p.playerId }} -->
+          <CollectorsCard
+            :card="card"
+            :availableAction="card.available"
+            @doAction="buyAuctionCard(card)"
+          />
+          <!-- {{ cardCost(card) }} -->
+        </div>
+        <div class="buy-cards">
+          <div class="cardslots">
+            <CollectorsCard
+              v-for="(card, index) in upForAuction"
+              :key="index"
+              :card="card"
+              :availableAction="card.available"
+              @doAction="placeBid()"
+            />
+            <!-- {{ cardCost(card) }} -->
+          </div>
+        </div>
+        <label for="placeBid">place bid here:</label>
+        <div class="placeBid-section">
+          <input type="number" id="placedBid" />
+          <input type="button" value="place bid" @click="placeBid()" />
+          <input type="button" value="pass" @click="passed()" />
+        </div>
+      </div>
+      <div class="button-section">
+        <div class="buttons" v-for="(p, index) in placement" :key="index">
+          <button
+            v-if="p.playerId === null"
+            :disabled="cannotAfford(p.cost)"
+            @click="placeBottle(p)"
+          >
+            ${{ p.cost }}
+          </button>
+          <div v-if="p.playerId !== null">
+            <!-- {{ p.playerId }} -->
+          </div>
         </div>
       </div>
     </div>
@@ -39,6 +64,7 @@ export default {
     labels: Object,
     player: Object,
     auctionCards: Array,
+    upForAuction: Array,
     marketValues: Object,
     placement: Array,
   },
@@ -85,13 +111,24 @@ export default {
     },
     buyAuctionCard: function (card) {
       if (card.available) {
-        this.$emit("buyCard", card);
+        this.$emit("buyAuctionCard", card);
         this.highlightAvailableCards();
       }
+    },
+
+    placeBid: function () {
+      console.log(this.player.playerId + 'placed the bid: ' + document.getElementById('placedBid').value);
+      this.player.bid += document.getElementById('placedBid').value;
+      this.$emit("placeBid", this.player.bid);
+    },
+    passed: function () {
+      console.log("passed");
+      this.$emit("passed");
     },
   },
 };
 </script>
+
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .buy-cards {
@@ -118,8 +155,18 @@ export default {
   border: 1px solid #19181850;
 }
 
-#item-section {
-  background-color: #ea9999ff;
+#auction-section {
+  background: #114357; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #f29492,
+    #114357
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #f29492,
+    #114357
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .cardslots {
