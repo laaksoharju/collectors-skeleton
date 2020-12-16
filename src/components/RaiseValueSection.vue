@@ -88,8 +88,6 @@ export default {
         this.$set(lastSkill, "available", false);
       }
       this.chosenPlacementCost = cost;
-      console.log(lastSkill);
-      console.log("INNTE I HIGHLIGTHT CARDS");
 
       //Ta fram sista kortet i auction
       for (let card of this.auctionCards) {

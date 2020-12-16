@@ -366,7 +366,7 @@ export default {
     this.$store.state.socket.on(
       "collectorsSkillCardBought",
       function (d) {
-        console.log(d.playerId, "bought a card");
+        console.log(d.playerId, "bought a skill card");
         this.players = d.players;
         this.skillsOnSale = d.skillsOnSale;
         this.nextRound = d.nextRound;
@@ -378,15 +378,12 @@ export default {
       n.target.select();
     },
     selectAction: function(card){
-      console.log("I selectAction COLLECTORS med type:")
-      console.log(this.currentAction)
       this.currentAction == 'itemType' ? this.buyCard(card) : null
       this.currentAction == 'skillType' ? this.buySkillCard(card) : null
       this.currentAction == 'marketType' ? this.buyRaiseValue(card) : null
       this.currentAction == 'auctionType' ? this.startAuction(card) : null //Funktionen existerar inte än
     },
     placeBottle: function (type, action, cost) {
-      console.log(type)
       this.currentAction = type;
       this.chosenPlacementCost = cost;
       this.$store.state.socket.emit("collectorsPlaceBottle", {
@@ -404,7 +401,6 @@ export default {
     },
 
     buyRaiseValue: function (card) {
-      console.log("buyRaiseValue", card);
       this.$store.state.socket.emit("buyRaiseValue", {
         roomId: this.$route.params.id,
         playerId: this.playerId,
@@ -414,7 +410,6 @@ export default {
     },
 
     buyCard: function (card) {
-      console.log("buyCard", card);
       this.$store.state.socket.emit("collectorsBuyCard", {
         roomId: this.$route.params.id,
         playerId: this.playerId,

@@ -17,15 +17,8 @@ export default {
   },
   methods: {
     doAction: function() {
-      // this.chooseAction();
       this.$emit('doAction');
     },
-    // chooseAction: function() {
-    //   if (this.actionType == "item"){
-    //     console.log(this.actionType);
-    //     console.log("NU ÄR DET ITEM SOM GÄLLER")
-    //   }
-    // }
   }
 }
 </script>

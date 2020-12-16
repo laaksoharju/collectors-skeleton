@@ -377,8 +377,6 @@ Data.prototype.buySkillCard = function (roomId, playerId, card, cost) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     let d = null;
-    console.log('DH BSC innan for1')
-    console.log(room.skillsOnSale.length)
     /// check first if the card is among the items on sale
     for (let i = 0; i < room.skillsOnSale.length; i += 1) {
       // since card comes from the client, it is NOT the same object (reference)
@@ -389,7 +387,6 @@ Data.prototype.buySkillCard = function (roomId, playerId, card, cost) {
         break;
       }  
     }
-    console.log(room.skillsOnSale.length)
     // ...then check if it is in the hand. It cannot be in both so it's safe
     for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
       // since card comes from the client, it is NOT the same object (reference)
