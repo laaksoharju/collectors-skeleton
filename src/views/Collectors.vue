@@ -715,12 +715,22 @@ footer a:visited {
   border-radius: 5px;
 }
 
-.bottleSlots{
+.bottleSlots {
   width: 10%;
   margin: 0em 1.5em 0em 1.5em;
   display: inline-block;
   position: relative;
 }
+
+#bottleSlotsDiv input:hover {
+  transform: scale(1.1);
+  transition: all 0.3s ease-in-out 0s;
+}
+
+#bottleSlotsDiv input {
+  transition: all 0.2s ease-in-out 0s;
+}
+
 #drawCard_button_img {
   width: 3.5em;
   vertical-align: middle;
@@ -731,6 +741,14 @@ footer a:visited {
   margin-bottom: 0.5em;
   margin-left: 1em;
   padding: 10px 0px 10px 0px;
+  transition: 0.15s;
+  transition-timing-function: ease-in-out;
+}
+
+.function_buttons:hover{
+  transform: scale(1.05);
+  transition: 0.15s;
+  transition-timing-function: ease-in-out;
 }
 
 .function_button_img {
