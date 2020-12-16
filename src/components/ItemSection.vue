@@ -21,8 +21,10 @@
         >
           ${{ p.cost }}
         </button>
-        <div v-if="p.playerId !== null">
-          {{ p.playerId }}
+        <div class="clickedButton" v-if="p.playerId !== null && typeof players !== 'undefined'" :style="{backgroundColor: players[p.playerId].color}">
+          
+            {{ p.playerId }}
+          
         </div>
       </div>
     </div>
@@ -45,6 +47,7 @@ export default {
     itemsOnSale: Array,
     marketValues: Object,
     placement: Array,
+    players: Object,
   },
 
   data: function () {
@@ -134,6 +137,23 @@ export default {
 .buttons {
   display: grid;
   grid-template-columns: repeat(auto-fill, 130px);
+}
+
+.clickedButton {
+  border: 1px solid rgb(118, 118, 118);
+  border-radius: 2px;
+  text-align: center;
+  align-items: flex-start;
+  color: black;
+}
+
+.board-section {
+  width: 50%;
+  padding: 10px;
+  align-items: center;
+  display: flex;
+  flex-direction: row-reverse;
+  border: 1px solid #19181850;
 }
 
 #item-section {

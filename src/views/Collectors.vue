@@ -14,6 +14,7 @@
             :itemsOnSale="itemsOnSale"
             :marketValues="marketValues"
             :placement="buyPlacement"
+            :players="players"
             @selectAction="selectAction($event)"
             @placeBottle="placeBottle('itemType','buy', $event)"
           />
@@ -52,9 +53,17 @@
 
           <!-- glöm ej ändra från buy på de ovan-->
         </div>
-        <WorkArea :color="players[playerId].color" class="gridWork" />
+        
+        <WorkArea v-if="players[playerId]"
+        :color ="players[playerId].color" 
+        :labels="labels"
+        :player="players[playerId]"
+        :placement="buyPlacement"
+        @circleClicked="circleClicked($event)" 
+        class="gridWork"/>
       </div>
 
+  
       <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
       <OtherPlayerboards :Players="players" :playerId="playerId" />
 

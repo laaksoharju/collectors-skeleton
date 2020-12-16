@@ -157,8 +157,9 @@ body {
 .yellow {
   background-image: radial-gradient(
     circle farthest-corner at 10% 20%,
-    rgba(255, 252, 200, 1) 0%,
-    rgba(255, 247, 94, 1) 90%
+    rgba(255,247,94,1) 0%,
+  gold 90%
+  
   );
 }
 
