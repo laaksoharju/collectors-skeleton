@@ -635,7 +635,7 @@ footer a:visited {
   align-self: center;
   background: #f9dcce;
   margin: 5px;
-  height: 100%
+
 }
 
 #BuySkillDiv {
@@ -643,7 +643,7 @@ footer a:visited {
   align-self: center;
   background: #dfeccc;
   margin: 5px;
-  height: 100%
+
 }
 
 #AuctionDiv {
@@ -671,6 +671,7 @@ footer a:visited {
 }
 
 #WorkDiv {
+  height: 70%;
   grid-area: WorkDiv;
   align-self: center;
   background: #f5f2cc;

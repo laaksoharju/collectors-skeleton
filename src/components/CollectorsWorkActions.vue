@@ -9,7 +9,7 @@ changeRoundWork<template>
           :disabled="cannotAfford(p.cost) || player.bottles < 1"
           @click="placeBottle(p, index)">
           <img v-if="index===0" :src='changeFirstWorkCard()'  style="width:100%" >
-          <p v-if="index===0"> {{changeFirstWorkCardInfoText()}} </p>
+          <p id='firstButtonInfoText' v-if="index===0"> {{changeFirstWorkCardInfoText()}} </p>
           <img :src='p.img' style="width:100%">
           <p id='info_text'> {{p.info_text}} </p>
         </button>
@@ -99,14 +99,14 @@ export default {
   float:left;
   grid-template-columns: repeat(auto-fill, 130px);
   grid-template-rows: repeat(auto-fill, 55px);
-  transform: scale(0.9);
+  transform: scale(1);
   z-index: -1;
 }
 
 .buttons {
   display: grid;
   float:center;
-  grid-template-columns: repeat(auto-fill, 130px);
+  grid-template-columns: repeat(auto-fill, 140px);
   grid-template-rows: repeat(auto-fill, 60px);
   margin: 5px;
   transform: scale(1);
@@ -124,17 +124,31 @@ export default {
   transition-timing-function: ease-in-out;
 }
 
-/* .buttons #info_text {
+
+
+.buttons #info_text, #firstButtonInfoText{
   transform: scale(1);
   transition:0.2s;
   transition-timing-function: ease-in-out;
 }
 
-.buttons #info_text:hover {
-  transform: scale(1.1);
+.buttons button:hover  #info_text{
+  transform: scale(2)translate(0,55%);
   transition:0.2s;
+  background-color: white;
+  border-radius: 10px;
   transition-timing-function: ease-in-out;
-} */
+  z-index: 2;
+}
+
+.buttons button:hover  #firstButtonInfoText{
+  transform: scale(2)translate(0,55%);
+  transition:0.2s;
+  background-color: white;
+  border-radius: 10px;
+  transition-timing-function: ease-in-out;
+  z-index: 2;
+}
 
 #WorkButtons{
   grid-area: workButtons;
