@@ -434,7 +434,7 @@
           readonly="readonly"
         />
       </p>
-
+      <p>{{marketValues}}</p>
       <!-- <button v-if="players[playerId]" @click="players[playerId].money += 1">
         fake more money
       </button> -->
@@ -573,7 +573,16 @@ export default {
         this.round = d.round;
       }.bind(this)
     );
-
+    
+    this.$store.state.socket.on(
+      "updateQuarter",
+      function (d) {
+        this.skillsOnSale = d.skillsOnSale;
+        this.marketValues = d.marketValues;
+        this.round = d.round;    
+      }.bind(this)
+    );
+    
     this.$store.state.socket.emit("notifyPlayers", {
       roomId: this.$route.params.id,
       playerId: this.playerId,
@@ -621,7 +630,7 @@ export default {
     this.$store.state.socket.on(
       "nextRound",
       function (d) {
-        this.round = d;
+        this.round = d.round;
       }.bind(this)
     );
 
