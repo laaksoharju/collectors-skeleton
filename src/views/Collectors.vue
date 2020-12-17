@@ -1,7 +1,6 @@
 <template>
   <div>
     <main>
-
       <div class="table">
           <h1>COLLECTORS</h1>
 
@@ -10,12 +9,10 @@
           <button id="userNameButton" type='submit' @click="changeUserName()" >
             Change Name
           </button>
-
           {{ labels.invite }}
           <input id="linkSquare" type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
 
       <div class="board">
-<!-- TEST ATT PUSHA -->
         <CollectorsGetSkills v-if="players[playerId]"
              :labels="labels"
              :player="players[playerId]"
@@ -43,10 +40,11 @@
           :skillsOnSale="skillsOnSale"
           :marketValues="marketValues"
           :market="market"
-            @placeBottle="placeBottle('market', $event)"
-            @startMarket="startMarket($event)"
-            />
+          @placeBottle="placeBottle('market', $event)"
+          @startMarket="startMarket($event)"
+          />
 
+<!-- HAR INTE VÅGAT RADERA WORK ÄN HELT MEN FINNS SOM COMPONENT NU
        <div class = "workPool">
          <div class= "titleWorkPool" >Work Pool</div>
 
@@ -66,27 +64,33 @@
          <div class = "Alt3"></div>
          <div class = "Alt4"></div>
        </div>
+-->
+       <CollectorsWork v-if="players[playerId]"
+          :labels="labels"
+          :player="players[playerId]"
+          :currentRound="currentRound"
+          />
 
        <CollectorsStartAuction v-if="players[playerId]"
             :labels="labels"
             :player="players[playerId]"
             :auctionCards="auctionCards"
             :cardUpForAuction="cardUpForAuction"
-            @startAuction="startAuction($event)"
+            :marketValues="marketValues"
+            :placement="auctionPlacement"
+            @startAuction="whichAction($event)"
             @startBidding="startBidding($event)"
+            @placeBottle="placeBottle('auction', $event)"
             />
 
        <div v-if="players[playerId]" class="playerBoard">
          <div class="playerTitle"> Player {{playerId}}'s Board </div>
-          <!--    <div v-if="players[playerId]">-->
-                <div class="chosenSkillCard" v-for="(card, index) in players[playerId].skills" :card="card" :key="index">
+             <div class="chosenSkillCard" v-for="(card, index) in players[playerId].skills" :card="card" :key="index">
                 <CollectorsCard
                 :card="card"
                  />
               </div>
-
-      <!--    <div v-if="players[playerId]">-->
-            <div class="chosenItemCard" v-for="(card, index) in players[playerId].items" :card="card" :key="index">
+        <div class="chosenItemCard" v-for="(card, index) in players[playerId].items" :card="card" :key="index">
             <CollectorsCard
             :card="card"
              />
@@ -98,7 +102,6 @@
         <div class="cardslots" v-if="players[playerId]">
           <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="buyCard(card)" :key="index"/>
         </div>
-
         <!-- visa hur mycket pengar man har -->
           <ul>
             <li v-for="(value, key) in players" :key = "key">
@@ -113,7 +116,6 @@
             </li>
           </ul>
       </div>
-
       <!-- Vems tur? Start på ruta för att visa vems tur -->
       <div class="turnCounter">
         <h3> Who's turn? </h3>
@@ -176,7 +178,8 @@
         :marketValues="marketValues"
         :placement="buyPlacement"
         @buyCard="buyCard($event)"
-        @placeBottle="placeBottle('buy', $event)"/>
+        @placeBottle="placeBottle('buy', $event)"
+        />
 <!--      <div class="buttons">
         <button @click="drawCard">
           {{ labels.draw }}
@@ -222,7 +225,7 @@ import CollectorsGetSkills from '@/components/CollectorsGetSkills.vue'
 import CollectorsStartAuction from '@/components/CollectorsStartAuction.vue'
 import CollectorsBuyItem from '@/components/CollectorsBuyItem.vue'
 import CollectorsMarket from '@/components/CollectorsMarket.vue'
-
+import CollectorsWork from '@/components/CollectorsWork.vue'
 
 export default {
   name: 'Collectors',
@@ -233,6 +236,7 @@ export default {
     CollectorsStartAuction,
     CollectorsBuyItem,
     CollectorsMarket,
+    CollectorsWork
   },
   data: function () {
     return {
@@ -369,7 +373,6 @@ export default {
     }.bind(this)
   );
 
-
   this.$store.state.socket.on('collectorsMarketStarted',
   function(d) {
     console.log(d.playerId, "Started market");
@@ -422,9 +425,9 @@ export default {
       if (this.chosenAction === "market") {
         this.startMarket(card)
       }
-    /*  if (this.chosenAction === "auction") {
+      if (this.chosenAction === "auction") {
         this.startAuction(card)
-      } LÄGG TILL SEN */
+      }
     },
     drawCard: function () {
       this.$store.state.socket.emit('collectorsDrawCard', {
@@ -578,24 +581,14 @@ export default {
           this.$store.state.socket.emit('collectorsCountRounds', {
               roomId: this.$route.params.id,
               currentPlayer: this.currentPlayer
-
-
               }
             );
           } */
-
   }
 }
 </script>
 
 <style scoped>
-
-.titleWorkPool {
-  font-style: italic;
-  font-size: 50px;
-  text-shadow: 2px 2px 4px yellow;
-  font-size: 20px;
-}
 
 h1 {
   text-align: center;
@@ -625,7 +618,6 @@ h5 {
   .table {
     padding-left: 50px;
     padding-right: 50px;
-
   }
   .board {
 	display: grid;
@@ -648,6 +640,14 @@ h5 {
     grid-template-columns: repeat(5, 60px);
     grid-template-rows: repeat(5, 27.5px);
     }*/
+
+/* Har ej vågat radera WORK än, men finns i component
+.titleWorkPool {
+  font-style: italic;
+  font-size: 50px;
+  text-shadow: 2px 2px 4px yellow;
+  font-size: 20px;
+}
   .workPool{
     grid-column: 3/span 5;
     grid-row: 6/span 5;
@@ -658,7 +658,7 @@ h5 {
     grid-template-rows: repeat(3,50px);
     background-color: #f5f2cc;
     color: black;
-    /*border: 3px solid #4C7B80;*/
+
     border-top: 2px solid #4C7B80;
   }
   .quarterImage {
@@ -730,6 +730,7 @@ h5 {
     background-image: url('/images/WorkPoolAlt4.jpg');
     background-size: cover;
   }
+  */
 
   .playerBoard {
     grid-column: 11/span 5;
