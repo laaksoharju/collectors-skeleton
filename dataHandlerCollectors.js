@@ -126,6 +126,7 @@ Data.prototype.joinGame = function (roomId, playerId)
       room.players[playerId] = {
         playerName: playerId,
         hand: room.deck.splice(0, 2), // Two cards are kept secret and form the hands of each player
+        // money: Object.keys(room.players).length == 0 ? 5 : Object.keys(room.players).length + 2,
         money: Object.keys(room.players).length + 2,
         points: 0,
         skills: [],
@@ -134,6 +135,7 @@ Data.prototype.joinGame = function (roomId, playerId)
         secret: room.deck.splice(0, 1), // picks one card and places it face down, tucked under their player board at the position marked with a treasure chest.
         color: room.playerColors.pop(),
         bottles: 2,
+        clickedOnBottle: false,
       };
       return true;
     }
@@ -197,11 +199,11 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
     let c = null;
 
     // check first if the player has enough bottles and money to buy the card
-    if (room.players[playerId].money < cost || room.players[playerId].bottles < 1)
-    {
-      console.log("Player doesn't have enough money or bottles to buy the card");
-      return;
-    }
+    // if (room.players[playerId].money < cost || room.players[playerId].bottles < 1)
+    // {
+    //   console.log("Player doesn't have enough money or bottles to buy the card");
+    //   return;
+    // }
 
     /// check first if the card is among the items on sale
     if (action === 'buy')
@@ -264,6 +266,16 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
       room.players[playerId].bottles -= 1;
     }
   }
+
+  room.players[playerId].clickedOnBottle = false;
+}
+
+Data.prototype.bottleClicked = function (roomId, playerId, clickedOnBottle)
+{
+  let room = this.rooms[roomId];
+  room.players[playerId].clickedOnBottle = clickedOnBottle;
+  console.log("Bottle clicked value changed");
+  console.log(room.players[playerId]);
 }
 
 Data.prototype.placeBottle = function (roomId, playerId, action, cost)

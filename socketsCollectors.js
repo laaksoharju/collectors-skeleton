@@ -19,9 +19,9 @@ function sockets(io, socket, data)
         placements: data.getPlacements(d.roomId)
 
       }
-    );
-  }
-  });socket.on('updatePlayerName', function (d)
+      );
+    }
+  }); socket.on('updatePlayerName', function (d)
   {
     io.to(d.roomId).emit('updatePlayerName',
       data.updatePlayerName(d.roomId, d.playerId, d.playerName)
@@ -57,6 +57,15 @@ function sockets(io, socket, data)
     data.placeBottle(d.roomId, d.playerId, d.action, d.cost);
     io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId)
     );
+  });
+
+  socket.on('collectorsBottleClicked', function (d)
+  {
+    data.bottleClicked(d.roomId, d.playerId, d.clickedOnBottle);
+    io.to(d.roomId).emit('collectorsBottleClicked',
+      data.getPlayers(d.roomId)
+    );
+
   });
 
 }
