@@ -311,6 +311,9 @@ export default {
             this.players[this.playerId].bottles = d.players[this.playerId].bottles;
             this.players[this.playerId].income = d.players[this.playerId].income;
             this.players[this.playerId].money = d.players[this.playerId].money;
+
+            this.players = d.players;
+
             this.playerIdArray = d.playerIdArray;
           }.bind(this));
 
@@ -393,6 +396,7 @@ export default {
           this.$store.state.socket.on('collectorsRoundUpdated',
           function(d) {
             this.activeRound = d.activeRound;
+            this.placements = d.placements;
           }.bind(this));
         },
 
@@ -721,13 +725,6 @@ footer a:visited {
   margin: 5px;
 }
 
-#TestDiv {
-  grid-area: TestDiv;
-  align-self: center;
-  background: #e4e4e3;
-  margin: 5px;
-}
-
 #PlayerSkillsDiv {
   grid-area: PlayerSkillsDiv;
   align-self: center;
@@ -883,7 +880,7 @@ footer a:visited {
 }
 
 .playercards div:hover {
-  transform: scale(0.8)translate(-20%,-20%);
+  transform: scale(0.8)translate(-80%,-80%);
   z-index: 1;
 }
 

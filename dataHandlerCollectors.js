@@ -285,17 +285,38 @@ Data.prototype.addPlayerReady = function(roomId, playerId) {
 Data.prototype.changeRound= function(roomId, playerId, nextRound, players) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
-     room.activeRound = nextRound;
-  for (playerId in players ) {
-    if (room.players[playerId].income.length !== 0) {
-      for (var card in room.players[playerId].income) {
-          room.players[playerId].money += room.players[playerId].income[card].auctionValue; //Ger pengar vid varje rondbyte baserat på totala värdet
-     }                                                                                      //av 'auctionValue' hos spelarens kort i 'income'.
-    }
-   }
-  }
- }
+    room.activeRound = nextRound;
 
+    this.resetButtons(roomId, room.buyPlacement );
+    this.resetButtons(roomId, room.skillPlacement );
+    this.resetButtons(roomId, room.marketPlacement );
+    this.resetButtons(roomId, room.auctionPlacement );
+    this.resetButtons(roomId, room.workPlacement );
+
+    for (playerId in players) {
+      if (room.players[playerId].income.length !== 0) {
+        for (var card in room.players[playerId].income) {
+          room.players[playerId].money += room.players[playerId].income[card].auctionValue; //Ger pengar vid varje rondbyte baserat på totala värdet
+        }                                                                                      //av 'auctionValue' hos spelarens kort i 'income'.
+      }
+    }
+  }
+}
+
+Data.prototype.resetButtons= function(roomId, placement) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+
+    for (let i  in placement) {
+
+      console.log(placement[i]);
+      if (placement[i].playerId !== null) {
+        placement[i].playerId = null;
+      }
+      console.log(placement[i]);
+    }
+  }
+}
 Data.prototype.startAuction = function (roomId, playerId, card, cost) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {

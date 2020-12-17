@@ -32,8 +32,8 @@ function sockets(io, socket, data) {
       io.to(d.roomId).emit('collectorsRoundUpdated', {
         activeRound: data.getActiveRound(d.roomId)
       });
-      console.log(d.activeRound, "aktiv runda som skickas in")
-      console.log(data.getActiveRound(d.roomId), "aktiv runda i datahandlern efter förändring")
+    //  console.log(d.activeRound, "aktiv runda som skickas in")
+    //  console.log(data.getActiveRound(d.roomId), "aktiv runda i datahandlern efter förändring")
     });
 
     socket.on('collectorsDrawCard', function(d) {
@@ -64,7 +64,8 @@ function sockets(io, socket, data) {
       console.log("ändrar runda i sockets")
       data.changeRound(d.roomId, d.playerId, d.activeRound, d.players);
       io.to(d.roomId).emit('collectorsRoundUpdated', {
-        activeRound: data.getActiveRound(d.roomId)
+        activeRound: data.getActiveRound(d.roomId),
+        placements: data.getPlacements(d.roomId)
       });
     });
 
