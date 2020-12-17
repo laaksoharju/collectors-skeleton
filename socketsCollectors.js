@@ -5,7 +5,7 @@ function sockets(io, socket, data) {
   socket.on('collectorsLoaded', function (d) {
     socket.join(d.roomId);
     if (data.joinGame(d.roomId, d.playerId)) {
-      socket.emit('collectorsInitialize', {
+      io.to(d.roomId).emit('collectorsInitialize', {
         labels: data.getUILabels(d.roomId),
         players: data.getPlayers(d.roomId),
         itemsOnSale: data.getItemsOnSale(d.roomId),
@@ -68,7 +68,7 @@ function sockets(io, socket, data) {
   });
 
   socket.on('collectorsPlaceBottle', function (d) {
-    data.placeBottle(d.roomId, d.playerId, d.action, d.cost);
+    data.placeBottle(d.roomId, d.playerId, d.action, d.cost, d.id);
     io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId));
   });
 

@@ -35,6 +35,7 @@
             :skillsOnSale="skillsOnSale"
             :marketValues="marketValues"
             :placement="skillPlacement"
+            :players="players"
             @selectAction="selectAction($event)"
             @placeBottle="placeBottle('skillType','skill', $event)"
           />
@@ -46,6 +47,7 @@
             :marketValues="marketValues"
             :auctionCards="auctionCards"
             :placement="marketPlacement"
+            :players="players"
             @selectAction="selectAction($event)"
             @placeBottle="placeBottle('marketType','buy', $event)"
           />
@@ -56,6 +58,7 @@
             :auctionCards="auctionCards"
             :marketValues="marketValues"
             :placement="auctionPlacement"
+            :players="players"
             @selectAction="selectAction($event)"
             @placeBottle="placeBottle('auctionType','buy', $event)"
 
@@ -71,12 +74,20 @@
         :placement="buyPlacement"
         @circleClicked="circleClicked($event)" 
         class="gridWork"/>
+
+        <div id="hand_playerboard">
+              <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
+
+              <Hand v-if="players[playerId]" 
+              :player="players[playerId]"
+              
+              />
+        </div>
+
       </div>
 
-  
-      <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
+      
       <OtherPlayerboards :Players="players" :playerId="playerId" />
-
       <!--  {{ buyPlacement }} {{ chosenPlacementCost }}-->
 
       <div class="buttons">
@@ -171,6 +182,7 @@ import PlayerBoard from "@/components/PlayerBoard.vue";
 import RaiseValueSection from "@/components/RaiseValueSection.vue";
 import AuctionSection from "@/components/AuctionSection.vue";
 import BottlesPlayerboard from "@/components/BottlesPlayerboard.vue";
+import Hand from "@/components/Hand.vue";
 
 export default {
   name: "Collectors",
@@ -183,7 +195,8 @@ export default {
     OtherPlayerboards,
     RaiseValueSection,
     AuctionSection,
-    BottlesPlayerboard
+    BottlesPlayerboard,
+    Hand,
   },
   data: function () {
     return {
@@ -422,14 +435,15 @@ export default {
       this.currentAction == 'marketType' ? this.buyRaiseValue(card) : null
       this.currentAction == 'auctionType' ? this.startAuction(card) : null //Funktionen existerar inte än
     },
-    placeBottle: function (type, action, cost) {
+    placeBottle: function (type, action, p) {
       this.currentAction = type;
-      this.chosenPlacementCost = cost;
+      this.chosenPlacementCost = p.cost;
       this.$store.state.socket.emit("collectorsPlaceBottle", {
         roomId: this.$route.params.id,
         playerId: this.playerId,
         action: action,
-        cost: cost,
+        cost: p.cost,
+        id: p.id,
       });
     },
     drawCard: function () {
@@ -504,33 +518,16 @@ main {
 .layout_wrapper {
   display: grid;
   grid-template-columns: 70% 30%;
-  /*grid-template-columns: 40% 10%;*/
 }
 
-.gridItem {
-  grid-column: 1;
-  grid-row: 1;
-}
-
-/*.gridGame {
-  grid-column: 1;
-  grid-row: 1;
-}*/
-
-.gridWork {
-  grid-column: 2;
-  /*grid-column: 1;*/
-}
-
-.gridOtherBoard {
-  grid-column: 3;
-  /*grid-column: 2;*/
-  /*grid-row: 1;*/
-}
-
-.gridPlayerboard {
-  grid-column: 1 / span 2;
-  grid-row: 2;
+#hand_playerboard {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  height: 400px; /*DENNA GJORDE ATT DRAW CARD FÖRFLYTTADES NERÅT*/ 
+  /*overflow: hidden; MED DENNA SÅ FÖRSIVNNER PROBLEMET MED ATT DRAW CARD LIGGER PÅ PLAYERBOARD, MEN DÅ FÖRSVINNER
+  RULLISTAN OCH SÅ ÄNDRAS SIZEN PÅ HELA GRIDEN. OM DENNA INTE ÄR MED SÅ LIGGER DRAW CARD I PLAYERBOARD, MEN 
+  RULLLISTAN FINNS DÅ DVS.*/
+  
 }
 
 /*TRANSITION*/
