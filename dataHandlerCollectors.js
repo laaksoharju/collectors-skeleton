@@ -284,18 +284,17 @@ Data.prototype.addPlayerReady = function(roomId, playerId) {
 
 Data.prototype.changeRound= function(roomId, playerId, nextRound, players) {
   let room = this.rooms[roomId];
-  console.log(nextRound);
   if (typeof room !== 'undefined') {
      room.activeRound = nextRound;
-
-  // for (var i = 0; i < players.length; i++) {
-  //
-  //     for (var i = 0; i < room.players.income.length; i++) {
-  //      room.players[playerId].money += income[i.auctionValue]
-  //    }
-  //   }
+  for (playerId in players ) {
+    if (room.players[playerId].income.length !== 0) {
+      for (var card in room.players[playerId].income) {
+          room.players[playerId].money += room.players[playerId].income[card].auctionValue; //Ger pengar vid varje rondbyte baserat på totala värdet
+     }                                                                                      //av 'auctionValue' hos spelarens kort i 'income'.
+    }
+   }
   }
-}
+ }
 
 Data.prototype.startAuction = function (roomId, playerId, card, cost) {
   let room = this.rooms[roomId];
