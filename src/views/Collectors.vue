@@ -51,9 +51,9 @@
           <p>{{labels.player}} {{ bidArray[bidArray.length - 1]}} {{labels.isNowLeading}} {{ bidArray.length}}${{labels.bid}}.</p>
           <button v-if="players[playerId]" :disabled="cannotRaiseBid()" @click="raiseCurrentBid()">{{labels.raiseCurrentBid}}</button>
           <button v-if="bidArray[bidArray.length - 1] === this.playerId" :disabled="noMoreBidsBoolean" @click="noMoreBids()">{{labels.my}} {{bidArray.length}}{{labels.dollarBidWon}}</button>
-          <button v-if="this.noMoreBidsBoolean" @click="endAuction('buyItem')" style="background-color: #f9dcce">Use as an item <br><img class="use_as" src="images/use_as_item.png" width="33%"></button>
-          <button v-if="this.noMoreBidsBoolean" @click="endAuction('getSkill')" style="background-color: #dfeccc">Use as a skill <br><img class="use_as" src="images/use_as_skill.png" width="33%"></button>
-          <button v-if="this.noMoreBidsBoolean" @click="endAuction('market')" style="background-color: #cfdcf2">Place in the market <br><img class="use_as" src="images/use_as_market.png" width="30%"></button>
+          <button v-if="this.noMoreBidsBoolean" @click="endAuction('buyItem')" style="background-color: #f9dcce">{{labels.useAsItem}}<br><img class="use_as" src="images/use_as_item.png" width="33%"></button>
+          <button v-if="this.noMoreBidsBoolean" @click="endAuction('getSkill')" style="background-color: #dfeccc">{{labels.useAsSkill}}<br><img class="use_as" src="images/use_as_skill.png" width="33%"></button>
+          <button v-if="this.noMoreBidsBoolean" @click="endAuction('market')" style="background-color: #cfdcf2">{{labels.useAsMarket}}<br><img class="use_as" src="images/use_as_market.png" width="30%"></button>
         </div>
       </div>
 
@@ -70,8 +70,7 @@
           </button>
         </div>
         <div id="NextRoundButton" v-if="playerBoardShown">
-          The current round is round {{ activeRound }}.
-          When the last player is finished, he or she can switch to the next round.
+          <p>{{labels.currentRound}} {{ activeRound }}. {{labels.lastPlayerCanChange}}</p>
           <button id="nextRound" v-on:click="changeRound()" :disabled="notLastPlayer()">Next round</button>
         </div>
         <div>
