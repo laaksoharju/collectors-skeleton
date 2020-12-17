@@ -77,7 +77,7 @@ export default {
     },
 
     placeBottle: function (p) {
-
+      
       this.$emit("placeBottle", p.cost);
       this.highlightAvailableCards(p.cost);
     },
