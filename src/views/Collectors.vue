@@ -5,12 +5,13 @@
         <BottlesPlayerboard 
           v-if="players[playerId]"
           :player="players[playerId]" 
+          :labels="labels"
           @getBottleIncome ="getBottleIncome($event)"
         />
       </div>
       
       <h1>I am player {{ playerId }}</h1>
-      <h1> Round {{round}} </h1>
+      <h1> {{labels.round}} {{round}} </h1>
       <div v-for="(player, index) in players" :key="index" :player="player">
         <h1 v-if="player.active"> It's {{index}}'s turn! </h1>
       </div>

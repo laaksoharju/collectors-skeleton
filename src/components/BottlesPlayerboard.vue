@@ -5,16 +5,16 @@
     </transition>
     <transition name="slide" appear>
         <div class="modal">
-              <h1>Income</h1>
-              <p>You will get &#36;{{player.income.length}} from your income cards.</p>
-              <p>Choose {{this.bottlesToPlace}} additional income placements!</p>
+              <h1>{{labels.income}}</h1>
+              <p> {{labels.incomeGain1}}{{player.income.length}}{{labels.incomeGain2}}</p>
+              <p>{{labels.remainingPlacements}}{{this.bottlesToPlace}}</p>
                 <div class = "slotGrid">
                   <button :disabled="this.bottleIncome.gainOneCoin || this.bottlesToPlace <= 0"
                       @click="gainOneCoin()"> +$1 </button>
                   <button :disabled="this.bottleIncome.gainTwoCoins || this.bottlesToPlace <= 0"
                       @click="gainTwoCoins()"> +$2 </button>
                   <button :disabled="this.bottleIncome.gainCard || this.bottlesToPlace <= 0"
-                      @click="gainCard()"> Draw card </button>
+                      @click="gainCard()"> {{labels.draw}} </button>
                 </div>
         </div>
     </transition>
@@ -28,6 +28,8 @@ export default {
   name: "BottlesPlayerboard",
   props: {
     player: Object,
+    labels: Object
+
   },
   data: function () {
     return {
