@@ -76,28 +76,28 @@ Data.prototype.createRoom = function (roomId, playerCount, lang = "en")
   room.skillsOnSale = room.deck.splice(0, 5);
   room.auctionCards = room.deck.splice(0, 4);
   room.market = [];
-  room.buyPlacement = [{ cost: 1, playerId: null, bottleType: 'normal' },
-  { cost: 1, playerId: null, bottleType: 'normal' },
-  { cost: 2, playerId: null, bottleType: 'normal' },
-  { cost: 2, playerId: null, bottleType: 'normal' },
-  { cost: 3, playerId: null, bottleType: 'normal' }];
-  room.skillPlacement = [{ cost: 0, playerId: null, bottleType: 'normal' },
-  { cost: 0, playerId: null, bottleType: 'normal' },
-  { cost: 0, playerId: null, bottleType: 'normal' },
-  { cost: 1, playerId: null, bottleType: 'normal' },
-  { cost: 1, playerId: null, bottleType: 'normal' }];
-  room.workPlacement = [{ cost: -3, playerId: null, bottleType: 'normal' },
-  { cost: -1, playerId: null, bottleType: 'normal' },
-  { cost: 1, playerId: null, bottleType: 'normal' },
-  { cost: 0, playerId: null, bottleType: 'normal' },
-  { cost: 0, playerId: null, bottleType: 'normal' }];
-  room.auctionPlacement = [{ cost: -2, playerId: null, bottleType: 'normal' },
-  { cost: -1, playerId: null, bottleType: 'normal' },
-  { cost: 0, playerId: null, bottleType: 'auctionMedal' },
-  { cost: 0, playerId: null, bottleType: 'auctionMedal' }];
-  room.marketPlacement = [{ cost: 0, playerId: null, bottleType: 'marketTwoBlue' },
-  { cost: 2, playerId: null, bottleType: 'marketDollar' },
-  { cost: 0, playerId: null, bottleType: 'marketOneBlue' }];
+  room.buyPlacement = [{ cost: 1, playerId: null, bottleType: 'normal', recieveCards: 0 },
+  { cost: 1, playerId: null, bottleType: 'normal', recieveCards: 0 },
+  { cost: 2, playerId: null, bottleType: 'normal', recieveCards: 0 },
+  { cost: 2, playerId: null, bottleType: 'normal', recieveCards: 0 },
+  { cost: 3, playerId: null, bottleType: 'normal', recieveCards: 0 }];
+  room.skillPlacement = [{ cost: 0, playerId: null, bottleType: 'normal', recieveCards: 0 },
+  { cost: 0, playerId: null, bottleType: 'normal', recieveCards: 0 },
+  { cost: 0, playerId: null, bottleType: 'normal', recieveCards: 0 },
+  { cost: 1, playerId: null, bottleType: 'normal', recieveCards: 0 },
+  { cost: 1, playerId: null, bottleType: 'normal', recieveCards: 0 }];
+  room.workPlacement = [{ cost: -3, playerId: null, bottleType: 'normal', recieveCards: 0 },
+  { cost: -1, playerId: null, bottleType: 'normal', recieveCards: 0 },
+  { cost: 1, playerId: null, bottleType: 'normal', recieveCards: 2 },
+  { cost: 0, playerId: null, bottleType: 'normal', recieveCards: 1 },
+  { cost: 0, playerId: null, bottleType: 'normal', recieveCards: 1 }];
+  room.auctionPlacement = [{ cost: -2, playerId: null, bottleType: 'normal', recieveCards: 0 },
+  { cost: -1, playerId: null, bottleType: 'normal', recieveCards: 0 },
+  { cost: 0, playerId: null, bottleType: 'auctionMedal', recieveCards: 0 },
+  { cost: 0, playerId: null, bottleType: 'auctionMedal', recieveCards: 0 }];
+  room.marketPlacement = [{ cost: 0, playerId: null, bottleType: 'marketTwoBlue', recieveCards: 0 },
+  { cost: 2, playerId: null, bottleType: 'marketDollar', recieveCards: 0 },
+  { cost: 0, playerId: null, bottleType: 'marketOneBlue', recieveCards: 0 }];
   this.rooms[roomId] = room;
 }
 
@@ -279,6 +279,7 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost)
     else if (action === "skill")
     {
       activePlacement = room.skillPlacement;
+      console.log('hejdå')
     }
     else if (action === "auction")
     {
@@ -287,6 +288,9 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost)
     else if (action === "work")
     {
       activePlacement = room.workPlacement;
+      room.players[playerId].money -= cost;
+      room.players[playerId].bottles -= 1;
+      console.log('hejjj');
     }
     else if (action === "market")
     {

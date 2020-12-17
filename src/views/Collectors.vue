@@ -78,7 +78,7 @@
               v-if="players[playerId]"
               :labels="labels"
               :player="players[playerId]"
-              :itemsOnSale="skillsOnSale"
+
               :marketValues="marketValues"
               :placement="workPlacement"
               @placeBottle="placeBottle('work', $event)"
@@ -598,6 +598,23 @@ export default {
       return otherPlayers;
     },
     placeBottle: function (action, cost) {
+
+      console.log(action);
+
+            if (cost<0){
+
+              this.players[this.playerId].money += cost*-1;
+
+            }
+
+            if (cost>0){
+
+              this.players[this.playerId].money -= cost;
+
+            }
+
+            this.players[this.playerId].bottles -=1;
+
       this.chosenPlacementCost = cost;
       this.$store.state.socket.emit("collectorsPlaceBottle", {
         roomId: this.$route.params.id,
@@ -613,6 +630,7 @@ export default {
       });
     },
     buyCard: function (action, card) {
+
       console.log("buyCard", card);
       this.$store.state.socket.emit("collectorsBuyCard", {
         roomId: this.$route.params.id,

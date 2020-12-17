@@ -9,6 +9,7 @@
             class="btn-normal"
             v-if="p.playerId === null"
             :disabled="cannotAfford(p.cost)"
+
             @click="placeBottle(p)"
           >
 
@@ -31,6 +32,7 @@
               class="btn-marketTwoBlue"
               v-if="p.playerId === null"
               :disabled="cannotAfford(p.cost)"
+
               @click="placeBottle(p)"
             >
             <div class = "recieveMoney" v-if="p.cost < 0 ">
@@ -48,6 +50,7 @@
               class="btn-marketOneBlue"
               v-if="p.playerId === null"
               :disabled="cannotAfford(p.cost)"
+
               @click="placeBottle(p)"
             >
             <div class = "recieveMoney" v-if="p.cost < 0 ">
@@ -65,6 +68,7 @@
               class="btn-marketDollar"
               v-if="p.playerId === null"
               :disabled="cannotAfford(p.cost)"
+
               @click="placeBottle(p)"
             >
             <div class = "recieveMoney" v-if="p.cost < 0 ">
@@ -82,6 +86,7 @@
               class="btn-auctionMedal"
               v-if="p.playerId === null"
               :disabled="cannotAfford(p.cost)"
+
               @click="placeBottle(p)"
             >
             <div class = "recieveMoney" v-if="p.cost < 0 ">
@@ -127,8 +132,23 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
-      this.$emit("placeBottle", p.cost);
-      this.highlightAvailableCards(p.cost);
+
+      console.log(p.recieveCards);
+      console.log(p.cost);
+
+
+
+      if (p.recieveCards > 0){
+      this.$store.state.socket.emit('collectorsDrawCard', { roomId: this.$route.params.id,
+      playerId: this.$store.state.playerId });
+    }
+
+    this.$emit("placeBottle", p.cost);
+    this.highlightAvailableCards(p.cost);
+
+
+
+
     },
     isAvailableCards: function (card, cost) {
       if (this.marketValues[card.item] <= this.player.money - cost) {
