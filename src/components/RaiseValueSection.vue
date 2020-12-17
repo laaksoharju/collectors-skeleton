@@ -18,14 +18,17 @@
       <div class="buttons" v-for="(p, index) in placement" :key="index">
         <button
           v-if="p.playerId === null"
-          :disabled="cannotAfford(p.cost)"
+          :disabled="buttonDisabled(p.cost)"
           @click="placeBottle(p)"
         >
-          ${{ p.cost }}
+          ${{ p.cost }}<span v-if="p.specialAction"> (2 cards)</span>
         </button>
-        <div class="clickedButton" v-if="p.playerId !== null && typeof players !== 'undefined'" :style="{backgroundColor: players[p.playerId].color}">
-           {{ p.playerId }} 
-           
+        <div
+          class="clickedButton"
+          v-if="p.playerId !== null && typeof players !== 'undefined'"
+          :style="{ backgroundColor: players[p.playerId].color }"
+        >
+          {{ p.playerId }}
         </div>
       </div>
     </div>
@@ -61,6 +64,15 @@ export default {
     };
   },
   methods: {
+    buttonDisabled: function (cost) {
+      if (
+        this.cannotAfford(cost) ||
+        !this.player.active ||
+        this.player.availableBottles == 0
+      ) {
+        return true;
+      } else return false;
+    },
     cannotAfford: function (cost) {
       let minCost = 100;
       for (let key in this.marketValues) {
@@ -73,19 +85,20 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
-      this.$emit("placeBottle", p.cost);
+      this.$emit("placeBottle", p);
       this.highlightAvailableCards(p.cost);
     },
     highlightAvailableCards: function (cost = 100) {
       let lastSkill;
-      let lastAction;
+      let lastAuction;
 
       //Ta fram sista kortet i skills
       for (let card of this.skillsOnSale) {
         card.item != undefined ? (lastSkill = card) : null;
       }
-      if (this.marketValues[lastSkill.item] <= this.player.money - cost) {
+      if (this.player.money - cost >= 0) {
         this.$set(lastSkill, "available", true);
+        console.log("skill har marketrats")
       } else {
         this.$set(lastSkill, "available", false);
       }
@@ -93,20 +106,17 @@ export default {
 
       //Ta fram sista kortet i auction
       for (let card of this.auctionCards) {
-        card.item != undefined ? (lastAction = card) : null;
+        card.item != undefined ? (lastAuction = card) : null;
       }
-      if (this.marketValues[lastAction.item] <= this.player.money - cost) {
-        this.$set(lastAction, "available", true);
+      if (this.player.money - cost >= 0) {
+        this.$set(lastAuction, "available", true);
       } else {
-        this.$set(lastAction, "available", false);
+        this.$set(lastAuction, "available", false);
       }
       this.chosenPlacementCost = cost;
 
       for (let i = 0; i < this.player.hand.length; i += 1) {
-        if (
-          this.marketValues[this.player.hand[i].market] <=
-          this.player.money - cost
-        ) {
+        if (this.player.money - cost >= 0) {
           this.$set(this.player.hand[i], "available", true);
           this.chosenPlacementCost = cost;
         } else {

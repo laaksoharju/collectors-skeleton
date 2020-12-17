@@ -46,6 +46,7 @@ export default {
     auctionCards: Array,
     marketValues: Object,
     placement: Array,
+    allCardsChosen: Boolean,
   },
 
   data: function() {
@@ -102,9 +103,12 @@ export default {
       }
     },
     selectAction: function (card) {
-      if (card.available) {
+      if (card.available) {      
         this.$emit("selectAction", card);
-        this.highlightAvailableCards();
+
+        this.allCardsChosen
+          ? this.highlightAvailableCards()
+          : this.$set(card, "available", false);
       }
     },
   },
