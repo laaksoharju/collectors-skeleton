@@ -1,10 +1,19 @@
 <template>
   <div>
     <main>
+      <div v-if="this.dispBottles">
+        <BottlesPlayerboard 
+          v-if="players[playerId]"
+          :player="players[playerId]" 
+          @getBottleIncome ="getBottleIncome($event)"
+        />
+      </div>
+      
       <h1>I am player {{ playerId }}</h1>
       <h1> Round {{round}} </h1>
-      <h1 v-if="players[playerId] && players[playerId].active">my turn!</h1>
-
+      <div v-for="(player, index) in players" :key="index" :player="player">
+        <h1 v-if="player.active"> It's {{index}}'s turn! </h1>
+      </div>
       <div class="layout_wrapper">
         <div id="game-board">
           <ItemSection
@@ -170,8 +179,9 @@ import CollectorsBuySkill from "@/components/CollectorsBuySkill.vue";
 import WorkArea from "@/components/WorkArea.vue";
 import ItemSection from "@/components/ItemSection.vue";
 import PlayerBoard from "@/components/PlayerBoard.vue";
-import RaiseValueSection from "../components/RaiseValueSection.vue";
-import AuctionSection from "../components/AuctionSection.vue";
+import RaiseValueSection from "@/components/RaiseValueSection.vue";
+import AuctionSection from "@/components/AuctionSection.vue";
+import BottlesPlayerboard from "@/components/BottlesPlayerboard.vue";
 import Hand from "@/components/Hand.vue";
 
 export default {
@@ -185,6 +195,7 @@ export default {
     OtherPlayerboards,
     RaiseValueSection,
     AuctionSection,
+    BottlesPlayerboard,
     Hand,
   },
   data: function () {
@@ -193,6 +204,7 @@ export default {
       touchScreen: false,
       nextRound:Boolean,
       round: 1,
+      dispBottles: false,
       myCards: [],
       maxSizes: { x: 0, y: 0 },
       labels: {},
@@ -296,7 +308,7 @@ export default {
     nextRound: function(){
       if(this.nextRound){
         if(this.round < 4){
-          //this.placeBottlesPlayerboard()
+          this.dispBottles = true;
           this.startNextRound();
         }else{
           //funktion som avslutar spelet
@@ -404,6 +416,14 @@ export default {
         this.nextRound = d.nextRound;
       }.bind(this)
     );
+
+    this.$store.state.socket.on(
+      "bottleIncomeGained",
+      function(d){
+        this.players = d.players;
+        this.dispBottles = d.dispBottles;
+      }.bind(this)
+    );
   },
   methods: {
     selectAll: function (n) {
@@ -464,12 +484,13 @@ export default {
         playerId: this.playerId,
       });
     },
-    placeBottlesPlayerboard: function () {
-      this.$store.state.socket.emit("placeBottlesPlayerboard", {
-        roomId: this.$route.params.id,
+    getBottleIncome: function(bottleIncome){
+      this.$store.state.socket.emit("getBottleIncome", {
         playerId: this.playerId,
+        roomId: this.$route.params.id,
+        bottleIncome,
       });
-    }
+    },
   },
 };
 </script>

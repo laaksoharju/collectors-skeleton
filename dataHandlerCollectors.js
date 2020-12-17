@@ -60,6 +60,7 @@ Data.prototype.createRoom = function (roomId, playerCount, lang = "en") {
   room.deck = this.createDeck(lang);
   room.playerCount = playerCount;
   room.playerOrder = [];
+  room.dispBottles = Boolean;
   room.itemsOnSale = room.deck.splice(0, 5);
   room.skillsOnSale = room.deck.splice(0, 5);
   room.auctionCards = room.deck.splice(0, 4);
@@ -146,6 +147,21 @@ Data.prototype.setNextActivePlayer = function(roomId, activePlayerId){
   return true;
 }
 
+Data.prototype.getBottleIncome = function(roomId, playerId, bottleIncome){
+  let room = this.rooms[roomId];
+  if(bottleIncome.gainOneCoin){
+    room.players[playerId].money +=1;
+  }
+  if(bottleIncome.gainTwoCoins){
+    room.players[playerId].money +=2;
+  }
+  if(bottleIncome.gainCard){
+    let card = room.deck.pop();
+    room.players[playerId].hand.push(card);
+  }
+  room.dispBottles = false;
+}
+
 Data.prototype.startNextRound = function(roomId){
   let room = this.rooms[roomId];
   room.round += 1;
@@ -206,11 +222,6 @@ Data.prototype.drawCard = function (roomId, playerId) {
     return room.players;
   } else return [];
 }
-
-Data.prototype.bottlesPlacedPlayerboard = function(roomId, playerId){
-  console.log("placera flaskor på playerboard")
-}
-
 
 Data.prototype.rotateCards = function (roomId) {
   let room = this.rooms[roomId];
@@ -455,6 +466,11 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost, id) {
 Data.prototype.getNextRound = function(roomId){
   let room = this.rooms[roomId];
 return room.nextRound;
+}
+
+Data.prototype.getDispBottles = function(roomId){
+  let room= this.rooms[roomId];
+  return room.dispBottles;
 }
 
 /* returns the hand of the player */

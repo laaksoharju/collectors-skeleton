@@ -362,11 +362,6 @@ export default {
       return this.player.income.length;
     },
   },
-  methods: {
-    actionMade: function (id) {
-      console.log(id);
-    },
-  },
 };
 </script>
 
