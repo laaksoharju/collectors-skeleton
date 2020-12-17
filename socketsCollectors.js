@@ -55,7 +55,7 @@ function sockets(io, socket, data)
     }
  
     )
-    console.log('josi');
+   
   });
   socket.on('collectorsPlaceBottle', function (d)
   {

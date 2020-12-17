@@ -706,7 +706,7 @@ export default {
         auctionIncome: 0,
       },
 
-      typeofaction: "",
+      typeofaction: "skills",
     };
   },
   computed: {
@@ -846,7 +846,7 @@ export default {
     },
     placeBottle: function (action, cost) {
       this.chosenPlacementCost = cost;
-      this.typeofaction = "skill";
+      this.typeofaction = action;
       this.$store.state.socket.emit("collectorsPlaceBottle", {
         roomId: this.$route.params.id,
         playerId: this.playerId,
@@ -1263,12 +1263,12 @@ footer a:visited {
   padding-left: 0.6em;
 }
 
-.other-players .player-items-1 img {
+/* .other-players .player-items-1 img {
   height: 45%;
   width: 100%;
   padding-top: 1px;
   padding-bottom: 1px;
-}
+} */
 .player-skills {
   grid-column: 2;
   grid-row: 1;
@@ -1332,12 +1332,12 @@ footer a:visited {
   padding-top: 0.1em;
 }
 
-.other-players .player-skills-1 img {
+/* .other-players .player-skills-1 img {
   height: 45%;
   width: 100%;
   padding-top: 1px;
   padding-bottom: 1px;
-}
+} */
 
 .other-players {
   display: grid;

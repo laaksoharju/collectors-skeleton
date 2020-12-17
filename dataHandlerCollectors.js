@@ -76,6 +76,7 @@ Data.prototype.createRoom = function (roomId, playerCount, lang = "en")
   room.skillsOnSale = room.deck.splice(0, 5);
   room.auctionCards = room.deck.splice(0, 4);
   room.market = [];
+  room.deckAuction=[];
   room.buyPlacement = [{ cost: 1, playerId: null, bottleType: 'normal' },
   { cost: 1, playerId: null, bottleType: 'normal' },
   { cost: 2, playerId: null, bottleType: 'normal' },
