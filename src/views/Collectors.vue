@@ -2,6 +2,7 @@
   <div>
     <main>
       <h1>I am player {{ playerId }}</h1>
+      <h1> Round {{round}} </h1>
       <h1 v-if="players[playerId] && players[playerId].active">my turn!</h1>
 
       <div class="layout_wrapper">
@@ -25,6 +26,7 @@
             :skillsOnSale="skillsOnSale"
             :marketValues="marketValues"
             :placement="skillPlacement"
+            :players="players"
             @selectAction="selectAction($event)"
             @placeBottle="placeBottle('skillType','skill', $event)"
           />
@@ -36,6 +38,7 @@
             :marketValues="marketValues"
             :auctionCards="auctionCards"
             :placement="marketPlacement"
+            :players="players"
             @selectAction="selectAction($event)"
             @placeBottle="placeBottle('marketType','market', $event)"
           />
@@ -46,6 +49,7 @@
             :auctionCards="auctionCards"
             :marketValues="marketValues"
             :placement="auctionPlacement"
+            :players="players"
             @selectAction="selectAction($event)"
             @placeBottle="placeBottle('auctionType','auction', $event)"
           />
@@ -60,12 +64,20 @@
         :placement="buyPlacement"
         @circleClicked="circleClicked($event)" 
         class="gridWork"/>
+
+        <div id="hand_playerboard">
+              <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
+
+              <Hand v-if="players[playerId]" 
+              :player="players[playerId]"
+              
+              />
+        </div>
+
       </div>
 
-  
-      <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
+      
       <OtherPlayerboards :Players="players" :playerId="playerId" />
-
       <!--  {{ buyPlacement }} {{ chosenPlacementCost }}-->
 
       <div class="buttons">
@@ -159,6 +171,7 @@ import ItemSection from "@/components/ItemSection.vue";
 import PlayerBoard from "@/components/PlayerBoard.vue";
 import RaiseValueSection from "../components/RaiseValueSection.vue";
 import AuctionSection from "../components/AuctionSection.vue";
+import Hand from "@/components/Hand.vue";
 
 export default {
   name: "Collectors",
@@ -171,12 +184,14 @@ export default {
     OtherPlayerboards,
     RaiseValueSection,
     AuctionSection,
+    Hand,
   },
   data: function () {
     return {
       publicPath: "localhost:8080/#", //"collectors-groupxx.herokuapp.com/#",
       touchScreen: false,
       nextRound:Boolean,
+      round: 1,
       myCards: [],
       maxSizes: { x: 0, y: 0 },
       labels: {},
@@ -279,7 +294,13 @@ export default {
     },
     nextRound: function(){
       if(this.nextRound){
-        this.startNextRound();
+        if(this.round < 4){
+          //this.placeBottlesPlayerboard()
+          this.startNextRound();
+        }else{
+          //funktion som avslutar spelet
+        }
+        
       }
     }
   },
@@ -349,9 +370,9 @@ export default {
         this.skillPlacement = d.placement.skillPlacement;
         this.marketPlacement = d.placement.marketPlacement;
         this.auctionPlacement = d.placement.auctionPlacement;
+        this.round = d.round
       }.bind(this)
     );
-
 
     this.$store.state.socket.on(
       "collectorsCardBought",
@@ -373,7 +394,6 @@ export default {
         this.nextRound = d.nextRound;
       }.bind(this)
     );
-    
 
     this.$store.state.socket.on(
       "collectorsSkillCardBought",
@@ -395,14 +415,15 @@ export default {
       this.currentAction == 'marketType' ? this.buyRaiseValue(card) : null
       this.currentAction == 'auctionType' ? this.startAuction(card) : null //Funktionen existerar inte än
     },
-    placeBottle: function (type, action, cost) {
+    placeBottle: function (type, action, p) {
       this.currentAction = type;
-      this.chosenPlacementCost = cost;
+      this.chosenPlacementCost = p.cost;
       this.$store.state.socket.emit("collectorsPlaceBottle", {
         roomId: this.$route.params.id,
         playerId: this.playerId,
         action: action,
-        cost: cost,
+        cost: p.cost,
+        id: p.id,
       });
     },
     drawCard: function () {
@@ -434,7 +455,7 @@ export default {
         roomId: this.$route.params.id,
         playerId: this.playerId,
         card: card,
-        cost: this.marketValues[card.market] + this.chosenPlacementCost,
+        cost: this.chosenPlacementCost,
       });
     },
     startNextRound: function () {
@@ -443,6 +464,12 @@ export default {
         playerId: this.playerId,
       });
     },
+    placeBottlesPlayerboard: function () {
+      this.$store.state.socket.emit("placeBottlesPlayerboard", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+      });
+    }
   },
 };
 </script>
@@ -470,33 +497,16 @@ main {
 .layout_wrapper {
   display: grid;
   grid-template-columns: 70% 30%;
-  /*grid-template-columns: 40% 10%;*/
 }
 
-.gridItem {
-  grid-column: 1;
-  grid-row: 1;
-}
-
-/*.gridGame {
-  grid-column: 1;
-  grid-row: 1;
-}*/
-
-.gridWork {
-  grid-column: 2;
-  /*grid-column: 1;*/
-}
-
-.gridOtherBoard {
-  grid-column: 3;
-  /*grid-column: 2;*/
-  /*grid-row: 1;*/
-}
-
-.gridPlayerboard {
-  grid-column: 1 / span 2;
-  grid-row: 2;
+#hand_playerboard {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  height: 400px; /*DENNA GJORDE ATT DRAW CARD FÖRFLYTTADES NERÅT*/ 
+  /*overflow: hidden; MED DENNA SÅ FÖRSIVNNER PROBLEMET MED ATT DRAW CARD LIGGER PÅ PLAYERBOARD, MEN DÅ FÖRSVINNER
+  RULLISTAN OCH SÅ ÄNDRAS SIZEN PÅ HELA GRIDEN. OM DENNA INTE ÄR MED SÅ LIGGER DRAW CARD I PLAYERBOARD, MEN 
+  RULLLISTAN FINNS DÅ DVS.*/
+  
 }
 
 /*TRANSITION*/

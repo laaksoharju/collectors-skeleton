@@ -373,7 +373,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #mainBoard {
-  width: 50%;
+  width: 100%;
   height: fit-content;
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -383,7 +383,7 @@ export default {
   color: black;
   border: 1px solid black;
   /*margin: 5px;*/
-  padding: 5px;
+  padding: 10px;
   /*border-radius: 3px;*/
 }
 #mainBoard h2 {

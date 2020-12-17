@@ -66,95 +66,23 @@ Data.prototype.createRoom = function (roomId, playerCount, lang = "en") {
   room.skillsOnSale = room.deck.splice(0, 5);
   room.auctionCards = room.deck.splice(0, 4);
   room.market = [];
-  room.buyPlacement = [{
-      cost: 1,
-      playerId: null,
-      type: "itemType"
-    },
-    {
-      cost: 1,
-      playerId: null,
-      type: "itemType"
-    },
-    {
-      cost: 2,
-      playerId: null,
-      type: "itemType"
-    },
-    {
-      cost: 2,
-      playerId: null,
-      type: "itemType"
-    },
-    {
-      cost: 3,
-      playerId: null,
-      type: "itemType"
-    }
-  ];
-  room.skillPlacement = [{
-      cost: 0,
-      playerId: null,
-      type: "skillType"
-    },
-    {
-      cost: 0,
-      playerId: null,
-      type: "skillType"
-    },
-    {
-      cost: 0,
-      playerId: null,
-      type: "skillType"
-    },
-    {
-      cost: 1,
-      playerId: null,
-      type: "skillType"
-    },
-    {
-      cost: 1,
-      playerId: null,
-      type: "skillType"
-    }
-  ];
-  room.auctionPlacement = [{
-      cost: -2,
-      playerId: null,
-      type: "auctionType"
-    },
-    {
-      cost: -1,
-      playerId: null,
-      type: "auctionType"
-    },
-    {
-      cost: 0,
-      playerId: null,
-      type: "auctionType"
-    },
-    {
-      cost: 0,
-      playerId: null,
-      type: "auctionType"
-    }
-  ];
-  room.marketPlacement = [{
-      cost: 0,
-      playerId: null,
-      type: "marketType"
-    },
-    {
-      cost: -2,
-      playerId: null,
-      type: "marketType"
-    },
-    {
-      cost: 0,
-      playerId: null,
-      type: "marketType"
-    }
-  ];
+  room.buyPlacement = [{ cost: 1, playerId: null, type: "itemType" },
+  { id: 1, cost: 1, playerId: null, type: "itemType" },
+  { id: 2, cost: 2, playerId: null, type: "itemType" },
+  { id: 3, cost: 2, playerId: null, type: "itemType" },
+  { id: 4, cost: 3, playerId: null, type: "itemType" }];
+  room.skillPlacement = [{ cost: 0, playerId: null, type: "skillType" },
+  { id: 5, cost: 0, playerId: null, type: "skillType" },
+  { id: 6, cost: 0, playerId: null, type: "skillType" },
+  { id: 7, cost: 1, playerId: null, type: "skillType" },
+  { id: 8, cost: 1, playerId: null, type: "skillType" }];
+  room.auctionPlacement = [{ cost: -2, playerId: null, type: "auctionType" },
+  { cost: -1, playerId: null, type: "auctionType" },
+  { cost: 0, playerId: null, type: "auctionType" },
+  { cost: 0, playerId: null, type: "auctionType" }];
+  room.marketPlacement = [{ cost: 0, playerId: null, type: "marketType" },
+  { cost: -2, playerId: null, type: "marketType"  },
+  { cost: 0, playerId: null, type: "marketType"  }];
   this.rooms[roomId] = room;
 
   /*skriv kod för färg i workarea*/
@@ -282,6 +210,11 @@ Data.prototype.drawCard = function (roomId, playerId) {
   } else return [];
 }
 
+Data.prototype.bottlesPlacedPlayerboard = function(roomId, playerId){
+  console.log("placera flaskor på playerboard")
+}
+
+
 Data.prototype.rotateCards = function (roomId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
@@ -304,11 +237,21 @@ Data.prototype.rotateCards = function (roomId) {
 }
 
 Data.prototype.rotateSkills = function (room) {
+  for (let i in room.skillsOnSale) {
+    if (room.skillsOnSale[i].item == undefined) {
+      room.skillsOnSale.splice(i, 1);
+    }
+  }
   let card = room.skillsOnSale.pop();
   room.market.push(card);
 }
 
 Data.prototype.rotateAuction = function (room) {
+  for (let i in room.auctionCards) {
+    if (room.auctionCards[i].item == undefined) {
+      room.auctionCards.splice(i, 1);
+    }
+  }
   let card = room.auctionCards.pop();
   room.market.push(card);
 
@@ -483,7 +426,7 @@ Data.prototype.buySkillCard = function (roomId, playerId, card, cost) {
   }
 }
 
-Data.prototype.placeBottle = function (roomId, playerId, action, cost) {
+Data.prototype.placeBottle = function (roomId, playerId, action, cost, id) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     let activePlacement = [];
@@ -497,7 +440,7 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost) {
       activePlacement = room.marketPlacement;
     }
     for (let i = 0; i < activePlacement.length; i += 1) {
-      if (activePlacement[i].cost === cost &&
+      if (activePlacement[i].id === id &&
         activePlacement[i].playerId === null) {
         activePlacement[i].playerId = playerId;
         break;
