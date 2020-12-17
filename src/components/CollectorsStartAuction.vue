@@ -19,10 +19,36 @@
 </div>
 
 <button id = "bidPlacement" @click="startBidding()">Place bid!</button>
-  <div class = "EnergyBottleCoinWhiteTwo"></div> <!-- Olika flaskor med vita coins, 1 2 eller 0 -->
+<!--
+  <div class = "EnergyBottleCoinWhiteTwo"></div>  Olika flaskor med vita coins, 1 2 eller 0
   <div class = "EnergyBottleCoinWhiteOne"></div>
   <div class = "EnergyBottleCoinWhiteNoll"></div>
-  <div class = "EnergyBottleCoinWhiteNoll second"></div>
+  <div class = "EnergyBottleCoinWhiteNoll second"></div> -->
+
+ <!--<div class="buttons" v-for="(p, index) in placement" :key="index"> -->
+<div class="buttons" v-for="(p, index) in placement" :key="'Auction Button'+index">
+
+   <button v-if="p.playerId===null & p.cost===0"
+   :disabled="cannotAfford(p.cost)"
+   @click="placeBottle(p)">
+     <div class = "EnergyBottleCoinWhiteNoll second">
+     </div>
+   </button>
+
+   <button v-if="p.playerId===null & p.cost===-1"
+   :disabled="cannotAfford(p.cost)"
+   @click="placeBottle(p)">
+     <div class = "EnergyBottleCoinWhiteOne">
+     </div>
+   </button>
+
+   <button v-if="p.playerId===null & p.cost===-2"
+   :disabled="cannotAfford(p.cost)"
+   @click="placeBottle(p)">
+     <div class = "EnergyBottleCoinWhiteTwo">
+     </div>
+   </button>
+ </div>
 
 <div class = "start-auction" >
   <div v-for="(card, index) in auctionCards" :key="index">
@@ -30,7 +56,7 @@
       :card="card"
       :availableAction="card.available"
       @doAction="startAuction(card)"/>
-        </div>
+  </div>
 </div>
 </div>
 </template>
@@ -49,13 +75,15 @@ export default {
     auctionCards: Array,
     cardUpForAuction: Object,
     //bids: Object,
-    //placement: Array
+    marketValues: Object,
+    placement: Array,
+
   },
   methods: {
     startAuction: function (card) {
-      this.highlightAvailableCards()
       if (card.available){
-        this.$emit('startAuction', card)
+        this.$emit('startAuction', card);
+        this.highlightAvailableCards()
         }
       },
 
@@ -68,12 +96,34 @@ export default {
      this.$emit('startBidding', this.player.bids);
 
   },
+  cannotAfford: function (cost) {
+    let minCost = 100;
+    for(let key in this.marketValues) {
+      if (cost + this.marketValues[key] < minCost)
+        minCost = cost + this.marketValues[key]
+    }
+    return (this.player.money < minCost);
+  },
+  cardCost: function (card) {
+    return this.marketValues[card.market];
+  },
+  placeBottle: function (p) {
+    this.$emit('placeBottle', p.cost);
+    this.highlightAvailableCards(p.cost);
+  },
 
-   highlightAvailableCards: function (){
+   highlightAvailableCards: function (cost=100){
       for (let i = 0; i < this.auctionCards.length; i += 1) {
           this.$set(this.auctionCards[i], "available", true);
+        if (this.marketValues[this.auctionCards[i].item] <= this.player.money - cost) {
+            this.$set(this.auctionCards[i], "available", true);
           }
+        else {
+            this.$set(this.auctionCards[i], "available", false);
+          }
+          this.chosenPlacementCost = cost;
         }
+      }
     }
   }
 </script>
@@ -90,7 +140,8 @@ export default {
   display: grid;
   grid-template-columns: repeat(3, 60px);
   grid-template-rows: repeat(10,48.5px);
-  grid-row-gap: 18px;
+  grid-row-gap: 10px;
+  grid-auto-flow: column;
   border: 2px solid #4C7B80;
 }
 
@@ -109,8 +160,7 @@ font-size: 20px;
   height:45px;
   background-image:  url('/images/Coin-white.png');
   background-size: cover;
-  grid-column: 1;
-  grid-row: 4;
+
 }
 
 .second{
@@ -123,8 +173,7 @@ font-size: 20px;
   height:45px;
   background-image:  url('/images/Coin-white-2.png');
   background-size: cover;
-  grid-column: 1;
-  grid-row: 2;
+
 }
 
 .EnergyBottleCoinWhiteOne{
@@ -148,7 +197,7 @@ font-size: 20px;
 
 .auctionSquare{
   grid-column: 1;
-  grid-row: 6;
+  grid-row: 7;
   height: 180px;
   width: 130px;
   border: 5px dotted pink;
@@ -160,13 +209,14 @@ font-size: 20px;
 
   .bidSquare {
     grid-column: 1;
-    grid-row: 9;
-
+    grid-row: 10;
+margin-top: 20%;
   }
 #bidSquare {
   width: 40px;
   height: 20px;
   grid-column: 2;
+
 }
 
 form {
@@ -179,7 +229,8 @@ form {
   height: 30px;
   width: 100px;
     grid-column: 2;
-    grid-row: 9;
+    grid-row: 10;
+    margin-top: 40%;
     background-color: lightpink;
 
   }
@@ -187,16 +238,25 @@ form {
   .cardUpForAuction {
   transform: scale(0.45);
   grid-column: 1;
-  grid-row: 6;
+  grid-row: 7;
   height: 70px;
   width: 50px;
   }
 
   .start-auction{
     transform: scale(0.25);
+    grid-column: 2;
   }
   .start-auction div:hover{
     transform: scale(1.25)translate(-15%,0);
+    z-index: 1;
+  }
+
+  .buttons{
+  }
+
+  .buttons div:hover {
+    transform: scale(1.5)translate(0,0);
     z-index: 1;
   }
 
