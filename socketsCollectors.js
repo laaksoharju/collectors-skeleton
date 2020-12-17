@@ -35,13 +35,15 @@ function sockets(io, socket, data)
   });
   socket.on('collectorsDrawCard', function (d)
   {
+    console.log('sockets drawCard');
     io.to(d.roomId).emit('collectorsCardDrawn',
       data.drawCard(d.roomId, d.playerId)
     );
+
   });
   socket.on('collectorsBuyCard', function (d)
   {
-    console.log('rich socket')
+    console.log('sockets collectorBuyCard');
 
     data.buyCard(d.roomId, d.playerId, d.card, d.cost, d.action)
     io.to(d.roomId).emit('collectorsCardBought', {
@@ -54,7 +56,11 @@ function sockets(io, socket, data)
   });
   socket.on('collectorsPlaceBottle', function (d)
   {
-    data.placeBottle(d.roomId, d.playerId, d.action, d.cost);
+
+    console.log('sockets placeBottle');
+    data.placeBottle(d.roomId, d.playerId, d.action, d.cost, d.recieveCards);
+
+    console.log('sockets placeBottle after data.placeBottle');
     io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId)
     );
   });

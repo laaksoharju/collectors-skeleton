@@ -266,11 +266,18 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
   }
 }
 
-Data.prototype.placeBottle = function (roomId, playerId, action, cost)
+Data.prototype.placeBottle = function (roomId, playerId, action, cost, recieveCards)
 {
+
+
+  console.log('dataHandler placeBottle');
+  console.log(recieveCards);
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined')
-  {
+    {
+
+
+
     let activePlacement = [];
     if (action === "buy")
     {
@@ -278,8 +285,10 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost)
     }
     else if (action === "skill")
     {
+
+      console.log('dataHandler.placeBottle.skill');
       activePlacement = room.skillPlacement;
-      console.log('hejdå')
+
     }
     else if (action === "auction")
     {
@@ -290,11 +299,14 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost)
       activePlacement = room.workPlacement;
       room.players[playerId].money -= cost;
       room.players[playerId].bottles -= 1;
-      console.log('hejjj');
+
     }
     else if (action === "market")
+
     {
       activePlacement = room.marketPlacement;
+      room.players[playerId].money -= cost;
+      room.players[playerId].bottles -= 1;
     }
     for (let i = 0; i < activePlacement.length; i += 1)
     {
@@ -329,7 +341,8 @@ Data.prototype.getPlacements = function (roomId)
       skillPlacement: room.skillPlacement,
       auctionPlacement: room.auctionPlacement,
       marketPlacement: room.marketPlacement,
-      workPlacement: room.workPlacement
+      workPlacement: room.workPlacement,
+      players: room.players
     }
   }
   else return {};

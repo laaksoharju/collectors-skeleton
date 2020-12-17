@@ -65,7 +65,6 @@
                 v-if="players[playerId]"
                 :labels="labels"
                 :player="players[playerId]"
-                :itemsOnSale="itemsOnSale"
                 :marketValues="marketValues"
                 :placement="marketPlacement"
                 @placeBottle="placeBottle('market', $event)"
@@ -524,11 +523,17 @@ export default {
     this.$store.state.socket.on(
       "collectorsBottlePlaced",
       function (d) {
+
+        console.log('Collectors collectorsBottlePlaced');
+
         this.buyPlacement = d.buyPlacement;
         this.skillPlacement = d.skillPlacement;
         this.marketPlacement = d.marketPlacement;
         this.auctionPlacement = d.auctionPlacement;
         this.workPlacement = d.workPlacement;
+        this.players = d.players;
+
+
       }.bind(this)
     );
 
@@ -597,30 +602,22 @@ export default {
       }
       return otherPlayers;
     },
-    placeBottle: function (action, cost) {
+    placeBottle: function (action, p) {
 
-      console.log(action);
+      console.log('Collectors placeBottle');
+      console.log(p.recieveCards);
 
-            if (cost<0){
-
-              this.players[this.playerId].money += cost*-1;
-
-            }
-
-            if (cost>0){
-
-              this.players[this.playerId].money -= cost;
-
-            }
-
-            this.players[this.playerId].bottles -=1;
-
+      var recieveCards = p.recieveCards;
+      var cost = p.cost;
+      console.log(p.cost);
       this.chosenPlacementCost = cost;
       this.$store.state.socket.emit("collectorsPlaceBottle", {
         roomId: this.$route.params.id,
         playerId: this.playerId,
         action: action,
         cost: cost,
+        recieveCards: recieveCards,
+
       });
     },
     drawCard: function () {
@@ -631,7 +628,7 @@ export default {
     },
     buyCard: function (action, card) {
 
-      console.log("buyCard", card);
+      console.log("buyCard collectors");
       this.$store.state.socket.emit("collectorsBuyCard", {
         roomId: this.$route.params.id,
         playerId: this.playerId,

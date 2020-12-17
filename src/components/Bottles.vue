@@ -132,18 +132,15 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
-
-      console.log(p.recieveCards);
-      console.log(p.cost);
+      console.log('Bottles placBottle');
 
 
-
-      if (p.recieveCards > 0){
+    for (let i = 0; i < p.recieveCards; i += 1){
       this.$store.state.socket.emit('collectorsDrawCard', { roomId: this.$route.params.id,
       playerId: this.$store.state.playerId });
     }
 
-    this.$emit("placeBottle", p.cost);
+    this.$emit("placeBottle", p);
     this.highlightAvailableCards(p.cost);
 
 
