@@ -221,22 +221,22 @@ Data.prototype.setNextActivePlayer = function (roomId, activePlayerId) {
   return true;
 }
 
-Data.prototype.getBottleIncome = function(roomId, playerId, bottleIncome){
+Data.prototype.getBottleIncome = function (roomId, playerId, bottleIncome) {
   let room = this.rooms[roomId];
-  if(bottleIncome.gainOneCoin){
-    room.players[playerId].money +=1;
+  if (bottleIncome.gainOneCoin) {
+    room.players[playerId].money += 1;
   }
-  if(bottleIncome.gainTwoCoins){
-    room.players[playerId].money +=2;
+  if (bottleIncome.gainTwoCoins) {
+    room.players[playerId].money += 2;
   }
-  if(bottleIncome.gainCard){
+  if (bottleIncome.gainCard) {
     let card = room.deck.pop();
     room.players[playerId].hand.push(card);
   }
   room.dispBottles = false;
 }
 
-Data.prototype.startNextRound = function(roomId){
+Data.prototype.startNextRound = function (roomId) {
   let room = this.rooms[roomId];
   room.round += 1;
   this.rotateCards(roomId);
@@ -481,7 +481,7 @@ Data.prototype.buyRaiseValue = function (roomId, playerId, cards, cost) {
         }
       }
     }
-    
+
     for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
       if (cards[1]) {
         if (room.players[playerId].hand[i].x === cards[1].x &&
@@ -564,8 +564,8 @@ Data.prototype.getNextRound = function (roomId) {
   return room.nextRound;
 }
 
-Data.prototype.getDispBottles = function(roomId){
-  let room= this.rooms[roomId];
+Data.prototype.getDispBottles = function (roomId) {
+  let room = this.rooms[roomId];
   return room.dispBottles;
 }
 
@@ -632,5 +632,62 @@ Data.prototype.getAuctionCards = function (roomId) {
     return room.auctionCards;
   } else return [];
 }
+
+Data.prototype.VPfiguresSkill = function () {
+  // VP-figures
+  // Get 1p more for each item of same sort (Same as Market Values?)
+  // 
+}
+
+Data.prototype.VPmusicSkill = function () {
+  // VP-music
+  // Get 1p more for each item of same sort (Same as Market Values?)
+  // 
+}
+
+Data.prototype.VPfastavalSkill = function () {
+  // VP-fastaval
+  // Get 1p more for each item of same sort (Same as Market Values?)
+}
+
+Data.prototype.VPmovieSkill = function () {
+  // VP-movie
+  // Get 1p more for each item of same sort (Same as Market Values?)
+  // 
+}
+
+Data.prototype.VPtechnologySkill = function () {
+  // VP-technology
+  // Get 1p more for each item of same sort (Same as Market Values?)
+  // 
+}
+
+Data.prototype.VPallSkill = function () {
+  // VP-all
+  // Om spelaren har en av varje skill I slutet av spelet, ge 5 poäng.
+}
+
+Data.prototype.bottleSkill = function () {
+  // bottle
+  // Get another bottle to use same quarter (round?).
+}
+
+Data.prototype.auctionIncome = function () {
+  // auctionIncome
+  // Få 1$ när en auktion startas
+}
+
+
+Data.prototype.workerCard = function () {
+  // workerCard
+  // Få 1 kort när du lägger bottle i work area
+}
+
+Data.prototype.workerIncome = function () {
+  // workerIncome
+  // Få 2$ när du lägger bottle i work area.
+}
+
+
 
 module.exports = Data;
