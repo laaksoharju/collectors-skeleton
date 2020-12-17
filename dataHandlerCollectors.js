@@ -480,6 +480,9 @@ Data.prototype.buyRaiseValue = function (roomId, playerId, cards, cost) {
           break
         }
       }
+    }
+    
+    for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
       if (cards[1]) {
         if (room.players[playerId].hand[i].x === cards[1].x &&
           room.players[playerId].hand[i].y === cards[1].y) {
