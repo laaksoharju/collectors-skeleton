@@ -129,14 +129,14 @@
         <div id="AllPlayerCardsDiv" v-if="playerBoardShown">
           <div id="AllPlayerIdDiv">
             <h3>{{labels.names}}</h3>
-            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="'names'+key">
               <p>{{ player }}</p>
             </div>
           </div>
 
           <div id="AllPlayerHandsDiv">
             <h3>{{labels.hands}}</h3>
-            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="'hands'+key">
               <CollectorsCard v-for="(card, index) in players[player].hand" :card="card" :availableAction="card.available" @doAction="handleAction(card)" :key="index"/>
             </div>
           </div>
@@ -312,7 +312,7 @@ export default {
             this.players[this.playerId].income = d.players[this.playerId].income;
             this.players[this.playerId].money = d.players[this.playerId].money;
 
-            this.players = d.players;
+          //  this.players = d.players;
 
             this.playerIdArray = d.playerIdArray;
           }.bind(this));
@@ -396,7 +396,11 @@ export default {
           this.$store.state.socket.on('collectorsRoundUpdated',
           function(d) {
             this.activeRound = d.activeRound;
-            this.placements = d.placements;
+            this.buyPlacement = d.placements.buyPlacement;
+            this.skillPlacement = d.placements.skillPlacement;
+            this.marketPlacement = d.placements.marketPlacement;
+            this.auctionPlacement = d.placements.auctionPlacement;
+            this.workPlacement = d.placements.workPlacement;
           }.bind(this));
         },
 
