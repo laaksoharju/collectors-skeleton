@@ -73,12 +73,15 @@ function sockets(io, socket, data) {
     io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId));
   });
 
-  socket.on('placeBottlePlayerboard', function (d) {
-    data.placeBottle(d.roomId, d.playerId, d.action, d.cost);
-    io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId));
-  });
-
-
+  socket.on('getBottleIncome', function (d){
+    data.getBottleIncome(d.roomId, d.playerId, d.bottleIncome);
+    io.to(d.roomId).emit('bottleIncomeGained', {
+      players: data.getPlayers(d.roomId),
+      dispBottles: data.getDispBottles(d.roomId)
+    });
+  }
+  
+  );
 
 }
 
