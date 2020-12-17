@@ -1,5 +1,6 @@
 {
 	"buyCard": "Buy an item",
+	"valueRaised": "Value raised",
 
 	"getSkill": "Get a skill",
 
@@ -23,6 +24,7 @@
 	"ready": "I'm ready!",
 	"start": "Start the game",
 	"retrieve": "Retrieve bottles",
+	"fake": "Fake more money",
 
 	"playerBoard": "Player board",
 	"names": "Names",

@@ -75,7 +75,7 @@
           <button id="nextRound" v-on:click="changeRound()" :disabled="notLastPlayer()">Next round</button>
         </div>
         <div>
-          <button id="money" v-if="players[playerId]" @click="fakeMoreMoney()">Fake more money</button>
+          <button id="money" v-if="players[playerId]" @click="fakeMoreMoney()">{{labels.fake}}</button>
         </div>
         <div class="buttons">
           <button class="function_buttons" @click="drawCard">

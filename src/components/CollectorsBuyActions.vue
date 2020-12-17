@@ -3,7 +3,7 @@
     <h1 style="text-align: center"><img class="title_img" src="images/buy.png">{{ labels.buyCard }}</h1>
     <div class="buy-cards">
       <div v-for="(card, index) in itemsOnSale" :key="index" style="color:black">
-        Value raised: +{{ cardCost(card) }}
+        {{labels.valueRaised}}: +{{ cardCost(card) }}
         <CollectorsCard
         :card="card"
         :availableAction="card.available"

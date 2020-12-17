@@ -1,5 +1,6 @@
 {
 	"buyCard": "Köp ett föremål",
+	"valueRaised": "Ökat värde",
 
 	"getSkill": "Skaffa en skicklighet",
 
@@ -23,6 +24,7 @@
 	"ready": "Jag är redo!",
 	"start": "Starta spelet",
 	"retrieve": "Återta flaskor",
+	"fake": "Skapa mer pengar",
 
 	"playerBoard": "Spelarbräde",
 	"names": "Namn",
