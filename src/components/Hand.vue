@@ -1,24 +1,24 @@
 <template>
   <div class="handPlayer" :style="{ backgroundColor: player.color }">
     <div class="test">
-    <InfoButtons :modalProps="handProps" />
-      
+      <InfoButtons :modalProps="handProps" />
+
       <h2>HAND</h2>
     </div>
-    <div class = "handSlot" :style="{ backgroundColor: player.color }">
-        
-        
-        <CollectorsCard v-for="(card, index) in player.hand"
-            :card="card"
-            :availableAction="card.available"
-            :key="index"/>
-        <!--<div id="secretCard">
+    <div class="handSlot" :style="{ backgroundColor: player.color }">
+      <CollectorsCard
+        v-for="(card, index) in player.hand"
+        :card="card"
+        :availableAction="card.available"
+        :key="index"
+        @doAction="selectAction(card)"
+      />
+      <!--<div id="secretCard">
             <p>Secret</p>
             <CollectorsCard :card="player.secret" />
         </div>-->
-
     </div>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -33,19 +33,28 @@ export default {
   },
   props: {
     player: Object,
+    allCardsChosen: Boolean,
   },
 
   data: function () {
     return {
       handProps: {
-      value: "Hand",
-      text: "Information about hand",
-      title: "",
-      classes: `${this.player.color} button`,
-    }}
+        value: "Hand",
+        text: "Information about hand",
+        title: "",
+        classes: `${this.player.color} button`,
+      },
+    };
   },
   methods: {
-    
+        selectAction: function (card) {
+      if (card.available) {
+        this.$emit("selectAction", card);
+        this.allCardsChosen
+          ? this.highlightAvailableCards()
+          : this.$set(card, "available", false);
+      }
+    },
   },
 };
 </script>
@@ -60,7 +69,7 @@ export default {
   /*margin: 10px;*/
   /*border-radius: 3px;*/
 }
-.handSlot div{
+.handSlot div {
   transform: scale(0.5) translate(-50%, -50%);
   transition: 0.2s;
   transition-timing-function: ease-out;
@@ -74,7 +83,6 @@ export default {
 div.handPlayer {
   overflow-y: scroll;
   white-space: nowrap;
-  
 }
 
 .handPlayer {
@@ -90,12 +98,12 @@ div.handPlayer {
   border: 1px solid black;
   border-left-style: none;
 }
-#secretCard{
-    background: url("/images/baksida.png");
-    background-size: 8vw 10vw;
+#secretCard {
+  background: url("/images/baksida.png");
+  background-size: 8vw 10vw;
   background-repeat: no-repeat;
-    border-radius: 3px;
-    padding: 10px;
-    text-align:center;
+  border-radius: 3px;
+  padding: 10px;
+  text-align: center;
 }
 </style>

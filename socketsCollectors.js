@@ -47,7 +47,7 @@ function sockets(io, socket, data) {
   });
 
   socket.on('buyRaiseValue', function (d) {
-    data.buyRaiseValue(d.roomId, d.playerId, d.card, d.cost)
+    data.buyRaiseValue(d.roomId, d.playerId, d.cards, d.cost)
     io.to(d.roomId).emit('raiseValueBought', {
       playerId: d.playerId,
       players: data.getPlayers(d.roomId),

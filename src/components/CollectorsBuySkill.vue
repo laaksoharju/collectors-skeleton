@@ -24,7 +24,11 @@
           >
             ${{ p.cost }}
           </button>
-          <div class="clickedButton" v-if="p.playerId !== null && typeof players !== 'undefined'" :style="{backgroundColor: players[p.playerId].color}">
+          <div
+            class="clickedButton"
+            v-if="p.playerId !== null && typeof players !== 'undefined'"
+            :style="{ backgroundColor: players[p.playerId].color }"
+          >
             {{ p.playerId }}
           </div>
         </div>
@@ -49,6 +53,7 @@ export default {
     skillsOnSale: Array,
     marketValues: Object,
     placement: Array,
+    allCardsChosen: Boolean,
     players: Object,
   },
 
@@ -78,7 +83,6 @@ export default {
     },
 
     placeBottle: function (p) {
-
       this.$emit("placeBottle", p);
       this.highlightAvailableCards(p.cost);
     },
@@ -109,11 +113,10 @@ export default {
     },
     selectAction: function (card) {
       if (card.available) {
-
         this.$emit("selectAction", card);
-
-
-        this.highlightAvailableCards();
+        this.allCardsChosen
+          ? this.highlightAvailableCards()
+          : this.$set(card, "available", false);
       }
     },
   },
@@ -263,5 +266,4 @@ p {
   align-items: flex-start;
   color: black;
 }
-
 </style>
