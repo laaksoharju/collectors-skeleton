@@ -69,6 +69,10 @@
           :labels="labels"
           :player="players[playerId]"
           :currentRound="currentRound"
+          :placement="workPlacement"
+          :skillsOnSale="skillsOnSale"
+          :marketValues="marketValues"
+          @placeBottle="placeBottle('work', $event)"
           />
 
        <CollectorsStartAuction v-if="players[playerId]"
@@ -262,6 +266,7 @@ export default {
       skillPlacement: [],
       auctionPlacement: [],
       marketPlacement: [],
+      workPlacement: [],
       chosenPlacementCost: null,
       marketValues: { fastaval: 0,
                      movie: 0,
@@ -322,6 +327,7 @@ export default {
         this.skillPlacement = d.placements.skillPlacement;
         this.marketPlacement = d.placements.marketPlacement;
         this.auctionPlacement = d.placements.auctionPlacement;
+        this.workPlacement = d.placements.workPlacement;
       }.bind(this));
     this.$store.state.socket.on('collectorsBottlePlaced',
       function(d) {
@@ -329,6 +335,7 @@ export default {
         this.skillPlacement = d.skillPlacement;
         this.marketPlacement = d.marketPlacement;
         this.auctionPlacement = d.auctionPlacement;
+        this.workPlacement = d.workPlacement;
       }.bind(this));
     this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
     this.$store.state.socket.on('collectorsCardDrawn',
@@ -427,6 +434,9 @@ export default {
       }
       if (this.chosenAction === "auction") {
         this.startAuction(card)
+      }
+      if (this.chosenAction === "work" ) {
+        console.log("whichAction = work")
       }
     },
     drawCard: function () {
@@ -755,7 +765,7 @@ h5 {
   grid-column: 1 / span 3;
   font-style: italic;
   font-size: 50px;
-  text-shadow: 2px 2px 4px red;
+  text-shadow: 2px 2px 4px #BD5467;
   font-size: 20px;
 }
   .chosenSkillCard {

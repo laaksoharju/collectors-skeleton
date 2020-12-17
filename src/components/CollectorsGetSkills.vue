@@ -4,14 +4,14 @@
 
 
 <div class="buttons" v-for="(p, index) in placement" :key="index">
-  <button v-if="p.playerId===null & p.cost===0"
+  <button id="noCoinButton" v-if="p.playerId===null & p.cost===0"
   :disabled="cannotAfford(p.cost)"
   @click="placeBottle(p)">
     <div class = "EnergyBottles">
     </div>
   </button>
 
-  <button v-if="p.playerId===null & p.cost===1"
+  <button id="coinButton" v-if="p.playerId===null & p.cost===1"
   :disabled="cannotAfford(p.cost)"
   @click="placeBottle(p)">
     <div class = "EnergyBottlesCoin">
@@ -145,8 +145,18 @@ export default {
 }
 
 .buttons{
-  background-color: #dce5cc;
-  border-color: #dce5cc;
+
+}
+
+#noCoinButton {
+  background-color: #dfeccc;
+  border-radius: 5px;
+  border: 2px solid #A3B77F;
+}
+#coinButton {
+  background-color: #dfeccc;
+  border-radius: 5px;
+  border: 2px solid #A3B77F;
 }
 
 .buttons div:hover {

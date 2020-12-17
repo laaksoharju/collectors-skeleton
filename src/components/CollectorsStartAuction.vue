@@ -18,7 +18,7 @@
   </form>
 </div>
 
-<button id = "bidPlacement" @click="startBidding()">Place bid!</button>
+<button  id = "bidPlacementButton" @click="startBidding()">Place bid!</button>
 <!--
   <div class = "EnergyBottleCoinWhiteTwo"></div>  Olika flaskor med vita coins, 1 2 eller 0
   <div class = "EnergyBottleCoinWhiteOne"></div>
@@ -28,21 +28,21 @@
  <!--<div class="buttons" v-for="(p, index) in placement" :key="index"> -->
 <div class="buttons" v-for="(p, index) in placement" :key="'Auction Button'+index">
 
-   <button v-if="p.playerId===null & p.cost===0"
+   <button id="buttonNollSecond" v-if="p.playerId===null & p.cost===0"
    :disabled="cannotAfford(p.cost)"
    @click="placeBottle(p)">
      <div class = "EnergyBottleCoinWhiteNoll second">
      </div>
    </button>
 
-   <button v-if="p.playerId===null & p.cost===-1"
+   <button id="buttonOne" v-if="p.playerId===null & p.cost===-1"
    :disabled="cannotAfford(p.cost)"
    @click="placeBottle(p)">
      <div class = "EnergyBottleCoinWhiteOne">
      </div>
    </button>
 
-   <button v-if="p.playerId===null & p.cost===-2"
+   <button id="buttonTwo" v-if="p.playerId===null & p.cost===-2"
    :disabled="cannotAfford(p.cost)"
    @click="placeBottle(p)">
      <div class = "EnergyBottleCoinWhiteTwo">
@@ -150,7 +150,7 @@ grid-column: 1;
 grid-row: 1;
 font-style: italic;
 font-size: 50px;
-text-shadow: 2px 2px 4px pink;
+text-shadow: 2px 2px 4px #75755C;
 font-size: 20px;
 }
 
@@ -210,7 +210,7 @@ font-size: 20px;
   .bidSquare {
     grid-column: 1;
     grid-row: 10;
-margin-top: 20%;
+    margin-top: 20%;
   }
 #bidSquare {
   width: 40px;
@@ -225,15 +225,21 @@ form {
   font-size: 13px;
 }
 
-#bidPlacement {
+#bidPlacementButton {
   height: 30px;
   width: 100px;
     grid-column: 2;
     grid-row: 10;
     margin-top: 40%;
     background-color: lightpink;
-
+    border-radius: 12px;
+    border: 2px solid #BD5467;
   }
+
+#bidPlacementButton:hover {
+  background-color: #BD5467;
+  border: 2px solid lightpink;
+}
 
   .cardUpForAuction {
   transform: scale(0.45);
@@ -253,6 +259,25 @@ form {
   }
 
   .buttons{
+    border-radius: 9px;
+  }
+
+  #buttonNollSecond {
+    background-color: white;
+    border-radius: 5px;
+    border: 2px solid #D4D4B8;
+  }
+
+  #buttonOne {
+    background-color: white;
+    border-radius: 5px;
+    border: 2px solid #D4D4B8;
+  }
+
+  #buttonTwo {
+    background-color: white;
+    border-radius: 5px;
+    border: 2px solid #D4D4B8;
   }
 
   .buttons div:hover {

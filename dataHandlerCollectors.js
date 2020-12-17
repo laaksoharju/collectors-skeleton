@@ -87,6 +87,10 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.marketPlacement = [ {cost:0, playerId: null},
                            {cost:-2, playerId: null},
                            {cost:0, playerId: null} ];
+  room.workPlacement = [ {cost:1, playerId: null},
+                            {cost:-1, playerId: null},
+                            {cost:0, playerId: null},
+                            {cost:0, playerId: null} ];
   this.rooms[roomId] = room;
 }
 
@@ -319,6 +323,9 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost) {
     else if (action === "market") {
       activePlacement = room.marketPlacement;
     }
+    else if (action === "work") {
+      activePlacement = room.workPlacement;
+    }
     for(let i = 0; i < activePlacement.length; i += 1) {
         if( activePlacement[i].cost === cost &&
             activePlacement[i].playerId === null ) {
@@ -344,7 +351,8 @@ Data.prototype.getPlacements = function(roomId){
     return { buyPlacement: room.buyPlacement,
              skillPlacement: room.skillPlacement,
              auctionPlacement: room.auctionPlacement,
-             marketPlacement: room.marketPlacement }
+             marketPlacement: room.marketPlacement,
+             workPlacement: room.workPlacement }
   }
   else return {};
 }

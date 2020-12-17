@@ -7,7 +7,7 @@
 <div></div>
 
    <div class="buttons" v-for="(p, index) in placement" :key="'Item Button'+index">
-     <button
+     <button id="oneCoinButton"
        v-if="p.playerId===null && p.cost===1"
        :disabled="cannotAfford(p.cost)"
        @click="placeBottle(p)">
@@ -15,7 +15,7 @@
        </div>
       </button>
 
-      <button
+      <button id="twoCoinButton"
         v-if="p.playerId===null && p.cost===2"
         :disabled="cannotAfford(p.cost)"
         @click="placeBottle(p)">
@@ -23,7 +23,7 @@
         </div>
      </button>
 
-     <button
+     <button id="threeCoinButton"
        v-if="p.playerId===null && p.cost===3"
        :disabled="cannotAfford(p.cost)"
        @click="placeBottle(p)">
@@ -148,7 +148,7 @@ export default {
 .itemCard {
   grid-row: 2;
   transform: scale(0.25);
-/*  place-self:center; */
+/*  place-self:center; förstör!! */
 }
 
 .itemCard div:hover{
@@ -162,7 +162,21 @@ export default {
   background-image:  url('/images/item-bottle-coin-one.png');
   background-size: cover;
 }
-
+#oneCoinButton {
+  background-color: #f9dcce;
+  border-radius: 5px;
+  border: 2px solid #E3A688;
+}
+#twoCoinButton {
+  background-color: #f9dcce;
+  border-radius: 5px;
+  border: 2px solid #E3A688;
+}
+#threeCoinButton {
+  background-color: #f9dcce;
+  border-radius: 5px;
+  border: 2px solid #E3A688;
+}
 .ItemBottleCoinTwo{
   width:50px;
   height:50px;

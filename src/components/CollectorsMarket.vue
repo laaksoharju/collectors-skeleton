@@ -23,7 +23,7 @@
     <div class = "bottleCoins"> </div>-->
 
 <div class="buttons" v-for="(p, index) in placement" :key="index">
-    <button
+    <button id="twoFlags"
       v-if="p.playerId===null && index ===0 "
       :disabled="cannotAfford(p.cost)"
       @click="placeBottle(p)">
@@ -31,7 +31,7 @@
       </div>
      </button>
 
-     <button
+     <button id="oneFlag"
        v-if="p.playerId===null && index===1"
        :disabled="cannotAfford(p.cost)"
        @click="placeBottle(p)">
@@ -39,7 +39,7 @@
        </div>
     </button>
 
-    <button
+    <button id="coinsButton"
       v-if="p.playerId===null && index===2"
       :disabled="cannotAfford(p.cost)"
       @click="placeBottle(p)">
@@ -107,7 +107,7 @@ export default {
 .titleMarketPool {
   font-style: italic;
   font-size: 50px;
-  text-shadow: 2px 2px 4px blue;
+  text-shadow: 2px 2px 4px #4678CC;
   font-size: 20px;
 }
 
@@ -138,7 +138,7 @@ export default {
     background-position:center;
     background-image: url('/images/iconBird.PNG');
     background-size: cover;
-    place-self: center; 
+    place-self: center;
     grid-column: 1;
     grid-row: 10;
   }
@@ -197,6 +197,11 @@ export default {
     grid-column: 2;
     grid-row: 2;
   }
+  #coinsButton {
+    background-color: #cfdcf2;
+    border-radius: 5px;
+    border: 2px solid #6894DF;
+  }
   .bottleOneFlag {
     width:50px;
     height:50px;
@@ -205,6 +210,11 @@ export default {
     grid-column: 3;
     grid-row: 2;
   }
+  #oneFlag {
+    background-color: #cfdcf2;
+    border-radius: 5px;
+    border: 2px solid #6894DF;
+  }
 .bottleTwoFlags {
   width:50px;
   height:50px;
@@ -212,5 +222,10 @@ export default {
   background-size: cover;
   grid-column: 4;
   grid-row: 2;
+}
+#twoFlags {
+  background-color: #cfdcf2;
+  border-radius: 5px;
+  border: 2px solid #6894DF;
 }
   </style>
