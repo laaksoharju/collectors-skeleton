@@ -2,7 +2,7 @@
   <div>
     <main>
       <h1>I am player {{ playerId }}</h1>
-      <h1 v-if="players[playerId].active">my turn!</h1>
+      <h1 v-if="players[playerId] && players[playerId].active">my turn!</h1>
 
       <div class="layout_wrapper">
         <div id="game-board">
@@ -37,7 +37,7 @@
             :auctionCards="auctionCards"
             :placement="marketPlacement"
             @selectAction="selectAction($event)"
-            @placeBottle="placeBottle('marketType','buy', $event)"
+            @placeBottle="placeBottle('marketType','market', $event)"
           />
           <AuctionSection
             v-if="players[playerId]"
@@ -47,8 +47,7 @@
             :marketValues="marketValues"
             :placement="auctionPlacement"
             @selectAction="selectAction($event)"
-            @placeBottle="placeBottle('auctionType','buy', $event)"
-
+            @placeBottle="placeBottle('auctionType','auction', $event)"
           />
 
           <!-- glöm ej ändra från buy på de ovan-->
@@ -340,9 +339,9 @@ export default {
     this.$store.state.socket.on(
       "nextRoundStarted",
       function (d) {
-        this.itemsOnSale = d.rotatedCards.itemsOnSale;
-        this.skillsOnSale = d.rotatedCards.skillsOnSale;
-        this.auctionCards = d.rotatedCards.auctionCards;
+        this.itemsOnSale = d.itemsOnSale;
+        this.skillsOnSale = d.skillsOnSale;
+        this.auctionCards = d.auctionCards;
         this.marketValues = d.marketValues;
         this.nextRound = d.nextRound;
         this.players = d.players;
@@ -371,6 +370,7 @@ export default {
         this.skillsOnSale = d.skillsOnSale;
         this.auctionCards = d.auctionCards;
         this.marketValues = d.marketValues;
+        this.nextRound = d.nextRound;
       }.bind(this)
     );
     
