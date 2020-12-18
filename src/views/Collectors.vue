@@ -301,7 +301,6 @@ export default {
     },
     nextRound: function(){
       if(this.nextRound){
-        this.nextRound = false;
         if(this.round < 4){
           this.startNextRound();
         } else {
@@ -377,7 +376,6 @@ export default {
         this.marketPlacement = d.placement.marketPlacement;
         this.auctionPlacement = d.placement.auctionPlacement;
         this.round = d.round;
-        console.log(this.playerId + "startade nästa runda")
       }.bind(this)
       
     );
@@ -505,7 +503,7 @@ export default {
     startNextRound: function () {
       this.$store.state.socket.emit("startNextRound", {
         roomId: this.$route.params.id,
-        playerId: this.playerId,
+        playerId: this.playerId
       });
     },
     getBottleIncome: function(bottleIncome){
