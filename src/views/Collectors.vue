@@ -607,16 +607,15 @@ export default {
       console.log('Collectors placeBottle');
       console.log(p.recieveCards);
 
-      var recieveCards = p.recieveCards;
-      var cost = p.cost;
+
       console.log(p.cost);
-      this.chosenPlacementCost = cost;
+      this.chosenPlacementCost = p.cost;
       this.$store.state.socket.emit("collectorsPlaceBottle", {
         roomId: this.$route.params.id,
         playerId: this.playerId,
         action: action,
-        cost: cost,
-        recieveCards: recieveCards,
+        
+        p: p,
 
       });
     },

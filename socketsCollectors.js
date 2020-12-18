@@ -58,7 +58,7 @@ function sockets(io, socket, data)
   {
 
     console.log('sockets placeBottle');
-    data.placeBottle(d.roomId, d.playerId, d.action, d.cost, d.recieveCards);
+    data.placeBottle(d.roomId, d.playerId, d.action, d.p);
 
     console.log('sockets placeBottle after data.placeBottle');
     io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId)

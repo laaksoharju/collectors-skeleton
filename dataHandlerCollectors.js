@@ -266,12 +266,15 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
   }
 }
 
-Data.prototype.placeBottle = function (roomId, playerId, action, cost, recieveCards)
+Data.prototype.placeBottle = function (roomId, playerId, action, p)
 {
 
 
   console.log('dataHandler placeBottle');
-  console.log(recieveCards);
+  console.log(p.recieveCards);
+var cost = p.cost
+
+
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined')
     {
