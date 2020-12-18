@@ -1,5 +1,6 @@
 <template>
-    <div v-if="card.x>0" :class="['card', {'available-to-choose': availableAction}]" :style="{'background-position': (-(card.x-1)*250)+'px ' + (-(card.y-1)*350)+'px'}" @click="doAction">
+    <div v-if="card.x>0" :class="['card', {'available-to-choose': availableAction}]" :style="{'background-position': (-(card.x-1)*200)+'px ' + (-(card.y-1)*280)+'px'}" @click="doAction">
+    <!-- Ändra här uppe också storleken innan det står px -->
 
       {{card.item}} 
       {{card.skill}}
@@ -27,10 +28,14 @@ export default {
   .card {
     color:red;
     user-select: none;
-    width:250px;
-    height:350px;
+    width: 200px;
+    height: 280px;
     background-image: url('/images/collectors-cards.png');
     border-radius: 10px;
+    background-size: 3000%; /* Om halvera storlek: 30 kort 125px, ursprungsbilden är 7502px, vi vill ha hälften så bred = 3751px. 
+    Bilden måste vara 30 ggr så stor som bredden på fönstret vet ej vad som menas??? men de e 30 kort i bredd, 
+    alltså måste den vara 30 ggr så stor?? KONTENTAN: ha kvar detta med 3000% = 30 * 100 % och ändra exakt bara hur man vill med width och heigth!!
+     Ändra också på rad 2*/
   }
 
   .available-to-choose {

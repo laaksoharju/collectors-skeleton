@@ -66,6 +66,7 @@ Data.prototype.createRoom = function (roomId, playerCount, lang = "en") {
   room.skillsOnSale = room.deck.splice(0, 5);
   room.auctionCards = room.deck.splice(0, 4);
   room.market = [];
+  room.readyForNextRound = new Set();
   room.buyPlacement = [{
       cost: 1,
       playerId: null
@@ -234,20 +235,31 @@ Data.prototype.getBottleIncome = function(roomId, playerId, bottleIncome){
     room.players[playerId].hand.push(card);
   }
   room.players[playerId].dispBottles = false;
+  room.nextRound = true;
+  //Väntar in alla!
+  for(let i = 0; i<room.playerOrder.length; i++){
+    if(room.players[room.playerOrder[i]].dispBottles){
+      room.nextRound = false;
+      return;
+    }
+  }
 }
 
-Data.prototype.startNextRound = function(roomId){
-  console.log("inne i startNextRound")
+Data.prototype.startNextRound = function(roomId, playerId){
   let room = this.rooms[roomId];
-  room.round += 1;
-  this.rotateCards(roomId);
-  this.resetPlacements(roomId);
-  for (let i = 0; i < room.playerOrder.length; i++) {
-    room.players[room.playerOrder[i]].availableBottles = room.players[room.playerOrder[i]].bottles;
-    room.players[room.playerOrder[i]].money = room.players[room.playerOrder[i]].money + room.players[room.playerOrder[i]].income.length;
+  room.readyForNextRound.add(playerId); //väntar in alla 
+  if(room.readyForNextRound.size == room.playerCount){
+    room.round += 1;
+    this.rotateCards(roomId);
+    this.resetPlacements(roomId);
+    for (let i = 0; i < room.playerOrder.length; i++) {
+      room.players[room.playerOrder[i]].availableBottles = room.players[room.playerOrder[i]].bottles;
+      room.players[room.playerOrder[i]].money = room.players[room.playerOrder[i]].money + room.players[room.playerOrder[i]].income.length;
+    }
+    room.players[room.playerOrder[0]].active = true; //första spelaren blir aktiv igen, ändra t den som har token
+    room.nextRound = false;
+    room.readyForNextRound = new Set(); //nollställer set
   }
-  room.players[room.playerOrder[0]].active = true; //första spelaren blir aktiv igen, ändra t den som har token
-  room.nextRound = false;
 }
 
 Data.prototype.resetPlacements = function (roomId) {
@@ -453,10 +465,7 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost) {
     room.players[playerId].money -= cost;
     room.players[playerId].active = false;
     room.players[playerId].availableBottles -= 1;
-    console.log("inne i buyCard, med setNextActivePlayer = false")
     if (this.setNextActivePlayer(roomId, playerId)) {
-      console.log("inne i buyCard, med setNextActivePlayer = true")
-      room.nextRound = true;
       for(let i=0; i <room.playerOrder.length; i++){
         room.players[room.playerOrder[i]].dispBottles = true;
       }
@@ -534,7 +543,7 @@ Data.prototype.buyRaiseValue = function (roomId, playerId, cards, cost) {
     room.players[playerId].active = false;
     room.players[playerId].availableBottles -= 1;
     if (this.setNextActivePlayer(roomId, playerId)) {
-      room.nextRound = true;
+      //room.nextRound = true;
       for(let i=0; i <room.playerOrder.length; i++){
         room.players[room.playerOrder[i]].dispBottles = true;
       }
@@ -571,7 +580,7 @@ Data.prototype.buySkillCard = function (roomId, playerId, card, cost) {
     room.players[playerId].active = false;
     room.players[playerId].availableBottles -= 1;
     if (this.setNextActivePlayer(roomId, playerId)) {
-      room.nextRound = true;
+      //room.nextRound = true;
       for(let i=0; i <room.playerOrder.length; i++){
         room.players[room.playerOrder[i]].dispBottles = true;
       }
