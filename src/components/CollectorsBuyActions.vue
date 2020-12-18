@@ -1,8 +1,10 @@
 <template>
   <div class="buy-cards">
     <div v-for="(card, index) in itemsOnSale" :key="index" class="cardslots">
+      <!-- {{ deckCardAvailable }} -->
       <CollectorsCard
         :card="card"
+        :deckCardAvaliable="deckCardAvailable"
         :availableAction="card.available"
         @doAction="buyCard(card)"
       />
@@ -22,9 +24,16 @@ export default {
     labels: Object,
     player: Object,
     itemsOnSale: Array,
+    deckCardAvailable: Boolean,
     marketValues: Object,
     placement: Array,
   },
+  data: function () {
+    return {
+      deckCard: this.deckCardAvailable,
+    };
+  },
+
   methods: {
     cannotAfford: function (cost) {
       let minCost = 100;
@@ -39,7 +48,6 @@ export default {
     },
     placeBottle: function (p) {
       this.$emit("placeBottle", p.cost);
-
       this.highlightAvailableCards(p.cost);
     },
     isAvailableCards: function (card, cost) {
@@ -52,15 +60,6 @@ export default {
     highlightAvailableCards: function (cost = 100) {
       for (let i = 0; i < this.itemsOnSale.length; i += 1) {
         this.isAvailableCards(this.itemsOnSale[i], cost);
-        // if (
-        //   this.marketValues[this.itemsOnSale[i].item] <=
-        //   this.player.money - cost
-        // ) {
-        //   this.$set(this.itemsOnSale[i], "available", true);
-        // } else {
-        //   this.$set(this.itemsOnSale[i], "available", false);
-        // }
-        // this.chosenPlacementCost = cost;
       }
       for (let i = 0; i < this.player.hand.length; i += 1) {
         this.isAvailableCards(this.player.hand[i], cost);
@@ -69,6 +68,7 @@ export default {
     buyCard: function (card) {
       if (card.available) {
         this.$emit("buyCard", card);
+
         this.highlightAvailableCards();
       }
     },

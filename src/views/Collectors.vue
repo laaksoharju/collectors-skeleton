@@ -36,6 +36,18 @@
             @buyCard="buyCard('auction', $event)"
           />
         </section>
+        <section class="do_deckAuction">
+          <CollectorsBuyActions
+            v-if="players[playerId]"
+            :labels="labels"
+            :player="players[playerId]"
+            :itemsOnSale="deckAuction"
+            :deckCardAvailable="deckCardAvailable"
+            :marketValues="marketValues"
+            :placement="auctionPlacement"
+            @buyCard="buyCard('win_auction', $event)"
+          />
+        </section>
 
         <div class="game main-board">
           <section class="item_bottle">
@@ -660,6 +672,7 @@ export default {
       auctionPlacement: [],
       marketPlacement: [],
       workPlacement: [],
+      deckAuction: [],
       chosenPlacementCost: null,
       marketValues: {
         fastaval: 0,
@@ -707,6 +720,7 @@ export default {
       },
 
       typeofaction: "skills",
+      deckCardAvailable: true,
     };
   },
   computed: {
@@ -753,6 +767,7 @@ export default {
         this.marketPlacement = d.placements.marketPlacement;
         this.auctionPlacement = d.placements.auctionPlacement;
         this.workPlacement = d.placements.workPlacement;
+        this.deckAuction = d.deckAuction;
       }.bind(this)
     );
 
@@ -807,6 +822,7 @@ export default {
         this.itemsOnSale = d.itemsOnSale;
         this.skillsOnSale = d.skillsOnSale;
         this.auctionCards = d.auctionCards;
+        this.deckAuction = d.deckAuction;
       }.bind(this)
     );
   },
@@ -975,11 +991,11 @@ footer a:visited {
   z-index: 6;
 }
 
-.do_auction >>> .buy-cards .cardslots div:hover {
-  /* transform: scale(1.2) translate(-110%, -110%); */
+/* .do_auction >>> .buy-cards .cardslots div {
+  /* transform: scale(1.2) translate(-110%, -110%); 
   transform: scale(1.2) translate(-110%, -110%);
   -webkit-transition: transform 1s ease-in-out;
-}
+} */
 
 .item_bottle {
   background-color: rgb(219, 197, 195);
@@ -1330,6 +1346,13 @@ footer a:visited {
   margin: 0;
   padding-left: 0.3em;
   padding-top: 0.1em;
+}
+.do_deckAuction >>> .buy-cards .cardslots {
+  position: relative;
+  z-index: 10;
+  top: -148vh;
+  left: 37.2vw;
+  transform: scale(0.7) translate(-50%, -50%);
 }
 
 /* .other-players .player-skills-1 img {

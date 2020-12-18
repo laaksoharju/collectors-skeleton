@@ -211,8 +211,7 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
 
       for (let i = 0; i < room.itemsOnSale.length; i += 1)
       {
-        // since card comes from the client, it is NOT the same object (reference)
-        // so we need to compare properties for determining equality
+        
         if (room.itemsOnSale[i].x === card.x &&
           room.itemsOnSale[i].y === card.y)
         {
@@ -220,11 +219,10 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
           break;
         }
       }
-      // ...then check if it is in the hand. It cannot be in both so it's safe
+   
       for (let i = 0; i < room.players[playerId].hand.length; i += 1)
       {
-        // since card comes from the client, it is NOT the same object (reference)
-        // so we need to compare properties for determining equality
+        
         if (room.players[playerId].hand[i].x === card.x &&
           room.players[playerId].hand[i].y === card.y)
         {
@@ -241,8 +239,7 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
       
       for (let i = 0; i < room.skillsOnSale.length; i += 1)
       {
-        // since card comes from the client, it is NOT the same object (reference)
-        // so we need to compare properties for determining equality
+        
         if (room.skillsOnSale[i].x === card.x &&
           room.skillsOnSale[i].y === card.y)
         {
@@ -260,16 +257,44 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
       
       for (let i = 0; i < room.auctionCards.length; i += 1)
       {
-        // since card comes from the client, it is NOT the same object (reference)
-        // so we need to compare properties for determining equality
+        
         if (room.auctionCards[i].x === card.x &&
           room.auctionCards[i].y === card.y)
         {
           c = room.auctionCards.splice(i, 1, {});
-          console.log('rich data with auction')
+          
           break;
         }
       }
+      
+      const count=0;
+      Object.keys(this.rooms).forEach(room => {
+
+        this.rooms[room].deckAuction.push(...c); // the value of the current key.
+      });
+ 
+     
+      // room.players[playerId].items.push(...c);
+      room.players[playerId].money -= cost;
+      room.players[playerId].bottles -= 1;
+    }
+    
+    else if (action === 'win_auction')    
+    {
+      
+      for (let i = 0; i < room.deckAuction.length; i += 1)
+      {
+        
+        if (room.deckAuction[i].x === card.x &&
+          room.deckAuction[i].y === card.y)
+        {
+          c = room.deckAuction.splice(i, 1, {});
+          
+          break;
+        }
+      }
+     
+ 
      
       room.players[playerId].items.push(...c);
       room.players[playerId].money -= cost;
@@ -390,6 +415,16 @@ Data.prototype.getAuctionCards = function (roomId)
   if (typeof room !== 'undefined')
   {
     return room.auctionCards;
+  }
+  else return [];
+}
+
+Data.prototype.getDeckauctionCard = function (roomId)
+{
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined')
+  {
+    return room.deckAuction;
   }
   else return [];
 }
