@@ -144,41 +144,41 @@
 
           <div id="AllPlayerItemsDiv">
             <h3>{{labels.items}}</h3>
-            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="'items'+key">
               <CollectorsCard v-for="(card, index) in players[player].items" :card="card" :key="index"/>
             </div>
           </div>
 
           <div id="AllPlayerSkillsDiv">
             <h3>{{labels.skills}}</h3>
-            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="'skills'+key">
               <CollectorsCard v-for="(card, index) in players[player].skills" :card="card" :key="index"/>
             </div>
           </div>
 
           <div id="AllPlayerIncomeDiv">
             <h3>{{labels.income}}</h3>
-            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="'income'+key">
               <CollectorsCard v-for="(card, index) in players[player].income" :card="card" :key="index"/>
             </div>
           </div>
 
           <div id="AllPlayerMoneyDiv">
             <h3>{{labels.money}}</h3>
-            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="'money'+key">
               <p>{{ players[player].money }}</p>
             </div>
           </div>
 
           <div id="AllPlayerBottlesDiv">
             <h3>{{labels.bottles}}</h3>
-            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="'bottles'+key">
               <p>{{ players[player].bottles }}</p>
             </div>
           </div>
           <div id="AllPlayerValueDiv">
             <h3>{{labels.value}}</h3>
-            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="'value'+key">
               <p>{{ players[player].value }}</p>
             </div>
           </div>
@@ -306,6 +306,7 @@ export default {
             this.playerBoardShown = d.playerBoardShown;
             this.playerIdArray = d.playerIdArray;
             this.players = d.players;
+            this.activeRound = d.activeRound;
           }.bind(this));
 
           this.$store.state.socket.on('collectorsBottlePlaced',
@@ -830,7 +831,6 @@ footer a:visited {
   display: grid;
   background: #D7D7D7;
   grid-template-columns: 25% 25% 25% 25%;
-  grid-template-rows: 16,67% 16,67% 16,67% 16,67% 16,67% 16,67%;
   grid-template-areas:
   "BuyItemDiv BuyItemDiv RaiseValueDiv RaiseValueDiv"
   "BuyItemDiv BuyItemDiv RaiseValueDiv RaiseValueDiv"

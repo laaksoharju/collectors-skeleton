@@ -28,12 +28,8 @@ function sockets(io, socket, data) {
         playerBoardShown: data.getPlayerBoardShown(d.roomId),
         playerIdArray: data.getPlayerIdArray(d.roomId),
         players: data.getPlayers(d.roomId),
-      });
-      io.to(d.roomId).emit('collectorsRoundUpdated', {
         activeRound: data.getActiveRound(d.roomId)
       });
-    //  console.log(d.activeRound, "aktiv runda som skickas in")
-    //  console.log(data.getActiveRound(d.roomId), "aktiv runda i datahandlern efter förändring")
     });
 
     socket.on('collectorsDrawCard', function(d) {
@@ -166,7 +162,7 @@ function sockets(io, socket, data) {
 
     socket.on('collectorsPlayerTotalValue', function(d) {
       data.playerTotalValue(d.roomId, d.playerId)
-      io.to(d.roomId).emit('collectorsPlayerValueRecived', { 
+      io.to(d.roomId).emit('collectorsPlayerValueRecived', {
           playerId: d.playerId,
           marketValues: data.getMarketValues(d.roomId),
         }

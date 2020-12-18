@@ -5,13 +5,13 @@
       <h1>Collectors</h1>
 
   <div class="buttons">
-      <button v-for="i in 3" :key="i">
+      <button v-for="i in 3" :key="'enbutton'+i">
         <a @click="setupCollectors(i+1, 'en')">Set up a game of Collectors for {{i+1}} players</a>.
       </button>
       <button>
         <a href="/rules_collectors.pdf" target="_blank">Rules</a>
       </button>
-      <button v-for="i in 3" :key="i">
+      <button v-for="i in 3" :key="'swebutton'+i">
         <a @click="setupCollectors(i+1, 'se')">Spela Collectors med {{i+1}} spelare</a>.
       </button>
       <button>
