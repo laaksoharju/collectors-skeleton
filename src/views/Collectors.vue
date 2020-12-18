@@ -1,7 +1,7 @@
 <template>
   <div>
     <main>
-      <div v-if="this.dispBottles">
+      <div v-if="players[playerId].dispBottles">
         <BottlesPlayerboard 
           v-if="players[playerId]"
           :player="players[playerId]" 
@@ -197,7 +197,6 @@ export default {
       touchScreen: false,
       nextRound: Boolean,
       round: 1,
-      dispBottles: false,
       myCards: [],
       maxSizes: { x: 0, y: 0 },
       labels: {},
@@ -303,7 +302,6 @@ export default {
     nextRound: function(){
       if(this.nextRound){
         if(this.round < 4){
-          this.dispBottles = true;
           this.startNextRound();
         } else {
           //funktion som avslutar spelet
@@ -416,7 +414,6 @@ export default {
       "bottleIncomeGained",
       function(d){
         this.players = d.players;
-        this.dispBottles = d.dispBottles;
       }.bind(this)
     );
   },
