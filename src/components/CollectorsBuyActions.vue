@@ -5,6 +5,14 @@
       <CollectorsCard
         :card="card"
         :deckCardAvaliable="deckCardAvailable"
+        v-if="deckCard === true"
+        :availableAction="(card.available = deckCard)"
+        @doAction="buyCard(card)"
+      />
+      <CollectorsCard
+        :card="card"
+        :deckCardAvaliable="deckCardAvailable"
+        v-else
         :availableAction="card.available"
         @doAction="buyCard(card)"
       />

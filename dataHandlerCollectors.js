@@ -298,7 +298,7 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
      
       room.players[playerId].items.push(...c);
       room.players[playerId].money -= cost;
-      room.players[playerId].bottles -= 1;
+      // room.players[playerId].bottles -= 1;
     }
   }
 }
