@@ -76,28 +76,28 @@ Data.prototype.createRoom = function (roomId, playerCount, lang = "en")
   room.skillsOnSale = room.deck.splice(0, 5);
   room.auctionCards = room.deck.splice(0, 4);
   room.market = [];
-  room.buyPlacement = [{ cost: 1, playerId: null, bottleType: 'normal', recieveCards: 0 },
-  { cost: 1, playerId: null, bottleType: 'normal', recieveCards: 0 },
-  { cost: 2, playerId: null, bottleType: 'normal', recieveCards: 0 },
-  { cost: 2, playerId: null, bottleType: 'normal', recieveCards: 0 },
-  { cost: 3, playerId: null, bottleType: 'normal', recieveCards: 0 }];
-  room.skillPlacement = [{ cost: 0, playerId: null, bottleType: 'normal', recieveCards: 0 },
-  { cost: 0, playerId: null, bottleType: 'normal', recieveCards: 0 },
-  { cost: 0, playerId: null, bottleType: 'normal', recieveCards: 0 },
-  { cost: 1, playerId: null, bottleType: 'normal', recieveCards: 0 },
-  { cost: 1, playerId: null, bottleType: 'normal', recieveCards: 0 }];
-  room.workPlacement = [{ cost: -3, playerId: null, bottleType: 'normal', recieveCards: 0 },
-  { cost: -1, playerId: null, bottleType: 'normal', recieveCards: 0 },
-  { cost: 1, playerId: null, bottleType: 'normal', recieveCards: 2 },
-  { cost: 0, playerId: null, bottleType: 'normal', recieveCards: 1 },
-  { cost: 0, playerId: null, bottleType: 'normal', recieveCards: 1 }];
-  room.auctionPlacement = [{ cost: -2, playerId: null, bottleType: 'normal', recieveCards: 0 },
-  { cost: -1, playerId: null, bottleType: 'normal', recieveCards: 0 },
-  { cost: 0, playerId: null, bottleType: 'auctionMedal', recieveCards: 0 },
-  { cost: 0, playerId: null, bottleType: 'auctionMedal', recieveCards: 0 }];
-  room.marketPlacement = [{ cost: 0, playerId: null, bottleType: 'marketTwoBlue', recieveCards: 0 },
-  { cost: 2, playerId: null, bottleType: 'marketDollar', recieveCards: 0 },
-  { cost: 0, playerId: null, bottleType: 'marketOneBlue', recieveCards: 0 }];
+  room.buyPlacement = [{ cost: 1, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0 },
+  { cost: 1, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0 },
+  { cost: 2, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0 },
+  { cost: 2, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0 },
+  { cost: 3, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0 }];
+  room.skillPlacement = [{ cost: 0, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0 },
+  { cost: 0, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0 },
+  { cost: 0, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0 },
+  { cost: 1, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0 },
+  { cost: 1, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0 }];
+  room.workPlacement = [{ cost: -3, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 1 },
+  { cost: -1, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 1 },
+  { cost: 1, playerId: null, bottleType: 'normal', recieveCards: 2, cashForCard: 1 },
+  { cost: 0, playerId: null, bottleType: 'normal', recieveCards: 1, cashForCard: 1 },
+  { cost: 0, playerId: null, bottleType: 'normal', recieveCards: 1, cashForCard: 1 }];
+  room.auctionPlacement = [{ cost: -2, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0 },
+  { cost: -1, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0 },
+  { cost: 0, playerId: null, bottleType: 'auctionMedal', recieveCards: 0, cashForCard: 0 },
+  { cost: 0, playerId: null, bottleType: 'auctionMedal', recieveCards: 0, cashForCard: 0 }];
+  room.marketPlacement = [{ cost: 0, playerId: null, bottleType: 'marketTwoBlue', recieveCards: 0, cashForCard: 0 },
+  { cost: 2, playerId: null, bottleType: 'marketDollar', recieveCards: 0, cashForCard: 0 },
+  { cost: 0, playerId: null, bottleType: 'marketOneBlue', recieveCards: 0, cashForCard: 0 }];
   this.rooms[roomId] = room;
 }
 
@@ -270,9 +270,10 @@ Data.prototype.placeBottle = function (roomId, playerId, action, p)
 {
 
 
+
   console.log('dataHandler placeBottle');
   console.log(p.recieveCards);
-var cost = p.cost
+  var cost = p.cost
 
 
   let room = this.rooms[roomId];

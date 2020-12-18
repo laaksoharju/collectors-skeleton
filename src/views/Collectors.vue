@@ -77,6 +77,8 @@
               v-if="players[playerId]"
               :labels="labels"
               :player="players[playerId]"
+              :itemsOnSale="hand"
+
 
               :marketValues="marketValues"
               :placement="workPlacement"
@@ -524,7 +526,11 @@ export default {
       "collectorsBottlePlaced",
       function (d) {
 
+
         console.log('Collectors collectorsBottlePlaced');
+        console.log('money: ' + this.players[this.playerId].money);
+        console.log('bottles' + this.players[this.playerId].bottles);
+
 
         this.buyPlacement = d.buyPlacement;
         this.skillPlacement = d.skillPlacement;
@@ -533,6 +539,9 @@ export default {
         this.workPlacement = d.workPlacement;
         this.players = d.players;
 
+        console.log('Collectors collectorsBottlePlaced after update');
+        console.log('money: ' + this.players[this.playerId].money);
+        console.log('bottles' + this.players[this.playerId].bottles);
 
       }.bind(this)
     );
@@ -608,16 +617,30 @@ export default {
       console.log(p.recieveCards);
 
 
-      console.log(p.cost);
-      this.chosenPlacementCost = p.cost;
-      this.$store.state.socket.emit("collectorsPlaceBottle", {
-        roomId: this.$route.params.id,
-        playerId: this.playerId,
-        action: action,
-        
-        p: p,
 
-      });
+      console.log('if money: ' + this.players[this.playerId].money);
+      console.log('if bottles' + this.players[this.playerId].bottles);
+
+      if ( this.players[this.playerId].money >= p.cost && this.players[this.playerId].bottles > 0){
+
+              for (let i = 0; i < p.recieveCards; i += 1){
+                this.$store.state.socket.emit('collectorsDrawCard', { roomId: this.$route.params.id,
+                playerId: this.$store.state.playerId });
+              }
+
+
+              console.log(p.cost);
+              this.chosenPlacementCost = p.cost;
+              this.$store.state.socket.emit("collectorsPlaceBottle", {
+                roomId: this.$route.params.id,
+                playerId: this.playerId,
+                action: action,
+
+                p: p,
+
+              });
+            }
+
     },
     drawCard: function () {
       this.$store.state.socket.emit("collectorsDrawCard", {

@@ -135,25 +135,33 @@ export default {
       console.log('Bottles placBottle');
 
 
-    for (let i = 0; i < p.recieveCards; i += 1){
-      this.$store.state.socket.emit('collectorsDrawCard', { roomId: this.$route.params.id,
-      playerId: this.$store.state.playerId });
-    }
-
-    this.$emit("placeBottle", p);
-    this.highlightAvailableCards(p.cost);
 
 
+        this.$emit("placeBottle", p);
+
+        console.log("bottles placebottle before if");
+        if (p.cashForCard > 0){
+        console.log("bottles placebottle after if");
+        this.highlightAvailableCardsInHand();
+        console.log("bottles placebottle after highlight");
+
+
+        }
+
+        this.highlightAvailableCards(p.cost);
 
 
     },
     isAvailableCards: function (card, cost) {
+      console.log('original available card:' + card);
       if (this.marketValues[card.item] <= this.player.money - cost) {
         this.$set(card, "available", true);
       } else {
         this.$set(card, "available", false);
       }
     },
+
+
     highlightAvailableCards: function (cost = 100) {
       for (let i = 0; i < this.itemsOnSale.length; i += 1) {
         this.isAvailableCards(this.itemsOnSale[i], cost);
@@ -171,6 +179,26 @@ export default {
         this.isAvailableCards(this.player.hand[i], cost);
       }
     },
+
+    isAvailableCardsInHand: function (card) {
+      console.log('new available card:' + card);
+    console.log("bottles isAvailableinhand before set");
+        this.$set(card, "available", true);
+          console.log("bottles isAvailableinhand after set");
+
+    },
+
+    highlightAvailableCardsInHand: function () {
+
+        console.log("bottles highlightinhand before forloop");
+      for (let i = 0; i < this.player.hand.length; i += 1) {
+        console.log("bottles highlightinhand in forloop");
+        this.isAvailableCardsInHand(this.players[this.playerId].hand[i]);
+          console.log("bottles highlightinhand after forloop");
+
+      }
+    },
+
     buyCard: function (card) {
       if (card.available) {
         this.$emit("buyCard", card);
