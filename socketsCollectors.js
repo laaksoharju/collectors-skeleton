@@ -23,7 +23,7 @@ function sockets(io, socket, data) {
   });
 
   socket.on('startNextRound', function (d) {
-    data.startNextRound(d.roomId)
+    data.startNextRound(d.roomId, d.playerId)
     io.to(d.roomId).emit('nextRoundStarted', {
       itemsOnSale: data.getItemsOnSale(d.roomId),
       skillsOnSale: data.getSkillsOnSale(d.roomId),
@@ -42,7 +42,6 @@ function sockets(io, socket, data) {
       playerId: d.playerId,
       players: data.getPlayers(d.roomId),
       itemsOnSale: data.getItemsOnSale(d.roomId),
-      nextRound: data.getNextRound(d.roomId)
     });
   });
 
@@ -54,7 +53,6 @@ function sockets(io, socket, data) {
       skillsOnSale: data.getSkillsOnSale(d.roomId),
       auctionCards: data.getAuctionCards(d.roomId),
       marketValues: data.getMarketValues(d.roomId),
-      nextRound: data.getNextRound(d.roomId),
     });
   });
 
@@ -64,7 +62,6 @@ function sockets(io, socket, data) {
       playerId: d.playerId,
       players: data.getPlayers(d.roomId),
       skillsOnSale: data.getSkillsOnSale(d.roomId),
-      nextRound: data.getNextRound(d.roomId)
     });
   });
 
@@ -77,6 +74,7 @@ function sockets(io, socket, data) {
     data.getBottleIncome(d.roomId, d.playerId, d.bottleIncome);
     io.to(d.roomId).emit('bottleIncomeGained', {
       players: data.getPlayers(d.roomId),
+      nextRound: data.getNextRound(d.roomId)
     });
   }
   

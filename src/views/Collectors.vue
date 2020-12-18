@@ -385,7 +385,6 @@ export default {
         console.log(d.playerId, "bought a card");
         this.players = d.players;
         this.itemsOnSale = d.itemsOnSale;
-        this.nextRound = d.nextRound;
       }.bind(this)
     );
     this.$store.state.socket.on(
@@ -396,7 +395,6 @@ export default {
         this.skillsOnSale = d.skillsOnSale;
         this.auctionCards = d.auctionCards;
         this.marketValues = d.marketValues;
-        this.nextRound = d.nextRound;
       }.bind(this)
     );
 
@@ -406,7 +404,6 @@ export default {
         console.log(d.playerId, "bought a skill card");
         this.players = d.players;
         this.skillsOnSale = d.skillsOnSale;
-        this.nextRound = d.nextRound;
       }.bind(this)
     );
 
@@ -414,6 +411,7 @@ export default {
       "bottleIncomeGained",
       function(d){
         this.players = d.players;
+        this.nextRound = d.nextRound;
       }.bind(this)
     );
   },
