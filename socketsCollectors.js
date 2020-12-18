@@ -23,7 +23,7 @@ function sockets(io, socket, data) {
   });
 
   socket.on('startNextRound', function (d) {
-    data.startNextRound(d.roomId)
+    data.startNextRound(d.roomId);
     io.to(d.roomId).emit('nextRoundStarted', {
       itemsOnSale: data.getItemsOnSale(d.roomId),
       skillsOnSale: data.getSkillsOnSale(d.roomId),
@@ -78,9 +78,14 @@ function sockets(io, socket, data) {
     io.to(d.roomId).emit('bottleIncomeGained', {
       players: data.getPlayers(d.roomId),
     });
-  }
-  
-  );
+  });
+
+  socket.on('countPoints', function (d){
+    data.countPoints(d.roomId);
+    io.to(d.roomId).emit('pointsCounted', {
+      players: data.getPlayers(roomId)
+    })
+  })
 
 }
 

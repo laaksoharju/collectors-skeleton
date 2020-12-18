@@ -237,6 +237,7 @@ Data.prototype.getBottleIncome = function(roomId, playerId, bottleIncome){
 }
 
 Data.prototype.startNextRound = function(roomId){
+  console.log("inne i startNextRound")
   let room = this.rooms[roomId];
   room.round += 1;
   this.rotateCards(roomId);
@@ -277,6 +278,38 @@ Data.prototype.getPlayers = function (id) {
     return room.players;
   } else return {};
 }
+
+Data.prototype.countPoints = function (roomId){
+  let room = this.rooms[roomId]
+  if(typeof room !== 'undefined'){
+    //loopar varje spelare
+    for(let i=0; i < room.playerOrder.length; i ++){
+      let player = room.players[room.playerOrder[i]];
+      console.log(room.playerOrder[i]);
+      //Poäng för varje item utifrån marketvalue!!
+      for(let j = 0; j < player.items.length; j++){
+        if (player.items[j].item === "fastaval") {
+          player.points += this.getMarketValues(roomId).fastaval;
+        } else if (player.items[j].item === "movie") {
+          player.points += this.getMarketValues(roomId).movie;
+        } else if (player.items[j].item === "technology") {
+          player.points += this.getMarketValues(roomId).technology;
+        } else if (player.items[j].item === "figures") {
+          player.points += this.getMarketValues(roomId).figures;
+        } else if (player.items[j].item === "music") {
+          player.points += this.getMarketValues(roomId).music;
+        }
+      }
+      //poäng för pengar
+      let moneyToPoints = math.floor(player.money / 3);
+      player.points += moneyToPoints;
+      console.log(player.points);
+    }
+
+
+  }
+}
+
 
 Data.prototype.updatePoints = function (roomId, player, points) {
   let room = this.rooms[roomId]
@@ -420,7 +453,9 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost) {
     room.players[playerId].money -= cost;
     room.players[playerId].active = false;
     room.players[playerId].availableBottles -= 1;
+    console.log("inne i buyCard, med setNextActivePlayer = false")
     if (this.setNextActivePlayer(roomId, playerId)) {
+      console.log("inne i buyCard, med setNextActivePlayer = true")
       room.nextRound = true;
       for(let i=0; i <room.playerOrder.length; i++){
         room.players[room.playerOrder[i]].dispBottles = true;
