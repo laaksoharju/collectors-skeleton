@@ -65,7 +65,7 @@ function sockets(io, socket, data) {
       data.changeRound(d.roomId, d.playerId, d.activeRound, d.players);
       io.to(d.roomId).emit('collectorsRoundUpdated', {
         activeRound: data.getActiveRound(d.roomId),
-        placements: data.getPlacements(d.roomId)
+        placements: data.getPlacements(d.roomId)  
       });
     });
 

@@ -28,7 +28,7 @@
 	"endTurn": "Avsluta rundan",
 	"ready": "Jag är redo!",
 	"start": "Starta spelet",
-	"retrieve": "Återta flaskor",
+	"retrieve": "Återta flaskor(Uppdatera PlayerBoard)",
 	"fake": "Skapa mer pengar",
 
 	"playerBoard": "Spelarbräde",

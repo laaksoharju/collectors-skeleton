@@ -310,9 +310,6 @@ export default {
             this.players[this.playerId].bottles = d.players[this.playerId].bottles;
             this.players[this.playerId].income = d.players[this.playerId].income;
             this.players[this.playerId].money = d.players[this.playerId].money;
-
-          //  this.players = d.players;
-
             this.playerIdArray = d.playerIdArray;
           }.bind(this));
 
