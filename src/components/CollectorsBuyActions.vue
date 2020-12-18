@@ -8,7 +8,6 @@
         :card="card"
         :availableAction="card.available"
         @doAction="buyItem(card)"/>
-
       </div>
     </div>
     <div class="buttons" v-for="(p, index) in placement" :key="index">
