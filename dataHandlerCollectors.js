@@ -317,8 +317,6 @@ Data.prototype.countPoints = function (roomId){
       player.points += moneyToPoints;
       console.log(player.points);
     }
-
-
   }
 }
 
