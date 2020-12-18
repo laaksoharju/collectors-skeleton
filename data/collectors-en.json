@@ -28,7 +28,7 @@
 	"endTurn": "End turn",
 	"ready": "I'm ready!",
 	"start": "Start the game",
-	"retrieve": "Retrieve bottles(Update PlayerBoard)",
+	"retrieve": "Retrieve bottles",
 	"fake": "Fake more money",
 
 	"playerBoard": "Player board",

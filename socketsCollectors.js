@@ -65,7 +65,7 @@ function sockets(io, socket, data) {
       data.changeRound(d.roomId, d.playerId, d.activeRound, d.players);
       io.to(d.roomId).emit('collectorsRoundUpdated', {
         activeRound: data.getActiveRound(d.roomId),
-        placements: data.getPlacements(d.roomId)  
+        placements: data.getPlacements(d.roomId)
       });
     });
 
@@ -89,7 +89,7 @@ function sockets(io, socket, data) {
 
     socket.on('collectorsPlaceBottleWork', function(d) {
       data.placeBottleWork(d.roomId, d.playerId, d.action, d.cost, d.index);
-      io.to(d.roomId).emit('collectorsBottlePlaced', {
+      io.to(d.roomId).emit('collectorsWorkBottlePlaced', {
         placements: data.getPlacements(d.roomId),
         players: data.getPlayers(d.roomId),
         playerIdArray: data.getPlayerIdArray(d.roomId)
