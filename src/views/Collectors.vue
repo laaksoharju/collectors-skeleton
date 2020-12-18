@@ -52,8 +52,8 @@
           <button v-if="players[playerId]" :disabled="cannotRaiseBid()" @click="raiseCurrentBid()">{{labels.raiseCurrentBid}}</button>
           <button v-if="bidArray[bidArray.length - 1] === this.playerId" :disabled="noMoreBidsBoolean" @click="noMoreBids()">{{labels.my}} {{bidArray.length}}{{labels.dollarBidWon}}</button>
           <button v-if="this.noMoreBidsBoolean" @click="endAuction('buyItem')" style="background-color: #f9dcce">{{labels.useAsItem}}<br><img class="use_as" src="images/use_as_item.png" width="33%"></button>
-          <button v-if="this.noMoreBidsBoolean" @click="endAuction('getSkill')" style="background-color: #dfeccc">{{labels.useAsSkill}}<br><img class="use_as" src="images/use_as_skill.png" width="33%"></button>
-          <button v-if="this.noMoreBidsBoolean" @click="endAuction('market')" style="background-color: #cfdcf2">{{labels.useAsMarket}}<br><img class="use_as" src="images/use_as_market.png" width="30%"></button>
+          <button v-if="this.noMoreBidsBoolean" @click="endAuction('getSkill')" style="background-color: #dfeccc">{{labels.useAsSkill}}<br><img class="use_as" src="images/use_as_skill.png" width="22%"></button>
+          <button v-if="this.noMoreBidsBoolean" @click="endAuction('market')" style="background-color: #cfdcf2">{{labels.useAsMarket}}<br><img class="use_as" src="images/use_as_market.png" width="20%"></button>
         </div>
       </div>
 
@@ -316,12 +316,19 @@ export default {
             this.auctionPlacement = d.placements.auctionPlacement;
             this.workPlacement = d.placements.workPlacement;
             this.players[this.playerId].bottles = d.players[this.playerId].bottles;
+            this.playerIdArray = d.playerIdArray;
+          }.bind(this));
+
+          this.$store.state.socket.on('collectorsWorkBottlePlaced',
+          function(d) {
+            this.players[this.playerId].bottles = d.players[this.playerId].bottles;
             this.players[this.playerId].income = d.players[this.playerId].income;
             this.players[this.playerId].money = d.players[this.playerId].money;
 
             this.players[this.playerId].value = d.players[this.playerId].value;
 
             this.playerIdArray = d.playerIdArray;
+            this.players = d.players;
           }.bind(this));
 
           this.$store.state.socket.on('collectorsPlayerArrayFinished',function(d) {
@@ -556,7 +563,6 @@ methods: {
   },
 
   fakeMoreMoney: function () {
-    console.log(this.players[this.playerId].hand[0].available);
     this.$store.state.socket.emit('collectorsFakeMoreMoney', {
       roomId: this.$route.params.id,
       playerId: this.playerId
@@ -881,7 +887,7 @@ footer a:visited {
 }
 
 .bottleSlots {
-  width: 10%;
+  width: 8%;
   margin: 0em 1.5em 0em 1.5em;
   display: inline-block;
   position: relative;
