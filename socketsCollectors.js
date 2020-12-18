@@ -76,9 +76,14 @@ function sockets(io, socket, data) {
       players: data.getPlayers(d.roomId),
       nextRound: data.getNextRound(d.roomId)
     });
-  }
-  
-  );
+  });
+
+  socket.on('countPoints', function (d){
+    data.countPoints(d.roomId);
+    io.to(d.roomId).emit('pointsCounted', {
+      players: data.getPlayers(roomId)
+    })
+  })
 
 }
 

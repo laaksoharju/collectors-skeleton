@@ -301,10 +301,11 @@ export default {
     },
     nextRound: function(){
       if(this.nextRound){
+        this.nextRound = false;
         if(this.round < 4){
           this.startNextRound();
         } else {
-          //funktion som avslutar spelet
+          this.countPoints();
         }
       }
     },
@@ -376,7 +377,9 @@ export default {
         this.marketPlacement = d.placement.marketPlacement;
         this.auctionPlacement = d.placement.auctionPlacement;
         this.round = d.round;
+        console.log(this.playerId + "startade nästa runda")
       }.bind(this)
+      
     );
 
     this.$store.state.socket.on(
@@ -414,6 +417,14 @@ export default {
         this.nextRound = d.nextRound;
       }.bind(this)
     );
+
+
+    this.$store.state.socket.on("pointsCounted",
+    function(d){
+      this.players = d.players;
+    }.bind(this)
+    );
+
   },
   methods: {
     selectAll: function (n) {
@@ -504,6 +515,11 @@ export default {
         bottleIncome,
       });
     },
+    countPoints: function(){
+      this.$store.state.socket.emit("countPoints", {
+        roomId: this.$route.params.id,
+      });
+    }
   },
 };
 </script>
