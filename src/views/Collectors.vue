@@ -15,6 +15,20 @@
       </div>
 
       <div id="BuySkillDiv">
+        <div id="skillinfodiv">
+
+        <h2>Skill descriptions</h2>
+
+        <img class="skillsinfo" src="images/gain2.png" title="Gain 2$ whenever you place a worker in the Work area."/>
+        <img class="skillsinfo" src="images/gaincard.png" title="Draw a card whenever you place a worker in the Work area."/>
+        <img class="skillsinfo" src="images/gain5vp.png" title="Get 5VP if you won at least one item from each category at the end of the game."/>
+        <img class="skillsinfo" src="images/gainbottle.png" title="Immediately gain a new bottle. You may use it this quarter."/>
+        <img class="skillsinfo" src="images/gainauction.png" title="Gain $1 whenever an auction is started by any player."/>
+        </div>
+             
+
+
+        
         <CollectorsSkillActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
@@ -672,8 +686,19 @@ footer a:visited {
   align-self: center;
   background: #dfeccc;
   margin: 5px;
-
 }
+
+#BuySkillDiv h2 {
+
+
+align-self:center;
+margin: 5px;
+margin-left: 1em;
+margin-top: 1em;
+}
+
+
+
 
 #AuctionDiv {
   grid-area: AuctionDiv;
@@ -886,6 +911,23 @@ footer a:visited {
   transform: scale(0.8)translate(-20%,-20%);
   z-index: 1;
 }
+
+#skillinfodiv {
+border: solid 10px #adc496
+}
+
+
+.skillsinfo {
+width: 3.5em;
+margin-right: 1em;
+margin-left: 1em;
+}
+
+
+
+
+
+
 
 @media screen and (max-width: 1400px) {
   main {
