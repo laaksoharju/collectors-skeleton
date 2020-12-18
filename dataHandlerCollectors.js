@@ -541,7 +541,6 @@ Data.prototype.buyRaiseValue = function (roomId, playerId, cards, cost) {
     room.players[playerId].active = false;
     room.players[playerId].availableBottles -= 1;
     if (this.setNextActivePlayer(roomId, playerId)) {
-      //room.nextRound = true;
       for(let i=0; i <room.playerOrder.length; i++){
         room.players[room.playerOrder[i]].dispBottles = true;
       }
@@ -578,7 +577,6 @@ Data.prototype.buySkillCard = function (roomId, playerId, card, cost) {
     room.players[playerId].active = false;
     room.players[playerId].availableBottles -= 1;
     if (this.setNextActivePlayer(roomId, playerId)) {
-      //room.nextRound = true;
       for(let i=0; i <room.playerOrder.length; i++){
         room.players[room.playerOrder[i]].dispBottles = true;
       }
