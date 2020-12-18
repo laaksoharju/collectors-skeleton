@@ -15,6 +15,9 @@
       </div>
 
       <div id="BuySkillDiv">
+     
+
+        
         <CollectorsSkillActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
@@ -36,6 +39,18 @@
         :placement="marketPlacement"
         @placeBottleRaiseValue="placeBottleRaiseValue('market', $event)"/>
       </div>
+         <div id="SkillInfoDiv">
+
+        <h2>Skill descriptions</h2>
+
+        <img  onclick="alert('Work Skill: Gain 2$ whenever you place a worker in the Work area.')"  class="skillsinfo" src="images/gain2.png" title="Gain 2$ whenever you place a worker in the Work area."/>
+        <img onclick="alert('Card skill: Draw a card whenever you place a worker in the Work area.')"  class="skillsinfo" src="images/gaincard.png" title="Draw a card whenever you place a worker in the Work area."/>
+        <img onclick="alert('Get 5VP if you won at least one item from each category at the end of the game.')"  class="skillsinfo" src="images/gain5vp.png" title="Get 5VP if you won at least one item from each category at the end of the game."/>
+        <img onclick="alert('Bottle: Immediately gain a new bottle. You may use it this quarter.')" class="skillsinfo" src="images/gainbottle.png" title="Immediately gain a new bottle. You may use it this quarter." />
+        <img onclick="alert('Auction Income: Gain $1 whenever an auction is started by any player.')" class="skillsinfo" src="images/gainauction.png" title="Gain $1 whenever an auction is started by any player."/>
+         <img onclick="alert('Gain 1 extra VP for each item you own of the specific category at the end of the game.')" class="skillsinfo" src="images/gainvp.png" title="Gain 1 extra VP for each item you own of the specific category at the end of the game."/>
+        </div>             
+
 
       <div id="AuctionDiv">
         <CollectorsAuctionActions v-if="players[playerId]"
@@ -705,8 +720,18 @@ footer a:visited {
   align-self: center;
   background: #dfeccc;
   margin: 5px;
-
 }
+
+#SkillInfoDiv {
+grid-area: SkillInfoDiv;
+border: dashed 10px #adc496;
+background: #dfeccc;
+margin: 2px;
+}
+
+
+
+
 
 #AuctionDiv {
   grid-area: AuctionDiv;
@@ -762,7 +787,7 @@ footer a:visited {
 }
 
 #PlayerBoardDiv {
-  grid-area: PlayerBoardDiv;
+    grid-area: PlayerBoardDiv;
   align-self: center;
   /* background: url("https://previews.123rf.com/images/prapann/prapann1606/prapann160600110/58202559-old-wood-vintage-wood-wall-texture-wood-background-old-panels.jpg"); */
   background: pink;
@@ -830,12 +855,16 @@ footer a:visited {
   width: 100%;
   display: grid;
   background: #D7D7D7;
-  grid-template-columns: 25% 25% 25% 25%;
+
+  grid-template-columns: 38% 12% 25% 25%;
+  grid-template-rows: 16,67% 16,67% 16,67% 16,67% 16,67% 16,67%;
+
+
   grid-template-areas:
   "BuyItemDiv BuyItemDiv RaiseValueDiv RaiseValueDiv"
   "BuyItemDiv BuyItemDiv RaiseValueDiv RaiseValueDiv"
-  "BuySkillDiv BuySkillDiv AuctionDiv AuctionDiv"
-  "BuySkillDiv BuySkillDiv AuctionDiv AuctionDiv"
+  "BuySkillDiv SkillInfoDiv AuctionDiv AuctionDiv"
+  "BuySkillDiv SkillInfoDiv AuctionDiv AuctionDiv"
   "GameOperationsDiv WorkDiv WorkDiv ."
   "bottleSlotsDiv bottleSlotsDiv bottleSlotsDiv bottleSlotsDiv"
   "PlayerBoardDiv PlayerBoardDiv PlayerBoardDiv PlayerBoardDiv"
@@ -951,6 +980,25 @@ footer a:visited {
   transform: scale(0.8)translate(-80%,-80%);
   z-index: 1;
 }
+
+
+
+.skillsinfo {
+width: 3.5em;
+margin-right: 0.9em;
+margin-left: 0.9em;
+margin-top: 2em;
+}
+
+.skillinfo h2 {
+align-self: center;
+}
+
+
+
+
+
+
 
 @media screen and (max-width: 1400px) {
   main {
