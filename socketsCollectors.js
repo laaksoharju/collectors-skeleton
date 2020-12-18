@@ -77,7 +77,6 @@ function sockets(io, socket, data) {
     data.getBottleIncome(d.roomId, d.playerId, d.bottleIncome);
     io.to(d.roomId).emit('bottleIncomeGained', {
       players: data.getPlayers(d.roomId),
-      dispBottles: data.getDispBottles(d.roomId)
     });
   }
   
