@@ -314,7 +314,6 @@ export default {
             this.skillPlacement = d.placements.skillPlacement;
             this.marketPlacement = d.placements.marketPlacement;
             this.auctionPlacement = d.placements.auctionPlacement;
-            this.workPlacement = d.placements.workPlacement;
             this.players[this.playerId].bottles = d.players[this.playerId].bottles;
             this.playerIdArray = d.playerIdArray;
           }.bind(this));
@@ -324,9 +323,8 @@ export default {
             this.players[this.playerId].bottles = d.players[this.playerId].bottles;
             this.players[this.playerId].income = d.players[this.playerId].income;
             this.players[this.playerId].money = d.players[this.playerId].money;
-
             this.players[this.playerId].value = d.players[this.playerId].value;
-
+            this.workPlacement = d.placements.workPlacement;
             this.playerIdArray = d.playerIdArray;
             this.players = d.players;
           }.bind(this));
