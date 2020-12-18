@@ -984,18 +984,29 @@ margin: 2px;
 
 
 .skillsinfo {
+
 width: 3.5em;
 margin-right: 0.9em;
 margin-left: 0.9em;
 margin-top: 2em;
 }
 
-.skillinfo h2 {
+.SkillInfoDiv h2 {
 align-self: center;
 }
 
+.skillsinfo div {
+transform: scale(0.2)translate(-200%,-200%);
+  transition:0.2s;
+  transition-timing-function: ease-out;
+  z-index: 0;
+}
 
-
+.skillsinfo:hover {
+transform: scale(1.05);
+  transition: 0.15s;
+  transition-timing-function: ease-in-out;
+}
 
 
 
