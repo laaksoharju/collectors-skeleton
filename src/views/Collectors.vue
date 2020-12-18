@@ -66,9 +66,9 @@
           <p>{{labels.player}} {{ bidArray[bidArray.length - 1]}} {{labels.isNowLeading}} {{ bidArray.length}}${{labels.bid}}.</p>
           <button v-if="players[playerId]" :disabled="cannotRaiseBid()" @click="raiseCurrentBid()">{{labels.raiseCurrentBid}}</button>
           <button v-if="bidArray[bidArray.length - 1] === this.playerId" :disabled="noMoreBidsBoolean" @click="noMoreBids()">{{labels.my}} {{bidArray.length}}{{labels.dollarBidWon}}</button>
-          <button v-if="this.noMoreBidsBoolean" @click="endAuction('buyItem')" style="background-color: #f9dcce">Use as an item <br><img class="use_as" src="images/use_as_item.png" width="33%"></button>
-          <button v-if="this.noMoreBidsBoolean" @click="endAuction('getSkill')" style="background-color: #dfeccc">Use as a skill <br><img class="use_as" src="images/use_as_skill.png" width="33%"></button>
-          <button v-if="this.noMoreBidsBoolean" @click="endAuction('market')" style="background-color: #cfdcf2">Place in the market <br><img class="use_as" src="images/use_as_market.png" width="30%"></button>
+          <button v-if="this.noMoreBidsBoolean" @click="endAuction('buyItem')" style="background-color: #f9dcce">{{labels.useAsItem}}<br><img class="use_as" src="images/use_as_item.png" width="33%"></button>
+          <button v-if="this.noMoreBidsBoolean" @click="endAuction('getSkill')" style="background-color: #dfeccc">{{labels.useAsSkill}}<br><img class="use_as" src="images/use_as_skill.png" width="22%"></button>
+          <button v-if="this.noMoreBidsBoolean" @click="endAuction('market')" style="background-color: #cfdcf2">{{labels.useAsMarket}}<br><img class="use_as" src="images/use_as_market.png" width="20%"></button>
         </div>
       </div>
 
@@ -84,10 +84,11 @@
             {{labels.start}}
           </button>
         </div>
-        <div id="NextRoundButton" v-if="playerBoardShown">
-          The current round is round {{ activeRound }}.
-          When the last player is finished, he or she can switch to the next round.
-          <button id="nextRound" v-on:click="changeRound()" :disabled="notLastPlayer()">Next round</button>
+        <div class="buttons" v-if="playerBoardShown">
+          <p>{{labels.currentRound}} {{ activeRound }}. {{labels.lastPlayerCanChange}}</p>
+          <button class="function_buttons"  v-on:click="changeRound()" :disabled="notLastPlayer()">{{labels.nextRound}}
+              <img class="function_button_img" src="images/retrieveBottles.png">
+          </button>
         </div>
         <div>
           <button id="money" v-if="players[playerId]" @click="fakeMoreMoney()">{{labels.fake}}</button>
@@ -99,12 +100,12 @@
           </button>
         </div>
 
-        <div class="buttons">
+        <!-- <div class="buttons">
           <button class="function_buttons" v-if="players[playerId]" @click="retrieveBottles()">
             {{labels.retrieve}}
             <img class="function_button_img" src="images/retrieveBottles.png">
           </button>
-        </div>
+        </div> -->
 
         <div>
           {{ labels.invite }}
@@ -144,50 +145,56 @@
         <div id="AllPlayerCardsDiv" v-if="playerBoardShown">
           <div id="AllPlayerIdDiv">
             <h3>{{labels.names}}</h3>
-            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="'names'+key">
               <p>{{ player }}</p>
             </div>
           </div>
 
           <div id="AllPlayerHandsDiv">
             <h3>{{labels.hands}}</h3>
-            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="'hands'+key">
               <CollectorsCard v-for="(card, index) in players[player].hand" :card="card" :availableAction="card.available" @doAction="handleAction(card)" :key="index"/>
             </div>
           </div>
 
           <div id="AllPlayerItemsDiv">
             <h3>{{labels.items}}</h3>
-            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="'items'+key">
               <CollectorsCard v-for="(card, index) in players[player].items" :card="card" :key="index"/>
             </div>
           </div>
 
           <div id="AllPlayerSkillsDiv">
             <h3>{{labels.skills}}</h3>
-            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="'skills'+key">
               <CollectorsCard v-for="(card, index) in players[player].skills" :card="card" :key="index"/>
             </div>
           </div>
 
           <div id="AllPlayerIncomeDiv">
             <h3>{{labels.income}}</h3>
-            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="'income'+key">
               <CollectorsCard v-for="(card, index) in players[player].income" :card="card" :key="index"/>
             </div>
           </div>
 
           <div id="AllPlayerMoneyDiv">
             <h3>{{labels.money}}</h3>
-            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="'money'+key">
               <p>{{ players[player].money }}</p>
             </div>
           </div>
 
           <div id="AllPlayerBottlesDiv">
             <h3>{{labels.bottles}}</h3>
-            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="'bottles'+key">
               <p>{{ players[player].bottles }}</p>
+            </div>
+          </div>
+          <div id="AllPlayerValueDiv">
+            <h3>{{labels.value}}</h3>
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="'value'+key">
+              <p>{{ players[player].value }}</p>
             </div>
           </div>
         </div>
@@ -314,6 +321,7 @@ export default {
             this.playerBoardShown = d.playerBoardShown;
             this.playerIdArray = d.playerIdArray;
             this.players = d.players;
+            this.activeRound = d.activeRound;
           }.bind(this));
 
           this.$store.state.socket.on('collectorsBottlePlaced',
@@ -322,11 +330,19 @@ export default {
             this.skillPlacement = d.placements.skillPlacement;
             this.marketPlacement = d.placements.marketPlacement;
             this.auctionPlacement = d.placements.auctionPlacement;
-            this.workPlacement = d.placements.workPlacement;
+            this.players[this.playerId].bottles = d.players[this.playerId].bottles;
+            this.playerIdArray = d.playerIdArray;
+          }.bind(this));
+
+          this.$store.state.socket.on('collectorsWorkBottlePlaced',
+          function(d) {
             this.players[this.playerId].bottles = d.players[this.playerId].bottles;
             this.players[this.playerId].income = d.players[this.playerId].income;
             this.players[this.playerId].money = d.players[this.playerId].money;
+            this.players[this.playerId].value = d.players[this.playerId].value;
+            this.workPlacement = d.placements.workPlacement;
             this.playerIdArray = d.playerIdArray;
+            this.players = d.players;
           }.bind(this));
 
           this.$store.state.socket.on('collectorsPlayerArrayFinished',function(d) {
@@ -387,6 +403,11 @@ export default {
             this.players = d;
           }.bind(this));
 
+          this.$store.state.socket.on('collectorsPlayerValueRecived',
+          function(d) {
+            this.players = d;                                         // -------------------------------<<
+          }.bind(this));
+
           this.$store.state.socket.on('collectorsBottlesRetrieved',
           function(d) {
             console.log(d.playerId, "retrieved bottles");
@@ -408,6 +429,12 @@ export default {
           this.$store.state.socket.on('collectorsRoundUpdated',
           function(d) {
             this.activeRound = d.activeRound;
+            this.buyPlacement = d.placements.buyPlacement;
+            this.skillPlacement = d.placements.skillPlacement;
+            this.marketPlacement = d.placements.marketPlacement;
+            this.auctionPlacement = d.placements.auctionPlacement;
+            this.workPlacement = d.placements.workPlacement;
+            this.players = d.players;
           }.bind(this));
         },
 
@@ -550,9 +577,15 @@ methods: {
   },
 
   fakeMoreMoney: function () {
-    console.log(this.players[this.playerId].hand[0].available);
     this.$store.state.socket.emit('collectorsFakeMoreMoney', {
       roomId: this.$route.params.id,
+      playerId: this.playerId
+    });
+  },
+
+  playerTotalValue: function () {
+    this.$store.state.socket.emit('collectorsPlayerTotalValue', {
+      roomId: this.$route.params.id,                              //---------------------------<<
       playerId: this.playerId
     });
   },
@@ -746,13 +779,6 @@ margin: 2px;
   margin: 5px;
 }
 
-#TestDiv {
-  grid-area: TestDiv;
-  align-self: center;
-  background: #e4e4e3;
-  margin: 5px;
-}
-
 #PlayerSkillsDiv {
   grid-area: PlayerSkillsDiv;
   align-self: center;
@@ -775,13 +801,53 @@ margin: 2px;
   text-align: center;
 }
 
+#AllPlayerIdDiv {
+  grid-area: AllPlayerIdDiv;
+  align-self: center;
+}
+
+#AllPlayerHandsDiv {
+  grid-area: AllPlayerHandsDiv;
+  align-self: center;
+}
+
+#AllPlayerItemsDiv {
+  grid-area: AllPlayerItemsDiv;
+  align-self: center;
+}
+
+#AllPlayerSkillsDiv {
+  grid-area: AllPlayerSkillsDiv;
+  align-self: center;
+}
+
+#AllPlayerIncomeDiv {
+  grid-area: AllPlayerIncomeDiv;
+  align-self: center;
+}
+
+#AllPlayerMoneyDiv {
+  grid-area: AllPlayerMoneyDiv;
+  align-self: center;
+}
+
+#AllPlayerBottlesDiv {
+  grid-area: AllPlayerBottlesDiv;
+  align-self: center;
+}
+
+#AllPlayerValueDiv {
+  grid-area: AllPlayerValueDiv;
+  align-self: center;
+}
+
 #AllPlayerCardsDiv {
-  grid-area: AllPlayerCardsDiv;
   align-self: center;
   display: grid;
-  grid-template-columns: 15% 15% 15% 15% 15% 12,5% 12,5%;
+  grid-template-columns: 10% 15% 15% 15% 15% 10% 10% 10%;
+  grid-template-rows: 100%;
   grid-template-areas:
-  "AllPlayerIdDiv AllPlayerHandsDiv AllPlayerItemsDiv AllPlayerSkillsDiv AllPlayerIncomeDiv AllPlayerMoneyDiv AllPlayerBottlesDiv"
+  "AllPlayerIdDiv AllPlayerHandsDiv AllPlayerItemsDiv AllPlayerSkillsDiv AllPlayerIncomeDiv AllPlayerMoneyDiv AllPlayerBottlesDiv AllPlayerValueDiv"
 }
 
 #container {
@@ -789,8 +855,11 @@ margin: 2px;
   width: 100%;
   display: grid;
   background: #D7D7D7;
+
   grid-template-columns: 38% 12% 25% 25%;
   grid-template-rows: 16,67% 16,67% 16,67% 16,67% 16,67% 16,67%;
+
+
   grid-template-areas:
   "BuyItemDiv BuyItemDiv RaiseValueDiv RaiseValueDiv"
   "BuyItemDiv BuyItemDiv RaiseValueDiv RaiseValueDiv"
@@ -832,11 +901,11 @@ margin: 2px;
   vertical-align: middle;
 }
 
-#nextRound {
+/* #nextRound {
   width: 7em;
   margin-bottom: 0.5em;
   padding: 10px 0px 10px 0px;
-}
+} */
 
 #money {
   width: 9em;
@@ -845,7 +914,7 @@ margin: 2px;
 }
 
 .bottleSlots {
-  width: 10%;
+  width: 8%;
   margin: 0em 1.5em 0em 1.5em;
   display: inline-block;
   position: relative;
@@ -908,7 +977,7 @@ margin: 2px;
 }
 
 .playercards div:hover {
-  transform: scale(0.8)translate(-20%,-20%);
+  transform: scale(0.8)translate(-80%,-80%);
   z-index: 1;
 }
 

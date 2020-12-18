@@ -112,10 +112,11 @@ Data.prototype.joinGame = function (roomId, playerId) {
     else if (Object.keys(room.players).length < room.playerCount) {
       console.log("Player", playerId, "joined for the first time");
       room.players[playerId] = { hand: [],
-                                 money: 1,
-                                 bottles: 2, // -------- Bottles to place --------
+                                 money: 5,
+                                 bottles: 2, // --------------Bottles to place ----------------
                                  bottleCount: 2, // -------- Number of bottles you own --------
                                  points: 0,
+                                 value: 0, //--------------- Value of a players Items ---------
                                  skills: [],
                                  items: [],
                                  income: [],
@@ -136,13 +137,30 @@ Data.prototype.getPlayers = function (id) {
 }
 
 Data.prototype.updatePoints = function (roomId, player, points) {
-  let room = this.rooms[roomId]
+  let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     room.points[player] += points;
     return room.points;
   }
   else return {};
 }
+
+Data.prototype.playerTotalValue = function(roomId, playerId) {
+  let room = this.rooms[roomId];
+  let marketValues = this.getMarketValues(roomId);
+
+  if (typeof room !== 'undefined') {
+
+    if (room.players[playerId].items.length !== 0) {
+        room.players[playerId].value = 0;
+      for (var card in room.players[playerId].items) {
+        room.players[playerId].value += marketValues[room.players[playerId].items[card].item];
+      }
+    }
+  } else return null;
+}
+
+
 
 /* returns players after a new card is drawn */
 Data.prototype.drawCard = function (roomId, playerId) {
@@ -188,7 +206,6 @@ Data.prototype.buyItem = function (roomId, playerId, card, cost) {
     }
     room.players[playerId].items.push(...c);
     room.players[playerId].money -= cost;
-
   }
 }
 Data.prototype.getSkill = function (roomId, playerId, card, cost) {
@@ -271,13 +288,13 @@ Data.prototype.addPlayerReady = function(roomId, playerId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
 
-    console.log(room.playerIdArray);
-    console.log(!room.playerIdArray.includes(playerId));
+  //  console.log(room.playerIdArray);
+  //  console.log(!room.playerIdArray.includes(playerId));
     if (!room.playerIdArray.includes(playerId)) {
       room.playerIdArray.push(playerId);
       shuffle(room.playerIdArray);
     }
-    console.log(room.playerIdArray);
+  //  console.log(room.playerIdArray);
   }
 }
 
@@ -285,17 +302,43 @@ Data.prototype.addPlayerReady = function(roomId, playerId) {
 Data.prototype.changeRound= function(roomId, playerId, nextRound, players) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
-     room.activeRound = nextRound;
-  for (playerId in players ) {
-    if (room.players[playerId].income.length !== 0) {
-      for (var card in room.players[playerId].income) {
-          room.players[playerId].money += room.players[playerId].income[card].auctionValue; //Ger pengar vid varje rondbyte baserat på totala värdet
-     }                                                                                      //av 'auctionValue' hos spelarens kort i 'income'.
-    }
-   }
-  }
- }
+    room.activeRound = nextRound;
 
+    this.resetButtons(roomId, room.buyPlacement );
+    this.resetButtons(roomId, room.skillPlacement );
+    this.resetButtons(roomId, room.marketPlacement );
+    this.resetButtons(roomId, room.auctionPlacement );
+    this.resetButtons(roomId, room.workPlacement );
+
+
+
+    for (playerId in players) {
+    this.playerTotalValue(roomId, playerId) // ---------------Uppdaterar Value för alla spelare vid ny runda!
+    this.retrieveBottles(roomId, playerId);
+
+      if (room.players[playerId].income.length !== 0) {
+        for (var card in room.players[playerId].income) {
+          room.players[playerId].money += room.players[playerId].income[card].auctionValue; //Ger pengar vid varje rondbyte baserat på totala värdet
+        }                                                                                      //av 'auctionValue' hos spelarens kort i 'income'.
+      }
+    }
+  }
+}
+
+Data.prototype.resetButtons= function(roomId, placement) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+
+    for (let i  in placement) {
+
+    //  console.log(placement[i]);
+      if (placement[i].playerId !== null) {
+        placement[i].playerId = null;
+      }
+    //  console.log(placement[i]);
+    }
+  }
+}
 Data.prototype.startAuction = function (roomId, playerId, card, cost) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
@@ -477,11 +520,11 @@ Data.prototype.fakeMoreMoney = function (roomId, playerId) {
 Data.prototype.retrieveBottles = function (roomId, playerId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
-    console.log(room.players[playerId].bottleCount, "bottleCount före retrieve");
-    console.log(room.players[playerId].bottles, "bottles före retrieve");
+  //  console.log(room.players[playerId].bottleCount, "bottleCount före retrieve");
+  //  console.log(room.players[playerId].bottles, "bottles före retrieve");
     room.players[playerId].bottles = room.players[playerId].bottleCount;
-    console.log(room.players[playerId].bottleCount, "bottleCount");
-    console.log(room.players[playerId].bottles, "bottles");
+  //  console.log(room.players[playerId].bottleCount, "bottleCount");
+  //  console.log(room.players[playerId].bottles, "bottles");
     return room.players;
   }
   else return [];

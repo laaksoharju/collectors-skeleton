@@ -28,12 +28,8 @@ function sockets(io, socket, data) {
         playerBoardShown: data.getPlayerBoardShown(d.roomId),
         playerIdArray: data.getPlayerIdArray(d.roomId),
         players: data.getPlayers(d.roomId),
-      });
-      io.to(d.roomId).emit('collectorsRoundUpdated', {
         activeRound: data.getActiveRound(d.roomId)
       });
-      console.log(d.activeRound, "aktiv runda som skickas in")
-      console.log(data.getActiveRound(d.roomId), "aktiv runda i datahandlern efter förändring")
     });
 
     socket.on('collectorsDrawCard', function(d) {
@@ -64,7 +60,9 @@ function sockets(io, socket, data) {
       console.log("ändrar runda i sockets")
       data.changeRound(d.roomId, d.playerId, d.activeRound, d.players);
       io.to(d.roomId).emit('collectorsRoundUpdated', {
-        activeRound: data.getActiveRound(d.roomId)
+        activeRound: data.getActiveRound(d.roomId),
+        placements: data.getPlacements(d.roomId),
+        players: data.getPlayers(d.roomId)
       });
     });
 
@@ -88,7 +86,7 @@ function sockets(io, socket, data) {
 
     socket.on('collectorsPlaceBottleWork', function(d) {
       data.placeBottleWork(d.roomId, d.playerId, d.action, d.cost, d.index);
-      io.to(d.roomId).emit('collectorsBottlePlaced', {
+      io.to(d.roomId).emit('collectorsWorkBottlePlaced', {
         placements: data.getPlacements(d.roomId),
         players: data.getPlayers(d.roomId),
         playerIdArray: data.getPlayerIdArray(d.roomId)
@@ -159,6 +157,15 @@ function sockets(io, socket, data) {
     socket.on('collectorsRaiseCurrentBid', function(d) {
 	     io.to(d.roomId).emit('collectorsBidRaised',
 			 data.raiseCurrentBid(d.roomId, d.playerId)
+      );
+    });
+
+    socket.on('collectorsPlayerTotalValue', function(d) {
+      data.playerTotalValue(d.roomId, d.playerId)
+      io.to(d.roomId).emit('collectorsPlayerValueRecived', {
+          playerId: d.playerId,
+          marketValues: data.getMarketValues(d.roomId),
+        }
       );
     });
 
