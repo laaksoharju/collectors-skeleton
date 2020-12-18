@@ -25,7 +25,7 @@
 	"lastPlayerCanChange": "Den sista spelaren kan ändra runda när han eller hon är klar med sitt drag.",
 	"draw": "Dra ett kort",
 	"invite": "Bjud in andra spelare med den här länken:",
-	"endTurn": "Avsluta rundan",
+	"nextRound": "Nästa runda",
 	"ready": "Jag är redo!",
 	"start": "Starta spelet",
 	"retrieve": "Återta flaskor(Uppdatera PlayerBoard)",
@@ -38,5 +38,6 @@
 	"skills": "Skickligheter",
 	"income": "Inkomst",
 	"money": "Pengar",
-	"bottles": "Flaskor"
+	"bottles": "Flaskor",
+	"value": "Föremåls värde"
 }

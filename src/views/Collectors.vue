@@ -69,9 +69,11 @@
             {{labels.start}}
           </button>
         </div>
-        <div id="NextRoundButton" v-if="playerBoardShown">
+        <div class="buttons" v-if="playerBoardShown">
           <p>{{labels.currentRound}} {{ activeRound }}. {{labels.lastPlayerCanChange}}</p>
-          <button id="nextRound" v-on:click="changeRound()" :disabled="notLastPlayer()">Next round</button>
+          <button class="function_buttons"  v-on:click="changeRound()" :disabled="notLastPlayer()">{{labels.nextRound}}
+              <img class="function_button_img" src="images/retrieveBottles.png">
+          </button>
         </div>
         <div>
           <button id="money" v-if="players[playerId]" @click="fakeMoreMoney()">{{labels.fake}}</button>
@@ -83,12 +85,12 @@
           </button>
         </div>
 
-        <div class="buttons">
+        <!-- <div class="buttons">
           <button class="function_buttons" v-if="players[playerId]" @click="retrieveBottles()">
             {{labels.retrieve}}
             <img class="function_button_img" src="images/retrieveBottles.png">
           </button>
-        </div>
+        </div> -->
 
         <div>
           {{ labels.invite }}
@@ -172,6 +174,12 @@
             <h3>{{labels.bottles}}</h3>
             <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
               <p>{{ players[player].bottles }}</p>
+            </div>
+          </div>
+          <div id="AllPlayerValueDiv">
+            <h3>{{labels.value}}</h3>
+            <div class="playercards" v-for="(player, key) in playerIdArray" :key="key">
+              <p>{{ players[player].value }}</p>
             </div>
           </div>
         </div>
@@ -310,6 +318,9 @@ export default {
             this.players[this.playerId].bottles = d.players[this.playerId].bottles;
             this.players[this.playerId].income = d.players[this.playerId].income;
             this.players[this.playerId].money = d.players[this.playerId].money;
+
+            this.players[this.playerId].value = d.players[this.playerId].value;
+
             this.playerIdArray = d.playerIdArray;
           }.bind(this));
 
@@ -371,6 +382,11 @@ export default {
             this.players = d;
           }.bind(this));
 
+          this.$store.state.socket.on('collectorsPlayerValueRecived',
+          function(d) {
+            this.players = d;                                         // -------------------------------<<
+          }.bind(this));
+
           this.$store.state.socket.on('collectorsBottlesRetrieved',
           function(d) {
             console.log(d.playerId, "retrieved bottles");
@@ -397,6 +413,7 @@ export default {
             this.marketPlacement = d.placements.marketPlacement;
             this.auctionPlacement = d.placements.auctionPlacement;
             this.workPlacement = d.placements.workPlacement;
+            this.players = d.players;
           }.bind(this));
         },
 
@@ -542,6 +559,13 @@ methods: {
     console.log(this.players[this.playerId].hand[0].available);
     this.$store.state.socket.emit('collectorsFakeMoreMoney', {
       roomId: this.$route.params.id,
+      playerId: this.playerId
+    });
+  },
+
+  playerTotalValue: function () {
+    this.$store.state.socket.emit('collectorsPlayerTotalValue', {
+      roomId: this.$route.params.id,                              //---------------------------<<
       playerId: this.playerId
     });
   },
@@ -747,13 +771,53 @@ footer a:visited {
   text-align: center;
 }
 
+#AllPlayerIdDiv {
+  grid-area: AllPlayerIdDiv;
+  align-self: center;
+}
+
+#AllPlayerHandsDiv {
+  grid-area: AllPlayerHandsDiv;
+  align-self: center;
+}
+
+#AllPlayerItemsDiv {
+  grid-area: AllPlayerItemsDiv;
+  align-self: center;
+}
+
+#AllPlayerSkillsDiv {
+  grid-area: AllPlayerSkillsDiv;
+  align-self: center;
+}
+
+#AllPlayerIncomeDiv {
+  grid-area: AllPlayerIncomeDiv;
+  align-self: center;
+}
+
+#AllPlayerMoneyDiv {
+  grid-area: AllPlayerMoneyDiv;
+  align-self: center;
+}
+
+#AllPlayerBottlesDiv {
+  grid-area: AllPlayerBottlesDiv;
+  align-self: center;
+}
+
+#AllPlayerValueDiv {
+  grid-area: AllPlayerValueDiv;
+  align-self: center;
+}
+
 #AllPlayerCardsDiv {
-  grid-area: AllPlayerCardsDiv;
   align-self: center;
   display: grid;
-  grid-template-columns: 15% 15% 15% 15% 15% 12,5% 12,5%;
+  grid-template-columns: 10% 15% 15% 15% 15% 10% 10% 10%;
+  grid-template-rows: 100%;
   grid-template-areas:
-  "AllPlayerIdDiv AllPlayerHandsDiv AllPlayerItemsDiv AllPlayerSkillsDiv AllPlayerIncomeDiv AllPlayerMoneyDiv AllPlayerBottlesDiv"
+  "AllPlayerIdDiv AllPlayerHandsDiv AllPlayerItemsDiv AllPlayerSkillsDiv AllPlayerIncomeDiv AllPlayerMoneyDiv AllPlayerBottlesDiv AllPlayerValueDiv"
 }
 
 #container {
@@ -804,11 +868,11 @@ footer a:visited {
   vertical-align: middle;
 }
 
-#nextRound {
+/* #nextRound {
   width: 7em;
   margin-bottom: 0.5em;
   padding: 10px 0px 10px 0px;
-}
+} */
 
 #money {
   width: 9em;

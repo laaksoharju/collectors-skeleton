@@ -8,7 +8,7 @@ changeRoundWork<template>
           v-if="p.playerId===null"
           :disabled="cannotAfford(p.cost) || player.bottles < 1"
           @click="placeBottle(p, index)">
-          <img v-if="index===0" :src='changeFirstWorkCard()'  style="width:100%" >
+          <img v-if="index===0" :src='changeFirstWorkCard()'  style="width:100%"  >
           <p id='firstButtonInfoText' v-if="index===0"> {{changeFirstWorkCardInfoText()}} </p>
           <img :src='p.img' style="width:100%">
           <p id='info_text'> {{p.info_text}} </p>
@@ -64,7 +64,7 @@ export default {
 
     changeFirstWorkCardInfoText: function (){
       let firstWorkButtonInfoText = ['Draw 2 cards to Income', 'Draw 2 cards to Income, +1$', 'Draw 2 cards to Income, +2$', 'Discard 1 bottle, +1$']
-      let setInfoText = [];
+      let setInfoText = ['No round started'];
 
       if (this.activeRound === 1){
         setInfoText = firstWorkButtonInfoText[0];

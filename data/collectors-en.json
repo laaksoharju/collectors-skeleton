@@ -25,7 +25,7 @@
 	"lastPlayerCanChange": "The last player can change rounds when finished with his or her move.",
 	"draw": "Draw a card",
 	"invite": "Invite other players with this link:",
-	"endTurn": "End turn",
+	"nextRound": "Next round",
 	"ready": "I'm ready!",
 	"start": "Start the game",
 	"retrieve": "Retrieve bottles(Update PlayerBoard)",
@@ -38,5 +38,6 @@
 	"skills": "Skills",
 	"income": "Income",
 	"money": "Money",
-	"bottles": "Bottles"
+	"bottles": "Bottles",
+	"value": "Items Value"
 }
