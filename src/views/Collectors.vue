@@ -85,15 +85,8 @@
           </button>
         </div>
 
-        <!-- <div class="buttons">
-          <button class="function_buttons" v-if="players[playerId]" @click="retrieveBottles()">
-            {{labels.retrieve}}
-            <img class="function_button_img" src="images/retrieveBottles.png">
-          </button>
-        </div> -->
-
         <div>
-          {{ labels.invite }}
+          {{ labels.invite }} <br>
           <input type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
         </div>
       </div>
@@ -115,21 +108,13 @@
       <div id="PlayerBoardDiv">
         <h2>{{labels.playerBoard}}</h2>
         <div id="BottleSlotsDiv">
-            <input type="hidden" name="bottleSlot" value="bottleSlot_1">
-            <input class="bottleSlots" type="image" src="images/bottleSlot_1.png">
-
-            <input type="hidden" name="bottleSlot" value="bottleSlot_2">
-            <input class="bottleSlots" type="image" src="images/bottleSlot_2.png">
-
-            <input type="hidden" name="bottleSlot" value="bottleSlot_3">
-            <input class="bottleSlots" type="image" src="images/bottleSlot_3.png">
-
-            <input type="hidden" name="bottleSlot" value="bottleSlot_4">
-            <input class="bottleSlots" type="image" src="images/bottleSlot_4.png">
-
-            <input type="hidden" name="bottleSlot" value="bottleSlot_5">
-            <input class="bottleSlots" type="image" src="images/bottleSlot_5.png">
-
+          <span id="bottles">
+            <img v-for="bottle in players[playerId].bottles" src="images/bottle.png" :key="bottle">
+          </span>
+          <span v-for="index in 5" :key="index">
+            <input type="hidden" name="bottleSlot">
+            <input class="bottleSlots" type="image" :src="visualizeBottleSlots(index)">
+          </span>
         </div>
 
         <div id="AllPlayerCardsDiv" v-if="playerBoardShown">
@@ -239,6 +224,7 @@ export default {
         auctionPlacement: [],
         marketPlacement: [],
         workPlacement: [],
+        bottleSlotsArray: ['images/bottleSlot_1.png', 'images/bottleSlot_2.png', 'images/bottleSlot_3.png', 'images/bottleSlot_4.png', 'images/bottleSlot_5.png',],
         chosenPlacementCost: null,
         chosenAction: "",
         raiseValueIndex: null,
@@ -493,6 +479,20 @@ methods: {
       action: action,
       cost: cost,
     });
+  },
+
+  visualizeBottleSlots: function (index) {
+    var bottleSlotsVisualisation = []
+      bottleSlotsVisualisation.push(this.bottleSlotsArray[index - 1]);
+      return bottleSlotsVisualisation;
+  },
+
+  visualizeBottles: function () {
+    var bottleSlotsVisualisation = this.bottleSlotsArray;
+    for (let i = 0; i < this.players[this.playerId].bottles; i += 1) {
+      bottleSlotsVisualisation[i] = "images/bottleSlotPlaced_" + (i+1) + ".png";
+    }
+    return bottleSlotsVisualisation;
   },
 
   placeBottleRaiseValue: function (action, p) {
@@ -776,8 +776,22 @@ footer a:visited {
 #BottleSlotsDiv {
   grid-area: BottleSlotsDiv;
   align-self: center;
-  margin: 5px;
   text-align: center;
+  display: inline-block;
+  position: relative;
+  margin: 5px;
+  z-index: 0;
+}
+
+#bottles {
+    position: absolute;
+    z-index: 1;
+}
+
+#bottles img {
+    margin: 0 3.83em 0 3.8em;
+    vertical-align: middle;
+    height: 100px;
 }
 
 #AllPlayerIdDiv {
