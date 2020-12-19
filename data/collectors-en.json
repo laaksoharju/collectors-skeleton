@@ -19,6 +19,15 @@
 	"useAsMarket": "Use to raise a value",
 
 	"doWork": "Work",
+	"firstWorkCardRound1": "Draw two income cards",
+	"firstWorkCardRound2": "+1$, draw two income cards",
+	"firstWorkCardRound3": "+2$, draw two income cards",
+	"firstWorkCardRound4": "+3$, draw two income cards",
+	"secondWorkLabel": "+1$, discard one bottle",
+	"thirdWorkLabel": "-1$, draw two cards to hand",
+	"fourthWorkLabel": "Draw one card to hand, become first player",
+	"fifthWorkLabel": "Draw one card to hand and get an income card",
+
 
 	"gameOperations": "Game Operations",
 	"currentRound": "The current round is",

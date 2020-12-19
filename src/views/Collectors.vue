@@ -107,9 +107,14 @@
         @placeBottleWork="placeBottleWork('doWork', $event)"/>
       </div>
 
+      <div id="HandDiv" class="cardslots" v-if="players[playerId]">
+        <h2>Hand</h2>
+        <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="handleAction(card)" :key="index"/>
+      </div>
+
       <div id="PlayerBoardDiv">
         <h2>{{labels.playerBoard}}</h2>
-        <div id="bottleSlotsDiv">
+        <div id="BottleSlotsDiv">
             <input type="hidden" name="bottleSlot" value="bottleSlot_1">
             <input class="bottleSlots" type="image" src="images/bottleSlot_1.png">
 
@@ -138,7 +143,7 @@
           <div id="AllPlayerHandsDiv">
             <h3>{{labels.hands}}</h3>
             <div class="playercards" v-for="(player, key) in playerIdArray" :key="'hands'+key">
-              <CollectorsCard v-for="(card, index) in players[player].hand" :card="card" :availableAction="card.available" @doAction="handleAction(card)" :key="index"/>
+              <p>{{players[player].hand.length}}</p>
             </div>
           </div>
 
@@ -741,6 +746,7 @@ footer a:visited {
 #HandDiv {
   grid-area: HandDiv;
   align-self: center;
+  text-align: center;
   background: #e4e4e3;
   margin: 5px;
 }
@@ -767,8 +773,8 @@ footer a:visited {
   margin: 5px;
 }
 
-#bottleSlotsDiv {
-  grid-area: bottleSlotsDiv;
+#BottleSlotsDiv {
+  grid-area: BottleSlotsDiv;
   align-self: center;
   margin: 5px;
   text-align: center;
@@ -828,19 +834,19 @@ footer a:visited {
   width: 100%;
   display: grid;
   background: #D7D7D7;
-  grid-template-columns: 38% 12% 25% 25%;
+  grid-template-columns: 25% 25% 25% 25%;
   grid-template-rows: 16,67% 16,67% 16,67% 16,67% 16,67% 16,67%;
   grid-template-areas:
   "BuyItemDiv BuyItemDiv RaiseValueDiv RaiseValueDiv"
   "BuyItemDiv BuyItemDiv RaiseValueDiv RaiseValueDiv"
   "BuySkillDiv BuySkillDiv AuctionDiv AuctionDiv"
   "BuySkillDiv BuySkillDiv AuctionDiv AuctionDiv"
-  "GameOperationsDiv WorkDiv WorkDiv ."
-  "bottleSlotsDiv bottleSlotsDiv bottleSlotsDiv bottleSlotsDiv"
+  "GameOperationsDiv WorkDiv WorkDiv HandDiv"
+  "BottleSlotsDiv BottleSlotsDiv BottleSlotsDiv BottleSlotsDiv"
   "PlayerBoardDiv PlayerBoardDiv PlayerBoardDiv PlayerBoardDiv"
 }
 
-#container h1, h2, h3, p, label, span  {
+#container h1, h2, h3, p, label, span {
   color: black;
 }
 
@@ -856,12 +862,12 @@ footer a:visited {
   font-size: 15px;
 }
 
-#bottleSlotsDiv input:hover {
+#BottleSlotsDiv input:hover {
   transform: scale(1.1);
   transition: all 0.3s ease-in-out 0s;
 }
 
-#bottleSlotsDiv input {
+#BottleSlotsDiv input {
   transition: all 0.2s ease-in-out 0s;
 }
 
@@ -916,13 +922,13 @@ footer a:visited {
 
 .cardslots {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
+  grid-template-columns: repeat(auto-fill, 80px);
   grid-template-rows: repeat(auto-fill, 180px);
 }
 
 .cardslots div {
   transform: scale(0.5)translate(-50%,-50%);
-  transition:0.2s;
+  transition: 0.2s;
   transition-timing-function: ease-out;
   z-index: 0;
 }

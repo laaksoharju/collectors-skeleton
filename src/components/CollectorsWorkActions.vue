@@ -11,7 +11,7 @@ changeRoundWork<template>
           <img v-if="index===0" :src='changeFirstWorkCard()'  style="width:100%"  >
           <p id='firstButtonInfoText' v-if="index===0"> {{changeFirstWorkCardInfoText()}} </p>
           <img :src='p.img' style="width:100%">
-          <p id='info_text'> {{p.info_text}} </p>
+          <p id='info_text'> {{getOtherInfoLabels(index)}} </p>
         </button>
         <div v-if="p.playerId !== null" style="color:black">
           {{p.playerId}}
@@ -47,7 +47,7 @@ export default {
       let firstWorkButtonImage = ['images/Work_Round_1.png','images/Work_Round_2.png','images/Work_Round_3.png','images/Work_Round_4.png'];
       let setImage = [];
 
-      if (this.activeRound === 1) {
+      if (this.activeRound <= 1) {
         setImage = firstWorkButtonImage[0];
       }
       else if (this.activeRound === 2) {
@@ -62,24 +62,38 @@ export default {
       return setImage;
     },
 
-    changeFirstWorkCardInfoText: function (){
-      let firstWorkButtonInfoText = ['Draw 2 cards to Income', 'Draw 2 cards to Income, +1$', 'Draw 2 cards to Income, +2$', 'Discard 1 bottle, +1$']
-      let setInfoText = ['No round started'];
+    changeFirstWorkCardInfoText: function() {
+      let setInfoText = "No round started";
 
-      if (this.activeRound === 1){
-        setInfoText = firstWorkButtonInfoText[0];
+      if (this.activeRound <= 1){
+        setInfoText = this.labels.firstWorkCardRound1;
       }
       else if (this.activeRound === 2) {
-        setInfoText = firstWorkButtonInfoText[1];
+        setInfoText = this.labels.firstWorkCardRound2;
       }
       else if (this.activeRound === 3) {
-        setInfoText = firstWorkButtonInfoText[2];
+        setInfoText = this.labels.firstWorkCardRound3;
       }
       else if (this.activeRound === 4) {
-        setInfoText = firstWorkButtonInfoText[3];
+        setInfoText = this.labels.firstWorkCardRound4;
       }
       return setInfoText
     },
+
+    getOtherInfoLabels: function(index) {
+      if (index === 1) {
+        return this.labels.secondWorkLabel;
+      }
+      if (index === 2) {
+        return this.labels.thirdWorkLabel;
+      }
+      if (index === 3) {
+        return this.labels.fourthWorkLabel;
+      }
+      if (index === 4) {
+        return this.labels.fifthWorkLabel;
+      }
+    }
   }
 }
 
