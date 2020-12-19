@@ -313,7 +313,7 @@ Data.prototype.countPoints = function (roomId){
         }
       }
       //poäng för pengar
-      let moneyToPoints = math.floor(player.money / 3);
+      let moneyToPoints = Math.floor(player.money / 3);
       player.points += moneyToPoints;
       console.log(player.points);
     }
