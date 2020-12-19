@@ -297,7 +297,6 @@ Data.prototype.countPoints = function (roomId){
     //loopar varje spelare
     for(let i=0; i < room.playerOrder.length; i ++){
       let player = room.players[room.playerOrder[i]];
-      console.log(room.playerOrder[i]);
       //Poäng för varje item utifrån marketvalue!!
       for(let j = 0; j < player.items.length; j++){
         if (player.items[j].item === "fastaval") {
@@ -315,7 +314,6 @@ Data.prototype.countPoints = function (roomId){
       //poäng för pengar
       let moneyToPoints = Math.floor(player.money / 3);
       player.points += moneyToPoints;
-      console.log(player.points);
     }
   }
 }
