@@ -107,15 +107,15 @@
 
       <div id="PlayerBoardDiv">
         <h2>{{labels.playerBoard}}</h2>
-        <!-- <div id="BottleSlotsDiv">
-          <span id="bottles">
+        <div id="BottleSlotsDiv">
+          <span id="bottles" v-if="players[playerId]">
             <img v-for="bottle in players[playerId].bottles" src="images/bottle.png" :key="bottle">
           </span>
           <span v-for="index in 5" :key="index">
             <input type="hidden" name="bottleSlot">
             <input class="bottleSlots" type="image" :src="visualizeBottleSlots(index)">
           </span>
-        </div> -->
+        </div>
 
         <div id="AllPlayerStatsDiv" v-if="playerBoardShown">
           <div id="AllPlayerIdDiv">
@@ -487,14 +487,6 @@ methods: {
     var bottleSlotsVisualisation = []
       bottleSlotsVisualisation.push(this.bottleSlotsArray[index - 1]);
       return bottleSlotsVisualisation;
-  },
-
-  visualizeBottles: function () {
-    var bottleSlotsVisualisation = this.bottleSlotsArray;
-    for (let i = 0; i < this.players[this.playerId].bottles; i += 1) {
-      bottleSlotsVisualisation[i] = "images/bottleSlotPlaced_" + (i+1) + ".png";
-    }
-    return bottleSlotsVisualisation;
   },
 
   placeBottleRaiseValue: function (action, p) {
