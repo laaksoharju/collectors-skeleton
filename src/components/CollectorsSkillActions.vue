@@ -75,7 +75,6 @@ export default {
         this.$set(this.player.hand[i], "available", true);
       }
       this.chosenPlacementCost = cost;
-      console.log(this.player.hand);
     },
     getSkill: function (card) {
       if (card.available) {

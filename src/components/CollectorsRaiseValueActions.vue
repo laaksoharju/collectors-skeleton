@@ -62,11 +62,25 @@ export default {
     },
 
     highlightAvailableCards: function () {
-      if (this.skillsOnSale.length === 5) {
-        this.$set(this.skillsOnSale[4], "available", true);
+      let lastSkillIndex = -1;
+      for (let i = 0; i < this.skillsOnSale.length; i++) {
+        if (this.skillsOnSale[i].item != undefined) {
+          lastSkillIndex = i;
+        }
+        console.log(this.skillsOnSale);
+        console.log(lastSkillIndex);
       }
-      if (this.auctionCards.length === 4) {
-        this.$set(this.auctionCards[3], "available", true);
+      if (lastSkillIndex >= 0) {
+        this.$set(this.skillsOnSale[lastSkillIndex], "available", true);
+      }
+      let lastAuctionIndex = -1;
+      for (let i = 0; i < this.auctionCards.length; i++) {
+        if (this.auctionCards[i].item != undefined) {
+          lastAuctionIndex = i;
+        }
+      }
+      if (lastAuctionIndex >= 0) {
+        this.$set(this.auctionCards[lastAuctionIndex], "available", true);
       }
       if (this.player.hand.length > 0) {
         for (let i = 0; i < this.player.hand.length; i += 1) {

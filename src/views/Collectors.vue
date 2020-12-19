@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div id='container'>
+    <div id="container">
 
       <div id="BuyItemDiv">
         <!-- {{buyPlacement}} {{chosenPlacementCost}} Detta borde vi kunna skita i nu-->
@@ -107,7 +107,7 @@
 
       <div id="PlayerBoardDiv">
         <h2>{{labels.playerBoard}}</h2>
-        <div id="BottleSlotsDiv">
+        <!-- <div id="BottleSlotsDiv">
           <span id="bottles">
             <img v-for="bottle in players[playerId].bottles" src="images/bottle.png" :key="bottle">
           </span>
@@ -115,9 +115,9 @@
             <input type="hidden" name="bottleSlot">
             <input class="bottleSlots" type="image" :src="visualizeBottleSlots(index)">
           </span>
-        </div>
+        </div> -->
 
-        <div id="AllPlayerCardsDiv" v-if="playerBoardShown">
+        <div id="AllPlayerStatsDiv" v-if="playerBoardShown">
           <div id="AllPlayerIdDiv">
             <h3>{{labels.names}}</h3>
             <div class="playercards" v-for="(player, key) in playerIdArray" :key="'names'+key">
@@ -357,7 +357,6 @@ export default {
 
           this.$store.state.socket.on('collectorsValueRaised',
           function(d) {
-            console.log(d.playerId, "raised a value");
             this.players = d.players;
             this.marketValues = d.marketValues;
             this.market = d.market;
@@ -411,6 +410,9 @@ export default {
             this.auctionPlacement = d.placements.auctionPlacement;
             this.workPlacement = d.placements.workPlacement;
             this.players = d.players;
+            this.skillsOnSale = d.skillsOnSale;
+            this.market = d.market;
+            this.marketValues = d.marketValues;
           }.bind(this));
         },
 
@@ -834,7 +836,7 @@ footer a:visited {
   align-self: center;
 }
 
-#AllPlayerCardsDiv {
+#AllPlayerStatsDiv {
   align-self: center;
   display: grid;
   grid-template-columns: 10% 15% 15% 15% 15% 10% 10% 10%;

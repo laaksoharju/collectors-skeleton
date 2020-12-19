@@ -57,12 +57,14 @@ function sockets(io, socket, data) {
     });
 
     socket.on('collectorsChangeRound', function(d) {
-      console.log("ändrar runda i sockets")
       data.changeRound(d.roomId, d.playerId, d.activeRound, d.players);
       io.to(d.roomId).emit('collectorsRoundUpdated', {
         activeRound: data.getActiveRound(d.roomId),
         placements: data.getPlacements(d.roomId),
-        players: data.getPlayers(d.roomId)
+        players: data.getPlayers(d.roomId),
+        skillsOnSale: data.getSkillsOnSale(d.roomId),
+        market: data.getMarket(d.roomId),
+        marketValues: data.getMarketValues(d.roomId)
       });
     });
 

@@ -238,6 +238,7 @@ Data.prototype.getSkill = function (roomId, playerId, card, cost) {
         c = room.currentAuctionCard.splice(0,1);
       }
     }
+    console.log(c);
     room.players[playerId].skills.push(...c);
     room.players[playerId].money -= cost;
 
@@ -299,27 +300,37 @@ Data.prototype.addPlayerReady = function(roomId, playerId) {
 }
 
 
-Data.prototype.changeRound= function(roomId, playerId, nextRound, players) {
+Data.prototype.changeRound = function(roomId, playerId, nextRound, players) {
   let room = this.rooms[roomId];
-  if (typeof room !== 'undefined') {
+  if (typeof room !== "undefined") {
     room.activeRound = nextRound;
-
-    this.resetButtons(roomId, room.buyPlacement );
-    this.resetButtons(roomId, room.skillPlacement );
-    this.resetButtons(roomId, room.marketPlacement );
-    this.resetButtons(roomId, room.auctionPlacement );
-    this.resetButtons(roomId, room.workPlacement );
-
-
-
-    for (playerId in players) {
-    this.playerTotalValue(roomId, playerId) // ---------------Uppdaterar Value för alla spelare vid ny runda!
-    this.retrieveBottles(roomId, playerId);
-
-      if (room.players[playerId].income.length !== 0) {
-        for (var card in room.players[playerId].income) {
-          room.players[playerId].money += room.players[playerId].income[card].auctionValue; //Ger pengar vid varje rondbyte baserat på totala värdet
-        }                                                                                      //av 'auctionValue' hos spelarens kort i 'income'.
+    if (nextRound > 1) {
+      this.resetButtons(roomId, room.buyPlacement);
+      this.resetButtons(roomId, room.skillPlacement);
+      this.resetButtons(roomId, room.marketPlacement);
+      this.resetButtons(roomId, room.auctionPlacement);
+      this.resetButtons(roomId, room.workPlacement);
+      for (playerId in players) {
+        this.playerTotalValue(roomId, playerId) // ---------------Uppdaterar Value för alla spelare vid ny runda!
+        this.retrieveBottles(roomId, playerId);
+        if (room.players[playerId].income.length !== 0) {
+          for (var card in room.players[player].income) {
+            room.players[playerId].money += room.players[playerId].income[card].auctionValue; //Ger pengar vid varje rondbyte baserat på totala värdet
+          }                                                                                   //av 'auctionValue' hos spelarens kort i 'income'.
+        }
+      }
+      let lastSkillIndex = -1;
+      for (let i = 0; i < room.skillsOnSale.length; i++) {
+        if (room.skillsOnSale[i].item != undefined) {
+          lastSkillIndex = i;
+        }
+      }
+      console.log(lastSkillIndex);
+      console.log(room.skillsOnSale[lastSkillIndex]);
+      let c = null;
+      if (lastSkillIndex > -1) {
+        c = room.skillsOnSale.splice(lastSkillIndex,1, {});
+        room.market.push(...c);
       }
     }
   }
@@ -430,7 +441,6 @@ Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index
         }
       }
     }
-
     if (index === 0) {
       if (room.activeRound === 1) {
         console.log('2 kort till Income');
@@ -487,7 +497,6 @@ Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index
           console.log("Bytte plats på spelare");
         }
       }
-
     }
     if (index === 4) {
       console.log('Work ruta index 4, dra ett kort till handen, och ett till Income');
