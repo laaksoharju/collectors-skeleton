@@ -86,5 +86,4 @@ function sockets(io, socket, data) {
   })
 
 }
-
 module.exports = sockets;
