@@ -159,7 +159,7 @@ export default {
 .raise-value-slot-container {
   width: 80%;
   display: grid;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 1.5fr 1fr;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   text-align: center;
   color: black;
@@ -167,8 +167,8 @@ export default {
 }
 .raise-value-slot {
   background-color: #6d9eebff;
-  width: 6vw;
-  height: 6vw;
+  width: 4vw;
+  height: 4vw;
   border-radius: 50%;
   border: 1px solid #19181850;
   display: flex;
@@ -179,22 +179,22 @@ export default {
 }
 #rvMovie {
   background: url("/images/RAISEVAL-FILM.png");
-  background-size: 6vw 6vw;
+  background-size: 4vw 4vw;
 }
 #rvFigures {
   background: url("/images/RAISEVAL-ROBOT.png");
-  background-size: 6vw 6vw;
+  background-size: 4vw 4vw;
 }
 #rvTechnology {
   background: url("/images/RAISEVAL-IT.png");
-  background-size: 6vw 6vw;
+  background-size: 4vw 4vw;
 }
 #rvMusic {
   background: url("/images/RAISEVAL-MUSIC.png");
-  background-size: 6vw 6vw;
+  background-size: 4vw 4vw;
 }
 #rvFastaval {
   background: url("/images/RAISEVAL-PINGVIN.png");
-  background-size: 6vw 6vw;
+  background-size: 4vw 4vw;
 }
 </style>
