@@ -57,7 +57,7 @@ function sockets(io, socket, data) {
     });
 
     socket.on('collectorsChangeRound', function(d) {
-      data.changeRound(d.roomId, d.playerId, d.activeRound, d.players);
+      data.changeRound(d.roomId, d.activeRound);
       io.to(d.roomId).emit('collectorsRoundUpdated', {
         activeRound: data.getActiveRound(d.roomId),
         placements: data.getPlacements(d.roomId),
@@ -65,6 +65,7 @@ function sockets(io, socket, data) {
         itemsOnSale: data.getItemsOnSale(d.roomId),
         skillsOnSale: data.getSkillsOnSale(d.roomId),
         market: data.getMarket(d.roomId),
+        auctionCards: data.getAuctionCards(d.roomId),
         marketValues: data.getMarketValues(d.roomId)
       });
     });

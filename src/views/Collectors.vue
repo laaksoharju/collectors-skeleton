@@ -413,6 +413,7 @@ export default {
             this.itemsOnSale = d.itemsOnSale;
             this.skillsOnSale = d.skillsOnSale;
             this.market = d.market;
+            this.auctionCards = d.auctionCards;
             this.marketValues = d.marketValues;
           }.bind(this));
         },
