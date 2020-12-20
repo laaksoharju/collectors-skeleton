@@ -410,6 +410,7 @@ export default {
             this.auctionPlacement = d.placements.auctionPlacement;
             this.workPlacement = d.placements.workPlacement;
             this.players = d.players;
+            this.itemsOnSale = d.itemsOnSale;
             this.skillsOnSale = d.skillsOnSale;
             this.market = d.market;
             this.marketValues = d.marketValues;
@@ -428,11 +429,7 @@ methods: {
     let allPlayersReady = this.checkAllPlayersReady();
     if (allPlayersReady) {
       this.$store.state.socket.emit('collectorsStartGame', {
-        roomId: this.$route.params.id,
-        playerId: this.playerId,
-        playerIdArray: this.playerIdArray,
-        activeRound: 1,
-        players: this.players
+        roomId: this.$route.params.id
       });
     }
     else {
