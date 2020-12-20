@@ -28,12 +28,18 @@
     </div>
     <div id="SkillInfoDiv">
       <h3>Info</h3>
-      <img onclick="alert('Work Skill: Gain 2$ whenever you place a worker in the Work area.')"  class="skillsinfo" src="images/gain2.png" title="Gain 2$ whenever you place a worker in the Work area."/>
-      <img onclick="alert('Card skill: Draw a card whenever you place a worker in the Work area.')"  class="skillsinfo" src="images/gaincard.png" title="Draw a card whenever you place a worker in the Work area."/>
-      <img onclick="alert('Get 5VP if you won at least one item from each category at the end of the game.')"  class="skillsinfo" src="images/gain5vp.png" title="Get 5VP if you won at least one item from each category at the end of the game."/>
-      <img onclick="alert('Bottle: Immediately gain a new bottle. You may use it this quarter.')" class="skillsinfo" src="images/gainbottle.png" title="Immediately gain a new bottle. You may use it this quarter." />
-      <img onclick="alert('Auction Income: Gain $1 whenever an auction is started by any player.')" class="skillsinfo" src="images/gainauction.png" title="Gain $1 whenever an auction is started by any player."/>
-      <img onclick="alert('Gain 1 extra VP for each item you own of the specific category at the end of the game.')" class="skillsinfo" src="images/gainvp.png" title="Gain 1 extra VP for each item you own of the specific category at the end of the game."/>
+      <img class="skillsinfo" src="images/gain2.png"/>
+          <p id = "skillInfoText">{{labels.skillInfoWorkSkill}}</p>
+      <img class="skillsinfo" src="images/gaincard.png"/>
+          <p id = "skillInfoText">{{labels.skillInfoCardSkill}}</p>
+      <img class="skillsinfo" src="images/gain5vp.png"/>
+          <p id = "skillInfoText">{{labels.skillInfo5VP}}</p>
+      <img class="skillsinfo" src="images/gainbottle.png"/>
+          <p id = "skillInfoText">{{labels.skillInfoBottle}}</p>
+      <img class="skillsinfo" src="images/gainauction.png"/>
+          <p id = "skillInfoText">{{labels.skillInfoAuction}}</p>
+      <img class="skillsinfo" src="images/gainvp.png"/>
+          <p id = "skillInfoText">{{labels.skillInfo1VP}}</p>
     </div>
   </div>
 </div>
@@ -152,6 +158,15 @@ export default {
   margin: 2px;
 }
 
+#skillInfoText{
+  position: absolute;
+  visibility: hidden;
+  width: 200px;
+  transition:0.2s;
+  transition-timing-function: ease-in-out;
+  z-index: 0;
+}
+
 .skillsinfo {
   align-self: center;
   width: 2em;
@@ -166,6 +181,18 @@ export default {
   transform: scale(1.2);
   transition: 0.15s;
   transition-timing-function: ease-in-out;
+}
+
+#SkillInfoDiv img:hover + #skillInfoText{
+ position: absolute;
+ visibility: visible;
+ transform: scale(2);
+ width: 200px;
+ transition:0.2s;
+ background-color: white;
+ border-radius: 10px;
+ transition-timing-function: ease-in-out;
+ z-index: 2;
 }
 
 </style>

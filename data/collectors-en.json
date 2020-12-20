@@ -3,6 +3,12 @@
 	"valueRaised": "Value raised",
 
 	"getSkill": "Get a skill",
+	"skillInfoWorkSkill": "Work Skill: Gain 2$ whenever you place a worker in the Work area",
+	"skillInfoCardSkill": "Card skill: Draw a card whenever you place a worker in the Work area",
+	"skillInfo5VP": "Get 5VP if you won at least one item from each category at the end of the game",
+	"skillInfoBottle": "Bottle: Immediately gain a new bottle. You may use it this quarter",
+	"skillInfoAuction": "Auction Income: Gain $1 whenever an auction is started by any player",
+	"skillInfo1VP": "Gain 1 extra VP for each item you own of the specific category at the end of the game",
 
 	"raiseValue": "Raise a value",
 	"currentlyRaisedValues": "Currently raised values",
