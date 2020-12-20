@@ -312,12 +312,12 @@ Data.prototype.changeRound = function(roomId, playerId, nextRound, players) {
       this.resetButtons(roomId, room.marketPlacement);
       this.resetButtons(roomId, room.auctionPlacement);
       this.resetButtons(roomId, room.workPlacement);
-      for (playerId in players) {
+      for (let player in players) {
         this.playerTotalValue(roomId, playerId);
         this.retrieveBottles(roomId, playerId);
-        if (room.players[playerId].income.length !== 0) {
+        if (room.players[player].income.length !== 0) {
           for (var card in room.players[player].income) {
-            room.players[playerId].money += room.players[playerId].income[card].auctionValue;
+            room.players[player].money += room.players[player].income[card].auctionValue;
           }
         }
       }
