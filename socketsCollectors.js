@@ -23,7 +23,7 @@ function sockets(io, socket, data) {
     });
 
     socket.on('collectorsStartGame', function(d) {
-      data.changeRound(d.roomId, d.playerId, d.activeRound, d.players);
+      data.startGame(d.roomId);
       io.to(d.roomId).emit('collectorsGameStarted', {
         playerBoardShown: data.getPlayerBoardShown(d.roomId),
         playerIdArray: data.getPlayerIdArray(d.roomId),
@@ -62,6 +62,7 @@ function sockets(io, socket, data) {
         activeRound: data.getActiveRound(d.roomId),
         placements: data.getPlacements(d.roomId),
         players: data.getPlayers(d.roomId),
+        itemsOnSale: data.getItemsOnSale(d.roomId),
         skillsOnSale: data.getSkillsOnSale(d.roomId),
         market: data.getMarket(d.roomId),
         marketValues: data.getMarketValues(d.roomId)
