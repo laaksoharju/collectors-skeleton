@@ -669,18 +669,6 @@ export default {
     },
 
 
-
-
-    sendActiveHand: function(hand){
-
-      console.log('collectors sendActiveHand');
-
-        this.$store.state.socket.emit("sendActiveHand", {hand: hand,
-                                      roomId: this.$route.params.id,
-                                      playerId: this.playerId,});
-    },
-
-
     drawCard: function () {
       this.$store.state.socket.emit("collectorsDrawCard", {
         roomId: this.$route.params.id,
