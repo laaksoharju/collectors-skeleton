@@ -70,8 +70,9 @@
           </button>
         </div>
         <div class="buttons" v-if="playerBoardShown">
-          <p>{{labels.currentRound}} {{ activeRound }}. {{labels.lastPlayerCanChange}}</p>
-          <button class="function_buttons"  v-on:click="changeRound()" :disabled="notLastPlayer()">{{labels.nextRound}}
+          <p v-if="activeRound < 5">{{labels.currentRound}} {{ activeRound }}. {{labels.lastPlayerCanChange}}</p>
+          <p v-if="activeRound === 5">{{labels.congratulations}} {{getWinner()[0]}} {{labels.whoWon}}</p>
+          <button class="function_buttons"  v-on:click="changeRound()" :disabled="notLastPlayer() || activeRound === 5">{{labels.nextRound}}
               <img class="function_button_img" src="images/retrieveBottles.png">
           </button>
         </div>
@@ -463,6 +464,19 @@ methods: {
       activeRound: this.activeRound+1,
       players: this.players
     });
+  },
+
+  getWinner: function() {
+    let highestScore = 0;
+    let highestScorePlayer = null;
+    for (let player in Object.keys(this.players)) {
+      if (this.players[Object.keys(this.players)[player]].victoryPoints > highestScore) {
+        // highestScore = this.players[player].victoryPoints;
+        highestScorePlayer = player;
+      }
+    }
+    let winnerArray = [highestScorePlayer, highestScore];
+    return winnerArray
   },
 
   selectAll: function (n) {

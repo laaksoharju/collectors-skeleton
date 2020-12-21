@@ -1,6 +1,6 @@
 {
 	"buyCard": "Köp ett föremål",
-	"valueRaised": "Ökat värde",
+	"valueRaised": "Nuvarande kortvärde",
 
 	"getSkill": "Skaffa en skicklighet",
 	"skillInfoWorkSkill": "Arbetar skicklighet: Tjäna 2$ varje gång du placerar en flaska i arbetsutrymmet",
@@ -44,6 +44,8 @@
 	"start": "Starta spelet",
 	"retrieve": "Återta flaskor",
 	"fake": "Skapa mer pengar",
+	"congratulations": "Grattis till spelare",
+	"whoWon": "som vann spelet!",
 
 	"playerBoard": "Spelarbräde",
 	"names": "Namn",

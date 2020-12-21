@@ -1,6 +1,6 @@
 {
 	"buyCard": "Buy an item",
-	"valueRaised": "Value raised",
+	"valueRaised": "Current card value",
 
 	"getSkill": "Get a skill",
 	"skillInfoWorkSkill": "Work Skill: Gain 2$ whenever you place a worker in the Work area",
@@ -45,6 +45,8 @@
 	"start": "Start the game",
 	"retrieve": "Retrieve bottles",
 	"fake": "Fake more money",
+	"congratulations": "Congratulations to player",
+	"whoWon": "who won the game!",
 
 	"playerBoard": "Player board",
 	"names": "Names",

@@ -102,7 +102,7 @@ export default {
 
 .raise-value {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
+  grid-template-columns: repeat(auto-fill, 40px);
   grid-template-rows: repeat(auto-fill, 260px);
 }
 
