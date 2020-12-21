@@ -769,11 +769,11 @@ footer a:visited {
 
   border-radius: 20px;
   background-color: #fff;
-  /* margin: 1em;
-  padding: 1em; */
+  /* margin: 1em; */
+  margin-top: 3em;
   position: absolute;
   grid-column: 1/2;
-  top: 10vh;
+  /* top: 14vh; */
   left: 9vw;
 
   width: 40vw;
@@ -789,12 +789,11 @@ footer a:visited {
   width: 100%;
   grid-column: 2/3;
 }
-.buy_item {
-}
+
 .buy_item >>> .buy-cards {
   position: relative;
   left: 16.5vw;
-  top: 10.2vh;
+  margin-top: 2.25em;
   grid-template-columns: repeat(5, 8rem);
   grid-gap: 1rem;
   transform: scale(0.6) translate(-50%, -50%);
@@ -803,7 +802,7 @@ footer a:visited {
 .buy_skill >>> .buy-cards {
   position: relative;
   left: 13vw;
-  top: -62vh;
+  top: -61vh;
   grid-template-rows: repeat(5, 10.5rem);
   grid-template-columns: 11rem;
   transform: scale(0.6) translate(-50%, -50%);
