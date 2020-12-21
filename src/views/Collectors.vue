@@ -10,26 +10,26 @@
             Change Name
           </button>
 
-          Choose your bottle color
-          <div class="playerBottleButton" v-for="(p,key) in players" :key = "'button'+key">
 
+          <div class="playerBottleButton" v-if="players[playerId].playerBottles == 0"> 
+          Choose your bottle color
           <button id = "black"
-            @click="chooseColor('black')">
+            @click="chooseColor('black', 2)">
             <div class = "blackBottle" > </div>
           </button>
 
           <button id = "blue"
-          @click="chooseColor('blue')">
+          @click="chooseColor('blue', 2)">
             <div class = "blueBottle" > </div>
           </button>
 
           <button id = "brown"
-          @click="chooseColor('brown')">
+          @click="chooseColor('brown', 2)">
             <div class = "brownBottle" > </div>
           </button>
 
           <button id = "purple"
-          @click="chooseColor('purple')">
+          @click="chooseColor('purple', 2)">
             <div class = "purpleBottle" > </div>
           </button>
         </div>
@@ -124,6 +124,35 @@
             :card="card"
              />
           </div>
+
+        <div class="playerBottles">
+          <div v-if="('black' === players[playerId].color)">
+              <div v-for="index in players[playerId].playerBottles" :key="index">
+                <div class="blackBottle"> </div>
+              </div>
+
+          </div>
+
+
+          <div v-if="('blue' === players[playerId].color)">
+            <div v-for="index in players[playerId].playerBottles" :key="index">
+              <div class="blueBottle"> </div>
+            </div>
+          </div>
+
+          <div v-if="('brown' === players[playerId].color)">
+            <div v-for="index in players[playerId].playerBottles" :key="index">
+              <div class="brownBottle"> </div>
+            </div>
+          </div>
+
+          <div v-if="('purple' === players[playerId].color)">
+            <div v-for="index in players[playerId].playerBottles" :key="index">
+              <div class="purpleBottle"> </div>
+            </div>
+          </div>
+        </div>
+
         </div>
 
       <div class="playerHand">
@@ -448,11 +477,12 @@ function(d) {
       console.log(this.$store.state.playerId);
 
     },
-    chooseColor: function(color){
+    chooseColor: function(color, playerBottles){
       this.$store.state.socket.emit('collectorsChooseColor',{
       roomId: this.$route.params.id,
       playerId: this.playerId,
-      color: color }
+      color: color,
+      playerBottles: playerBottles}
       );
     },
     placeBottle: function (action, cost) {
@@ -678,6 +708,11 @@ h5 {
 	margin: 20px ;
 	background: $black;
 	border: 2px solid $black;
+  }
+  .playerBottleButton div:hover{
+    transform: scale(1.5)translate(0,0);
+    z-index: 1;
+
   }
   .blackBottle{
     width:50px;

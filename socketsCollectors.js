@@ -33,8 +33,7 @@ function sockets(io, socket, data) {
     });
 
     socket.on('collectorsChooseColor', function(d) {
-      console.log("i socket choosecolor");
-      data.chooseColor(d.roomId, d.playerId, d.color)
+      data.chooseColor(d.roomId, d.playerId, d.color, d.playerBottles)
       io.to(d.roomId).emit('collectorsColorChosen', {
           playerId: d.playerId,
           players: data.getPlayers(d.roomId),

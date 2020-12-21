@@ -122,7 +122,9 @@ Data.prototype.joinGame = function (roomId, playerId) {
                                  income: [],
                                  secret: [],
                                  bids: 0,
-                                 color: ''};
+                                 color: '',
+                                 playerBottles: 0
+                               };
       return true;
     }
     console.log("Player", playerId, "was declined due to player limit");
@@ -160,12 +162,13 @@ Data.prototype.drawCard = function (roomId, playerId) {
   else return [];
 }
 //CHOOSECOLOR försök till att välja färg
-Data.prototype.chooseColor = function(roomId, playerId, color){
+Data.prototype.chooseColor = function(roomId, playerId, color, playerBottles){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     console.log("inne i data handler chooose color");
     console.log(color);
     room.players[playerId].color = color;
+    room.players[playerId].playerBottles = playerBottles;
     console.log("color innan foor loop"+ room.players[playerId].color);
   }
 }
