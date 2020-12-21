@@ -34,6 +34,7 @@ function sockets(io, socket, data) {
 
     socket.on('collectorsChooseColor', function(d) {
       data.chooseColor(d.roomId, d.playerId, d.color, d.playerBottles)
+
       io.to(d.roomId).emit('collectorsColorChosen', {
           playerId: d.playerId,
           players: data.getPlayers(d.roomId),
@@ -44,7 +45,8 @@ function sockets(io, socket, data) {
     });
     socket.on('collectorsPlaceBottle', function(d) {
       data.placeBottle(d.roomId, d.playerId, d.action, d.cost);
-      io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId)
+      io.to(d.roomId).emit('collectorsBottlePlaced',
+         data.getPlacements(d.roomId)
       );
     });
 

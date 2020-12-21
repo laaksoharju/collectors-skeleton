@@ -11,7 +11,7 @@
           </button>
 
 
-          <div class="playerBottleButton" v-if="players[playerId].playerBottles == 0"> 
+          <div class="playerBottleButton" v-if="players[playerId].color === ''">
           Choose your bottle color
           <button id = "black"
             @click="chooseColor('black', 2)">
@@ -115,42 +115,41 @@
        <div v-if="players[playerId]" class="playerBoard">
          <div class="playerTitle"> Player {{playerId}}'s Board </div>
              <div class="chosenSkillCard" v-for="(card, index) in players[playerId].skills" :card="card" :key="index">
-                <CollectorsCard
-                :card="card"
-                 />
+                  <CollectorsCard
+                  :card="card"
+                  />
+                  </div>
+            <div class="chosenItemCard" v-for="(card, index) in players[playerId].items" :card="card" :key="index">
+                  <CollectorsCard
+                  :card="card"
+                  />
+           </div>
+
+           <div class="playerBottles">
+                <div v-if="('black' === players[playerId].color)">
+                    <div v-for="index in players[playerId].playerBottles" :key="index">
+                        <div class="blackBottle"> </div>
+                   </div>
+
+               </div>
+
+               <div v-if="('blue' === players[playerId].color)">
+                    <div v-for="index in players[playerId].playerBottles" :key="index">
+                          <div class="blueBottle"> </div>
+                    </div>
               </div>
-        <div class="chosenItemCard" v-for="(card, index) in players[playerId].items" :card="card" :key="index">
-            <CollectorsCard
-            :card="card"
-             />
-          </div>
 
-        <div class="playerBottles">
-          <div v-if="('black' === players[playerId].color)">
-              <div v-for="index in players[playerId].playerBottles" :key="index">
-                <div class="blackBottle"> </div>
-              </div>
+              <div v-if="('brown' === players[playerId].color)">
+                  <div v-for="index in players[playerId].playerBottles" :key="index">
+                      <div class="brownBottle"> </div>
+                  </div>
+             </div>
 
-          </div>
-
-
-          <div v-if="('blue' === players[playerId].color)">
-            <div v-for="index in players[playerId].playerBottles" :key="index">
-              <div class="blueBottle"> </div>
+             <div v-if="('purple' === players[playerId].color)">
+                  <div v-for="index in players[playerId].playerBottles" :key="index">
+                    <div class="purpleBottle"> </div>
+                  </div>
             </div>
-          </div>
-
-          <div v-if="('brown' === players[playerId].color)">
-            <div v-for="index in players[playerId].playerBottles" :key="index">
-              <div class="brownBottle"> </div>
-            </div>
-          </div>
-
-          <div v-if="('purple' === players[playerId].color)">
-            <div v-for="index in players[playerId].playerBottles" :key="index">
-              <div class="purpleBottle"> </div>
-            </div>
-          </div>
         </div>
 
         </div>

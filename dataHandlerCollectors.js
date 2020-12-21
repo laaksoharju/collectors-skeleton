@@ -345,6 +345,10 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost) {
     else if (action === "work") {
       activePlacement = room.workPlacement;
     }
+
+    if (room.players[playerId].playerBottles > 0){
+      room.players[playerId].playerBottles = room.players[playerId].playerBottles - 1;
+    }
     for(let i = 0; i < activePlacement.length; i += 1) {
         if( activePlacement[i].cost === cost &&
             activePlacement[i].playerId === null ) {
