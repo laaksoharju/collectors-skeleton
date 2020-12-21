@@ -9,6 +9,31 @@
           <button id="userNameButton" type='submit' @click="changeUserName()" >
             Change Name
           </button>
+
+          Choose your bottle color
+          <div class="playerBottleButton" v-for="(p,key) in players" :key = "'button'+key">
+
+          <button id = "black"
+            @click="chooseColor('black')">
+            <div class = "blackBottle" > </div>
+          </button>
+
+          <button id = "blue"
+          @click="chooseColor('blue')">
+            <div class = "blueBottle" > </div>
+          </button>
+
+          <button id = "brown"
+          @click="chooseColor('brown')">
+            <div class = "brownBottle" > </div>
+          </button>
+
+          <button id = "purple"
+          @click="chooseColor('purple')">
+            <div class = "purpleBottle" > </div>
+          </button>
+        </div>
+
           {{ labels.invite }}
           <input id="linkSquare" type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
 
@@ -399,6 +424,15 @@ export default {
   }.bind(this)
 );
 
+this.$store.state.socket.on('collectorsColorChosen',
+function(d) {
+  this.players = d.players;
+  console.log(d.playerId, "choosed a ", d.players[d.playerId].color," color bottle");
+
+
+}.bind(this)
+);
+
 },
 
   methods: {
@@ -413,6 +447,13 @@ export default {
     //  this.players[playerId] = userName;
       console.log(this.$store.state.playerId);
 
+    },
+    chooseColor: function(color){
+      this.$store.state.socket.emit('collectorsChooseColor',{
+      roomId: this.$route.params.id,
+      playerId: this.playerId,
+      color: color }
+      );
     },
     placeBottle: function (action, cost) {
       this.chosenPlacementCost = cost;
@@ -638,7 +679,50 @@ h5 {
 	background: $black;
 	border: 2px solid $black;
   }
-
+  .blackBottle{
+    width:50px;
+    height:50px;
+    background-image:  url('/images/player-bottle-black.png');
+    background-size: cover;
+  }
+  #black {
+    background-color: #474342;
+    border-radius: 5px;
+    border: 2px solid #E3A688;
+  }
+  .blueBottle{
+    width:50px;
+    height:50px;
+    background-image:  url('/images/player-bottle-blue.png');
+    background-size: cover;
+  }
+  #blue {
+    background-color: #12B3A9 ;
+    border-radius: 5px;
+    border: 2px solid #E3A688;
+  }
+  .brownBottle{
+    width:50px;
+    height:50px;
+    background-image:  url('/images/player-bottle-brown.png');
+    background-size: cover;
+  }
+  #brown {
+    background-color: #B79048 ;
+    border-radius: 5px;
+    border: 2px solid #E3A688;
+  }
+  .purpleBottle{
+    width:50px;
+    height:50px;
+    background-image:  url('/images/player-bottle-purple.png');
+    background-size: cover;
+  }
+  #purple {
+    background-color: #6B2977;
+    border-radius: 5px;
+    border: 2px solid #E3A688;
+  }
   /*.marketPool{
     grid-column: 3/span 5;
     grid-row: 11/span 4;

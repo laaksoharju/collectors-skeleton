@@ -91,6 +91,9 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
                             {cost:-1, playerId: null},
                             {cost:0, playerId: null},
                             {cost:0, playerId: null} ];
+  //FÖRSÖK ATT FÅ SPELARENS FLASKA ATT DYKA UPP EFTER KNAPPTRYCKNING
+
+
   this.rooms[roomId] = room;
 }
 
@@ -118,7 +121,8 @@ Data.prototype.joinGame = function (roomId, playerId) {
                                  items: [],
                                  income: [],
                                  secret: [],
-                                 bids: 0, };
+                                 bids: 0,
+                                 color: ''};
       return true;
     }
     console.log("Player", playerId, "was declined due to player limit");
@@ -133,6 +137,8 @@ Data.prototype.getPlayers = function (id) {
   }
   else return {};
 }
+
+
 
 Data.prototype.updatePoints = function (roomId, player, points) {
   let room = this.rooms[roomId]
@@ -152,6 +158,16 @@ Data.prototype.drawCard = function (roomId, playerId) {
     return room.players;
   }
   else return [];
+}
+//CHOOSECOLOR försök till att välja färg
+Data.prototype.chooseColor = function(roomId, playerId, color){
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    console.log("inne i data handler chooose color");
+    console.log(color);
+    room.players[playerId].color = color;
+    console.log("color innan foor loop"+ room.players[playerId].color);
+  }
 }
 
 //getSkill har jag skapat
