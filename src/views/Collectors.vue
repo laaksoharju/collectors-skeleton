@@ -134,7 +134,7 @@
                 <img
                   src="/images/player-cards-for-coins.png"
                   alt="Player Cards for Coins"
-                />x4
+                />{{this.players[this.playerId].cardsForCash}}
               </div>
             </div>
             <div class="player-hand">
@@ -158,7 +158,7 @@
 
                   :marketValues="marketValues"
                   :placement="buyPlacement"
-                  @buyCard="buyCard('buy', $event)"
+                  @buyCard="buyCard('market', $event)"
                 />
 
               </div>
@@ -599,6 +599,7 @@ export default {
         this.players = d.players;
         this.itemsOnSale = d.itemsOnSale;
         this.skillsOnSale = d.skillsOnSale;
+        this.deckCardAvailable = false;
       }.bind(this)
     );
   },
@@ -676,7 +677,8 @@ export default {
       });
     },
     buyCard: function (action, card) {
-
+      console.log(card.item);
+      console.log(action);
       console.log("buyCard collectors");
       this.$store.state.socket.emit("collectorsBuyCard", {
         roomId: this.$route.params.id,

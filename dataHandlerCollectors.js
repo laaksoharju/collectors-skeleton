@@ -134,6 +134,7 @@ Data.prototype.joinGame = function (roomId, playerId)
         secret: room.deck.splice(0, 1), // picks one card and places it face down, tucked under their player board at the position marked with a treasure chest.
         color: room.playerColors.pop(),
         bottles: 2,
+        cardsForCash: 0,
       };
       return true;
     }
@@ -265,6 +266,23 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
       room.players[playerId].money -= cost;
       room.players[playerId].bottles -= 1;
     }
+
+      else if (action === 'market'){
+         console.log('dataHandler buyCard market');
+         room.players[playerId].cardsForCash += 1;
+         for (let i = 0; i < room.players[playerId].hand.length; i += 1)
+         {
+           if (room.players[playerId].hand[i].x === card.x &&
+             room.players[playerId].hand[i].y === card.y)
+           {
+             room.players[playerId].hand.splice(i, 1);
+             break;
+           }
+         }
+
+
+
+      }
   }
 }
 
