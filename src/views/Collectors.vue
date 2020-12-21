@@ -78,6 +78,7 @@
               :labels="labels"
               :player="players[playerId]"
               :marketValues="marketValues"
+              :itemsOnSale="players[playerId].hand"
               :placement="workPlacement"
               @placeBottle="placeBottle('work', $event)"
             />
@@ -146,12 +147,20 @@
                 />
               </div>
               <div class="cardslots" v-if="players[playerId]">
-                <CollectorsCard
-                  v-for="(card, index) in players[playerId].hand"
-                  :card="card"
-                  :availableAction="card.available"
-                  :key="index"
+
+                <CollectorsBuyActions
+                  v-if="players[playerId]"
+                  :labels="labels"
+                  :player="players[playerId]"
+                  :itemsOnSale="players[playerId].hand"
+
+                  :deckCardAvailable="deckCardAvailable"
+
+                  :marketValues="marketValues"
+                  :placement="buyPlacement"
+                  @buyCard="buyCard('buy', $event)"
                 />
+
               </div>
             </div>
             <div
@@ -421,7 +430,8 @@ export default {
       itemsOnSale: [],
       skillsOnSale: [],
       auctionCards: [],
-
+      handClicked: 0,
+      deckCardAvailable: false,
       playerid: 0,
       playerName: "",
       otherPlayers: [],
@@ -628,11 +638,17 @@ export default {
     },
     placeBottle: function (action, p) {
 
+      if (p.cashForCard > 0){
+        this.deckCardAvailable = true;
+      }
 
       for (let i = 0; i < p.recieveCards; i += 1){
         this.$store.state.socket.emit('collectorsDrawCard', { roomId: this.$route.params.id,
         playerId: this.$store.state.playerId });
+
+
       }
+
 
 
 
@@ -646,24 +662,12 @@ export default {
         playerId: this.playerId,
         action: action,
         p: p,
+        hand: this.players[this.playerId].hand,
       });
 
-    /*  if ( this.players[this.playerId].money >= p.cost && this.players[this.playerId].bottles > 0){
-
-              for (let i = 0; i < p.recieveCards; i += 1){
-                this.$store.state.socket.emit('collectorsDrawCard', { roomId: this.$route.params.id,
-                playerId: this.$store.state.playerId });
-              }
-              this.chosenPlacementCost = p.cost;
-              this.$store.state.socket.emit("collectorsPlaceBottle", {
-                roomId: this.$route.params.id,
-                playerId: this.playerId,
-                action: action,
-                p: p,
-              });
-            } */
 
     },
+
 
 
 
@@ -892,6 +896,9 @@ footer a:visited {
   grid-template-rows: repeat(5, 2.5rem);
   grid-gap: 0.5em;
 }
+.player-hand .cardslots div{
+  transfrom:scale(03)translate(-110%,-110%)
+}
 
 .cardslots {
   display: grid;
@@ -1001,6 +1008,9 @@ footer a:visited {
   color: red;
   display: grid;
   grid-template-columns: 15% 85%;
+}
+.player-hand-2{
+
 }
 
 .player-bottles {

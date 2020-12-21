@@ -86,10 +86,10 @@ Data.prototype.createRoom = function (roomId, playerCount, lang = "en")
   { cost: 0, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0, buttonId: 8 },
   { cost: 1, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0, buttonId: 9 },
   { cost: 1, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0, buttonId: 10 }];
-  room.workPlacement = [{ cost: -3, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 1, buttonId: 11 },
-  { cost: -1, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 1, buttonId: 12 },
-  { cost: 1, playerId: null, bottleType: 'normal', recieveCards: 2, cashForCard: 1, buttonId: 13 },
-  { cost: 0, playerId: null, bottleType: 'normal', recieveCards: 1, cashForCard: 1, buttonId: 14 },
+  room.workPlacement = [{ cost: -3, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0, buttonId: 11 },
+  { cost: -1, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0, buttonId: 12 },
+  { cost: 1, playerId: null, bottleType: 'normal', recieveCards: 2, cashForCard: 0, buttonId: 13 },
+  { cost: 0, playerId: null, bottleType: 'normal', recieveCards: 1, cashForCard: 0, buttonId: 14 },
   { cost: 0, playerId: null, bottleType: 'normal', recieveCards: 1, cashForCard: 1, buttonId: 15 }];
   room.auctionPlacement = [{ cost: -2, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0, buttonId: 16 },
   { cost: -1, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0, buttonId: 17 },
@@ -342,16 +342,6 @@ Data.prototype.getCards = function (roomId, playerId)
   else return [];
 }
 
-Data.prototype.handActive = function (hand, roomId, playerId)
-{
-
-   this.rooms[roomId].players[playerId].hand = hand;
-
-   return this.rooms[roomId].players[playerId].hand;
-
-
-
-}
 
 Data.prototype.getPlacements = function (roomId)
 {

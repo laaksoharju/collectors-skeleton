@@ -36,17 +36,6 @@ function sockets(io, socket, data)
 
 
 
-  socket.on("sendActiveHand", function (d)
-  {
-    console.log('sockets sendActiveHand');
-    io.to(d.roomId).emit("collectorsHandActivated", data.handActive(d.hand, d.roomId, d.playerId)
-    );
-
-
-
-  });
-
-
 
 
 
@@ -78,7 +67,7 @@ function sockets(io, socket, data)
   {
 
     console.log('sockets placeBottle');
-    data.placeBottle(d.roomId, d.playerId, d.action, d.p);
+    data.placeBottle(d.roomId, d.playerId, d.action, d.p, d.hand);
 
     console.log('sockets placeBottle after data.placeBottle');
     io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId)

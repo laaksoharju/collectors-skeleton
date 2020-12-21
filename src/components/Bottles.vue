@@ -122,7 +122,7 @@ export default {
     cannotAfford: function (cost) {
       let minCost = 100;
       for (let key in this.marketValues) {
-        console.log(this.marketValues)
+        // console.log(this.marketValues)
         if (cost + this.marketValues[key] < minCost)
           minCost = cost + this.marketValues[key];
       }
@@ -135,22 +135,14 @@ export default {
 
       this.$emit("placeBottle", p);
 
-      if (p.cashForCard > 0){
-          this.highlightCardsInHand();
-
-          console.log('Bottles after highlightCardsInHand')
-
-          this.$emit("sendActiveHand", this.player.hand);
-        }
-
-      if (this.itemsOnSale !== undefined){
-          this.highlightAvailableCards(p.cost);
-        }
 
 
+      this.highlightAvailableCards(p.cost);
 
 
     },
+
+
     isAvailableCards: function (card, cost) {
 
       if (this.marketValues[card.item] <= this.player.money - cost) {
@@ -182,14 +174,7 @@ export default {
 
     },
 
-    highlightCardsInHand: function () {
-      for (let i = 0; i < this.player.hand.length; i += 1) {
-        var card = this.player.hand[i];
-        console.log('card not activated: ' + card.available);
-        this.$set(card, "available", true);
-        console.log('card activated: ' + card.available);
-      }
-    },
+
 
     buyCard: function (card) {
       if (card.available) {

@@ -3,7 +3,7 @@
     <div v-for="(card, index) in itemsOnSale" :key="index" class="cardslots">
       <CollectorsCard
         :card="card"
-        :availableAction="card.available"
+        :availableAction="card.available=deckCardAvailable"
         @doAction="buyCard(card)"
       />
     </div>
@@ -22,6 +22,7 @@ export default {
     labels: Object,
     player: Object,
     itemsOnSale: Array,
+    deckCardAvailable:Boolean,
     marketValues: Object,
     placement: Array,
   },
