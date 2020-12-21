@@ -71,7 +71,10 @@
         </div>
         <div class="buttons" v-if="playerBoardShown">
           <p v-if="activeRound < 5">{{labels.currentRound}} {{ activeRound }}. {{labels.lastPlayerCanChange}}</p>
-          <p v-if="activeRound === 5">{{labels.congratulations}} {{getWinner()[0]}} {{labels.whoWon}}</p>
+          <p v-if="activeRound === 5 && getWinner().length === 2">{{labels.congratulationsOne}} {{getWinner()[1]}} {{labels.whoWon}} {{getWinner()[0]}} {{labels.points}}</p>
+          <p v-if="activeRound === 5 && getWinner().length === 3">{{labels.congratulationsMany}} {{getWinner()[1]}} {{labels.and}} {{getWinner()[2]}} {{labels.whoWon}} {{getWinner()[0]}} {{labels.points}}</p>
+          <p v-if="activeRound === 5 && getWinner().length === 4">{{labels.congratulationsMany}} {{getWinner()[1]}}, {{getWinner()[2]}} {{labels.and}} {{getWinner()[3]}} {{labels.whoWon}} {{getWinner()[0]}} {{labels.points}}</p>
+          <p v-if="activeRound === 5 && getWinner().length === 5">{{labels.congratulationsMany}} {{getWinner()[1]}}, {{getWinner()[2]}}, {{getWinner()[3]}} {{labels.and}} {{getWinner()[4]}} {{labels.whoWon}} {{getWinner()[0]}} {{labels.points}}</p>
           <button class="function_buttons"  v-on:click="changeRound()" :disabled="notLastPlayer() || activeRound === 5">{{labels.nextRound}}
               <img class="function_button_img" src="images/retrieveBottles.png">
           </button>
@@ -467,15 +470,24 @@ methods: {
   },
 
   getWinner: function() {
-    let highestScore = 0;
-    let highestScorePlayer = null;
-    for (let player in Object.keys(this.players)) {
-      if (this.players[Object.keys(this.players)[player]].victoryPoints > highestScore) {
-        // highestScore = this.players[player].victoryPoints;
-        highestScorePlayer = player;
+    let highestScore = -1;
+    let highestScorePlayer1 = null;
+    let winnerArray = [];
+    for (let index in Object.keys(this.players)) {
+      console.log(this.players[Object.keys(this.players)[index]].victoryPoints);
+      if (this.players[Object.keys(this.players)[index]].victoryPoints > highestScore) {
+        highestScore = this.players[Object.keys(this.players)[index]].victoryPoints;
+        highestScorePlayer1 = Object.keys(this.players)[index];
+        winnerArray.push(highestScore);
+        winnerArray.push(highestScorePlayer1);
       }
     }
-    let winnerArray = [highestScorePlayer, highestScore];
+    for (let index in Object.keys(this.players)) {
+      console.log(this.players[Object.keys(this.players)[index]].victoryPoints);
+      if (this.players[Object.keys(this.players)[index]].victoryPoints === highestScore && Object.keys(this.players)[index] !== highestScorePlayer1) {
+        winnerArray.push(Object.keys(this.players)[index]);
+      }
+    }
     return winnerArray
   },
 

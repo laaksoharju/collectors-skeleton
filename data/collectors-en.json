@@ -45,8 +45,11 @@
 	"start": "Start the game",
 	"retrieve": "Retrieve bottles",
 	"fake": "Fake more money",
-	"congratulations": "Congratulations to player",
-	"whoWon": "who won the game!",
+	"congratulationsOne": "Congratulations to player",
+	"congratulationsMany": "Congratulations to the players",
+	"and": "and",
+	"whoWon": "who won the game with",
+	"points": "points!",
 
 	"playerBoard": "Player board",
 	"names": "Names",

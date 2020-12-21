@@ -44,8 +44,11 @@
 	"start": "Starta spelet",
 	"retrieve": "Återta flaskor",
 	"fake": "Skapa mer pengar",
-	"congratulations": "Grattis till spelare",
-	"whoWon": "som vann spelet!",
+	"congratulationsOne": "Grattis till spelare",
+	"congratulationsMany": "Grattis till spelarna",
+	"and": "och",
+	"whoWon": "som vann spelet med",
+	"points": "poäng!",
 
 	"playerBoard": "Spelarbräde",
 	"names": "Namn",
