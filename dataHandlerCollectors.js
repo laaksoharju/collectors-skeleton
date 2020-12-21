@@ -113,8 +113,8 @@ Data.prototype.joinGame = function (roomId, playerId) {
       console.log("Player", playerId, "joined for the first time");
       room.players[playerId] = { hand: [],
                                  money: 5,
-                                 bottles: 2, // --------------Bottles to place ----------------
-                                 bottleCount: 2, // -------- Number of bottles you own --------
+                                 bottles: 8, // --------------Bottles to place ----------------
+                                 bottleCount: 8, // -------- Number of bottles you own --------
                                  points: 0,
                                  value: 0, //--------------- Value of a players Items ---------
                                  skills: [],
@@ -448,6 +448,91 @@ Data.prototype.endGame = function (roomId) {
     for (let player in room.players) {
       room.players[player].victoryPoints += room.players[player].value;
       room.players[player].victoryPoints += Math.floor((room.players[player].money)/3);
+      this.checkOneVictoryPointSkills(roomId, player);
+      this.checkFiveVictoryPointsSkills(roomId, player);
+      console.log(room.players[player].victoryPoints);
+    }
+  }
+}
+
+Data.prototype.checkOneVictoryPointSkills = function (roomId, playerId) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    if (room.players[playerId].skills !== []) {
+      for (let skillCard in room.players[playerId].skills) {
+        if (room.players[playerId].skills[skillCard].skill === "VP-movie" && room.players[playerId].items !== []) {
+          for (let itemCard in room.players[playerId].items) {
+            if (room.players[playerId].items[itemCard].item === "movie") {
+              room.players[playerId].victoryPoints += 1;
+            }
+          }
+        }
+        if (room.players[playerId].skills[skillCard].skill === "VP-figures" && room.players[playerId].items !== []) {
+          for (let itemCard in room.players[playerId].items) {
+            if (room.players[playerId].items[itemCard].item === "figures") {
+              room.players[playerId].victoryPoints += 1;
+            }
+          }
+        }
+        if (room.players[playerId].skills[skillCard].skill === "VP-music" && room.players[playerId].items !== []) {
+          for (let itemCard in room.players[playerId].items) {
+            if (room.players[playerId].items[itemCard].item === "music") {
+              room.players[playerId].victoryPoints += 1;
+            }
+          }
+        }
+        if (room.players[playerId].skills[skillCard].skill === "VP-fastaval" && room.players[playerId].items !== []) {
+          for (let itemCard in room.players[playerId].items) {
+            if (room.players[playerId].items[itemCard].item === "fastaval") {
+              room.players[playerId].victoryPoints += 1;
+            }
+          }
+        }
+        if (room.players[playerId].skills[skillCard].skill === "VP-technology" && room.players[playerId].items !== []) {
+          for (let itemCard in room.players[playerId].items) {
+            if (room.players[playerId].items[itemCard].item === "technology") {
+              room.players[playerId].victoryPoints += 1;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+Data.prototype.checkFiveVictoryPointsSkills = function (roomId, playerId) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    if (room.players[playerId].skills !== []) {
+      for (let skillCard in room.players[playerId].skills) {
+        if (room.players[playerId].skills[skillCard].skill === "VP-all" && room.players[playerId].items.length > 4) {
+          let playerHasMovie = false;
+          let playerHasFigures = false;
+          let playerHasMusic = false;
+          let playerHasFastaval = false;
+          let playerHasTechnology = false;
+          for (let itemCard in room.players[playerId].items) {
+            if (room.players[playerId].items[itemCard].item === "movie") {
+              playerHasMovie = true;
+            }
+            if (room.players[playerId].items[itemCard].item === "figures") {
+              playerHasFigures = true;
+            }
+            if (room.players[playerId].items[itemCard].item === "music") {
+              playerHasMusic = true;
+            }
+            if (room.players[playerId].items[itemCard].item === "fastaval") {
+              playerHasFastaval = true;
+            }
+            if (room.players[playerId].items[itemCard].item === "technology") {
+              playerHasTechnology = true;
+            }
+          }
+          if (playerHasMovie && playerHasFigures && playerHasMusic && playerHasFastaval && playerHasTechnology) {
+            room.players[playerId].victoryPoints += 5
+          }
+        }
+      }
     }
   }
 }
