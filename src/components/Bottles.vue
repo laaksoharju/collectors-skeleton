@@ -132,28 +132,27 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
-      console.log('Bottles placBottle');
 
+      this.$emit("placeBottle", p);
 
+      if (p.cashForCard > 0){
+          this.highlightCardsInHand();
 
+          console.log('Bottles after highlightCardsInHand')
 
-        this.$emit("placeBottle", p);
-
-        console.log("bottles placebottle before if");
-        if (p.cashForCard > 0){
-        console.log("bottles placebottle after if");
-        this.highlightAvailableCardsInHand();
-        console.log("bottles placebottle after highlight");
-
-
+          this.$emit("sendActiveHand", this.player.hand);
         }
 
-        this.highlightAvailableCards(p.cost);
+      if (this.itemsOnSale !== undefined){
+          this.highlightAvailableCards(p.cost);
+        }
+
+
 
 
     },
     isAvailableCards: function (card, cost) {
-      console.log('original available card:' + card);
+
       if (this.marketValues[card.item] <= this.player.money - cost) {
         this.$set(card, "available", true);
       } else {
@@ -175,27 +174,20 @@ export default {
         // }
         // this.chosenPlacementCost = cost;
       }
-      for (let i = 0; i < this.player.hand.length; i += 1) {
-        this.isAvailableCards(this.player.hand[i], cost);
-      }
     },
 
-    isAvailableCardsInHand: function (card) {
-      console.log('new available card:' + card);
-    console.log("bottles isAvailableinhand before set");
+    cardsInHand: function (card) {
         this.$set(card, "available", true);
-          console.log("bottles isAvailableinhand after set");
+
 
     },
 
-    highlightAvailableCardsInHand: function () {
-
-        console.log("bottles highlightinhand before forloop");
+    highlightCardsInHand: function () {
       for (let i = 0; i < this.player.hand.length; i += 1) {
-        console.log("bottles highlightinhand in forloop");
-        this.isAvailableCardsInHand(this.players[this.playerId].hand[i]);
-          console.log("bottles highlightinhand after forloop");
-
+        var card = this.player.hand[i];
+        console.log('card not activated: ' + card.available);
+        this.$set(card, "available", true);
+        console.log('card activated: ' + card.available);
       }
     },
 

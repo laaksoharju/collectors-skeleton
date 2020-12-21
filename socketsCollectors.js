@@ -33,9 +33,29 @@ function sockets(io, socket, data)
       data.getPlayers(d.roomId)
     );
   });
+
+
+
+  socket.on("sendActiveHand", function (d)
+  {
+    console.log('sockets sendActiveHand');
+    io.to(d.roomId).emit("collectorsHandActivated", data.handActive(d.hand, d.roomId, d.playerId)
+    );
+
+
+
+  });
+
+
+
+
+
+
+
+
   socket.on('collectorsDrawCard', function (d)
   {
-    console.log('sockets drawCard');
+    console.log('sockets drawCard' + d);
     io.to(d.roomId).emit('collectorsCardDrawn',
       data.drawCard(d.roomId, d.playerId)
     );
@@ -62,7 +82,7 @@ function sockets(io, socket, data)
 
     console.log('sockets placeBottle after data.placeBottle');
     io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId)
-    );
+  );
   });
 
 }
