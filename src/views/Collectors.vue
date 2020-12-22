@@ -422,6 +422,74 @@
 
     <footer>
       <br /><br />
+      <section class="market-cards">
+        <div class="fastaval">
+          <div class="card"
+            v-for="(item, value) in marketValues['fastaval']"
+            :key="item"
+            :value="value"
+            :style="{
+              gridTemplateRows: 'repeat(' + value + ', 1rem)',
+            }"
+          >
+            <img src="/images/market/fastaval.png" />
+          </div>
+        </div>
+
+        <div class="figures">
+          <div
+            class="card"
+            v-for="(item, value) in marketValues['figures']"
+            :key="item"
+            :value="value"
+            :style="{
+              gridTemplateRows: 'repeat(' + value + ', 1rem)',
+            }"
+          >
+            <img src="/images/market/figures.png" />
+          </div>
+        </div>
+        <div class="music">
+          <div
+            class="card"
+            v-for="(item, value) in marketValues['music']"
+            :key="item"
+            :value="value"
+            :style="{
+              gridTemplateRows: 'repeat(' + value + ', 1rem)',
+            }"
+          >
+            <img src="/images/market/music.png" />
+          </div>
+        </div>
+        <div class="movie">
+          <div
+            class="card"
+            v-for="(item, value) in marketValues['movie']"
+            :key="item"
+            :value="value"
+            :style="{
+              gridTemplateRows: 'repeat(' + value + ', 1rem)',
+            }"
+          >
+            <img src="/images/market/movie.png" />
+          </div>
+        </div>
+        <div class="technology">
+          <div
+            class="card"
+            v-for="(item, value) in marketValues['technology']"
+            :key="item"
+            :value="value"
+            :style="{
+              gridTemplateRows: 'repeat(' + value + ', 1rem)',
+            }"
+          >
+            <img src="/images/market/technology.png" />
+          </div>
+        </div>
+      </section>
+
       <!-- {{ players }} -->
       <!-- {{ marketValues }} -->
       <br /><br />
@@ -434,7 +502,7 @@
           readonly="readonly"
         />
       </p>
-      <p>{{ marketValues }}</p>
+      <!-- <p>{{ marketValues }}</p> -->
       <!-- <button v-if="players[playerId]" @click="players[playerId].money += 1">
         fake more money
       </button> -->
@@ -819,6 +887,88 @@ footer a:visited {
   z-index: 6;
 }
 
+.market-cards {
+  display: grid;
+  grid-template-columns: repeat(5, 5.5rem);
+  grid-template-rows: 3em;
+  margin-left: 12em;
+}
+
+.market-cards .fastaval,
+.market-cards .figures,
+.market-cards .technology,
+.market-cards .music,
+.market-cards .movie {
+  display: grid;
+  grid-template-columns: 10rem;
+  grid-template-rows: repeat(5, 1rem);
+}
+
+.market-cards .fastaval {
+  grid-row: 1;
+  grid-column: 1;
+}
+
+.market-cards .figures {
+  grid-row: 1;
+  grid-column: 2;
+}
+
+.market-cards .music {
+  grid-row: 1;
+  grid-column: 3;
+}
+
+.market-cards .movie {
+  grid-row: 1;
+  grid-column: 4;
+}
+
+.market-cards .technology {
+  grid-row: 1;
+  grid-column: 5;
+}
+
+.fastaval >>> .card {
+  /* left: 17.5vw; */
+  position: relative;
+  top: -2vh;
+  transform: scale(0.22) translate(-50%, -50%);
+  z-index: 5;
+}
+
+.figures >>> .card {
+  /* left: 17.5vw; */
+  position: relative;
+  top: -2vh;
+  transform: scale(0.22) translate(-50%, -50%);
+  z-index: 5;
+}
+
+.music >>> .card {
+  /* left: 29.5vw; */
+  position: relative;
+  top: -2vh;
+  transform: scale(0.22) translate(-50%, -50%);
+  z-index: 5;
+}
+
+.movie >>> .card {
+  position: relative;
+  top: -2vh;
+  transform: scale(0.22) translate(-50%, -50%);
+  z-index: 5;
+  /* left: 29.5vw; */
+}
+
+.technology >>> .card {
+  position: relative;
+  top: -2vh;
+  transform: scale(0.22) translate(-50%, -50%);
+  z-index: 5;
+  /* left: 39.5vw; */
+}
+
 .item_bottle {
   background-color: rgb(219, 197, 195);
   grid-column: 2/4;
@@ -859,6 +1009,7 @@ footer a:visited {
   background-image: url("/images/market.jpg");
   background-size: 100% 100%;
 }
+
 .market_bottle >>> .buttons {
   top: 1.5vh;
   left: 12.3vw;
