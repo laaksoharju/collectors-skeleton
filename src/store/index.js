@@ -14,7 +14,7 @@ function makeId(length = 10) {
   }
   return result;
 }
-//Funktion för att få ett namn som bara är fyra karaktärer
+//Funktion för att få ett namn som är högst 10 karaktärer
 function makePlayerName() {
   let maxLength = 10;
   let name = -1;
