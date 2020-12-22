@@ -56,7 +56,7 @@ export default {
       else if (this.activeRound === 3) {
         setImage = firstWorkButtonImage[2];
       }
-      else if (this.activeRound === 4) {
+      else if (this.activeRound >= 4) {
         setImage = firstWorkButtonImage[3];
       }
       return setImage;
@@ -74,7 +74,7 @@ export default {
       else if (this.activeRound === 3) {
         setInfoText = this.labels.firstWorkCardRound3;
       }
-      else if (this.activeRound === 4) {
+      else if (this.activeRound >= 4) {
         setInfoText = this.labels.firstWorkCardRound4;
       }
       return setInfoText
