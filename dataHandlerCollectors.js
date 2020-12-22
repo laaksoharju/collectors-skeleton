@@ -628,7 +628,7 @@ Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index
       }
     }
     if (index === 0) {
-      if (room.activeRound === 1) {
+      if (room.activeRound <= 1) {
         console.log('2 kort till Income');
         let card1 = room.deck.pop();
         let card2 = room.deck.pop();
@@ -654,7 +654,7 @@ Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index
         room.players[playerId].income.push(card2);
         room.workPlacement[index].playerId = playerId;
       }
-      else if (room.activeRound === 4) {
+      else if (room.activeRound >= 4) {
         console.log('Släng en flaska + 3$');
         room.players[playerId].money += 3;
       }

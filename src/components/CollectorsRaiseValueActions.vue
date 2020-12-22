@@ -149,7 +149,7 @@ export default {
 
 #MarketDiv {
   display: grid;
-  grid-template-columns: 80% 20% ;
+  grid-template-columns: 85% 15% ;
   grid-template-areas:
   "Cards ValueStats"
 }
