@@ -656,7 +656,7 @@ Data.prototype.placeBottleWork = function (roomId, playerId, action, cost, index
       }
       else if (room.activeRound === 4) {
         console.log('Släng en flaska + 3$');
-        room.players[playerId].money += 1;
+        room.players[playerId].money += 3;
       }
     }
     if (index === 1) {
