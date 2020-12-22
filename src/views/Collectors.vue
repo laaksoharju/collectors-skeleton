@@ -10,26 +10,29 @@
             Change Name
           </button>
 
-
+            <!-- Låta spelare välja färg på flaska  -->
           <div class="playerBottleButton" v-if="players[playerId].color === ''">
           Choose your bottle color
+
+          <!-- choosecolor - välja flaskfärg, startmoney - sätter pengarna för spelare vid start  -->
           <button id = "black"
-            @click="chooseColor('black', 2)">
+            @click="chooseColor('black', 2);startMoney()"
+            >
             <div class = "blackBottle" > </div>
           </button>
 
           <button id = "blue"
-          @click="chooseColor('blue', 2)">
+          @click="chooseColor('blue', 2);startMoney()">
             <div class = "blueBottle" > </div>
           </button>
 
           <button id = "brown"
-          @click="chooseColor('brown', 2)">
+          @click="chooseColor('brown', 2);startMoney()">
             <div class = "brownBottle" > </div>
           </button>
 
           <button id = "purple"
-          @click="chooseColor('purple', 2)">
+          @click="chooseColor('purple', 2);startMoney()">
             <div class = "purpleBottle" > </div>
           </button>
         </div>
@@ -124,7 +127,7 @@
                   :card="card"
                   />
            </div>
-
+             <!-- Visa spelarens färg och iterera fram rätt antal energybottles på playerboard -->
            <div class="playerBottles">
                 <div v-if="('black' === players[playerId].color)">
                     <div v-for="index in players[playerId].playerBottles" :key="index">
@@ -156,6 +159,14 @@
 
       <div class="playerHand">
         Hand
+
+        <!-- försök att göra en lista med spelare och ge ordningsnummer -->
+        <div class="startMoney" v-if= "currentRound === 0">
+
+          <div v-if="players[playerId].order === 1" > </div>
+
+        </div>
+
         <div class="cardslots" v-if="players[playerId]">
           <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="buyCard(card)" :key="index"/>
         </div>
@@ -461,6 +472,13 @@ function(d) {
 }.bind(this)
 );
 
+this.$store.state.socket.on('collectorsMoneyStarted',
+function(d) {
+  this.players = d.players;
+  console.log(d.playerId, "starts with ", d.players[d.playerId].money," coins");
+}.bind(this)
+);
+
 },
 
   methods: {
@@ -481,7 +499,16 @@ function(d) {
       roomId: this.$route.params.id,
       playerId: this.playerId,
       color: color,
-      playerBottles: playerBottles}
+      playerBottles: playerBottles
+      }
+      );
+    },
+
+    startMoney: function(){
+      this.$store.state.socket.emit('collectorsStartMoney',{
+      roomId: this.$route.params.id,
+      playerId: this.playerId,
+      }
       );
     },
     placeBottle: function (action, cost) {

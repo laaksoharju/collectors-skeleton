@@ -114,7 +114,7 @@ Data.prototype.joinGame = function (roomId, playerId) {
     }
     else if (Object.keys(room.players).length < room.playerCount) {
       console.log("Player", playerId, "joined for the first time");
-      room.players[playerId] = { hand: [],
+      room.players[playerId] = { hand: room.deck.splice(0, 3),
                                  money: 1,
                                  points: 0,
                                  skills: [],
@@ -123,7 +123,8 @@ Data.prototype.joinGame = function (roomId, playerId) {
                                  secret: [],
                                  bids: 0,
                                  color: '',
-                                 playerBottles: 0
+                                 playerBottles: 0,
+                                 order: Object.keys(room.players).length+1
                                };
       return true;
     }
@@ -172,7 +173,32 @@ Data.prototype.chooseColor = function(roomId, playerId, color, playerBottles){
     console.log("color innan foor loop"+ room.players[playerId].color);
   }
 }
+//startmoney sätter pengar vid spelstart
+Data.prototype.startMoney = function(roomId, playerId){
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    console.log("inne i data handler startMoney");
+    if (room.players[playerId].order === 1){
+      room.players[playerId].money = 2 ;
 
+    }
+    else if (room.players[playerId].order === 2){
+      room.players[playerId].money = 3;
+
+    }
+
+    else if (room.players[playerId].order === 3){
+      room.players[playerId].money = 4;
+
+    }
+
+    else if (room.players[playerId].order === 4){
+      room.players[playerId].money = 5;
+
+    }
+
+  }
+}
 //getSkill har jag skapat
 Data.prototype.getSkill = function (roomId, playerId, card, skill) {
   let room = this.rooms[roomId];
@@ -260,6 +286,7 @@ Data.prototype.startBidding = function (roomId, playerId, bids) {
 Data.prototype.changeTurn = function (roomId, playerId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
+
     let allPlayersId = Object.keys(room.players);
     let nextPlayer = allPlayersId[0];
     for (let i in allPlayersId) {
