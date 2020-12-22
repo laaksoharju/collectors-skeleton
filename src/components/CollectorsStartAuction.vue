@@ -19,6 +19,8 @@
 </div>
 
 <button  id = "bidPlacementButton" @click="startBidding()">Place bid!</button>
+
+<button  id = "stopAuctionButton" @click="stopAuction()">Stop auction!</button>
 <!--
   <div class = "EnergyBottleCoinWhiteTwo"></div>  Olika flaskor med vita coins, 1 2 eller 0
   <div class = "EnergyBottleCoinWhiteOne"></div>
@@ -89,13 +91,17 @@ export default {
 
   startBidding: function (){
      var bid = Number(document.getElementById("bidSquare").value);
-     console.log(bid);
-     console.log(this.player);
      this.player.bids = bid;
-     console.log(this.player);
+     console.log(this.player, "started bidding");
      this.$emit('startBidding', this.player.bids);
 
   },
+//Stop auction - här skickas det kort som är upp to auction vidare
+  stopAuction: function (){
+    console.log(this.cardUpForAuction, "stopAuction i CollectorsStartAuction");
+     this.$emit('stopAuction', this.cardUpForAuction);
+  },
+
   cannotAfford: function (cost) {
     let minCost = 100;
     for(let key in this.marketValues) {

@@ -95,10 +95,18 @@ function sockets(io, socket, data) {
       );
     });
 
+    socket.on('collectorsStopAuction', function(d){
+      data.stopAuction(d.roomId, d.playerId, d.cardUpForAuction)
+      io.to(d.roomId).emit('collectorsStoppingAuction', {
+        playerId: d.playerId,
+        players: data.getPlayers(d.roomId),
+        cardUpForAuction: data.getCardUpForAuction(d.roomId)
+        }
+      );
+    }
+    );
     socket.on('collectorsStartBidding', function(d){
     //  data.startBidding(d.roomId, d.playerId)
-    console.log("HEJ NU I SOCKET");
-    console.log("här är d:" ,d);
     console.log(data.getPlayers(d.roomId));
     data.startBidding(d.roomId, d.playerId, d.bids)
       io.to(d.roomId).emit('collectorsBiddingStarted', {

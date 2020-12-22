@@ -237,6 +237,27 @@ Data.prototype.startAuction = function (roomId, playerId, card, auctionCard) {
   }
 }
 
+Data.prototype.stopAuction = function (roomId, playerId, card) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+
+  console.log("INNE I DATA STOP AUCTION");
+  let c = room.cardUpForAuction;
+  let allPlayersId = Object.keys(room.players);
+
+  for (let i in allPlayersId){
+      console.log(room.players[allPlayersId[i]].bids);
+      console.log("c", c);
+    if (room.players[allPlayersId[i]].bids === room.highestBid){
+        console.log("handen för spelare med högst bud", room.players[allPlayersId[i]].hand);
+        room.players[allPlayersId[i]].hand.push(c);
+        console.log("handen efter push", room.players[allPlayersId[i]].hand);
+        room.cardUpForAuction = {};
+      }
+  }
+  }
+}
+
 Data.prototype.startMarket = function (roomId, playerId, card) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {

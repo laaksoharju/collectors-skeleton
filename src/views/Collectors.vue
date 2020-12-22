@@ -112,6 +112,7 @@
             :placement="auctionPlacement"
             @startAuction="whichAction($event)"
             @startBidding="startBidding($event)"
+            @stopAuction="stopAuction($event)"
             @placeBottle="placeBottle('auction', $event)"
             />
 
@@ -159,17 +160,13 @@
 
       <div class="playerHand">
         Hand
-
-        <!-- försök att göra en lista med spelare och ge ordningsnummer -->
-        <div class="startMoney" v-if= "currentRound === 0">
-
-          <div v-if="players[playerId].order === 1" > </div>
-
-        </div>
-
+        <!-- visa spelarens kort i handen, förstår inte varför korten blir pyttesmå -->
         <div class="cardslots" v-if="players[playerId]">
-          <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="buyCard(card)" :key="index"/>
+          <div v-for="(card, index) in players[playerId].hand" :key="index">
+          <CollectorsCard  :card="card" :availableAction="card.available" @doAction="buyCard(card)" />
         </div>
+      </div>
+
         <!-- visa hur mycket pengar man har -->
           <ul>
             <li v-for="(value, key) in players" :key = "key">
@@ -444,6 +441,14 @@ export default {
     }.bind(this)
   );
 
+  this.$store.state.socket.on('collectorsAuctionStopped',
+  function(d) {
+    console.log(d.playerId, "Stopped an auction");
+    this.players = d.players;
+    this.cardUpForAuction = d.cardUpForAuction;
+  }.bind(this)
+);
+
   this.$store.state.socket.on('collectorsMarketStarted',
   function(d) {
     console.log(d.playerId, "Started market");
@@ -599,6 +604,17 @@ function(d) {
               }
         );
   },
+
+  stopAuction: function () {
+    console.log("Starting stop auction", this.cardUpForAuction);
+
+    this.$store.state.socket.emit('collectorsStopAuction', {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        card: this.cardUpForAuction,
+          }
+    );
+},
     changeTurn: function () {
       this.$store.state.socket.emit('collectorsChangeTurn', {
           roomId: this.$route.params.id,
@@ -925,6 +941,7 @@ h5 {
     grid-column: 11/span 5;
     grid-row: 8/span 4;
   }
+
   .turnCounter {
     background-color: #60AB4D;
     color:white;
@@ -1045,6 +1062,8 @@ h5 {
     transform: scale(1)translate(-25%,0);
     z-index: 1;
   }
+
+
 
   @media screen and (max-width: 800px) {
     main {
