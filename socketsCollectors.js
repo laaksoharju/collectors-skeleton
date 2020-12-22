@@ -47,8 +47,9 @@ function sockets(io, socket, data) {
       data.drawCard(d.roomId, d.playerId)
     );
   });
-  socket.on("collectorsBuyCard", function(d) {
-    console.log("rich socket");
+  socket.on('collectorsBuyCard', function (d)
+  {
+    console.log('sockets collectorBuyCard');
 
     data.buyCard(d.roomId, d.playerId, d.card, d.cost, d.action);
     io.to(d.roomId).emit("collectorsCardBought", {
@@ -58,12 +59,15 @@ function sockets(io, socket, data) {
       skillsOnSale: data.getSkillsOnSale(d.roomId),
     });
   });
-  socket.on("collectorsPlaceBottle", function(d) {
-    data.placeBottle(d.roomId, d.playerId, d.action, d.cost);
-    io.to(d.roomId).emit(
-      "collectorsBottlePlaced",
-      data.getPlacements(d.roomId)
-    );
+  socket.on('collectorsPlaceBottle', function (d)
+  {
+
+    console.log('sockets placeBottle');
+    data.placeBottle(d.roomId, d.playerId, d.action, d.p, d.hand);
+
+    console.log('sockets placeBottle after data.placeBottle');
+    io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId)
+  );
   });
 }
 module.exports = sockets;

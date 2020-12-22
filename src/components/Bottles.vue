@@ -1,14 +1,24 @@
 <template>
   <div class="buttons">
     <div v-for="(p, index) in placement" :key="index">
-      <div v-if="p.bottleType == 'normal'">
-        <button
-          class="btn-normal"
-          v-if="p.playerId === null"
-          :disabled="cannotAfford(p.cost)"
-          @click="placeBottle(p)"
-        >
-          <div class="recieveMoney" v-if="p.cost < 0">${{ p.cost * -1 }}</div>
+
+        <div v-if="p.bottleType == 'normal'">
+
+
+          <button
+            class="btn-normal"
+            v-if="p.playerId === null"
+            :disabled="cannotAfford(p.cost)"
+
+            @click="placeBottle(p)"
+          >
+
+            <div class = "recieveMoney" v-if="p.cost < 0 ">
+
+              ${{ p.cost*-1 }}
+            </div>
+
+            <div class = "costMoney" v-if="p.cost >= 0 ">
 
           <div class="costMoney" v-if="p.cost >= 0">${{ p.cost }}</div>
         </button>
@@ -98,7 +108,11 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
-      this.$emit("placeBottle", p.cost);
+
+      this.$emit("placeBottle", p);
+
+
+
       this.highlightAvailableCards(p.cost);
     },
     isAvailableCards: function (card, cost) {
@@ -121,10 +135,16 @@ export default {
         // }
         // this.chosenPlacementCost = cost;
       }
-      for (let i = 0; i < this.player.hand.length; i += 1) {
-        this.isAvailableCards(this.player.hand[i], cost);
-      }
     },
+
+    cardsInHand: function (card) {
+        this.$set(card, "available", true);
+
+
+    },
+
+
+
     buyCard: function (card) {
       if (card.available) {
         this.$emit("buyCard", card);

@@ -65,7 +65,6 @@
               v-if="players[playerId]"
               :labels="labels"
               :player="players[playerId]"
-              :itemsOnSale="itemsOnSale"
               :marketValues="marketValues"
               :placement="marketPlacement"
               @placeBottle="placeBottle('market', $event)"
@@ -141,7 +140,7 @@
                 <img
                   src="/images/player-cards-for-coins.png"
                   alt="Player Cards for Coins"
-                />x4
+                />{{this.players[this.playerId].cardsForCash}}
               </div>
             </div>
             <div class="player-hand">
@@ -154,12 +153,20 @@
                 />
               </div>
               <div class="cardslots" v-if="players[playerId]">
-                <CollectorsCard
-                  v-for="(card, index) in players[playerId].hand"
-                  :card="card"
-                  :availableAction="card.available"
-                  :key="index"
+
+                <CollectorsBuyActions
+                  v-if="players[playerId]"
+                  :labels="labels"
+                  :player="players[playerId]"
+                  :itemsOnSale="players[playerId].hand"
+
+                  :deckCardAvailable="deckCardAvailable"
+
+                  :marketValues="marketValues"
+                  :placement="buyPlacement"
+                  @buyCard="buyCard('market', $event)"
                 />
+
               </div>
             </div>
             <div
@@ -557,6 +564,8 @@ export default {
       itemsOnSale: [],
       skillsOnSale: [],
       auctionCards: [],
+      handClicked: 0,
+      deckCardAvailable: false,
       playerid: 0,
       playerName: "",
       otherPlayers: [],
@@ -674,11 +683,37 @@ export default {
     this.$store.state.socket.on(
       "collectorsBottlePlaced",
       function (d) {
+
+        console.log(d);
+
+
+/*If i comment this away they shine prmanently*/
         this.buyPlacement = d.buyPlacement;
         this.skillPlacement = d.skillPlacement;
         this.marketPlacement = d.marketPlacement;
         this.auctionPlacement = d.auctionPlacement;
         this.workPlacement = d.workPlacement;
+        this.players = d.players;
+
+
+
+
+      }.bind(this)
+    );
+
+
+    this.$store.state.socket.on(
+      "collectorsHandActivated",
+      function (d) {
+
+        console.log(d);
+
+        console.log('collectors handActiveed');
+
+    /*  console.log(  this.players[this.playerId].hand[i].available
+        this.players[this.playerId].hand = d;
+        for (let c)*/
+
       }.bind(this)
     );
 
@@ -717,6 +752,7 @@ export default {
         this.players = d.players;
         this.itemsOnSale = d.itemsOnSale;
         this.skillsOnSale = d.skillsOnSale;
+        this.deckCardAvailable = false;
       }.bind(this)
     );
   },
@@ -760,13 +796,33 @@ export default {
       }
       return otherPlayers;
     },
-    placeBottle: function (action, cost) {
-      this.chosenPlacementCost = cost;
+    placeBottle: function (action, p) {
+
+      if (p.cashForCard > 0){
+        this.deckCardAvailable = true;
+      }
+
+      for (let i = 0; i < p.recieveCards; i += 1){
+        this.$store.state.socket.emit('collectorsDrawCard', { roomId: this.$route.params.id,
+        playerId: this.$store.state.playerId });
+
+
+      }
+
+
+
+
+
+
+
+
+      this.chosenPlacementCost = p.cost;
       this.$store.state.socket.emit("collectorsPlaceBottle", {
         roomId: this.$route.params.id,
         playerId: this.playerId,
         action: action,
-        cost: cost,
+        p: p,
+        hand: this.players[this.playerId].hand,
       });
     },
     drawCard: function () {
@@ -1055,6 +1111,9 @@ footer a:visited {
   display: grid;
   grid-template-rows: repeat(5, 2.5rem);
   grid-gap: 0.5em;
+}
+.player-hand .cardslots div{
+  transfrom:scale(03)translate(-110%,-110%)
 }
 
 .cardslots {
