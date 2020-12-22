@@ -18,7 +18,7 @@
               ${{ p.cost*-1 }}
             </div>
 
-            <div class = "costMoney" v-if="p.cost >= 0 ">
+            <!-- <div class = "costMoney" v-if="p.cost >= 0 "> -->
 
           <div class="costMoney" v-if="p.cost >= 0">${{ p.cost }}</div>
         </button>

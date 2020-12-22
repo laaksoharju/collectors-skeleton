@@ -86,6 +86,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
   room.marketPlacement = [{ cost: 0, playerId: null, bottleType: 'marketTwoBlue', recieveCards: 0, cashForCard: 0, buttonId: 20 },
   { cost: 2, playerId: null, bottleType: 'marketDollar', recieveCards: 0, cashForCard: 0, buttonId: 21 },
   { cost: 0, playerId: null, bottleType: 'marketOneBlue', recieveCards: 0, cashForCard: 0, buttonId: 22 }];
+  room.round = 1;
   this.rooms[roomId] = room;
 };
 
