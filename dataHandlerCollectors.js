@@ -113,8 +113,8 @@ Data.prototype.joinGame = function (roomId, playerId) {
       console.log("Player", playerId, "joined for the first time");
       room.players[playerId] = { hand: [],
                                  money: 5,
-                                 bottles: 8, // --------------Bottles to place ----------------
-                                 bottleCount: 8, // -------- Number of bottles you own --------
+                                 bottles: 2, // --------------Bottles to place ----------------
+                                 bottleCount: 2, // -------- Number of bottles you own --------
                                  points: 0,
                                  value: 0, //--------------- Value of a players Items ---------
                                  skills: [],

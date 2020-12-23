@@ -112,13 +112,34 @@
       <div id="PlayerBoardDiv">
         <h2>{{labels.playerBoard}}</h2>
         <div id="BottleSlotsDiv">
-          <span id="bottles" v-if="players[playerId]">
-            <img v-for="bottle in players[playerId].bottles" src="images/bottle.png" :key="bottle">
-          </span>
-          <span v-for="index in 5" :key="index">
+          <!-- <span id="bottles" v-if="players[playerId]">
+            <img id="playerBottles" v-for="bottle in players[playerId].bottles" src="images/bottle.png" :key="bottle">
+          </span> -->
+          <!-- <span id="slotImages" v-for="index in 5" :key="index">
             <input type="hidden" name="bottleSlot">
             <input class="bottleSlots" type="image" :src="visualizeBottleSlots(index)">
+          </span> -->
+          <span id="slot_1">
+            <img v-if="players[playerId].bottles < 1" class="bottleSlotImages" src="images/bottleSlot_1.png">
+            <img class="glowingBorder" v-if="players[playerId].bottles > 0" src="images/bottleSlotPlaced_1.png">
           </span>
+          <span id="slot_2">
+            <img v-if="players[playerId].bottles < 2" class="bottleSlotImages" src="images/bottleSlot_2.png">
+            <img class="glowingBorder" v-if="players[playerId].bottles > 1" src="images/bottleSlotPlaced_2.png">
+          </span>
+          <span id="slot_3">
+            <img v-if="players[playerId].bottles < 3" class="bottleSlotImages" src="images/bottleSlot_3.png">
+            <img class="glowingBorder" v-if="players[playerId].bottles > 2" src="images/bottleSlotPlaced_3.png">
+          </span>
+          <span id="slot_4">
+            <img v-if="players[playerId].bottles < 4" class="bottleSlotImages" src="images/bottleSlot_4.png">
+            <img class="glowingBorder" v-if="players[playerId].bottles > 3" src="images/bottleSlotPlaced_4.png">
+          </span>
+          <span id="slot_5">
+            <img v-if="players[playerId].bottles < 5" class="bottleSlotImages" src="images/bottleSlot_5.png">
+            <img class="glowingBorder" v-if="players[playerId].bottles > 4" src="images/bottleSlotPlaced_5.png">
+          </span>
+
         </div>
 
         <div id="AllPlayerStatsDiv" v-if="playerBoardShown">
@@ -799,17 +820,43 @@ footer a:visited {
   position: relative;
   margin: 5px;
   z-index: 0;
+
+  display: grid;
+  grid-template-columns: 11.11% 11.11% 11.11% 11.11% 11.11% 11.11% 11.11% 11.11% 11.11%;
+  grid-template-rows: 100%;
+  grid-template-areas: ". . slot_1 slot_2 slot_3 slot_4 slot_5 . ."
 }
 
-#bottles {
-    position: absolute;
-    z-index: 1;
+#slot_1 {
+  grid-area: slot_1;
 }
 
-#bottles img {
-    margin: 0 3.83em 0 3.8em;
-    vertical-align: middle;
-    height: 100px;
+#slot_2 {
+  grid-area: slot_2;
+}
+
+#slot_3 {
+  grid-area: slot_3;
+}
+
+#slot_4 {
+  grid-area: slot_4;
+}
+
+#slot_5 {
+  grid-area: slot_5;
+}
+
+/* storlek på bottleSlot-bilder */
+.bottleSlotImages {
+  width: 7em;
+}
+
+.glowingBorder {
+  width: 7em;
+  border-radius: 50%;
+  box-shadow: 0 0 25px #fff700;
+  border: 2px solid #ffea00;
 }
 
 #AllPlayerIdDiv {
@@ -922,7 +969,7 @@ footer a:visited {
 
 .bottleSlots {
   width: 8%;
-  margin: 0em 1.5em 0em 1.5em;
+  margin: 0em 2em 0em 2em;
   display: inline-block;
   position: relative;
 }
