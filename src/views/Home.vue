@@ -1,41 +1,50 @@
-<template>
-  <div class="container">
+  <template>
+    <div class="container">
 
-    <div id="startMenuImageDiv">
-      <img src="images\CollectorsStartMenuImage-removebg-preview (1).png" alt="">
+      <div id="startMenuImageDiv">
+        <img src="images\CollectorsStartMenuImage-removebg-preview (1).png" alt="">
+      </div>
+
+        <h1>Collectors</h1>
+
+      <div>
+          <span id="languageFlags">
+            <img src="images/se.png" @click="displaySe()">
+            <img src="images/en.png" @click="displayEn()">
+          </span>
+      </div>
+
+
+
+    <div id="buttons_En" style="display: none">
+      <h2> Set up a game of Collectors for: </h2>
+        <a>
+          <button v-for="i in 3" :key="'enbutton'+i" @click="setupCollectors(i+1, 'en')">
+            <span class="playerNumber"> {{i+1}} </span> players
+         </button>
+       </a>
+        <a class="rules" href="/rules_collectors.pdf" target="_blank">
+          <button>
+            Rules
+          </button>
+        </a>
+      </div>
+
+      <div id="buttons_Se" style="display: none" opacity="0">
+        <h2> Spela Collectors med: </h2>
+          <a>
+            <button v-for="i in 3" :key="'swebutton'+i" @click="setupCollectors(i+1, 'se')">
+              <span class="playerNumber"> {{i+1}} </span> spelare
+            </button>
+          </a>
+        <a class="rules" href="/rules_collectors.pdf" target="_blank">
+          <button>
+            Spelregler
+          </button>
+        </a>
+      </div>
     </div>
-
-      <h1>Collectors</h1>
-
-    <div>
-        <span id="languageFlags">
-          <img src="images/se.png" @click="displaySe()">
-          <img src="images/en.png" @click="displayEn()">
-        </span>
-    </div>
-
-
-
-  <div id="buttons_En" style="display: none">
-    <h2> Set up a game of Collectors for: </h2>
-      <button v-for="i in 3" :key="'enbutton'+i">
-        <a @click="setupCollectors(i+1, 'en')"> <span class="playerNumber"> {{i+1}} </span> players</a>
-      </button>
-      <button>
-        <a class="rules" href="/rules_collectors.pdf" target="_blank">Rules</a>
-      </button>
-    </div>
-    <div id="buttons_Se" style="display: none">
-      <h2> Spela Collectors med: </h2>
-        <button v-for="i in 3" :key="'swebutton'+i">
-          <a @click="setupCollectors(i+1, 'se')"> <span class="playerNumber"> {{i+1}} </span> spelare</a>
-        </button>
-        <button>
-          <a class="rules" href="rules_collectors.pdf" text-decoration="none" target="_blank">Spelregler</a>
-        </button>
-    </div>
-  </div>
-</template>
+  </template>
 
 <script>
 // @ is an alias to /src
@@ -91,15 +100,30 @@ export default {
   transition-timing-function: ease-in-out;
 }
 
-.playerNumber {
-  font-size: 1.25em;
-  font-weight: 600;
+@keyframes buttonFades{
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+#buttons_Se {
+  animation: buttonFades 1s ease-in-out;
+}
+
+#buttons_En {
+  animation: buttonFades 1s ease-in-out;
 }
 
 a {
-  font-size: 1.5em;
-  color: #000000;
   text-decoration: none;
+}
+
+.playerNumber {
+  font-size: 1.25em;
+  font-weight: 600;
 }
 
 .rules {
@@ -113,16 +137,17 @@ a {
   text-align: center;
 }
 
-
 button {
 margin: auto;
 margin-bottom: 0.5em;
 background-color: #d9d9d9;
 display: block;
-width: 20em;
+width: 15em;
 height: 3em;
 border-radius: 10px;
 transition:0.3s;
+font-size: 1em;
+color: #000000;
 }
 
 button:hover{
