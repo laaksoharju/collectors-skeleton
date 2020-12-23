@@ -100,7 +100,7 @@ export default {
   transition-timing-function: ease-in-out;
 }
 
-@keyframes buttonFades{
+@keyframes buttonFades {
   0% {
     opacity: 0;
   }

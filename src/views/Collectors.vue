@@ -855,8 +855,17 @@ footer a:visited {
 .glowingBorder {
   width: 7em;
   border-radius: 50%;
-  box-shadow: 0 0 25px #fff700;
-  border: 2px solid #ffea00;
+  box-shadow: 0 0 30px yellow;
+  animation: borderAnimation 5s ease;
+  animation-iteration-count: infinite;
+}
+
+@keyframes borderAnimation {
+  0%   {box-shadow: 0 0 30px yellow;}
+  25%  {box-shadow: 0 0 30px pink;}
+  50%  {box-shadow: 0 0 30px yellow;}
+  75%  {box-shadow: 0 0 30px pink;}
+  100% {box-shadow: 0 0 30px yellow;}
 }
 
 #AllPlayerIdDiv {
