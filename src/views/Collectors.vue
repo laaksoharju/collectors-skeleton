@@ -111,8 +111,8 @@
               v-if="players[playerId]"
               :labels="labels"
               :player="players[playerId]"
-              :itemsOnSale="skillsOnSale"
               :marketValues="marketValues"
+              :itemsOnSale="players[playerId].hand"
               :placement="workPlacement"
               @placeBottle="placeBottle('work', $event)"
             />
@@ -194,9 +194,10 @@
                   :player="players[playerId]"
                   :itemsOnSale="players[playerId].hand"
                   :handCardAvailable="handCardAvailable"
+                  :buttonClicked ="buttonClicked"
                   :marketValues="marketValues"
                   :placement="buyPlacement"
-                  @buyCard="buyCard('market', $event)"
+                  @buyCard="buyCard('hand', $event)"
                 />
               </div>
             </div>
@@ -356,18 +357,11 @@
                     {{ playerskill["VP-music"] }}
                   </p>
                 </div>
-                <div v-if="card.skill === 'VP-figure'" class="player-skills-8">
-                  <img
-                    src="/images/skills/VP-figure.jpg"
-                    alt="Player Items 1"
-                  />
-                  <p
-                    v-if="
-                      countskills(players[playerId].skills, 'VP-figure') > 1
-                    "
-                  >
-                    {{ playerskill["VP-figure"] }}
-                  </p>
+                <div v-if="card.skill==='VP-figure'" class="player-skills-8">
+                  <img src="/images/skills/VP-figure.jpg" alt="Player Items 1" />
+                  <p v-if="countskills(players[playerId].skills,'VP-figure')>1 ">
+                      {{playerskill['VP-figure']}}
+                         </p>
                 </div>
                 <div v-if="card.skill === 'VP-all'" class="player-skills-9">
                   <img src="/images/skills/VP-all.jpg" alt="Player Items 1" />
@@ -788,6 +782,7 @@ export default {
       auctionCards: [],
       handClicked: 0,
       handCardAvailable: false,
+      buttonClicked: null,
       playerid: 0,
       playerName: "",
       otherPlayers: [],
@@ -863,7 +858,6 @@ export default {
     this.$store.state.socket.on(
       "collectorsInitialize",
       function (d) {
-        console.log(d.marketValues);
         this.labels = d.labels;
         this.players = d.players;
         this.itemsOnSale = d.itemsOnSale;
@@ -976,6 +970,7 @@ export default {
         this.auctionCards = d.auctionCards;
         this.deckAuction = d.deckAuction;
         this.handCardAvailable = false;
+        this.deckCardAvailable = false;
       }.bind(this)
     );
   },
@@ -1049,7 +1044,13 @@ export default {
       }
     },
     placeBottle: function (action, p) {
-      if (p.cashForCard > 0) {
+
+      this.buttonClicked = p;
+
+      if (p.cashForCard > 0){
+        this.handCardAvailable = true;
+      }
+      if (p.raiseValue > 0 && p.raiseValue !== undefined){
         this.handCardAvailable = true;
       }
 
@@ -1111,10 +1112,11 @@ export default {
         this.$store.state.socket.emit("collectorsBuyCard", {
           roomId: this.$route.params.id,
           playerId: this.playerId,
-          card: card,
+          card: d.card,
           action: action,
           cost: this.marketValues[card.market] + this.chosenPlacementCost,
           start_auction: this.players[this.playerId].start_auction,
+          p: d.p,
         });
       }
     },

@@ -59,7 +59,7 @@ socket.on('updatePlayerAuction', function (d)
   {
     console.log('sockets collectorBuyCard');
 
-    data.buyCard(d.roomId, d.playerId, d.card, d.cost, d.action,d.start_auction)
+    data.buyCard(d.roomId, d.playerId, d.card, d.cost, d.action, d.p, d.start_auction)
     io.to(d.roomId).emit('collectorsCardBought', {
       playerId: d.playerId,
       players: data.getPlayers(d.roomId),

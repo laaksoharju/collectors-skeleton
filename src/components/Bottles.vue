@@ -104,6 +104,11 @@ export default {
       this.$emit("placeBottle", p);
 
 
+      if (this.itemsOnSale !== undefined) {
+          this.highlightAvailableCards(p.cost);
+
+      }
+
       this.highlightAvailableCards(p.cost);
     },
     isAvailableCards: function (card, cost) {

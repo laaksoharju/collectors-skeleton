@@ -8,6 +8,8 @@
       <!-- {{ deckCardAvailable }} -->
       <CollectorsCard
         :card="card"
+        :availableAction="card.available=deckCardAvailable"
+        :buttonClicked="buttonClicked"
         :index="index"
         :deckCardAvaliable="deckCardAvailable"
         :handCardAvaliable="handCardAvailable"
@@ -22,6 +24,7 @@
         :handCardAvaliable="handCardAvailable"
         v-else
         :availableAction="card.available"
+        :buttonClicked="buttonClicked"
         @doAction="buyCard(card)"
       />
     </div>
@@ -44,6 +47,7 @@ export default {
     handCardAvaliable: Boolean,
     marketValues: Object,
     placement: Array,
+    buttonClicked: Object,
   },
   data: function () {
     return {
@@ -77,6 +81,15 @@ export default {
     highlightAvailableCards: function (cost = 100) {
       for (let i = 0; i < this.itemsOnSale.length; i += 1) {
         this.isAvailableCards(this.itemsOnSale[i], cost);
+        // if (
+        //   this.marketValues[this.itemsOnSale[i].item] <=
+        //   this.player.money - cost
+        // ) {
+        //   this.$set(this.itemsOnSale[i], "available", true);
+        // } else {
+        //   this.$set(this.itemsOnSale[i], "available", false);
+        // }
+        // this.chosenPlacementCost = cost;
       }
       for (let i = 0; i < this.player.hand.length; i += 1) {
         this.isAvailableCards(this.player.hand[i], cost);
@@ -84,7 +97,9 @@ export default {
     },
     buyCard: function (card) {
       if (card.available) {
-        this.$emit("buyCard", card);
+
+        console.log('this.buttonClicked CollectorsBuyAction: ' + this.buttonClicked);
+        this.$emit("buyCard", {card: card, p: this.buttonClicked});
         this.highlightAvailableCards();
       }
     },

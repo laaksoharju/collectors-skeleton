@@ -85,9 +85,9 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
   { cost: -1, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0, buttonId: 17 },
   { cost: 0, playerId: null, bottleType: 'auctionMedal', recieveCards: 0, cashForCard: 0, buttonId: 18 },
   { cost: 0, playerId: null, bottleType: 'auctionMedal', recieveCards: 0, cashForCard: 0, buttonId: 19 }];
-  room.marketPlacement = [{ cost: 0, playerId: null, bottleType: 'marketTwoBlue', recieveCards: 0, cashForCard: 0, buttonId: 20 },
-  { cost: 2, playerId: null, bottleType: 'marketDollar', recieveCards: 0, cashForCard: 0, buttonId: 21 },
-  { cost: 0, playerId: null, bottleType: 'marketOneBlue', recieveCards: 0, cashForCard: 0, buttonId: 22 }];
+  room.marketPlacement = [{ cost: 0, playerId: null, bottleType: 'marketTwoBlue', recieveCards: 0, cashForCard: 0, buttonId: 20, raiseValue: 2 },
+  { cost: 2, playerId: null, bottleType: 'marketDollar', recieveCards: 0, cashForCard: 0, buttonId: 21, raiseValue: 2 },
+  { cost: 0, playerId: null, bottleType: 'marketOneBlue', recieveCards: 0, cashForCard: 0, buttonId: 22, raiseValue: 1 }];
   room.round = 1;
   this.rooms[roomId] = room;
 };
@@ -331,7 +331,7 @@ Data.prototype.drawCard = function(roomId, playerId) {
 }
 
 /* moves card from itemsOnSale to a player's hand */
-Data.prototype.buyCard = function (roomId, playerId, card, cost, action,start_auction)
+Data.prototype.buyCard = function (roomId, playerId, card, cost, action, p, start_auction)
 {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined')
@@ -352,7 +352,8 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action,start_au
 
       for (let i = 0; i < room.itemsOnSale.length; i += 1)
       {
-
+        // since card comes from the client, it is NOT the same object (reference)
+        // so we need to compare properties for determining equality
         if (room.itemsOnSale[i].x === card.x &&
           room.itemsOnSale[i].y === card.y)
         {
@@ -360,10 +361,11 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action,start_au
           break;
         }
       }
-
+      // ...then check if it is in the hand. It cannot be in both so it's safe
       for (let i = 0; i < room.players[playerId].hand.length; i += 1)
       {
-
+        // since card comes from the client, it is NOT the same object (reference)
+        // so we need to compare properties for determining equality
         if (room.players[playerId].hand[i].x === card.x &&
           room.players[playerId].hand[i].y === card.y)
         {
@@ -387,7 +389,16 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action,start_au
           break;
         }
       }
-
+      // // ...then check if it is in the hand. It cannot be in both so it's safe
+      // for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
+      //   // since card comes from the client, it is NOT the same object (reference)
+      //   // so we need to compare properties for determining equality
+      //   if (room.players[playerId].hand[i].x === card.x &&
+      //       room.players[playerId].hand[i].y === card.y) {
+      //     c = room.players[playerId].hand.splice(i,1);
+      //     break;
+      //   }
+      // }
       room.players[playerId].skills.push(...c);
       room.players[playerId].money -= cost;
       room.players[playerId].bottles -= 1;
@@ -466,6 +477,65 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action,start_au
           break;
         }
       }
+    //exchanges a card in hand for income
+      else  if (action === 'hand'){
+
+        console.log('dataHandler room.fastaval: ' + room.fastaval);
+        console.log('button sent to buyCard: ' + p);
+
+        if (p.cashForCard > 0) {
+
+          room.players[playerId].cardsForCash += 1;
+
+        }
+
+
+        if (p.raiseValue > 0){
+          if(card.item === 'fastaval'){
+            room.fastaval += 1;
+            console.log(room.fastaval);
+          }
+          if(card.item === 'movie'){
+            room.movie += 1;
+            console.log(room.movie);
+
+          }
+          if(card.item === 'technology'){
+            room.technology += 1;
+            console.log(room.technology);
+
+          }
+          if(card.item === 'figures'){
+            room.figures += 1;
+            console.log(room.figures);
+
+          }
+          if(card.item === 'music'){
+            room.music += 1;
+            console.log(room.music);
+
+          }
+
+          /*var string = card.item;
+
+          console.log('raiseValue string: ' + string);
+
+          room.string += 1;
+          console.log('dataHandler raiseValue: ' + room.string);*/
+
+        }
+
+
+
+           for (let i = 0; i < room.players[playerId].hand.length; i += 1)
+           {
+             if (room.players[playerId].hand[i].x === card.x &&
+               room.players[playerId].hand[i].y === card.y)
+             {
+               room.players[playerId].hand.splice(i, 1);
+               break;
+             }
+           }
 
 
 
