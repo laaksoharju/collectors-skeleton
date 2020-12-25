@@ -83,8 +83,11 @@ function sockets(io, socket, data) {
   });
 
   socket.on('collectorsPlaceBid', function (d) {
-    data.placeBid(d.roomId, d.playerId, d.action);
-    io.to(d.roomId).emit('collectorsBidPlace', data.getPlacements(d.roomId));
+    data.placeBid(d.roomId, d.playerId, d.bid);
+    io.to(d.roomId).emit('collectorsPlacedBid', { 
+      playerId: d.playerId,
+      players: data.getPlayers(d.roomId)
+    });
   });
 
   socket.on('collectorsPassed', function (d) {

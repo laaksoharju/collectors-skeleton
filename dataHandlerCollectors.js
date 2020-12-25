@@ -129,7 +129,7 @@ Data.prototype.joinGame = function (roomId, playerId) {
         items: [],
         income: [],
         secret: [],
-        bid: [],
+        bid: 0,
         color: colors[Object.keys(room.players).length]
       };
       room.playerOrder[Object.keys(room.players).length] = playerId;
@@ -140,6 +140,7 @@ Data.prototype.joinGame = function (roomId, playerId) {
                                  items: [],
                                  income: [],
                                  secret: [],
+                                 bid: 0,
                                  color: colors[Object.keys(room.players).length],
                                  bottles: 2, //ska vara 2!!
                                  availableBottles: 2, //ska vara 2!!
@@ -469,17 +470,18 @@ Data.prototype.buyAuctionCard = function (roomId, playerId, card, cost) {
       }
     }
     room.upForAuction.push(...d);
-    console.log(room.upForAuction)
     room.players[playerId].money -= cost;
 
   }
 }
 
-Data.prototype.placeBid = function (roomId, playerId, card, bid) {
+Data.prototype.placeBid = function (roomId, playerId, bid) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     console.log('placedBid DH')
-    console.log(room.player[playereId].bid)
+    console.log('datahandler' + bid); 
+    room.players[playerId].bid += bid;
+    console.log(room.players[playerId].bid)
     
   }
 }
