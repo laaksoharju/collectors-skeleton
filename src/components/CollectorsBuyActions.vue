@@ -1,9 +1,27 @@
 <template>
   <div class="buy-cards">
-    <div v-for="(card, index) in itemsOnSale" :key="index" class="cardslots">
+    <div
+      v-for="(card, index) in itemsOnSale"
+      :key="index"
+      :class="[`cardslots ${index}`]"
+    >
+      <!-- {{ deckCardAvailable }} -->
       <CollectorsCard
         :card="card"
-        :availableAction="card.available=deckCardAvailable"
+        :index="index"
+        :deckCardAvaliable="deckCardAvailable"
+        :handCardAvaliable="handCardAvailable"
+        v-if="deckCard === true"
+        :availableAction="(card.available = deckCard)"
+        @doAction="buyCard(card)"
+      />
+      <CollectorsCard
+        :card="card"
+        :index="index"
+        :deckCardAvaliable="deckCardAvailable"
+        :handCardAvaliable="handCardAvailable"
+        v-else
+        :availableAction="card.available"
         @doAction="buyCard(card)"
       />
     </div>
@@ -22,10 +40,17 @@ export default {
     labels: Object,
     player: Object,
     itemsOnSale: Array,
-    deckCardAvailable:Boolean,
+    deckCardAvailable: Boolean,
+    handCardAvaliable: Boolean,
     marketValues: Object,
     placement: Array,
   },
+  data: function () {
+    return {
+      deckCard: this.deckCardAvailable,
+    };
+  },
+
   methods: {
     cannotAfford: function (cost) {
       let minCost = 100;
@@ -52,15 +77,6 @@ export default {
     highlightAvailableCards: function (cost = 100) {
       for (let i = 0; i < this.itemsOnSale.length; i += 1) {
         this.isAvailableCards(this.itemsOnSale[i], cost);
-        // if (
-        //   this.marketValues[this.itemsOnSale[i].item] <=
-        //   this.player.money - cost
-        // ) {
-        //   this.$set(this.itemsOnSale[i], "available", true);
-        // } else {
-        //   this.$set(this.itemsOnSale[i], "available", false);
-        // }
-        // this.chosenPlacementCost = cost;
       }
       for (let i = 0; i < this.player.hand.length; i += 1) {
         this.isAvailableCards(this.player.hand[i], cost);
@@ -83,11 +99,15 @@ export default {
   grid-gap: 1rem;
 }
 
-
 .cardslots div {
   transform: scale(0.5) translate(-50%, -50%);
   transition: 0.2s;
   transition-timing-function: ease-out;
   z-index: 0;
 }
+/* .\30 {
+  position: relative;
+  background-color: black;
+  background-position: 20px 20px;
+} */
 </style>

@@ -1,6 +1,15 @@
 <template>
   <div
-    v-if="card.x > 0"
+    v-if="deckCardAvailable === true && card.x > 0"
+    :class="['card', { 'available-to-choose': available }, index]"
+    :style="{
+      'background-position':
+        -(card.x - 1) * 250 + 'px ' + -(card.y - 1) * 350 + 'px',
+    }"
+    @click="doAction"
+  ></div>
+  <div
+    v-else-if="card.x > 0"
     :class="['card', { 'available-to-choose': availableAction }]"
     :style="{
       'background-position':
@@ -16,7 +25,15 @@ export default {
   props: {
     card: Object,
     availableAction: Boolean,
+    deckCard: Boolean,
+    index: Number,
   },
+  data: function () {
+    return {
+      available: this.deckCard,
+    };
+  },
+
   methods: {
     doAction: function () {
       this.$emit("doAction");
@@ -42,8 +59,6 @@ export default {
   animation-iteration-count: infinite;*/
 
   box-shadow: 0 0 30px red;
-
-
 }
 
 @keyframes jiggle {

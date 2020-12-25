@@ -20,6 +20,7 @@ function Data() {
   this.rooms = {};
 }
 
+
 /***********************************************
 For performance reasons, methods are added to the
 prototype of the Data object/class
@@ -64,6 +65,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
   room.skillsOnSale = room.deck.splice(0, 5);
   room.auctionCards = room.deck.splice(0, 4);
   room.market = [];
+  room.deckAuction=[];
   room.buyPlacement = [{ cost: 1, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0, buttonId: 1 },
   { cost: 1, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0, buttonId: 2 },
   { cost: 2, playerId: null, bottleType: 'normal', recieveCards: 0, cashForCard: 0, buttonId: 3 },
@@ -120,6 +122,8 @@ Data.prototype.joinGame = function(roomId, playerId) {
         color: room.playerColors.pop(),
         bottles: 2,
         cardsForCash: 0,
+        auction_amount:0,
+        start_auction:true
       };
       return true;
     }
@@ -290,7 +294,7 @@ Data.prototype.nextRound = function(roomId) {
         }
       }
     }
-    // TODO: PHASE 4: GET INCOME
+
     // PHASE 5: REMOVE A QUARTER TILE
     room.round = room.round + 1;
     room.workPlacement[0].cost +=1;
@@ -300,6 +304,18 @@ Data.prototype.nextRound = function(roomId) {
     return false;
   }
 };
+
+Data.prototype.updatePlayerAuction = function (roomId, playerId, auction_amount)
+{
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined')
+  {
+    room.players[playerId].auction_amount = auction_amount;
+    return room.players;
+  }
+  else return {};
+  // console.log("From data handler, Room Id: " + roomId + ", player Id: " + playerId + ", new name: " + playerName);
+}
 
 /* returns players after a new card is drawn */
 Data.prototype.drawCard = function(roomId, playerId) {
@@ -315,7 +331,7 @@ Data.prototype.drawCard = function(roomId, playerId) {
 }
 
 /* moves card from itemsOnSale to a player's hand */
-Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
+Data.prototype.buyCard = function (roomId, playerId, card, cost, action,start_auction)
 {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined')
@@ -336,8 +352,7 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
 
       for (let i = 0; i < room.itemsOnSale.length; i += 1)
       {
-        // since card comes from the client, it is NOT the same object (reference)
-        // so we need to compare properties for determining equality
+
         if (room.itemsOnSale[i].x === card.x &&
           room.itemsOnSale[i].y === card.y)
         {
@@ -345,11 +360,10 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
           break;
         }
       }
-      // ...then check if it is in the hand. It cannot be in both so it's safe
+
       for (let i = 0; i < room.players[playerId].hand.length; i += 1)
       {
-        // since card comes from the client, it is NOT the same object (reference)
-        // so we need to compare properties for determining equality
+
         if (room.players[playerId].hand[i].x === card.x &&
           room.players[playerId].hand[i].y === card.y)
         {
@@ -373,37 +387,89 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
           break;
         }
       }
-      // // ...then check if it is in the hand. It cannot be in both so it's safe
-      // for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
-      //   // since card comes from the client, it is NOT the same object (reference)
-      //   // so we need to compare properties for determining equality
-      //   if (room.players[playerId].hand[i].x === card.x &&
-      //       room.players[playerId].hand[i].y === card.y) {
-      //     c = room.players[playerId].hand.splice(i,1);
-      //     break;
-      //   }
-      // }
+
       room.players[playerId].skills.push(...c);
       room.players[playerId].money -= cost;
       room.players[playerId].bottles -= 1;
     }
+    else if (action === 'auction')
+    {
 
-      else if (action === 'market'){
-         console.log('dataHandler buyCard market');
-         room.players[playerId].cardsForCash += 1;
-         for (let i = 0; i < room.players[playerId].hand.length; i += 1)
-         {
-           if (room.players[playerId].hand[i].x === card.x &&
-             room.players[playerId].hand[i].y === card.y)
-           {
-             room.players[playerId].hand.splice(i, 1);
-             break;
-           }
-         }
+      for (let i = 0; i < room.auctionCards.length; i += 1)
+      {
 
+        if (room.auctionCards[i].x === card.x &&
+          room.auctionCards[i].y === card.y)
+        {
+          c = room.auctionCards.splice(i, 1, {});
 
-
+          break;
+        }
       }
+
+      const count=0;
+      Object.keys(this.rooms).forEach(room => {
+
+        this.rooms[room].deckAuction.push(...c);
+        Object.keys(this.rooms[room].players).forEach(player=>{
+          this.rooms[room].players[player].start_auction=start_auction;
+        })
+      });
+
+
+      // room.players[playerId].items.push(...c);
+      room.players[playerId].money -= cost;
+      room.players[playerId].bottles -= 1;
+
+    }
+
+    else if (action === 'win_auction')
+    {
+
+      for (let i = 0; i < room.deckAuction.length; i += 1)
+      {
+
+        if (room.deckAuction[i].x === card.x &&
+          room.deckAuction[i].y === card.y)
+        {
+          c = room.deckAuction.splice(i, 1, {});
+
+          break;
+        }
+      }
+
+
+
+      room.players[playerId].items.push(...c);
+
+
+
+      Object.keys(this.rooms).forEach(room => {
+        Object.keys(this.rooms[room].players).forEach(player=>{
+          this.rooms[room].players[player].start_auction=start_auction;
+          this.rooms[room].players[player].auction_amount=0;
+        })
+      });
+      // room.players[playerId].money -= cost;
+      // room.players[playerId].bottles -= 1;
+      console.log("remove bottle")
+    }
+    else if (action === 'market'){
+      console.log('dataHandler buyCard market');
+      room.players[playerId].cardsForCash += 1;
+      for (let i = 0; i < room.players[playerId].hand.length; i += 1)
+      {
+        if (room.players[playerId].hand[i].x === card.x &&
+          room.players[playerId].hand[i].y === card.y)
+        {
+          room.players[playerId].hand.splice(i, 1);
+          break;
+        }
+      }
+
+
+
+   }
   }
 };
 
@@ -424,10 +490,7 @@ Data.prototype.placeBottle = function (roomId, playerId, action, p)
 
 
   if (typeof room !== 'undefined')
-    {
-
-
-
+  {
     let activePlacement = [];
     if (action === "buy")
     {
@@ -438,7 +501,6 @@ Data.prototype.placeBottle = function (roomId, playerId, action, p)
 
       console.log('dataHandler.placeBottle.skill');
       activePlacement = room.skillPlacement;
-
     }
     else if (action === "auction")
     {
@@ -452,7 +514,6 @@ Data.prototype.placeBottle = function (roomId, playerId, action, p)
 
     }
     else if (action === "market")
-
     {
       activePlacement = room.marketPlacement;
       room.players[playerId].money -= cost;
@@ -541,7 +602,18 @@ Data.prototype.getAuctionCards = function(roomId) {
   let room = this.rooms[roomId];
   if (typeof room !== "undefined") {
     return room.auctionCards;
-  } else return [];
-};
+  }
+  else return [];
+}
+
+Data.prototype.getDeckauctionCard = function (roomId)
+{
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined')
+  {
+    return room.deckAuction;
+  }
+  else return [];
+}
 
 module.exports = Data;

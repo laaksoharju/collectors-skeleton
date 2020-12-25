@@ -36,12 +36,47 @@
             @buyCard="buyCard('auction', $event)"
           />
         </section>
+        <section class="do_deckAuction">
+          <CollectorsBuyActions
+            v-if="players[playerId]"
+            :labels="labels"
+            :player="players[playerId]"
+            :itemsOnSale="deckAuction"
+            :deckCardAvailable="deckCardAvailable"
+            :marketValues="marketValues"
+            :placement="auctionPlacement"
+            @buyCard="buyCard('win_auction', $event)"
+          />
+        </section>
+        <section
+          v-if="!this.players[this.playerId].start_auction"
+          id="players_auction"
+          style="background: white height:90px width:60px"
+        >
+          <label>Players auction</label>
+          <div
+            v-for="(val, key) in getallPlayersAuction()"
+            :key="key"
+            class="player_1_auction"
+            style="background: white"
+          >
+            <label>{{ val.id }}</label>
+
+            <input
+              id="playerNameInputField"
+              type="text"
+              v-bind:value="val.auction_amount"
+              v-on:keyup="updatePlayerAuction($event, val.id)"
+            />
+          </div>
+        </section>
 
         <div class="game main-board">
           <section class="item_bottle">
             <Bottles
               v-if="players[playerId]"
               :labels="labels"
+              :typeofaction="typeofaction"
               :player="players[playerId]"
               :itemsOnSale="itemsOnSale"
               :marketValues="marketValues"
@@ -95,7 +130,7 @@
               v-if="players[playerId]"
               :labels="labels"
               :player="players[playerId]"
-              :itemsOnSale="skillsOnSale"
+              :itemsOnSale="auctionCards"
               :marketValues="marketValues"
               :placement="auctionPlacement"
               @placeBottle="placeBottle('auction', $event)"
@@ -140,7 +175,7 @@
                 <img
                   src="/images/player-cards-for-coins.png"
                   alt="Player Cards for Coins"
-                />{{this.players[this.playerId].cardsForCash}}
+                />{{ this.players[this.playerId].cardsForCash }}
               </div>
             </div>
             <div class="player-hand">
@@ -153,20 +188,16 @@
                 />
               </div>
               <div class="cardslots" v-if="players[playerId]">
-
                 <CollectorsBuyActions
                   v-if="players[playerId]"
                   :labels="labels"
                   :player="players[playerId]"
                   :itemsOnSale="players[playerId].hand"
-
-                  :deckCardAvailable="deckCardAvailable"
-
+                  :handCardAvailable="handCardAvailable"
                   :marketValues="marketValues"
                   :placement="buyPlacement"
                   @buyCard="buyCard('market', $event)"
                 />
-
               </div>
             </div>
             <div
@@ -401,23 +432,212 @@
                 :src="playerBottle[players[otherPlayerId].color]"
                 alt="index"
               />
-              <!-- <img
-                v-bind:src="playerBoards[players[otherPlayerId].color]"
-                alt="Player Boards"
-              /> -->
             </div>
             <div class="player-items-skills">
               <div
+                v-for="(card, index) in players[otherPlayerId].items"
+                :key="index"
                 class="player-items"
-                v-if="players[otherPlayerId].items.length !== 0"
               >
-                <div class="player-items-1">
-                  <img src="/images/item-movie-icon.png" alt="Player Items 1" />
+                <div v-if="card.item === 'movie'" class="player-items-1">
+                  <img src="/images/items/movie.jpg" alt="Player Items 1" />
+                  <p
+                    v-if="countitem(players[otherPlayerId].items, 'movie') > 1"
+                  >
+                    {{ playeritem["movie"] }}
+                  </p>
+                </div>
+                <div v-if="card.item === 'music'" class="player-items-2">
+                  <img src="/images/items/music.jpg" alt="Player Items 1" />
+                  <p
+                    v-if="countitem(players[otherPlayerId].items, 'music') > 1"
+                  >
+                    {{ playeritem["music"] }}
+                  </p>
+                </div>
+                <div v-if="card.item === 'fastaval'" class="player-items-3">
+                  <img src="/images/items/fastaval.jpg" alt="Player Items 1" />
+                  <p
+                    v-if="
+                      countitem(players[otherPlayerId].items, 'fastaval') > 1
+                    "
+                  >
+                    {{ playeritem["fastaval"] }}
+                  </p>
+                </div>
+                <div v-if="card.item === 'figures'" class="player-items-4">
+                  <img src="/images/items/figures.jpg" alt="Player Items 1" />
+                  <p
+                    v-if="
+                      countitem(players[otherPlayerId].items, 'figures') > 1
+                    "
+                  >
+                    {{ playeritem["figures"] }}
+                  </p>
+                </div>
+                <div v-if="card.item === 'technology'" class="player-items-5">
+                  <img
+                    src="/images/items/technology.jpg"
+                    alt="Player Items 1"
+                  />
+                  <p
+                    v-if="
+                      countitem(players[otherPlayerId].items, 'technology') > 1
+                    "
+                  >
+                    {{ playeritem["technology"] }}
+                  </p>
                 </div>
               </div>
-              <div class="player-skills">
-                <div class="player-skills-1">
-                  <img src="/images/skill-bottle-icon.png" />
+
+              <div
+                v-for="(card, index) in players[otherPlayerId].skills"
+                :key="index"
+                class="player-skills"
+              >
+                <div v-if="card.skill === 'bottle'" class="player-skills-1">
+                  <img src="/images/skills/bottle.jpg" alt="Player Skills 1" />
+                  <p
+                    v-if="
+                      countskills(players[otherPlayerId].skills, 'bottle') > 1
+                    "
+                  >
+                    {{ playerskill["bottle"] }}
+                  </p>
+                </div>
+                <div
+                  v-if="card.skill === 'workerIncome'"
+                  class="player-skills-2"
+                >
+                  <img
+                    src="/images/skills/workerIncome.jpg"
+                    alt="Player Items 1"
+                  />
+                  <p
+                    v-if="
+                      countskills(
+                        players[otherPlayerId].skills,
+                        'workerIncome'
+                      ) > 1
+                    "
+                  >
+                    {{ playerskill["workerIncome"] }}
+                  </p>
+                </div>
+                <div v-if="card.skill === 'workerCard'" class="player-skills-3">
+                  <img
+                    src="/images/skills/workerCard.jpg"
+                    alt="Player Items 1"
+                  />
+                  <p
+                    v-if="
+                      countskills(players[otherPlayerId].skills, 'workerCard') >
+                      1
+                    "
+                  >
+                    {{ playerskill["workerCard"] }}
+                  </p>
+                </div>
+                <div
+                  v-if="card.skill === 'VP-technology'"
+                  class="player-skills-4"
+                >
+                  <img
+                    src="/images/skills/VP-technology.jpg"
+                    alt="Player Skills 1"
+                  />
+                  <p
+                    v-if="
+                      countskills(
+                        players[otherPlayerId].skills,
+                        'VP-technology'
+                      ) > 1
+                    "
+                  >
+                    {{ playerskill["VP-technology"] }}
+                  </p>
+                </div>
+                <div
+                  v-if="card.skill === 'VP-fastaval'"
+                  class="player-skills-5"
+                >
+                  <img
+                    src="/images/skills/VP-fastaval.jpg"
+                    alt="Player Items 1"
+                  />
+                  <p
+                    v-if="
+                      countskills(
+                        players[otherPlayerId].skills,
+                        'VP-fastaval'
+                      ) > 1
+                    "
+                  >
+                    {{ playerskill["VP-fastaval"] }}
+                  </p>
+                </div>
+                <div v-if="card.skill === 'VP-movie'" class="player-skills-6">
+                  <img src="/images/skills/VP-movie.jpg" alt="Player Items 1" />
+                  <p
+                    v-if="
+                      countskills(players[otherPlayerId].skills, 'VP-movie') > 1
+                    "
+                  >
+                    {{ playerskill["VP-movie"] }}
+                  </p>
+                </div>
+                <div v-if="card.skill === 'VP-music'" class="player-skills-7">
+                  <img src="/images/skills/VP-music.jpg" alt="Player Items 1" />
+                  <p
+                    v-if="
+                      countskills(players[otherPlayerId].skills, 'VP-music') > 1
+                    "
+                  >
+                    {{ playerskill["VP-music"] }}
+                  </p>
+                </div>
+                <div v-if="card.skill === 'VP-figure'" class="player-skills-8">
+                  <img
+                    src="/images/skills/VP-figure.jpg"
+                    alt="Player Items 1"
+                  />
+                  <p
+                    v-if="
+                      countskills(players[otherPlayerId].skills, 'VP-figure') >
+                      1
+                    "
+                  >
+                    {{ playerskill["VP-figure"] }}
+                  </p>
+                </div>
+                <div v-if="card.skill === 'VP-all'" class="player-skills-9">
+                  <img src="/images/skills/VP-all.jpg" alt="Player Items 1" />
+                  <p
+                    v-if="
+                      countskills(players[otherPlayerId].skills, 'VP-all') > 1
+                    "
+                  >
+                    {{ playerskill["VP-all"] }}
+                  </p>
+                </div>
+                <div
+                  v-if="card.skill === 'auctionIncome'"
+                  class="player-skills-10"
+                >
+                  <img
+                    src="/images/skills/auctionIncome.jpg"
+                    alt="Player Items 1"
+                  />
+                  <p
+                    v-if="
+                      countskills(
+                        players[otherPlayerId].skills,
+                        'auctionIncome'
+                      ) > 1
+                    "
+                  >
+                    {{ playerskill["auctionIncome"] }}
+                  </p>
                 </div>
               </div>
             </div>
@@ -431,7 +651,8 @@
       <br /><br />
       <section class="market-cards">
         <div class="fastaval">
-          <div class="card"
+          <div
+            class="card"
             v-for="(item, value) in marketValues['fastaval']"
             :key="item"
             :value="value"
@@ -553,6 +774,7 @@ export default {
       auctionPlacement: [],
       marketPlacement: [],
       workPlacement: [],
+      deckAuction: [],
       chosenPlacementCost: null,
       marketValues: {
         fastaval: 0,
@@ -565,7 +787,7 @@ export default {
       skillsOnSale: [],
       auctionCards: [],
       handClicked: 0,
-      deckCardAvailable: false,
+      handCardAvailable: false,
       playerid: 0,
       playerName: "",
       otherPlayers: [],
@@ -600,6 +822,11 @@ export default {
         workerIncome: 0,
         auctionIncome: 0,
       },
+
+      typeofaction: "skills",
+      deckCardAvailable: true,
+
+      start_auction: true,
       round: 0,
     };
   },
@@ -636,6 +863,7 @@ export default {
     this.$store.state.socket.on(
       "collectorsInitialize",
       function (d) {
+        console.log(d.marketValues);
         this.labels = d.labels;
         this.players = d.players;
         this.itemsOnSale = d.itemsOnSale;
@@ -665,6 +893,8 @@ export default {
         this.auctionPlacement = d.placements.auctionPlacement;
         this.workPlacement = d.placements.workPlacement;
         this.round = d.round;
+        this.deckAuction = d.deckAuction;
+        this.start_auction = d.start_auction;
       }.bind(this)
     );
 
@@ -683,37 +913,28 @@ export default {
     this.$store.state.socket.on(
       "collectorsBottlePlaced",
       function (d) {
-
         console.log(d);
 
-
-/*If i comment this away they shine prmanently*/
+        /*If i comment this away they shine prmanently*/
         this.buyPlacement = d.buyPlacement;
         this.skillPlacement = d.skillPlacement;
         this.marketPlacement = d.marketPlacement;
         this.auctionPlacement = d.auctionPlacement;
         this.workPlacement = d.workPlacement;
         this.players = d.players;
-
-
-
-
       }.bind(this)
     );
-
 
     this.$store.state.socket.on(
       "collectorsHandActivated",
       function (d) {
-
         console.log(d);
 
-        console.log('collectors handActiveed');
+        console.log("collectors handActiveed");
 
-    /*  console.log(  this.players[this.playerId].hand[i].available
+        /*  console.log(  this.players[this.playerId].hand[i].available
         this.players[this.playerId].hand = d;
         for (let c)*/
-
       }.bind(this)
     );
 
@@ -752,7 +973,9 @@ export default {
         this.players = d.players;
         this.itemsOnSale = d.itemsOnSale;
         this.skillsOnSale = d.skillsOnSale;
-        this.deckCardAvailable = false;
+        this.auctionCards = d.auctionCards;
+        this.deckAuction = d.deckAuction;
+        this.handCardAvailable = false;
       }.bind(this)
     );
   },
@@ -796,25 +1019,46 @@ export default {
       }
       return otherPlayers;
     },
+    getallPlayersAuction: function () {
+      var allPlayers = [];
+
+      for (var id of Object.keys(this.players)) {
+        var obj = {};
+        obj.id = id;
+        obj.auction_amount = this.players[id].auction_amount;
+        console.log(obj.id, obj.auction_amount);
+
+        allPlayers.push(obj);
+      }
+
+      return allPlayers;
+    },
+    updatePlayerAuction: function (e, val) {
+      if (e.keyCode === 13) {
+        if (val === this.$store.state.playerId && e.target.value !== "") {
+          this.players[this.$store.state.playerId].auction_amount =
+            e.target.value;
+
+          this.$store.state.socket.emit("updatePlayerAuction", {
+            roomId: this.$route.params.id,
+            playerId: this.$store.state.playerId,
+            auction_amount: this.players[this.$store.state.playerId]
+              .auction_amount,
+          });
+        }
+      }
+    },
     placeBottle: function (action, p) {
-
-      if (p.cashForCard > 0){
-        this.deckCardAvailable = true;
+      if (p.cashForCard > 0) {
+        this.handCardAvailable = true;
       }
 
-      for (let i = 0; i < p.recieveCards; i += 1){
-        this.$store.state.socket.emit('collectorsDrawCard', { roomId: this.$route.params.id,
-        playerId: this.$store.state.playerId });
-
-
+      for (let i = 0; i < p.recieveCards; i += 1) {
+        this.$store.state.socket.emit("collectorsDrawCard", {
+          roomId: this.$route.params.id,
+          playerId: this.$store.state.playerId,
+        });
       }
-
-
-
-
-
-
-
 
       this.chosenPlacementCost = p.cost;
       this.$store.state.socket.emit("collectorsPlaceBottle", {
@@ -831,16 +1075,50 @@ export default {
         playerId: this.playerId,
       });
     },
-    buyCard: function (action, card) {
-      console.log("buyCard", card);
-      this.$store.state.socket.emit("collectorsBuyCard", {
-        roomId: this.$route.params.id,
-        playerId: this.playerId,
-        card: card,
-        action: action,
-        cost: this.marketValues[card.market] + this.chosenPlacementCost,
-      });
+
+    getmax: function () {
+      let val = this.getallPlayersAuction();
+      let sortval = val.sort((a, b) => b.auction_amount - a.auction_amount);
+      return sortval[0];
     },
+    buyCard: function (action, card) {
+      if (action === "win_auction") {
+        let max_val = this.getmax();
+        console.log(max_val.id, this.playerId);
+
+        if (max_val.id === this.playerId) {
+          this.players[this.playerId].start_auction = true;
+          this.$store.state.socket.emit("collectorsBuyCard", {
+            roomId: this.$route.params.id,
+            playerId: this.playerId,
+            card: card,
+            action: action,
+            cost: this.marketValues[card.market],
+            start_auction: this.players[this.playerId].start_auction,
+          });
+          // document.getElementById("players_auction").hidden = false;
+        } else {
+          alert("You can not take the card");
+        }
+      } else {
+        if (action === "auction") {
+          this.players[this.playerId].start_auction = false;
+        } else {
+          this.players[this.playerId].start_auction = true;
+        }
+        // document.getElementById("players_auction").hidden = this.start_auction;
+
+        this.$store.state.socket.emit("collectorsBuyCard", {
+          roomId: this.$route.params.id,
+          playerId: this.playerId,
+          card: card,
+          action: action,
+          cost: this.marketValues[card.market] + this.chosenPlacementCost,
+          start_auction: this.players[this.playerId].start_auction,
+        });
+      }
+    },
+
     countitem: function (items, card) {
       var count = 0;
       Object.keys(items).forEach(function (prop) {
@@ -859,7 +1137,7 @@ export default {
         }
       });
       this.playerskill[String(card)] = count;
-      console.log(this.playerskill[card]);
+      // console.log(this.playerskill[card]);
       return count;
     },
   },
@@ -933,13 +1211,16 @@ footer a:visited {
   transition-timing-function: ease-out;
 }
 
-.do_auction >>> .buy-cards {
+.do_auction .buy-cards {
   position: relative;
-  left: -31.5vw;
-  top: -25vh;
-  grid-template-columns: repeat(5, 7.5rem);
-  grid-template-rows: 12rem;
-  transform: scale(0.5) translate(-50%, -50%);
+  left: -27.5vw;
+  top: -35vh;
+  display: grid;
+  grid-template-columns: repeat(3, 10rem);
+  grid-template-rows: repeat(2, 10rem);
+  grid-gap: 40px;
+
+  transform: scale(0.6) translate(-50%, -50%);
   z-index: 6;
 }
 
@@ -1025,6 +1306,27 @@ footer a:visited {
   /* left: 39.5vw; */
 }
 
+::v-deep .do_auction .buy-cards .cardslots.\33 {
+  position: absolute;
+  grid-column: 3/4;
+  grid-row: 1/2;
+  grid-gap: 40px;
+}
+::v-deep .do_auction .buy-cards .cardslots.\30 {
+  position: absolute;
+  grid-column: 1/2;
+  grid-row: 2/3;
+}
+::v-deep .do_auction .buy-cards .cardslots.\31 {
+  position: absolute;
+  grid-column: 2/3;
+  grid-row: 2/3;
+}
+::v-deep .do_auction .buy-cards .cardslots.\32 {
+  position: absolute;
+  grid-column: 3/4;
+  grid-row: 2/3;
+}
 .item_bottle {
   background-color: rgb(219, 197, 195);
   grid-column: 2/4;
@@ -1112,8 +1414,8 @@ footer a:visited {
   grid-template-rows: repeat(5, 2.5rem);
   grid-gap: 0.5em;
 }
-.player-hand .cardslots div{
-  transfrom:scale(03)translate(-110%,-110%)
+.player-hand .cardslots div {
+  transfrom: scale(03) translate(-110%, -110%);
 }
 
 .cardslots {
@@ -1311,12 +1613,12 @@ footer a:visited {
   padding-left: 0.6em;
 }
 
-.other-players .player-items-1 img {
+/* .other-players .player-items-1 img {
   height: 45%;
   width: 100%;
   padding-top: 1px;
   padding-bottom: 1px;
-}
+} */
 .player-skills {
   grid-column: 2;
   grid-row: 1;
@@ -1379,13 +1681,49 @@ footer a:visited {
   padding-left: 0.3em;
   padding-top: 0.1em;
 }
+.do_deckAuction >>> .buy-cards .cardslots {
+  position: relative;
+  z-index: 10;
+  top: -143vh;
+  left: 37.2vw;
+  transform: scale(0.7) translate(-50%, -50%);
+}
+#players_auction {
+  position: relative;
 
-.other-players .player-skills-1 img {
+  width: 6vw;
+  height: 5vh;
+
+  bottom: 185vh;
+  left: -10.4vw;
+  padding: 2px;
+  margin: 2px;
+  border-radius: 2rem;
+  outline: 2px solid rgb(81, 85, 82);
+}
+.player_1_auction {
+}
+.player_1_auction label {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0.2rem;
+  width: 3vw;
+}
+
+.player_1_auction input {
+  display: inline-block;
+  vertical-align: middle;
+
+  width: 20px;
+  font-size: 1em;
+}
+
+/* .other-players .player-skills-1 img {
   height: 45%;
   width: 100%;
   padding-top: 1px;
   padding-bottom: 1px;
-}
+} */
 
 .other-players {
   display: grid;
