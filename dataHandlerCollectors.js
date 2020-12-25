@@ -135,6 +135,8 @@ Data.prototype.joinGame = function (roomId, playerId)
         secret: room.deck.splice(0, 1), // picks one card and places it face down, tucked under their player board at the position marked with a treasure chest.
         color: room.playerColors.pop(),
         bottles: 2,
+        auction_amount:0,
+        start_auction:true
       };
       return true;
     }
@@ -175,6 +177,17 @@ Data.prototype.updatePlayerName = function (roomId, playerId, playerName)
   else return {};
   // console.log("From data handler, Room Id: " + roomId + ", player Id: " + playerId + ", new name: " + playerName);
 }
+Data.prototype.updatePlayerAuction = function (roomId, playerId, auction_amount)
+{
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined')
+  {
+    room.players[playerId].auction_amount = auction_amount;
+    return room.players;
+  }
+  else return {};
+  // console.log("From data handler, Room Id: " + roomId + ", player Id: " + playerId + ", new name: " + playerName);
+}
 
 /* returns players after a new card is drawn */
 Data.prototype.drawCard = function (roomId, playerId)
@@ -190,7 +203,7 @@ Data.prototype.drawCard = function (roomId, playerId)
 }
 
 /* moves card from itemsOnSale to a player's hand */
-Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
+Data.prototype.buyCard = function (roomId, playerId, card, cost, action,start_auction)
 {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined')
@@ -270,13 +283,17 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
       const count=0;
       Object.keys(this.rooms).forEach(room => {
 
-        this.rooms[room].deckAuction.push(...c); // the value of the current key.
+        this.rooms[room].deckAuction.push(...c); 
+        Object.keys(this.rooms[room].players).forEach(player=>{
+          this.rooms[room].players[player].start_auction=start_auction;
+        })
       });
  
      
       // room.players[playerId].items.push(...c);
       room.players[playerId].money -= cost;
       room.players[playerId].bottles -= 1;
+      
     }
     
     else if (action === 'win_auction')    
@@ -297,8 +314,18 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
  
      
       room.players[playerId].items.push(...c);
-      room.players[playerId].money -= cost;
+      
+      
+
+      Object.keys(this.rooms).forEach(room => {
+        Object.keys(this.rooms[room].players).forEach(player=>{
+          this.rooms[room].players[player].start_auction=start_auction;
+          this.rooms[room].players[player].auction_amount=0;
+        })
+      });
+      // room.players[playerId].money -= cost;
       // room.players[playerId].bottles -= 1;
+      console.log("remove bottle")
     }
   }
 }

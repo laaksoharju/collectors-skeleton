@@ -1,9 +1,14 @@
 <template>
   <div class="buy-cards">
-    <div v-for="(card, index) in itemsOnSale" :key="index" class="cardslots">
+    <div
+      v-for="(card, index) in itemsOnSale"
+      :key="index"
+      :class="[`cardslots ${index}`]"
+    >
       <!-- {{ deckCardAvailable }} -->
       <CollectorsCard
         :card="card"
+        :index="index"
         :deckCardAvaliable="deckCardAvailable"
         v-if="deckCard === true"
         :availableAction="(card.available = deckCard)"
@@ -11,6 +16,7 @@
       />
       <CollectorsCard
         :card="card"
+        :index="index"
         :deckCardAvaliable="deckCardAvailable"
         v-else
         :availableAction="card.available"
@@ -97,4 +103,9 @@ export default {
   transition-timing-function: ease-out;
   z-index: 0;
 }
+/* .\30 {
+  position: relative;
+  background-color: black;
+  background-position: 20px 20px;
+} */
 </style>

@@ -48,6 +48,28 @@
             @buyCard="buyCard('win_auction', $event)"
           />
         </section>
+        <section
+          v-if="!this.players[this.playerId].start_auction"
+          id="players_auction"
+          style="background: white height:90px width:60px"
+        >
+          <label>Players auction</label>
+          <div
+            v-for="(val, key) in getallPlayersAuction()"
+            :key="key"
+            class="player_1_auction"
+            style="background: white"
+          >
+            <label>{{ val.id }}</label>
+
+            <input
+              id="playerNameInputField"
+              type="text"
+              v-bind:value="val.auction_amount"
+              v-on:keyup="updatePlayerAuction($event, val.id)"
+            />
+          </div>
+        </section>
 
         <div class="game main-board">
           <section class="item_bottle">
@@ -721,6 +743,8 @@ export default {
 
       typeofaction: "skills",
       deckCardAvailable: true,
+
+      start_auction: true,
     };
   },
   computed: {
@@ -729,10 +753,10 @@ export default {
     },
   },
   watch: {
-    players: function (newP, oldP) {
+    players: function () {
       // console.log(Object.keys(newP).length);
       // console.log(Object.keys(oldP).length);
-      console.log(newP, oldP);
+      // console.log(newP, oldP);
       for (let p in this.players) {
         for (let c = 0; c < this.players[p].hand.length; c += 1) {
           if (typeof this.players[p].hand[c].item !== "undefined")
@@ -768,6 +792,7 @@ export default {
         this.auctionPlacement = d.placements.auctionPlacement;
         this.workPlacement = d.placements.workPlacement;
         this.deckAuction = d.deckAuction;
+        this.start_auction = d.start_auction;
       }.bind(this)
     );
 
@@ -832,8 +857,8 @@ export default {
     },
     setupNameChange: function () {
       if (!document.getElementById("playerNameLabel").hidden) {
-        document.getElementById("playerNameLabel").hidden = true;
-        document.getElementById("playerNameInputField").hidden = false;
+        document.getElementById("playerNameLabel").hidden = false;
+        document.getElementById("playerNameInputField").hidden = true;
       }
     },
     changeName: function (e) {
@@ -860,7 +885,40 @@ export default {
       }
       return otherPlayers;
     },
+    getallPlayersAuction: function () {
+      var allPlayers = [];
+
+      for (var id of Object.keys(this.players)) {
+        var obj = {};
+        obj.id = id;
+        obj.auction_amount = this.players[id].auction_amount;
+        console.log(obj.id, obj.auction_amount);
+
+        allPlayers.push(obj);
+      }
+
+      return allPlayers;
+    },
+    updatePlayerAuction: function (e, val) {
+      if (e.keyCode === 13) {
+        if (val === this.$store.state.playerId && e.target.value !== "") {
+          this.players[this.$store.state.playerId].auction_amount =
+            e.target.value;
+
+          this.$store.state.socket.emit("updatePlayerAuction", {
+            roomId: this.$route.params.id,
+            playerId: this.$store.state.playerId,
+            auction_amount: this.players[this.$store.state.playerId]
+              .auction_amount,
+          });
+        }
+      }
+    },
     placeBottle: function (action, cost) {
+      // if (action === "auction") {
+      //   document.getElementById("players_auction").hidden = false;
+      // }
+
       this.chosenPlacementCost = cost;
       this.typeofaction = action;
       this.$store.state.socket.emit("collectorsPlaceBottle", {
@@ -876,16 +934,50 @@ export default {
         playerId: this.playerId,
       });
     },
-    buyCard: function (action, card) {
-      console.log("buyCard", card);
-      this.$store.state.socket.emit("collectorsBuyCard", {
-        roomId: this.$route.params.id,
-        playerId: this.playerId,
-        card: card,
-        action: action,
-        cost: this.marketValues[card.market] + this.chosenPlacementCost,
-      });
+
+    getmax: function () {
+      let val = this.getallPlayersAuction();
+      let sortval = val.sort((a, b) => b.auction_amount - a.auction_amount);
+      return sortval[0];
     },
+    buyCard: function (action, card) {
+      if (action === "win_auction") {
+        let max_val = this.getmax();
+        console.log(max_val.id, this.playerId);
+
+        if (max_val.id === this.playerId) {
+          this.players[this.playerId].start_auction = true;
+          this.$store.state.socket.emit("collectorsBuyCard", {
+            roomId: this.$route.params.id,
+            playerId: this.playerId,
+            card: card,
+            action: action,
+            cost: this.marketValues[card.market],
+            start_auction: this.players[this.playerId].start_auction,
+          });
+          // document.getElementById("players_auction").hidden = false;
+        } else {
+          alert("You can not take the card");
+        }
+      } else {
+        if (action === "auction") {
+          this.players[this.playerId].start_auction = false;
+        } else {
+          this.players[this.playerId].start_auction = true;
+        }
+        // document.getElementById("players_auction").hidden = this.start_auction;
+
+        this.$store.state.socket.emit("collectorsBuyCard", {
+          roomId: this.$route.params.id,
+          playerId: this.playerId,
+          card: card,
+          action: action,
+          cost: this.marketValues[card.market] + this.chosenPlacementCost,
+          start_auction: this.players[this.playerId].start_auction,
+        });
+      }
+    },
+
     countitem: function (items, card) {
       var count = 0;
       Object.keys(items).forEach(function (prop) {
@@ -904,7 +996,7 @@ export default {
         }
       });
       this.playerskill[String(card)] = count;
-      console.log(this.playerskill[card]);
+      // console.log(this.playerskill[card]);
       return count;
     },
   },
@@ -979,24 +1071,39 @@ footer a:visited {
   transition-timing-function: ease-out;
 }
 
-.do_auction >>> .buy-cards {
+.do_auction .buy-cards {
   position: relative;
-  left: -31.5vw;
-  top: -25vh;
-  grid-template-columns: repeat(4, 9.5rem);
-  grid-template-rows: 12rem;
+  left: -27.5vw;
+  top: -35vh;
   display: grid;
+  grid-template-columns: repeat(3, 10rem);
+  grid-template-rows: repeat(2, 10rem);
+  grid-gap: 40px;
 
-  transform: scale(0.5) translate(-50%, -50%);
+  transform: scale(0.6) translate(-50%, -50%);
   z-index: 6;
 }
-
-/* .do_auction >>> .buy-cards .cardslots div {
-  /* transform: scale(1.2) translate(-110%, -110%); 
-  transform: scale(1.2) translate(-110%, -110%);
-  -webkit-transition: transform 1s ease-in-out;
-} */
-
+::v-deep .do_auction .buy-cards .cardslots.\33 {
+  position: absolute;
+  grid-column: 3/4;
+  grid-row: 1/2;
+  grid-gap: 40px;
+}
+::v-deep .do_auction .buy-cards .cardslots.\30 {
+  position: absolute;
+  grid-column: 1/2;
+  grid-row: 2/3;
+}
+::v-deep .do_auction .buy-cards .cardslots.\31 {
+  position: absolute;
+  grid-column: 2/3;
+  grid-row: 2/3;
+}
+::v-deep .do_auction .buy-cards .cardslots.\32 {
+  position: absolute;
+  grid-column: 3/4;
+  grid-row: 2/3;
+}
 .item_bottle {
   background-color: rgb(219, 197, 195);
   grid-column: 2/4;
@@ -1350,9 +1457,38 @@ footer a:visited {
 .do_deckAuction >>> .buy-cards .cardslots {
   position: relative;
   z-index: 10;
-  top: -148vh;
+  top: -143vh;
   left: 37.2vw;
   transform: scale(0.7) translate(-50%, -50%);
+}
+#players_auction {
+  position: relative;
+
+  width: 6vw;
+  height: 5vh;
+
+  bottom: 185vh;
+  left: -10.4vw;
+  padding: 2px;
+  margin: 2px;
+  border-radius: 2rem;
+  outline: 2px solid rgb(81, 85, 82);
+}
+.player_1_auction {
+}
+.player_1_auction label {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0.2rem;
+  width: 3vw;
+}
+
+.player_1_auction input {
+  display: inline-block;
+  vertical-align: middle;
+
+  width: 20px;
+  font-size: 1em;
 }
 
 /* .other-players .player-skills-1 img {

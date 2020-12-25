@@ -91,7 +91,7 @@ export default {
     cannotAfford: function (cost) {
       let minCost = 100;
       for (let key in this.marketValues) {
-        console.log(this.marketValues);
+        // console.log(this.marketValues);
         if (cost + this.marketValues[key] < minCost)
           minCost = cost + this.marketValues[key];
       }
@@ -101,7 +101,7 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
-      console.log(this.typeofaction);
+      // console.log(this.typeofaction);
       this.$emit("placeBottle", p.cost);
 
       this.highlightAvailableCards(p.cost);

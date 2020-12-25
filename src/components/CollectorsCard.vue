@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="deckCardAvailable === true && card.x > 0"
-    :class="['card', { 'available-to-choose': available }]"
+    :class="['card', { 'available-to-choose': available }, index]"
     :style="{
       'background-position':
         -(card.x - 1) * 250 + 'px ' + -(card.y - 1) * 350 + 'px',
@@ -26,6 +26,7 @@ export default {
     card: Object,
     availableAction: Boolean,
     deckCard: Boolean,
+    index: Number,
   },
   data: function () {
     return {
