@@ -155,10 +155,10 @@
                   :itemsOnSale="players[playerId].hand"
 
                   :deckCardAvailable="deckCardAvailable"
-
+                  :buttonClicked ="buttonClicked"
                   :marketValues="marketValues"
                   :placement="buyPlacement"
-                  @buyCard="buyCard('market', $event)"
+                  @buyCard="buyCard('hand', $event)"
                 />
 
               </div>
@@ -432,6 +432,7 @@ export default {
       auctionCards: [],
       handClicked: 0,
       deckCardAvailable: false,
+      buttonClicked: null,
       playerid: 0,
       playerName: "",
       otherPlayers: [],
@@ -639,7 +640,12 @@ export default {
     },
     placeBottle: function (action, p) {
 
+      this.buttonClicked = p;
+
       if (p.cashForCard > 0){
+        this.deckCardAvailable = true;
+      }
+      if (p.raiseValue > 0 && p.raiseValue !== undefined){
         this.deckCardAvailable = true;
       }
 
@@ -649,13 +655,6 @@ export default {
 
 
       }
-
-
-
-
-
-
-
 
       this.chosenPlacementCost = p.cost;
       this.$store.state.socket.emit("collectorsPlaceBottle", {
@@ -676,16 +675,18 @@ export default {
         playerId: this.playerId,
       });
     },
-    buyCard: function (action, card) {
-      console.log(card.item);
-      console.log(action);
+    buyCard: function (action, d) {
+
       console.log("buyCard collectors");
+      console.log(d.p
+      );
       this.$store.state.socket.emit("collectorsBuyCard", {
         roomId: this.$route.params.id,
         playerId: this.playerId,
-        card: card,
+        card: d.card,
         action: action,
-        cost: this.marketValues[card.market] + this.chosenPlacementCost,
+        cost: this.marketValues[d.card.market] + this.chosenPlacementCost,
+        p: d.p,
       });
     },
     countitem:function(items,card){

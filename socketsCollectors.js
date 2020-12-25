@@ -54,7 +54,7 @@ function sockets(io, socket, data)
   {
     console.log('sockets collectorBuyCard');
 
-    data.buyCard(d.roomId, d.playerId, d.card, d.cost, d.action)
+    data.buyCard(d.roomId, d.playerId, d.card, d.cost, d.action, d.p)
     io.to(d.roomId).emit('collectorsCardBought', {
       playerId: d.playerId,
       players: data.getPlayers(d.roomId),

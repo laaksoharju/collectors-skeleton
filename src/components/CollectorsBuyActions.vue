@@ -4,6 +4,7 @@
       <CollectorsCard
         :card="card"
         :availableAction="card.available=deckCardAvailable"
+        :buttonClicked="buttonClicked"
         @doAction="buyCard(card)"
       />
     </div>
@@ -25,6 +26,7 @@ export default {
     deckCardAvailable:Boolean,
     marketValues: Object,
     placement: Array,
+    buttonClicked: Object,
   },
   methods: {
     cannotAfford: function (cost) {
@@ -68,7 +70,9 @@ export default {
     },
     buyCard: function (card) {
       if (card.available) {
-        this.$emit("buyCard", card);
+
+        console.log('this.buttonClicked CollectorsBuyAction: ' + this.buttonClicked);
+        this.$emit("buyCard", {card: card, p: this.buttonClicked});
         this.highlightAvailableCards();
       }
     },
