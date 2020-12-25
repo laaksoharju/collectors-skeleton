@@ -25,12 +25,12 @@ export default {
   props: {
     card: Object,
     availableAction: Boolean,
-    deckCard: Boolean,
+    deckCardAvailable: Boolean,
     index: Number,
   },
   data: function () {
     return {
-      available: this.deckCard,
+      available: this.deckCardAvailable,
     };
   },
 

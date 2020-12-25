@@ -11,20 +11,21 @@
         :availableAction="(card.available = deckCardAvailable)"
         :buttonClicked="buttonClicked"
         :index="index"
-        :deckCardAvaliable="deckCardAvailable"
-        :handCardAvaliable="handCardAvailable"
+        :deckCardAvailable="deckCardAvailable"
+        :handCardAvailable="card.available=handCardAvailable"
         v-if="deckCard === true"
         @doAction="buyCard(card)"
       />
       <CollectorsCard
         :card="card"
         :index="index"
-        :deckCardAvaliable="deckCardAvailable"
-        :handCardAvaliable="handCardAvailable"
+        :deckCardAvailable="deckCardAvailable"
+        :handCardAvailable="card.available=handCardAvailable"
         v-else
         :availableAction="card.available"
         :buttonClicked="buttonClicked"
         @doAction="buyCard(card)"
+
       />
     </div>
   </div>
@@ -43,7 +44,7 @@ export default {
     player: Object,
     itemsOnSale: Array,
     deckCardAvailable: Boolean,
-    handCardAvaliable: Boolean,
+    handCardAvailable: Boolean,
     marketValues: Object,
     placement: Array,
     buttonClicked: Object,

@@ -102,6 +102,7 @@
               :player="players[playerId]"
               :marketValues="marketValues"
               :placement="marketPlacement"
+              :itemsOnSale="players[playerId].hand"
               @placeBottle="placeBottle('market', $event)"
             />
           </section>
@@ -895,7 +896,7 @@ export default {
         this.workPlacement = d.placements.workPlacement;
         this.round = d.round;
         this.deckAuction = d.deckAuction;
-        this.start_auction = d.start_auction;
+        /*this.start_auction = d.start_auction;*/
       }.bind(this)
     );
 
@@ -1051,6 +1052,8 @@ export default {
       }
     },
     placeBottle: function (action, p) {
+
+      console.log('collectors place bottle');
       this.buttonClicked = p;
 
       if (p.cashForCard > 0) {
@@ -1088,7 +1091,7 @@ export default {
       let sortval = val.sort((a, b) => b.auction_amount - a.auction_amount);
       return sortval[0];
     },
-    buyCard: function (action, card) {
+    buyCard: function (action, d) {
       if (action === "win_auction") {
         let max_val = this.getmax();
         console.log(max_val.id, this.playerId);
@@ -1098,10 +1101,11 @@ export default {
           this.$store.state.socket.emit("collectorsBuyCard", {
             roomId: this.$route.params.id,
             playerId: this.playerId,
-            card: card,
+            card: d.card,
             action: action,
-            cost: this.marketValues[card.market],
+            cost: this.marketValues[d.card.market],
             start_auction: this.players[this.playerId].start_auction,
+
           });
           // document.getElementById("players_auction").hidden = false;
         } else {
@@ -1120,7 +1124,7 @@ export default {
           playerId: this.playerId,
           card: d.card,
           action: action,
-          cost: this.marketValues[card.market] + this.chosenPlacementCost,
+          cost: this.marketValues[d.card.market] + this.chosenPlacementCost,
           start_auction: this.players[this.playerId].start_auction,
           p: d.p,
         });
