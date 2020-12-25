@@ -8,13 +8,12 @@
       <!-- {{ deckCardAvailable }} -->
       <CollectorsCard
         :card="card"
-        :availableAction="card.available=deckCardAvailable"
+        :availableAction="(card.available = deckCardAvailable)"
         :buttonClicked="buttonClicked"
         :index="index"
         :deckCardAvaliable="deckCardAvailable"
         :handCardAvaliable="handCardAvailable"
         v-if="deckCard === true"
-        :availableAction="(card.available = deckCard)"
         @doAction="buyCard(card)"
       />
       <CollectorsCard
@@ -97,9 +96,10 @@ export default {
     },
     buyCard: function (card) {
       if (card.available) {
-
-        console.log('this.buttonClicked CollectorsBuyAction: ' + this.buttonClicked);
-        this.$emit("buyCard", {card: card, p: this.buttonClicked});
+        console.log(
+          "this.buttonClicked CollectorsBuyAction: " + this.buttonClicked
+        );
+        this.$emit("buyCard", { card: card, p: this.buttonClicked });
         this.highlightAvailableCards();
       }
     },
@@ -110,7 +110,7 @@ export default {
 <style scoped>
 .buy-cards {
   display: grid;
-  grid-template-columns:repeat(5,1fr);
+  grid-template-columns: repeat(5, 1fr);
   grid-gap: 1rem;
 }
 

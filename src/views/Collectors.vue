@@ -194,7 +194,7 @@
                   :player="players[playerId]"
                   :itemsOnSale="players[playerId].hand"
                   :handCardAvailable="handCardAvailable"
-                  :buttonClicked ="buttonClicked"
+                  :buttonClicked="buttonClicked"
                   :marketValues="marketValues"
                   :placement="buyPlacement"
                   @buyCard="buyCard('hand', $event)"
@@ -357,11 +357,18 @@
                     {{ playerskill["VP-music"] }}
                   </p>
                 </div>
-                <div v-if="card.skill==='VP-figure'" class="player-skills-8">
-                  <img src="/images/skills/VP-figure.jpg" alt="Player Items 1" />
-                  <p v-if="countskills(players[playerId].skills,'VP-figure')>1 ">
-                      {{playerskill['VP-figure']}}
-                         </p>
+                <div v-if="card.skill === 'VP-figure'" class="player-skills-8">
+                  <img
+                    src="/images/skills/VP-figure.jpg"
+                    alt="Player Items 1"
+                  />
+                  <p
+                    v-if="
+                      countskills(players[playerId].skills, 'VP-figure') > 1
+                    "
+                  >
+                    {{ playerskill["VP-figure"] }}
+                  </p>
                 </div>
                 <div v-if="card.skill === 'VP-all'" class="player-skills-9">
                   <img src="/images/skills/VP-all.jpg" alt="Player Items 1" />
@@ -1044,13 +1051,12 @@ export default {
       }
     },
     placeBottle: function (action, p) {
-
       this.buttonClicked = p;
 
-      if (p.cashForCard > 0){
+      if (p.cashForCard > 0) {
         this.handCardAvailable = true;
       }
-      if (p.raiseValue > 0 && p.raiseValue !== undefined){
+      if (p.raiseValue > 0 && p.raiseValue !== undefined) {
         this.handCardAvailable = true;
       }
 

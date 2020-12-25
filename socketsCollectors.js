@@ -14,21 +14,21 @@ function sockets(io, socket, data) {
         auctionCards: data.getAuctionCards(d.roomId),
         placements: data.getPlacements(d.roomId),
         round: data.getRound(d.roomId),
-        decKAuction:data.getDeckauctionCard(d.roomId)
-      }
-    );
-  }
-  });socket.on('updatePlayerName', function (d)
-  {
-    io.to(d.roomId).emit('updatePlayerName',
+        decKAuction: data.getDeckauctionCard(d.roomId),
+      });
+    }
+  });
+  socket.on("updatePlayerName", function(d) {
+    io.to(d.roomId).emit(
+      "updatePlayerName",
       data.updatePlayerName(d.roomId, d.playerId, d.playerName)
     );
   });
 
-socket.on('updatePlayerAuction', function (d)
-  {
+  socket.on("updatePlayerAuction", function(d) {
     // console.log("insockets" + d.auction_amount)
-    io.to(d.roomId).emit('updatePlayerName',
+    io.to(d.roomId).emit(
+      "updatePlayerName",
       data.updatePlayerAuction(d.roomId, d.playerId, d.auction_amount)
     );
   });
@@ -55,35 +55,36 @@ socket.on('updatePlayerAuction', function (d)
       data.drawCard(d.roomId, d.playerId)
     );
   });
-  socket.on('collectorsBuyCard', function (d)
-  {
-    console.log('sockets collectorBuyCard');
+  socket.on("collectorsBuyCard", function(d) {
+    console.log("sockets collectorBuyCard");
 
-    data.buyCard(d.roomId, d.playerId, d.card, d.cost, d.action, d.p, d.start_auction)
-    io.to(d.roomId).emit('collectorsCardBought', {
+    data.buyCard(
+      d.roomId,
+      d.playerId,
+      d.card,
+      d.cost,
+      d.action,
+      d.p,
+      d.start_auction
+    );
+    io.to(d.roomId).emit("collectorsCardBought", {
       playerId: d.playerId,
       players: data.getPlayers(d.roomId),
       itemsOnSale: data.getItemsOnSale(d.roomId),
       skillsOnSale: data.getSkillsOnSale(d.roomId),
       auctionCards: data.getAuctionCards(d.roomId),
-      deckAuction:data.getDeckauctionCard(d.roomId),
-
-
-
-    }
-
-    )
-
+      deckAuction: data.getDeckauctionCard(d.roomId),
+    });
   });
-  socket.on('collectorsPlaceBottle', function (d)
-  {
-
-    console.log('sockets placeBottle');
+  socket.on("collectorsPlaceBottle", function(d) {
+    console.log("sockets placeBottle");
     data.placeBottle(d.roomId, d.playerId, d.action, d.p, d.hand);
 
-    console.log('sockets placeBottle after data.placeBottle');
-    io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId)
-  );
+    console.log("sockets placeBottle after data.placeBottle");
+    io.to(d.roomId).emit(
+      "collectorsBottlePlaced",
+      data.getPlacements(d.roomId)
+    );
   });
 }
 module.exports = sockets;
