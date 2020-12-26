@@ -1,5 +1,14 @@
 <template>
   <main>
+    <div id="winnerWrap">
+      <div id="winnerDiv">
+        <h3 v-if="activeRound === 5 && getWinner().length === 2">{{labels.congratulationsOne}} {{getWinner()[1]}} {{labels.whoWon}} {{getWinner()[0]}} {{labels.points}}</h3>
+        <h3 v-if="activeRound === 5 && getWinner().length === 3">{{labels.congratulationsMany}} {{getWinner()[1]}} {{labels.and}} {{getWinner()[2]}} {{labels.whoWon}} {{getWinner()[0]}} {{labels.points}}</h3>
+        <h3 v-if="activeRound === 5 && getWinner().length === 4">{{labels.congratulationsMany}} {{getWinner()[1]}}, {{getWinner()[2]}} {{labels.and}} {{getWinner()[3]}} {{labels.whoWon}} {{getWinner()[0]}} {{labels.points}}</h3>
+        <h3 v-if="activeRound === 5 && getWinner().length === 5">{{labels.congratulationsMany}} {{getWinner()[1]}}, {{getWinner()[2]}}, {{getWinner()[3]}} {{labels.and}} {{getWinner()[4]}} {{labels.whoWon}} {{getWinner()[0]}} {{labels.points}}</h3>
+      </div>
+    </div>
+
     <div id="container">
 
       <div id="BuyItemDiv">
@@ -509,6 +518,9 @@ methods: {
         winnerArray.push(Object.keys(this.players)[index]);
       }
     }
+    document.getElementById('container').style.filter = "blur(7px)";
+    document.getElementById('container').style.transition = "7s";
+    document.getElementById('winnerWrap').style.display="block";
     return winnerArray
   },
 
@@ -735,12 +747,49 @@ footer a:visited {
   color:ivory;
 }
 
+#winnerWrap {
+  width: 50em;
+  height: 100%;
+  position: relative;
+  margin: auto;
+  display: none;
+}
+
+#winnerDiv {
+  background: radial-gradient(#f5f2cc, darkgray);
+  padding: 10px 0 10px 0;
+  border-radius: 10px;
+  border: 10px double #f5f2cc;
+  text-align: center;
+  position: absolute;
+  height: 15em;
+  width: 50em;
+  z-index: 1;
+  animation: winner 2s forwards, winnerDivBorderAnimation 4s infinite;
+}
+
+#winnerDiv h3 {
+  vertical-align: middle;
+}
+
+@keyframes winner {
+  from {top: 0;}
+  to {top: 85em;}
+}
+
+@keyframes winnerDivBorderAnimation {
+  0%   {box-shadow: 0 0 50px yellow;}
+  25%  {box-shadow: 0 0 50px darkgray;}
+  50%  {box-shadow: 0 0 50px yellow;}
+  75%  {box-shadow: 0 0 50px darkgray;}
+  100% {box-shadow: 0 0 50px yellow;}
+}
+
 #BuyItemDiv {
   grid-area: BuyItemDiv;
   align-self: center;
   background: #f9dcce;
   margin: 5px;
-
 }
 
 #BuySkillDiv {
@@ -856,11 +905,11 @@ footer a:visited {
   width: 7em;
   border-radius: 50%;
   box-shadow: 0 0 30px yellow;
-  animation: borderAnimation 5s ease;
+  animation: bottleBorderAnimation 5s ease;
   animation-iteration-count: infinite;
 }
 
-@keyframes borderAnimation {
+@keyframes bottleBorderAnimation {
   0%   {box-shadow: 0 0 30px yellow;}
   25%  {box-shadow: 0 0 30px pink;}
   50%  {box-shadow: 0 0 30px yellow;}
@@ -1070,4 +1119,5 @@ footer a:visited {
     -moz-transform: scale(0.4);
   }
 }
+
 </style>

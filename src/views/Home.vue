@@ -23,8 +23,8 @@
             <span class="playerNumber"> {{i+1}} </span> players
          </button>
        </a>
-        <a class="rules" href="/rules_collectors.pdf" target="_blank">
-          <button>
+        <a href="/rules_collectors.pdf" target="_blank">
+          <button class="rules">
             Rules
           </button>
         </a>
@@ -38,7 +38,7 @@
             </button>
           </a>
         <a class="rules" href="/rules_collectors.pdf" target="_blank">
-          <button>
+          <button class="rules">
             Spelregler
           </button>
         </a>
