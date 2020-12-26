@@ -1114,15 +1114,17 @@ export default {
           this.players[this.playerId].start_auction = true;
         }
         // document.getElementById("players_auction").hidden = this.start_auction;
-
+        console.log("*****************'");
+        console.log(action);
         this.$store.state.socket.emit("collectorsBuyCard", {
           roomId: this.$route.params.id,
           playerId: this.playerId,
-          card: d.card,
+          card: card,
           action: action,
           cost: this.marketValues[card.market] + this.chosenPlacementCost,
+
+          p: action,
           start_auction: this.players[this.playerId].start_auction,
-          p: d.p,
         });
       }
     },
@@ -1221,8 +1223,8 @@ footer a:visited {
 
 .do_auction .buy-cards {
   position: relative;
-  left: -27.5vw;
-  top: -35vh;
+  left: -21.5vw;
+  top: -37vh;
   display: grid;
   grid-template-columns: repeat(3, 10rem);
   grid-template-rows: repeat(2, 10rem);
@@ -1312,6 +1314,10 @@ footer a:visited {
   transform: scale(0.22) translate(-50%, -50%);
   z-index: 5;
   /* left: 39.5vw; */
+}
+::v-deep .do_auction .buy-cards .cardslots {
+  height: 10rem;
+  width: 10rem;
 }
 
 ::v-deep .do_auction .buy-cards .cardslots.\33 {
@@ -1426,11 +1432,11 @@ footer a:visited {
   transfrom: scale(03) translate(-110%, -110%);
 }
 
-.cardslots {
+/* .cardslots {
   display: grid;
   grid-template-columns: repeat(auto-fill, 80px);
   grid-template-rows: repeat(auto-fill, 100px);
-}
+} */
 
 .secret-card div {
   border: dashed green;

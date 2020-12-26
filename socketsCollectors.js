@@ -73,7 +73,7 @@ function sockets(io, socket, data) {
       itemsOnSale: data.getItemsOnSale(d.roomId),
       skillsOnSale: data.getSkillsOnSale(d.roomId),
       auctionCards: data.getAuctionCards(d.roomId),
-      deckAuction: data.getDeckauctionCard(d.roomId),
+      deckAuction: data.getDeckauctionCard(d.roomId)
     });
   });
   socket.on("collectorsPlaceBottle", function(d) {
