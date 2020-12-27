@@ -12,15 +12,25 @@
         :buttonClicked="buttonClicked"
         :index="index"
         :deckCardAvailable="deckCardAvailable"
-        :handCardAvailable="card.available=handCardAvailable"
+
         v-if="deckCard === true"
         @doAction="buyCard(card)"
       />
       <CollectorsCard
         :card="card"
         :index="index"
+        v-else-if="handCardAvailable"
+        :availableAction="card.available=handCardAvailable"
+        :buttonClicked="buttonClicked"
+        @doAction="buyCard(card)"
+
+      />
+
+      <CollectorsCard
+        :card="card"
+        :index="index"
         :deckCardAvailable="deckCardAvailable"
-        :handCardAvailable="card.available=handCardAvailable"
+
         v-else
         :availableAction="card.available"
         :buttonClicked="buttonClicked"

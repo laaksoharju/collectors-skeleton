@@ -777,7 +777,10 @@ export default {
       marketPlacement: [],
       workPlacement: [],
       deckAuction: [],
+      cardClicked: 0,
+      clickCardTimes: 0,
       chosenPlacementCost: null,
+
       marketValues: {
         fastaval: 0,
         movie: 0,
@@ -977,8 +980,14 @@ export default {
         this.skillsOnSale = d.skillsOnSale;
         this.auctionCards = d.auctionCards;
         this.deckAuction = d.deckAuction;
-        this.handCardAvailable = false;
+        this.marketValues = d.marketValues;
         this.deckCardAvailable = false;
+        this.cardClicked += 1
+        if (this.cardClicked == this.clickCardTimes){
+          this.handCardAvailable = false;
+          this.cardClicked = 0;
+          this.clickCardTimes = 0;
+        }
       }.bind(this)
     );
   },
@@ -1052,6 +1061,8 @@ export default {
       }
     },
     placeBottle: function (action, p) {
+
+      this.clickCardTimes = p.clickCardTimes;
 
       console.log('collectors place bottle');
       this.buttonClicked = p;
@@ -1226,7 +1237,7 @@ footer a:visited {
 .do_auction .buy-cards {
   position: relative;
   left: -27.5vw;
-  top: -35vh;
+  top: 100vh;
   display: grid;
   grid-template-columns: repeat(3, 10rem);
   grid-template-rows: repeat(2, 10rem);
