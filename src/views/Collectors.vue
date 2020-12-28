@@ -416,7 +416,9 @@
                 <img
                   src="/images/player-cards-for-coins.png"
                   alt="Player Cards for Coins"
-                />x4
+                />x{{
+                  players[otherPlayerId].cardsForCash
+                }}
               </div>
             </div>
             <div

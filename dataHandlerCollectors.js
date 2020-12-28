@@ -461,6 +461,30 @@ Data.prototype.nextRound = function(roomId) {
       }
     }
 
+    // PHASE 4: GET INCOME
+    for (var key in room.players) {
+      if (room.players.hasOwnProperty(key)) {
+        // Each player takes one coin for each income symbol on the player board that is not covered by a bottle
+        // Draw one card, unless a bottle covers the “draw one card” symbol.
+        if (room.players[key].bottles < 3) {
+          // Take one card
+          let card = room.deck.pop();
+          room.players[key].hand.push(card);
+          // Get three coins 
+          room.players[key].money +=3;
+        } else if (room.players[key].bottles == 3) {
+          // Get three coins
+          room.players[key].money +=3;
+        } else if (room.players[key].bottles == 4) {
+          // Get two coins
+          room.players[key].money +=2;
+        }
+        // for each card tucked under the player board with an income symbol on it
+        room.players[key].money += room.players[key].cardsForCash;
+        room.players[key].cardsForCash = 0;
+      }
+    }
+    
     // PHASE 5: REMOVE A QUARTER TILE
     room.round = room.round + 1;
     room.workPlacement[0].cost += 1;
