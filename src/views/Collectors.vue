@@ -1438,7 +1438,8 @@ footer a:visited {
   grid-gap: 0.5em;
 }
 .player-hand .cardslots div {
-  transfrom: scale(03) translate(-110%, -110%);
+  transfrom: scale(0.3) translate(-110%, -110%);
+
 }
 
 .cardslots {

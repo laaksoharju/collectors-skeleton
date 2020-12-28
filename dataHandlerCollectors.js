@@ -56,6 +56,9 @@ Data.prototype.getUILabels = function(roomId) {
 Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
   let room = {};
   room.players = {};
+  room.nrPlayerToJoin = 0;
+  room.firstTojoin = true;
+  room.turnToPlay = null;
   room.playerColors = ["violet", "blue", "brown", "grey"];
   room.lang = lang;
   room.deck = this.createDeck(lang);
@@ -289,7 +292,20 @@ Data.prototype.createDeck = function() {
 };
 
 Data.prototype.joinGame = function(roomId, playerId) {
+  console.log('dataHandler joinGame');
+
   let room = this.rooms[roomId];
+
+  if (room.firstTojoin){
+    room.turnToPlay = true;
+    room.firstTojoin = false;
+
+  }
+  else {
+    room.turnToPlay = false;
+
+  }
+
   if (typeof room !== "undefined") {
     if (typeof room.players[playerId] !== "undefined") {
       console.log(
@@ -315,7 +331,11 @@ Data.prototype.joinGame = function(roomId, playerId) {
         cardsForCash: 0,
         auction_amount: 0,
         start_auction: true,
+        nrPlayerToJoin: room.nrPlayerToJoin,
+        playersTurn: room.turnToPlay,
+
       };
+      room.nrPlayerToJoin += 1;
       return true;
     }
     console.log("Player", playerId, "was declined due to player limit");
@@ -708,11 +728,15 @@ Data.prototype.buyCard = function(
 
 
 Data.prototype.placeBottle = function(roomId, playerId, action, p) {
-  console.log("dataHandler type of this.rooms[roomId] " + this.rooms[roomId]);
+
+/*  this.calcPlayersTurns(roomId, playerId);*/
 
   var buttonId = p.buttonId;
   var cost = p.cost;
   let room = this.rooms[roomId];
+
+
+  console.log("dataHandler typeof.this.players: " + typeof room.players[playerId]);
 
   /*for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
     var card = room.players[playerId].hand[i];
@@ -821,6 +845,37 @@ Data.prototype.getDeckauctionCard = function(roomId) {
   if (typeof room !== "undefined") {
     return room.deckAuction;
   } else return [];
+};
+
+Data.prototype.calcPlayersTurns = function(roomId) {
+  let room = this.rooms[roomId];
+
+
+    for (var key in room.players) {
+
+      if (room.players[key].playersTurn) {
+        room.players[key].playersTurn = false;
+      }
+      else {
+        room.players[key].hasentPlayedInTurns += 1
+
+      }
+
+      if (room.players[key].hasentPlayedInTurns == room.nrOfPlayers - 1){
+        if (room.players[key].bottles)
+      }
+
+
+
+
+    /*  if (room.players[playerId].playersTurn == true){
+        room.players[playerId].playersTurn == false;
+
+
+      }*/
+      }
+
+
 };
 
 module.exports = Data;
