@@ -73,6 +73,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       recieveCards: 0,
       cashForCard: 0,
       buttonId: 1,
+      clickCardTimes: 1,
     },
     {
       cost: 1,
@@ -81,6 +82,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       recieveCards: 0,
       cashForCard: 0,
       buttonId: 2,
+      clickCardTimes: 1,
     },
     {
       cost: 2,
@@ -89,6 +91,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       recieveCards: 0,
       cashForCard: 0,
       buttonId: 3,
+      clickCardTimes: 1,
     },
     {
       cost: 2,
@@ -97,6 +100,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       recieveCards: 0,
       cashForCard: 0,
       buttonId: 4,
+      clickCardTimes: 1,
     },
     {
       cost: 3,
@@ -105,6 +109,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       recieveCards: 0,
       cashForCard: 0,
       buttonId: 5,
+      clickCardTimes: 1,
     },
   ];
   room.skillPlacement = [
@@ -115,6 +120,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       recieveCards: 0,
       cashForCard: 0,
       buttonId: 6,
+      clickCardTimes: 1,
     },
     {
       cost: 0,
@@ -123,6 +129,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       recieveCards: 0,
       cashForCard: 0,
       buttonId: 7,
+      clickCardTimes: 1,
     },
     {
       cost: 0,
@@ -131,6 +138,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       recieveCards: 0,
       cashForCard: 0,
       buttonId: 8,
+      clickCardTimes: 1,
     },
     {
       cost: 1,
@@ -139,6 +147,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       recieveCards: 0,
       cashForCard: 0,
       buttonId: 9,
+      clickCardTimes: 1,
     },
     {
       cost: 1,
@@ -147,16 +156,18 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       recieveCards: 0,
       cashForCard: 0,
       buttonId: 10,
+      clickCardTimes: 1,
     },
   ];
   room.workPlacement = [
     {
-      cost: -3,
+      cost: 0,
       playerId: null,
       bottleType: "normal",
       recieveCards: 0,
-      cashForCard: 0,
+      cashForCard: 2,
       buttonId: 11,
+      clickCardTimes: 2,
     },
     {
       cost: -1,
@@ -165,6 +176,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       recieveCards: 0,
       cashForCard: 0,
       buttonId: 12,
+      clickCardTimes: 1,
     },
     {
       cost: 1,
@@ -173,6 +185,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       recieveCards: 2,
       cashForCard: 0,
       buttonId: 13,
+      clickCardTimes: 1,
     },
     {
       cost: 0,
@@ -181,6 +194,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       recieveCards: 1,
       cashForCard: 0,
       buttonId: 14,
+      clickCardTimes: 1,
     },
     {
       cost: 0,
@@ -189,6 +203,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       recieveCards: 1,
       cashForCard: 1,
       buttonId: 15,
+      clickCardTimes: 1,
     },
   ];
   room.auctionPlacement = [
@@ -199,6 +214,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       recieveCards: 0,
       cashForCard: 0,
       buttonId: 16,
+      clickCardTimes: 1,
     },
     {
       cost: -1,
@@ -207,6 +223,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       recieveCards: 0,
       cashForCard: 0,
       buttonId: 17,
+      clickCardTimes: 1,
     },
     {
       cost: 0,
@@ -215,6 +232,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       recieveCards: 0,
       cashForCard: 0,
       buttonId: 18,
+      clickCardTimes: 1,
     },
     {
       cost: 0,
@@ -223,6 +241,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       recieveCards: 0,
       cashForCard: 0,
       buttonId: 19,
+      clickCardTimes: 1,
     },
   ];
   room.marketPlacement = [
@@ -234,6 +253,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 20,
       raiseValue: 2,
+      clickCardTimes: 2,
     },
     {
       cost: 2,
@@ -243,6 +263,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 21,
       raiseValue: 2,
+      clickCardTimes: 2,
     },
     {
       cost: 0,
@@ -252,6 +273,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 22,
       raiseValue: 1,
+      clickCardTimes: 1,
     },
   ];
   room.round = 1;
@@ -470,7 +492,7 @@ Data.prototype.nextRound = function(roomId) {
           // Take one card
           let card = room.deck.pop();
           room.players[key].hand.push(card);
-          // Get three coins 
+          // Get three coins
           room.players[key].money +=3;
         } else if (room.players[key].bottles == 3) {
           // Get three coins
@@ -484,10 +506,14 @@ Data.prototype.nextRound = function(roomId) {
         room.players[key].cardsForCash = 0;
       }
     }
-    
+
     // PHASE 5: REMOVE A QUARTER TILE
     room.round = room.round + 1;
-    room.workPlacement[0].cost += 1;
+    if (room.round == 4) {
+      room.workPlacement[0].clickCardTimes = 0;
+      room.workPlacement[0].cashForCard = 0;
+    }
+    room.workPlacement[0].cost -= 1;
     return true;
   } else {
     console.log("Error moving to next round");
@@ -534,7 +560,7 @@ Data.prototype.buyCard = function(
     let c = null;
 
     // check first if the player has enough bottles and money to buy the card
-    if (
+    /*if (
       room.players[playerId].money < cost ||
       room.players[playerId].bottles < 1
     ) {
@@ -542,7 +568,7 @@ Data.prototype.buyCard = function(
         "Player doesn't have enough money or bottles to buy the card"
       );
       return;
-    }
+    }*/
 
     /// check first if the card is among the items on sale
     if (action === "buy") {
@@ -668,27 +694,9 @@ Data.prototype.buyCard = function(
         room.players[playerId].cardsForCash += 1;
       }
 
-      if (p.raiseValue > 0) {
-        if (card.item === "fastaval") {
-          room.fastaval += 1;
-          console.log(room.fastaval);
-        }
-        if (card.item === "movie") {
-          room.movie += 1;
-          console.log(room.movie);
-        }
-        if (card.item === "technology") {
-          room.technology += 1;
-          console.log(room.technology);
-        }
-        if (card.item === "figures") {
-          room.figures += 1;
-          console.log(room.figures);
-        }
-        if (card.item === "music") {
-          room.music += 1;
-          console.log(room.music);
-        }
+      if (p.raiseValue > 0){
+        room.market.push(card);
+      }
 
         /*var string = card.item;
 
@@ -708,8 +716,8 @@ Data.prototype.buyCard = function(
         }
       }
     }
-  }
-};
+  };
+
 
 Data.prototype.placeBottle = function(roomId, playerId, action, p) {
   console.log("dataHandler type of this.rooms[roomId] " + this.rooms[roomId]);

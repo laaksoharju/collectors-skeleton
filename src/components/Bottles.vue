@@ -99,6 +99,7 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
+      console.log('bottles place bottle');
 
 // console.log(this.typeofaction);
       this.$emit("placeBottle", p);
