@@ -456,15 +456,6 @@ export default {
       maxSizes: { x: 0, y: 0 },
       labels: {},
       players: {},
-      // playerId: {
-      //   hand: [],
-      //   money: 1,
-      //   points: 0,
-      //   skills: [],
-      //   items: [],
-      //   income: [],
-      //   secret: []
-      // }
       buyPlacement: [],
       skillPlacement: [],
       auctionPlacement: [],
@@ -515,6 +506,10 @@ export default {
         workerIncome: 0,
         auctionIncome: 0,
       },
+      playerState: {
+        saleItems: [],
+        action: "",
+      },
     };
   },
   computed: {
@@ -523,10 +518,10 @@ export default {
     },
   },
   watch: {
-    players: function (newP, oldP) {
+    players: function (/*newP, oldP*/) {
       // console.log(Object.keys(newP).length);
       // console.log(Object.keys(oldP).length);
-      console.log(newP, oldP);
+      // console.log(newP, oldP);
       for (let p in this.players) {
         for (let c = 0; c < this.players[p].hand.length; c += 1) {
           if (typeof this.players[p].hand[c].item !== "undefined")
@@ -547,6 +542,7 @@ export default {
       roomId: this.$route.params.id,
       playerId: this.playerId,
     });
+
     this.$store.state.socket.on(
       "collectorsInitialize",
       function (d) {
@@ -561,6 +557,10 @@ export default {
         this.marketPlacement = d.placements.marketPlacement;
         this.auctionPlacement = d.placements.auctionPlacement;
         this.workPlacement = d.placements.workPlacement;
+        this.playerState = d.playerState;
+        if (this.playerState.action !== "") {
+          this.handlePlayerState();
+        }
       }.bind(this)
     );
 
@@ -618,7 +618,6 @@ export default {
     this.$store.state.socket.on(
       "collectorsCardBought",
       function (d) {
-        console.log(d.playerId, "bought a card");
         this.players = d.players;
         this.itemsOnSale = d.itemsOnSale;
         this.skillsOnSale = d.skillsOnSale;
@@ -626,6 +625,22 @@ export default {
     );
   },
   methods: {
+    handlePlayerState: function () {
+      var action = this.playerState.action;
+
+      if (action === "buy" || action === "market") {
+        this.itemsOnSale = this.playerState.saleItems;
+        this.highlightCards(this.itemsOnSale);
+      } else if (action === "skill") {
+        this.skillsOnSale = this.playerState.saleItems;
+        this.highlightCards(this.skillsOnSale);
+      }
+    },
+    highlightCards: function (cardsToHighlight) {
+      for (let i = 0; i < cardsToHighlight.length; i++) {
+        this.$set(cardsToHighlight[i], "available", true);
+      }
+    },
     selectAll: function (n) {
       n.target.select();
     },
@@ -659,9 +674,16 @@ export default {
       return otherPlayers;
     },
     placeBottle: function (action, cost) {
+      this.saleItems = [];
+      if (action == "buy") this.saleItems = this.itemsOnSale;
+      else if (action == "skill") this.saleItems = this.skillsOnSale;
+      else if (action == "market") this.saleItems = this.itemsOnSale;
+
       this.$store.state.socket.emit("collectorsBottleClicked", {
         roomId: this.$route.params.id,
         playerId: this.playerId,
+        saleItems: this.saleItems,
+        action: action,
         clickedOnBottle: true,
       });
 
@@ -680,7 +702,8 @@ export default {
       });
     },
     buyCard: function (action, card) {
-      console.log("buyCard", card);
+      // console.log("buyCard", card);
+
       this.$store.state.socket.emit("collectorsBuyCard", {
         roomId: this.$route.params.id,
         playerId: this.playerId,
@@ -707,7 +730,7 @@ export default {
         }
       });
       this.playerskill[String(card)] = count;
-      console.log(this.playerskill[card]);
+      // console.log(this.playerskill[card]);
       return count;
     },
   },

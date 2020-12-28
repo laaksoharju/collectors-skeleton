@@ -84,7 +84,15 @@ export default {
     marketValues: Object,
     placement: Array,
   },
+
   methods: {
+    isAvailableCards: function (card, cost) {
+      if (this.marketValues[card.item] <= this.player.money - cost) {
+        this.$set(card, "available", true);
+      } else {
+        this.$set(card, "available", false);
+      }
+    },
     cannotAfford: function (cost) {
       let minCost = 100;
       for (let key in this.marketValues) {
@@ -106,34 +114,12 @@ export default {
         this.highlightAvailableCards(p.cost);
       }
     },
-    isAvailableCards: function (card, cost) {
-      if (this.marketValues[card.item] <= this.player.money - cost) {
-        this.$set(card, "available", true);
-      } else {
-        this.$set(card, "available", false);
-      }
-    },
     highlightAvailableCards: function (cost = 100) {
       for (let i = 0; i < this.itemsOnSale.length; i += 1) {
         this.isAvailableCards(this.itemsOnSale[i], cost);
-        // if (
-        //   this.marketValues[this.itemsOnSale[i].item] <=
-        //   this.player.money - cost
-        // ) {
-        //   this.$set(this.itemsOnSale[i], "available", true);
-        // } else {
-        //   this.$set(this.itemsOnSale[i], "available", false);
-        // }
-        // this.chosenPlacementCost = cost;
       }
       for (let i = 0; i < this.player.hand.length; i += 1) {
         this.isAvailableCards(this.player.hand[i], cost);
-      }
-    },
-    buyCard: function (card) {
-      if (card.available) {
-        this.$emit("buyCard", card);
-        this.highlightAvailableCards();
       }
     },
   },

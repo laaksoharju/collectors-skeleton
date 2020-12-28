@@ -9,6 +9,7 @@ function sockets(io, socket, data)
     socket.join(d.roomId);
     if (data.joinGame(d.roomId, d.playerId))
     {
+      // console.log("Hello from collectorsLoaded");
       socket.emit('collectorsInitialize', {
         labels: data.getUILabels(d.roomId),
         players: data.getPlayers(d.roomId),
@@ -16,8 +17,8 @@ function sockets(io, socket, data)
         marketValues: data.getMarketValues(d.roomId),
         skillsOnSale: data.getSkillsOnSale(d.roomId),
         auctionCards: data.getAuctionCards(d.roomId),
-        placements: data.getPlacements(d.roomId)
-
+        placements: data.getPlacements(d.roomId),
+        playerState: data.getPlayerState(d.roomId, d.playerId),
       }
       );
     }
@@ -41,7 +42,7 @@ function sockets(io, socket, data)
   });
   socket.on('collectorsBuyCard', function (d)
   {
-    console.log('rich socket')
+    // console.log('rich socket')
 
     data.buyCard(d.roomId, d.playerId, d.card, d.cost, d.action)
     io.to(d.roomId).emit('collectorsCardBought', {
@@ -61,7 +62,7 @@ function sockets(io, socket, data)
 
   socket.on('collectorsBottleClicked', function (d)
   {
-    data.bottleClicked(d.roomId, d.playerId, d.clickedOnBottle);
+    data.bottleClicked(d.roomId, d.playerId, d.saleItems, d.action, d.clickedOnBottle);
     io.to(d.roomId).emit('collectorsBottleClicked',
       data.getPlayers(d.roomId)
     );

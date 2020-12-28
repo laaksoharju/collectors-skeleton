@@ -5,11 +5,13 @@ import io from 'socket.io-client'
 Vue.use(Vuex)
 
 /* https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript */
-function makeId(length = 10) {
+function makeId(length = 10)
+{
   let result = '';
   let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let charactersLength = characters.length;
-  for ( let i = 0; i < length; i++ ) {
+  for (let i = 0; i < length; i++)
+  {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
@@ -24,26 +26,32 @@ export default new Vuex.Store({
     lang: "en"
   },
   mutations: {
-    SETUP_GAME(state, d) {
+    SETUP_GAME(state, d)
+    {
       state.playerCount = d.playerCount;
-      state.socket.emit('setupCollectors', 
+      state.socket.emit('setupCollectors',
         {
-          playerCount: d.playerCount, 
+          playerCount: d.playerCount,
           roomId: state.roomId,
-          lang: state.lang });
+          lang: state.lang
+        });
     },
-    SET_PLAYER_COUNT(state, d) {
+    SET_PLAYER_COUNT(state, d)
+    {
       state.playerCount = d;
     },
-    SET_ROOM_ID(state) {
+    SET_ROOM_ID(state)
+    {
       state.roomId = makeId();
     },
-    SET_LANG(state, d) {
+    SET_LANG(state, d)
+    {
       state.lang = d;
     },
-    SET_PLAYER_ID(state, d = makeId(4)) {
+    SET_PLAYER_ID(state, d = makeId(4))
+    {
       state.playerId = d;
-      console.log("playerid and playercount ",state.playerId,state.playerCount)
+      // console.log("playerid and playercount ",state.playerId,state.playerCount)
     }
   },
   actions: {

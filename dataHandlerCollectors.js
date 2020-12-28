@@ -117,7 +117,7 @@ Data.prototype.joinGame = function (roomId, playerId)
   {
     if (typeof room.players[playerId] !== 'undefined')
     {
-      console.log("Player", playerId, "joined again with info", room.players[playerId]);
+      // console.log("Player", playerId, "joined again with info", room.players[playerId]);
       return true;
     }
     else if (Object.keys(room.players).length < room.playerCount)
@@ -126,7 +126,7 @@ Data.prototype.joinGame = function (roomId, playerId)
       room.players[playerId] = {
         playerName: playerId,
         hand: room.deck.splice(0, 2), // Two cards are kept secret and form the hands of each player
-        // money: Object.keys(room.players).length == 0 ? 5 : Object.keys(room.players).length + 2,
+        // money: 10,
         money: Object.keys(room.players).length + 2,
         points: 0,
         skills: [],
@@ -135,7 +135,13 @@ Data.prototype.joinGame = function (roomId, playerId)
         secret: room.deck.splice(0, 1), // picks one card and places it face down, tucked under their player board at the position marked with a treasure chest.
         color: room.playerColors.pop(),
         bottles: 2,
+        // bottles: 5,
         clickedOnBottle: false,
+        playerState:
+        {
+          saleItems: [],
+          action: "",
+        },
       };
       return true;
     }
@@ -165,6 +171,16 @@ Data.prototype.updatePoints = function (roomId, player, points)
   else return {};
 }
 
+Data.prototype.getPlayerState = function (roomId, playerId)
+{
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined')
+  {
+    return room.players[playerId].playerState;
+  }
+  else return {};
+}
+
 Data.prototype.updatePlayerName = function (roomId, playerId, playerName)
 {
   let room = this.rooms[roomId];
@@ -174,7 +190,6 @@ Data.prototype.updatePlayerName = function (roomId, playerId, playerName)
     return room.players;
   }
   else return {};
-  // console.log("From data handler, Room Id: " + roomId + ", player Id: " + playerId + ", new name: " + playerName);
 }
 
 /* returns players after a new card is drawn */
@@ -198,17 +213,10 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
   {
     let c = null;
 
-    // check first if the player has enough bottles and money to buy the card
-    // if (room.players[playerId].money < cost || room.players[playerId].bottles < 1)
-    // {
-    //   console.log("Player doesn't have enough money or bottles to buy the card");
-    //   return;
-    // }
-
     /// check first if the card is among the items on sale
     if (action === 'buy')
     {
-      console.log('reach buy')
+      // console.log('reach buy')
 
       for (let i = 0; i < room.itemsOnSale.length; i += 1)
       {
@@ -239,7 +247,7 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
     }
     else if (action === 'skill')
     {
-      console.log('reach skill')
+      // console.log('reach skill')
       for (let i = 0; i < room.skillsOnSale.length; i += 1)
       {
         // since card comes from the client, it is NOT the same object (reference)
@@ -268,14 +276,16 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost, action)
   }
 
   room.players[playerId].clickedOnBottle = false;
+  room.players[playerId].playerState.saleItems = [];
+  room.players[playerId].playerState.action = "";
 }
 
-Data.prototype.bottleClicked = function (roomId, playerId, clickedOnBottle)
+Data.prototype.bottleClicked = function (roomId, playerId, saleItems, action, clickedOnBottle, cost)
 {
   let room = this.rooms[roomId];
   room.players[playerId].clickedOnBottle = clickedOnBottle;
-  console.log("Bottle clicked value changed");
-  console.log(room.players[playerId]);
+  room.players[playerId].playerState.saleItems = saleItems;
+  room.players[playerId].playerState.action = action;
 }
 
 Data.prototype.placeBottle = function (roomId, playerId, action, cost)
