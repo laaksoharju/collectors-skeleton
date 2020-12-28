@@ -64,8 +64,9 @@ function sockets(io, socket, data) {
       d.card,
       d.cost,
       d.action,
+      d.start_auction,
       d.p,
-      d.start_auction
+   
 
     );
     io.to(d.roomId).emit("collectorsCardBought", {
