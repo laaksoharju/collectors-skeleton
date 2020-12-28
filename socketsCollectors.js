@@ -64,8 +64,10 @@ function sockets(io, socket, data) {
       d.card,
       d.cost,
       d.action,
+      d.start_auction,
       d.p,
-      d.start_auction
+   
+
     );
     io.to(d.roomId).emit("collectorsCardBought", {
       playerId: d.playerId,
@@ -73,7 +75,9 @@ function sockets(io, socket, data) {
       itemsOnSale: data.getItemsOnSale(d.roomId),
       skillsOnSale: data.getSkillsOnSale(d.roomId),
       auctionCards: data.getAuctionCards(d.roomId),
-      deckAuction: data.getDeckauctionCard(d.roomId)
+      deckAuction: data.getDeckauctionCard(d.roomId),
+      marketValues: data.getMarketValues(d.roomId),
+
     });
   });
   socket.on("collectorsPlaceBottle", function(d) {
