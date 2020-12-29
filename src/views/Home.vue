@@ -4,6 +4,11 @@
       <div>
         <h1>COLLECTORS</h1>
       </div>
+
+      <button title="Rules!" type="button" id="rulesButton" class="rulesButton" v-on:click="setSprak">
+        <h2>Svenska</h2>
+      </button>
+
       <div>
         <h3> Welcome to play Collectors, please choose a setup for the game.<nav>
         </nav>In the next step you will get a link to send to the other players. </h3>
@@ -22,6 +27,7 @@
         <div id="ruleContent">
         </div>
         <div> <img id="myImage" src="/images/backgroundblue.png" height="50" > </div>
+
 
       </ul>
         <!--- sorry riktigt dålig lösning:)<br><br><br><br><br><br><br><br> -->
@@ -51,6 +57,12 @@ export default {
         lang: lang });
       this.$router.push("/room/" + this.$store.state.roomId);
     },
+
+    setSprak: function(){
+      this.$store.commit('SET_LANG','se')
+      console.log(this.$store.state.lang)
+    },
+
 
     ruleFunction: function() {
       //console.log("button clicked");
