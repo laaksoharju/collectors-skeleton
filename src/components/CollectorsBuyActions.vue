@@ -104,7 +104,9 @@ export default {
     // },
     buyCard: function (card) {
       if (card.available) {
-        this.$emit("buyCard", card);
+
+
+        this.$emit("buyCard", {card: card, p: "buttonClicked"});
         // this.highlightAvailableCards();
       }
     },

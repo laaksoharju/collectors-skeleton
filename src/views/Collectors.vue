@@ -1202,7 +1202,7 @@ export default {
           this.players[this.playerId].deckCardAvailable = false;
         }
         // document.getElementById("players_auction").hidden = this.start_auction;
-
+        console.log('collectors buycard emit collectorsbuycard');
         this.$store.state.socket.emit("collectorsBuyCard", {
           roomId: this.$route.params.id,
           playerId: this.playerId,
