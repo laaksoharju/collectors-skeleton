@@ -154,7 +154,7 @@ export default {
 }
 .buttons {
   position: relative;
-  z-index: 3;
+  z-index: 5;
 }
 
 .cardslots div {
