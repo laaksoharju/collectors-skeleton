@@ -68,6 +68,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
 
   room.auctionCards = room.deck.splice(0, 4);
   room.cardUpForAuction = {};
+  room.auctionWinner = "";
   room.highestBid = 0;
   room.market = [];
   room.buyPlacement = [ {cost:1, playerId: null},
@@ -124,7 +125,8 @@ Data.prototype.joinGame = function (roomId, playerId) {
                                  bids: 0,
                                  color: '',
                                  playerBottles: 0,
-                                 order: Object.keys(room.players).length+1
+                                 order: Object.keys(room.players).length+1,
+
                                };
       return true;
     }
@@ -217,6 +219,7 @@ Data.prototype.getSkill = function (roomId, playerId, card, skill) {
       }
     }
     room.players[playerId].skills.push(...c);
+    
   }
 }
 
@@ -249,13 +252,54 @@ Data.prototype.stopAuction = function (roomId, playerId, card) {
       console.log(room.players[allPlayersId[i]].bids);
       console.log("c", c);
     if (room.players[allPlayersId[i]].bids === room.highestBid){
-        console.log("handen för spelare med högst bud", room.players[allPlayersId[i]].hand);
-        room.players[allPlayersId[i]].hand.push(c);
-        console.log("handen efter push", room.players[allPlayersId[i]].hand);
-        room.cardUpForAuction = {};
+
+        room.auctionWinner = allPlayersId[i];
+        console.log("VINNARE" + room.auctionWinner);
+
+
+        return c;
+
       }
+
+      else return {};
+
   }
   }
+}
+
+Data.prototype.startWinnerCard = function(roomId, playerId, cardUpForAuction, action){
+  let room = this.rooms[roomId];
+
+  if (typeof room !== 'undefined') {
+    console.log("i data handler innan if winnerCard", action);
+
+    if(action==='skill'){
+      console.log("skill"+room.players[playerId].skills);
+      room.players[playerId].skills.push(room.cardUpForAuction);
+
+    }
+
+    if(action==='market'){
+      room.market.push(room.cardUpForAuction);
+      console.log("market");
+    }
+
+    if(action==='item'){
+      room.players[playerId].items.push(room.cardUpForAuction);
+      console.log("item");
+    }
+    room.cardUpForAuction = {};
+    room.highestBid = 0;
+    room.auctionWinner = "";
+    action = '';
+
+    let allPlayersId = Object.keys(room.players);
+    for (let i in allPlayersId){
+      room.players[allPlayersId[i]].bids = 0;
+    }
+
+  }
+
 }
 
 Data.prototype.startMarket = function (roomId, playerId, card) {
@@ -442,6 +486,15 @@ Data.prototype.getCardUpForAuction = function(roomId){
     return room.cardUpForAuction;
   }
   else return {};
+}
+
+Data.prototype.getAuctionWinner = function(roomId){
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    console.log( "inne i getAuctionWinner"+room.auctionWinner);
+    return room.auctionWinner;
+  }
+  else return "";
 }
 
 Data.prototype.getHighestBid = function(roomId){
