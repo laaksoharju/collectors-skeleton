@@ -335,7 +335,12 @@ Data.prototype.joinGame = function(roomId, playerId) {
         start_auction: true,
         playersTurn: room.turnToPlay,
         starts_round: room.turnToPlay,
-
+        clickedOnBottle: false,
+        playerState:
+        {
+          saleItems: [],
+          action: "",
+        }
       };
       return true;
     }
@@ -363,8 +368,19 @@ Data.prototype.updatePoints = function(roomId, player, points) {
   if (typeof room !== "undefined") {
     room.points[player] += points;
     return room.points;
-  } else return {};
+  }
+  else return {};
 };
+
+Data.prototype.getPlayerState = function (roomId, playerId)
+{
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined')
+  {
+    return room.players[playerId].playerState;
+  }
+  else return {};
+}
 
 Data.prototype.updatePlayerName = function(roomId, playerId, playerName) {
   let room = this.rooms[roomId];
@@ -570,7 +586,6 @@ Data.prototype.updatePlayerAuction = function(
     room.players[playerId].auction_amount = auction_amount;
     return room.players;
   } else return {};
-  // console.log("From data handler, Room Id: " + roomId + ", player Id: " + playerId + ", new name: " + playerName);
 };
 
 /* returns players after a new card is drawn */
@@ -755,7 +770,18 @@ Data.prototype.buyCard = function(
         }
       }
     }
+    room.players[playerId].clickedOnBottle = false;
+  room.players[playerId].playerState.saleItems = [];
+  room.players[playerId].playerState.action = "";
   };
+
+Data.prototype.bottleClicked = function (roomId, playerId, saleItems, action, clickedOnBottle, cost)
+{
+  let room = this.rooms[roomId];
+  room.players[playerId].clickedOnBottle = clickedOnBottle;
+  room.players[playerId].playerState.saleItems = saleItems;
+  room.players[playerId].playerState.action = action;
+}
 
 
 Data.prototype.placeBottle = function(roomId, playerId, action, p) {

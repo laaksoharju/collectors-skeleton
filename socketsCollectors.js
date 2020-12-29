@@ -15,6 +15,7 @@ function sockets(io, socket, data) {
         placements: data.getPlacements(d.roomId),
         round: data.getRound(d.roomId),
         decKAuction: data.getDeckauctionCard(d.roomId),
+        playerState: data.getPlayerState(d.roomId, d.playerId)
       });
     }
   });
@@ -66,7 +67,7 @@ function sockets(io, socket, data) {
       d.action,
       d.start_auction,
       d.p,
-   
+
 
     );
     io.to(d.roomId).emit("collectorsCardBought", {
@@ -90,5 +91,15 @@ function sockets(io, socket, data) {
       data.getPlacements(d.roomId)
     );
   });
+
+  socket.on('collectorsBottleClicked', function (d)
+  {
+    data.bottleClicked(d.roomId, d.playerId, d.saleItems, d.action, d.clickedOnBottle);
+    io.to(d.roomId).emit('collectorsBottleClicked',
+      data.getPlayers(d.roomId)
+    );
+
+  });
+
 }
 module.exports = sockets;
