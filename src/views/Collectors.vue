@@ -11,7 +11,7 @@
           </button>
 
             <!-- Låta spelare välja färg på flaska  -->
-          <div class="playerBottleButton" v-if="players[playerId].color === ''">
+          <div class="playerBottleButton" v-if="players[playerId] && players[playerId].color === ''">
           Choose your bottle color
 
           <!-- choosecolor - välja flaskfärg, startmoney - sätter pengarna för spelare vid start  -->
@@ -105,15 +105,19 @@
 
        <CollectorsStartAuction v-if="players[playerId]"
             :labels="labels"
+            :players="players"
             :player="players[playerId]"
             :auctionCards="auctionCards"
             :cardUpForAuction="cardUpForAuction"
             :marketValues="marketValues"
             :placement="auctionPlacement"
+            :auctionWinner="auctionWinner"
             @startAuction="whichAction($event)"
             @startBidding="startBidding($event)"
             @stopAuction="stopAuction($event)"
             @placeBottle="placeBottle('auction', $event)"
+            @startWinnerCard="startWinnerCard($event)"
+
             />
 
        <div v-if="players[playerId]" class="playerBoard">
@@ -339,6 +343,7 @@ export default {
       auctionCards: [],
       market:[],
       cardUpForAuction: {},
+      auctionWinner: "",
       chosenAction: "",
       highestBid: 0,
       rules: ""
@@ -389,6 +394,7 @@ export default {
         this.marketPlacement = d.placements.marketPlacement;
         this.auctionPlacement = d.placements.auctionPlacement;
         this.workPlacement = d.placements.workPlacement;
+        
       }.bind(this));
     this.$store.state.socket.on('collectorsBottlePlaced',
       function(d) {
@@ -444,8 +450,11 @@ export default {
   this.$store.state.socket.on('collectorsAuctionStopped',
   function(d) {
     console.log(d.playerId, "Stopped an auction");
+    console.log(d.auctionWinner, "socket ish auction winner")
     this.players = d.players;
     this.cardUpForAuction = d.cardUpForAuction;
+    this.auctionWinner = d.auctionWinner;
+
   }.bind(this)
 );
 
@@ -481,6 +490,15 @@ this.$store.state.socket.on('collectorsMoneyStarted',
 function(d) {
   this.players = d.players;
   console.log(d.playerId, "starts with ", d.players[d.playerId].money," coins");
+}.bind(this)
+);
+
+this.$store.state.socket.on('collectorsWinnerCardStarted',
+function(d) {
+  this.players = d.players;
+  this.auctionWinner = d.auctionWinner;
+  this.cardUpForAuction = d.cardUpForAuction;
+  this.marketValues = d.marketValues;
 }.bind(this)
 );
 
@@ -608,6 +626,8 @@ function(d) {
   stopAuction: function () {
     console.log("Starting stop auction", this.cardUpForAuction);
 
+
+
     this.$store.state.socket.emit('collectorsStopAuction', {
         roomId: this.$route.params.id,
         playerId: this.playerId,
@@ -615,6 +635,18 @@ function(d) {
           }
     );
 },
+
+startWinnerCard: function(action){
+  console.log("start winner card collectors.vue med action "+action)
+  this.$store.state.socket.emit('collectorsWinnerCard', {
+    roomId: this.$route.params.id,
+    playerId: this.playerId,
+    card: this.cardUpForAuction,
+    action: action,
+  });
+},
+
+
     changeTurn: function () {
       this.$store.state.socket.emit('collectorsChangeTurn', {
           roomId: this.$route.params.id,
