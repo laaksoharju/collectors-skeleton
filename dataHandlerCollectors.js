@@ -219,7 +219,7 @@ Data.prototype.getSkill = function (roomId, playerId, card, skill) {
       }
     }
     room.players[playerId].skills.push(...c);
-    
+
   }
 }
 
@@ -490,6 +490,8 @@ Data.prototype.placeWorkBottle = function (roomId, playerId, workActionId, cost)
 
     if (workActionId===3 ){
       this.drawCard(roomId, playerId);
+      let c = room.players[playerId].hand.splice(0,1);
+      room.players[playerId].secret.push(...c);
     }
 
 

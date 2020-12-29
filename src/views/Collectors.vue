@@ -133,6 +133,11 @@
                   :card="card"
                   />
            </div>
+           <div class="chosenSecret" v-for="(card, index) in players[playerId].secret" :card="card" :key="index">
+                 <CollectorsCard
+                 :card="card"
+                 />
+          </div>
              <!-- Visa spelarens färg och iterera fram rätt antal energybottles på playerboard -->
            <div class="playerBottles">
                 <div v-if="('black' === players[playerId].color)">
@@ -396,7 +401,7 @@ export default {
         this.marketPlacement = d.placements.marketPlacement;
         this.auctionPlacement = d.placements.auctionPlacement;
         this.workPlacement = d.placements.workPlacement;
-        
+
       }.bind(this));
     this.$store.state.socket.on('collectorsBottlePlaced',
       function(d) {
@@ -881,6 +886,10 @@ h5 {
 }
   .chosenSkillCard {
     grid-row: 3;
+    transform: scale(0.25);
+  }
+  .chosenSecret {
+    grid-row: 2;
     transform: scale(0.25);
   }
   .chosenItemCard {

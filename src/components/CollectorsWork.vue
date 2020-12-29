@@ -1,7 +1,7 @@
 <template>
   <div class = "workPool">
     <div class= "titleWorkPool" >Work Pool</div>
-
+    <div class= "workdeck"> </div>
     <div class = "quarterImage">
       <div class= "quarter1" v-if="currentRound === 1" >
       </div>
@@ -209,6 +209,15 @@ export default {
   background-color: #f5f2cc;
   border-radius: 5px;
   border: 2px solid #DDD359;
+}
+
+.workdeck{
+  grid-column: 2;
+  grid-row: 3;
+  background-image: url('/images/BackOfCard.PNG');
+  background-size: cover;
+  width: 67.5px;
+  height: 95.5px;
 }
 
 
