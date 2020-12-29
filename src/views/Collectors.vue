@@ -983,9 +983,9 @@ export default {
         this.auctionCards = d.auctionCards;
         this.deckAuction = d.deckAuction;
         this.marketValues = d.marketValues;
-        this.deckCardAvailable = false;
-        this.cardClicked += 1
-        if (this.cardClicked == this.clickCardTimes){
+        // this.deckCardAvailable = false;
+        this.cardClicked += 1;
+        if (this.cardClicked == this.clickCardTimes) {
           this.handCardAvailable = false;
           this.cardClicked = 0;
           this.clickCardTimes = 0;
@@ -1063,10 +1063,9 @@ export default {
       }
     },
     placeBottle: function (action, p) {
-
       this.clickCardTimes = p.clickCardTimes;
 
-      console.log('collectors place bottle');
+      console.log("collectors place bottle");
       this.buttonClicked = p;
 
       if (p.cashForCard > 0) {
@@ -1111,14 +1110,16 @@ export default {
 
         if (max_val.id === this.playerId) {
           this.players[this.playerId].start_auction = true;
+          this.deckCardAvailable = false;
           this.$store.state.socket.emit("collectorsBuyCard", {
             roomId: this.$route.params.id,
             playerId: this.playerId,
             card: d.card,
             action: action,
             cost: this.marketValues[d.card.market],
-            start_auction: this.players[this.playerId].start_auction,
 
+            start_auction: this.players[this.playerId].start_auction,
+            p: d.p,
           });
           // document.getElementById("players_auction").hidden = false;
         } else {
@@ -1127,17 +1128,20 @@ export default {
       } else {
         if (action === "auction") {
           this.players[this.playerId].start_auction = false;
+          this.deckCardAvailable = true;
         } else {
           this.players[this.playerId].start_auction = true;
         }
         // document.getElementById("players_auction").hidden = this.start_auction;
-
+        console.log("*****************'");
+        console.log(action);
         this.$store.state.socket.emit("collectorsBuyCard", {
           roomId: this.$route.params.id,
           playerId: this.playerId,
           card: d.card,
           action: action,
           cost: this.marketValues[d.card.market] + this.chosenPlacementCost,
+
           start_auction: this.players[this.playerId].start_auction,
           p: d.p,
         });
@@ -1235,18 +1239,23 @@ footer a:visited {
   transform: scale(0.6) translate(-50%, -50%);
   transition-timing-function: ease-out;
 }
+::v-deep .do_auction .buy-cards {
+  width: 30rem;
+}
 
 .do_auction .buy-cards {
   position: relative;
-  left: -27.5vw;
-  top: 100vh;
+  height: 10rem;
+  width: 30rem;
+  left: -23.8vw;
+  top: -39.5vh;
   display: grid;
   grid-template-columns: repeat(3, 10rem);
   grid-template-rows: repeat(2, 10rem);
-  grid-gap: 40px;
+  grid-gap: 50px;
 
   transform: scale(0.6) translate(-50%, -50%);
-  z-index: 6;
+  z-index: 5;
 }
 
 .market-cards {
@@ -1329,6 +1338,12 @@ footer a:visited {
   transform: scale(0.22) translate(-50%, -50%);
   z-index: 5;
   /* left: 39.5vw; */
+}
+::v-deep .do_auction .buy-cards .cardslots {
+  position: absolute;
+
+  height: 10rem;
+  width: 10rem;
 }
 
 ::v-deep .do_auction .buy-cards .cardslots.\33 {
@@ -1435,19 +1450,22 @@ footer a:visited {
 .auction_bottle >>> .buttons {
   top: 2vh;
   left: 1vw;
+  width: 20rem;
   display: grid;
   grid-template-rows: repeat(5, 2.5rem);
   grid-gap: 0.5em;
+  z-index: 6;
 }
+
 .player-hand .cardslots div {
   transfrom: scale(03) translate(-110%, -110%);
 }
 
-.cardslots {
+/* .cardslots {
   display: grid;
   grid-template-columns: repeat(auto-fill, 80px);
   grid-template-rows: repeat(auto-fill, 100px);
-}
+} */
 
 .secret-card div {
   border: dashed green;
@@ -1714,17 +1732,19 @@ footer a:visited {
   transform: scale(0.7) translate(-50%, -50%);
 }
 #players_auction {
-  position: relative;
+  position: absolute;
 
   width: 6vw;
   height: 5vh;
 
-  bottom: 185vh;
-  left: -10.4vw;
+  bottom: 93vh;
+  left: 50vw;
   padding: 2px;
   margin: 2px;
   border-radius: 2rem;
   outline: 2px solid rgb(81, 85, 82);
+  display: grid;
+  grid-template-columns: repeat(4, 4rem);
 }
 .player_1_auction {
 }
