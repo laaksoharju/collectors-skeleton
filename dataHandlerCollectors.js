@@ -271,6 +271,8 @@ Data.prototype.startWinnerCard = function(roomId, playerId, cardUpForAuction, ac
     if(action==='item'){
       room.players[playerId].items.push(room.cardUpForAuction);
     }
+    room.players[room.auctionWinner].money -= room.highestBid;
+    console.log("players kostnad highest:" + room.players[room.auctionWinner].money);
     room.cardUpForAuction = {};
     room.highestBid = 0;
     room.auctionWinner = "";
