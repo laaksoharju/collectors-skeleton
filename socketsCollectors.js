@@ -12,6 +12,7 @@ function sockets(io, socket, data) {
         marketValues: data.getMarketValues(d.roomId),
         skillsOnSale: data.getSkillsOnSale(d.roomId),
         auctionCards: data.getAuctionCards(d.roomId),
+        deckAuction: data.getDeckauctionCard(d.roomId),
         placements: data.getPlacements(d.roomId),
         round: data.getRound(d.roomId),
         decKAuction: data.getDeckauctionCard(d.roomId),
@@ -40,6 +41,7 @@ function sockets(io, socket, data) {
         skillsOnSale: data.getSkillsOnSale(d.roomId),
         auctionCards: data.getAuctionCards(d.roomId),
         marketValues: data.getMarketValues(d.roomId),
+        deckAuction: data.getDeckauctionCard(d.roomId),
         placements: data.getPlacements(d.roomId),
         round: data.getRound(d.roomId),
       });
@@ -65,6 +67,7 @@ function sockets(io, socket, data) {
       d.cost,
       d.action,
       d.start_auction,
+      d.deckCardAvailable,
       d.p,
    
 

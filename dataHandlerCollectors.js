@@ -65,6 +65,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
   room.auctionCards = room.deck.splice(0, 4);
   room.market = [];
   room.deckAuction = [];
+ 
   room.buyPlacement = [
     {
       cost: 1,
@@ -315,6 +316,7 @@ Data.prototype.joinGame = function(roomId, playerId) {
         cardsForCash: 0,
         auction_amount: 0,
         start_auction: true,
+        deckCardAvailable:false
       };
       return true;
     }
@@ -539,9 +541,10 @@ Data.prototype.buyCard = function(
   playerId,
   card,
   cost,
-  action,
-  p,
-  start_auction
+  action,  
+  start_auction,
+  deckCardAvailable,
+  p
 ) {
   let room = this.rooms[roomId];
   if (typeof room !== "undefined") {
@@ -631,6 +634,7 @@ Data.prototype.buyCard = function(
         this.rooms[room].deckAuction.push(...c);
         Object.keys(this.rooms[room].players).forEach((player) => {
           this.rooms[room].players[player].start_auction = start_auction;
+          this.rooms[room].players[player].deckCardAvailable = true;
         });
       });
 
@@ -650,10 +654,12 @@ Data.prototype.buyCard = function(
       }
 
       room.players[playerId].items.push(...c);
+      room.players[playerId].money -= cost;
 
       Object.keys(this.rooms).forEach((room) => {
         Object.keys(this.rooms[room].players).forEach((player) => {
           this.rooms[room].players[player].start_auction = start_auction;
+          this.rooms[room].players[player].deckCardAvailable = false;
           this.rooms[room].players[player].auction_amount = 0;
         });
       });

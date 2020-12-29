@@ -42,7 +42,7 @@
             :labels="labels"
             :player="players[playerId]"
             :itemsOnSale="deckAuction"
-            :deckCardAvailable="deckCardAvailable"
+            :deckCardAvailable="this.players[this.playerId].deckCardAvailable"
             :marketValues="marketValues"
             :placement="auctionPlacement"
             @buyCard="buyCard('win_auction', $event)"
@@ -830,9 +830,7 @@ export default {
       },
 
       typeofaction: "skills",
-      deckCardAvailable: true,
 
-      start_auction: true,
       round: 0,
     };
   },
@@ -880,6 +878,7 @@ export default {
         this.marketPlacement = d.placements.marketPlacement;
         this.auctionPlacement = d.placements.auctionPlacement;
         this.workPlacement = d.placements.workPlacement;
+        this.deckAuction = d.deckAuction;
         this.round = d.round;
       }.bind(this)
     );
@@ -899,6 +898,7 @@ export default {
         this.workPlacement = d.placements.workPlacement;
         this.round = d.round;
         this.deckAuction = d.deckAuction;
+
         /*this.start_auction = d.start_auction;*/
       }.bind(this)
     );
@@ -925,6 +925,8 @@ export default {
         this.skillPlacement = d.skillPlacement;
         this.marketPlacement = d.marketPlacement;
         this.auctionPlacement = d.auctionPlacement;
+        this.deckAuction = d.deckAuction;
+
         this.workPlacement = d.workPlacement;
         this.players = d.players;
       }.bind(this)
@@ -981,7 +983,7 @@ export default {
         this.auctionCards = d.auctionCards;
         this.deckAuction = d.deckAuction;
         this.marketValues = d.marketValues;
-        // this.deckCardAvailable = false;
+
         this.cardClicked += 1;
         if (this.cardClicked == this.clickCardTimes) {
           this.handCardAvailable = false;
@@ -1104,11 +1106,10 @@ export default {
     buyCard: function (action, d) {
       if (action === "win_auction") {
         let max_val = this.getmax();
-        console.log(max_val.id, this.playerId);
 
         if (max_val.id === this.playerId) {
           this.players[this.playerId].start_auction = true;
-          this.deckCardAvailable = false;
+          this.players[this.playerId].deckCardAvailable = false;
           this.$store.state.socket.emit("collectorsBuyCard", {
             roomId: this.$route.params.id,
             playerId: this.playerId,
@@ -1117,8 +1118,11 @@ export default {
             cost: this.marketValues[d.card.market],
 
             start_auction: this.players[this.playerId].start_auction,
+            deckCardAvailable: this.players[this.playerId].deckCardAvailable,
             p: d.p,
           });
+
+          document.getElementsByClassName("0").remove();
           // document.getElementById("players_auction").hidden = false;
         } else {
           alert("You can not take the card");
@@ -1126,13 +1130,13 @@ export default {
       } else {
         if (action === "auction") {
           this.players[this.playerId].start_auction = false;
-          this.deckCardAvailable = true;
+          this.players[this.playerId].deckCardAvailable = true;
         } else {
           this.players[this.playerId].start_auction = true;
+          this.players[this.playerId].deckCardAvailable = false;
         }
         // document.getElementById("players_auction").hidden = this.start_auction;
-        console.log("*****************'");
-        console.log(action);
+
         this.$store.state.socket.emit("collectorsBuyCard", {
           roomId: this.$route.params.id,
           playerId: this.playerId,
@@ -1141,6 +1145,7 @@ export default {
           cost: this.marketValues[d.card.market] + this.chosenPlacementCost,
 
           start_auction: this.players[this.playerId].start_auction,
+          deckCardAvailable: this.players[this.playerId].deckCardAvailable,
           p: d.p,
         });
       }
