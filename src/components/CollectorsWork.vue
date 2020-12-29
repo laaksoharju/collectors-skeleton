@@ -17,7 +17,7 @@
 
       <button id="alt1" v-if="p.playerId===null && p.cost===-1"
       :disabled="cannotAfford(p.cost)"
-      @click = "placeBottle(p)" >
+      @click = "placeBottle(p)">
         <div class = "Alt1">
         </div>
       </button>
@@ -26,6 +26,7 @@
       :disabled="cannotAfford(p.cost)"
       @click="placeBottle(p)">
         <div class = "Alt2">
+
         </div>
       </button>
 
@@ -42,22 +43,18 @@
           </div>
         </button>
     </div>
-<!--
-    <div class = "Alt1"></div>
-    <div class = "Alt2"></div>
-    <div class = "Alt3"></div>
-    <div class = "Alt4"></div> -->
+
+
+
   </div>
 
 </template>
 
 <script>
-// import CollectorsCard from '@/components/CollectorsCard.vue'
 
 export default {
   name: 'CollectorsWork',
   components: {
-  //  CollectorsCard
   },
   props: {
     labels: Object,
@@ -81,8 +78,7 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
-      this.$emit('placeBottle', p.cost);
-      this.highlightAvailableCards(p.cost);
+      this.$emit('placeBottle', p);
     },
     highlightAvailableCards: function (cost=100) {
       for (let i = 0; i < this.skillsOnSale.length; i += 1) {
@@ -95,6 +91,11 @@ export default {
         this.chosenPlacementCost = cost;
       }
     },
+    drawCard: function (card) {
+      if (card.available) {
+        this.$emit('drawCard', card);
+      }
+    }
     }
   }
 </script>
@@ -109,7 +110,7 @@ export default {
   width: auto;
   height: auto;
   display:grid;
-  grid-template-columns: repeat(2, 224px);
+  grid-template-columns: repeat(3, 149px);
   grid-template-rows: repeat(4,55px);
   grid-auto-flow: column;
   background-color: #f5f2cc;
@@ -129,8 +130,8 @@ export default {
 }
 
 .quarterImage {
-  grid-column: 2;
-  grid-row: 3;
+  grid-column: 3;
+  grid-row: 2;
 }
 .quarter1 {
   grid-column: 2 ;
@@ -208,6 +209,20 @@ export default {
   background-color: #f5f2cc;
   border-radius: 5px;
   border: 2px solid #DDD359;
+}
+
+
+
+
+.work-Card {
+  grid-row: 2;
+  transform: scale(0.25);
+/*  place-self:center; förstör!! */
+}
+
+.work-Card div:hover{
+  transform: scale(1.5)translate(-25%,0);
+  z-index: 1;
 }
 
 </style>

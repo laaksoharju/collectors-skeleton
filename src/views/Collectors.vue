@@ -100,7 +100,8 @@
           :placement="workPlacement"
           :skillsOnSale="skillsOnSale"
           :marketValues="marketValues"
-          @placeBottle="placeBottle('work', $event)"
+          @drawCard="drawCard($event)"
+          @placeBottle="placeBottleWork( $event)"
           />
 
        <CollectorsStartAuction v-if="players[playerId]"
@@ -168,6 +169,7 @@
         <div class="cardslots" v-if="players[playerId]">
           <div v-for="(card, index) in players[playerId].hand" :key="index">
           <CollectorsCard  :card="card" :availableAction="card.available" @doAction="buyCard(card)" />
+
         </div>
       </div>
 
@@ -404,6 +406,13 @@ export default {
         this.auctionPlacement = d.auctionPlacement;
         this.workPlacement = d.workPlacement;
       }.bind(this));
+
+      this.$store.state.socket.on('collectorsWorkBottlePlaced',
+        function(d) {
+          this.players= d.players;
+          this.workPlacement = d.placements.workPlacement;
+        }.bind(this));
+
     this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
     this.$store.state.socket.on('collectorsCardDrawn',
       function(d) {
@@ -545,6 +554,17 @@ function(d) {
         }
       );
     },
+    placeBottleWork: function (p) {
+      this.chosenPlacementCost = p.cost;
+      this.chosenAction = p.action;
+      this.$store.state.socket.emit('collectorsPlaceWorkBottle', {
+          roomId: this.$route.params.id,
+          playerId: this.playerId,
+          workActionId: p.workActionId,
+          cost: p.cost,
+        }
+      );
+    },
     whichAction: function (card){
       if (this.chosenAction === "skill") {
         this.getSkill(card)
@@ -567,7 +587,6 @@ function(d) {
       );
     },
     buyCard: function (card) {
-      console.log("buyCard", card);
       this.$store.state.socket.emit('collectorsBuyCard', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
@@ -833,108 +852,7 @@ h5 {
     border-radius: 5px;
     border: 2px solid #E3A688;
   }
-  /*.marketPool{
-    grid-column: 3/span 5;
-    grid-row: 11/span 4;
-    width: auto;
-    height: auto;
-    background-color: #c9d5e1;
-    color: black;
-    display: grid;
-    grid-template-columns: repeat(5, 60px);
-    grid-template-rows: repeat(5, 27.5px);
-    }*/
 
-/* Har ej vågat radera WORK än, men finns i component
-.titleWorkPool {
-  font-style: italic;
-  font-size: 50px;
-  text-shadow: 2px 2px 4px yellow;
-  font-size: 20px;
-}
-  .workPool{
-    grid-column: 3/span 5;
-    grid-row: 6/span 5;
-    width: auto;
-    height: auto;
-    display:grid;
-    grid-template-columns: repeat(2, 224px);
-    grid-template-rows: repeat(3,50px);
-    background-color: #f5f2cc;
-    color: black;
-
-    border-top: 2px solid #4C7B80;
-  }
-  .quarterImage {
-    grid-column: 2;
-    grid-row: 3;
-  }
-  .quarter1 {
-    grid-column: 2 ;
-    grid-row: 1;
-    width: 140px;
-    height: 62px;
-    background-image: url('/images/quarterTile1.png');
-    background-size: cover;
-  }
-  .quarter2 {
-    grid-column: 2 ;
-    grid-row: 1;
-    width: 140px;
-    height: 62px;
-    background-image: url('/images/quarterTile2.png');
-    background-size: cover;
-  }
-  .quarter3 {
-    grid-column: 2 ;
-    grid-row: 1;
-    width: 140px;
-    height: 62px;
-    background-image: url('/images/quarterTile3.png');
-    background-size: cover;
-  }
-  .quarter4 {
-    grid-column: 2 ;
-    grid-row: 1;
-    width: 140px;
-    height: 62px;
-    background-image: url('/images/quarterTile4.png');
-    background-size: cover;
-  }
-
-  .Alt1 {
-    grid-column: 1 ;
-    grid-row: 1;
-    width: 130px;
-    height: 60px;
-    background-image: url('/images/WorkPoolAlt1.jpg');
-    background-size: cover;
-  }
-  .Alt2 {
-    grid-column: 1 ;
-    grid-row: 2;
-    width: 130px;
-    height: 60px;
-    background-image: url('/images/WorkPoolAlt2.jpg');
-    background-size: cover;
-  }
-  .Alt3 {
-    grid-column: 1 / span 2 ;
-    grid-row: 3;
-    width: 130px;
-    height: 60px;
-    background-image: url('/images/WorkPoolAlt3.jpg');
-    background-size: cover;
-  }
-  .Alt4 {
-    grid-column: 1 ;
-    grid-row: 4;
-    width: 152px;
-    height: 60px;
-    background-image: url('/images/WorkPoolAlt4.jpg');
-    background-size: cover;
-  }
-  */
 
   .playerBoard {
     grid-column: 11/span 5;

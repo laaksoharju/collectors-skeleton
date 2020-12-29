@@ -88,10 +88,10 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.marketPlacement = [ {cost:0, playerId: null},
                            {cost:-2, playerId: null},
                            {cost:0, playerId: null} ];
-  room.workPlacement = [ {cost:1, playerId: null},
-                            {cost:-1, playerId: null},
-                            {cost:0, playerId: null},
-                            {cost:0, playerId: null} ];
+  room.workPlacement = [ {cost:1, playerId: null, workActionId:0},
+                            {cost:-1, playerId: null, workActionId:1},
+                            {cost:0, playerId: null, workActionId:2},
+                            {cost:0, playerId: null, workActionId:3} ];
   //FÖRSÖK ATT FÅ SPELARENS FLASKA ATT DYKA UPP EFTER KNAPPTRYCKNING
 
 
@@ -430,6 +430,52 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost) {
     }
   }
 }
+
+Data.prototype.placeWorkBottle = function (roomId, playerId, workActionId, cost) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    let activePlacement = room.workPlacement;
+
+    if (room.players[playerId].playerBottles > 0){
+      room.players[playerId].playerBottles = room.players[playerId].playerBottles - 1;
+    }
+    for(let i = 0; i < activePlacement.length; i += 1) {
+        if( activePlacement[i].cost === cost &&
+            activePlacement[i].playerId === null ) {
+          activePlacement[i].playerId = playerId;
+          break;
+        }
+    }
+    if (workActionId===0 ){
+      this.drawCard(roomId, playerId);
+      this.drawCard(roomId, playerId);
+      room.players[playerId].money -= cost;
+    }
+
+    if (workActionId===1 ){
+    room.players[playerId].money += cost;
+    //radera flaska, får ej va med i framtida ronder, gör om de finns tid
+    }
+
+    if (workActionId===2 ){
+      this.drawCard(roomId, playerId);
+      //let nuvarandeSpelare= room.players[playerId].order
+
+    //  if (room.players[playerId].order === 1)
+    //  let nuvarandeSpelare= room.players[playerId].order
+      //room.players[playerId].order === 1
+
+
+    }
+
+    if (workActionId===3 ){
+      this.drawCard(roomId, playerId);
+    }
+
+
+  }
+}
+
 /* returns the hand of the player */
 Data.prototype.getCards = function (roomId, playerId) {
   let room = this.rooms[roomId];
@@ -504,6 +550,7 @@ Data.prototype.getMarketValues = function(roomId){
 
 
 
+
 Data.prototype.getSkillsOnSale = function(roomId){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
@@ -511,6 +558,9 @@ Data.prototype.getSkillsOnSale = function(roomId){
   }
   else return [];
 }
+
+
+
 Data.prototype.getMarket = function(roomId){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
