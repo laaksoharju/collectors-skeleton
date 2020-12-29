@@ -394,7 +394,7 @@ export default {
         this.marketPlacement = d.placements.marketPlacement;
         this.auctionPlacement = d.placements.auctionPlacement;
         this.workPlacement = d.placements.workPlacement;
-        
+
       }.bind(this));
     this.$store.state.socket.on('collectorsBottlePlaced',
       function(d) {
@@ -594,6 +594,7 @@ function(d) {
           playerId: this.playerId,
           card: card,
           auctionCard: this.auctionCards,
+          cost: this.chosenPlacementCost
         }
       );
 

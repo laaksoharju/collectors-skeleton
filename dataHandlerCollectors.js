@@ -219,11 +219,11 @@ Data.prototype.getSkill = function (roomId, playerId, card, skill) {
       }
     }
     room.players[playerId].skills.push(...c);
-    
+
   }
 }
 
-Data.prototype.startAuction = function (roomId, playerId, card, auctionCard) {
+Data.prototype.startAuction = function (roomId, playerId, card, auctionCard, cost) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
         //check if card is among skills on sale
@@ -238,31 +238,22 @@ Data.prototype.startAuction = function (roomId, playerId, card, auctionCard) {
       }
     }
   }
+  room.players[playerId].money -= cost;
 }
 
 Data.prototype.stopAuction = function (roomId, playerId, card) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
 
-  console.log("INNE I DATA STOP AUCTION");
   let c = room.cardUpForAuction;
   let allPlayersId = Object.keys(room.players);
-
   for (let i in allPlayersId){
-      console.log(room.players[allPlayersId[i]].bids);
-      console.log("c", c);
     if (room.players[allPlayersId[i]].bids === room.highestBid){
-
         room.auctionWinner = allPlayersId[i];
-        console.log("VINNARE" + room.auctionWinner);
-
-
         return c;
 
       }
-
       else return {};
-
   }
   }
 }
@@ -271,28 +262,19 @@ Data.prototype.startWinnerCard = function(roomId, playerId, cardUpForAuction, ac
   let room = this.rooms[roomId];
 
   if (typeof room !== 'undefined') {
-    console.log("i data handler innan if winnerCard", action);
-
     if(action==='skill'){
-      console.log("skill"+room.players[playerId].skills);
       room.players[playerId].skills.push(room.cardUpForAuction);
-
     }
-
     if(action==='market'){
       room.market.push(room.cardUpForAuction);
-      console.log("market");
     }
-
     if(action==='item'){
       room.players[playerId].items.push(room.cardUpForAuction);
-      console.log("item");
     }
     room.cardUpForAuction = {};
     room.highestBid = 0;
     room.auctionWinner = "";
     action = '';
-
     let allPlayersId = Object.keys(room.players);
     for (let i in allPlayersId){
       room.players[allPlayersId[i]].bids = 0;
@@ -305,7 +287,6 @@ Data.prototype.startWinnerCard = function(roomId, playerId, cardUpForAuction, ac
 Data.prototype.startMarket = function (roomId, playerId, card) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
-  console.log("TEST I START MARKET");
         for (let i = 0; i < room.skillsOnSale.length; i += 1) {
 
           if (room.skillsOnSale[i].x === card.x &&
@@ -323,7 +304,6 @@ Data.prototype.startMarket = function (roomId, playerId, card) {
 
 
 Data.prototype.startBidding = function (roomId, playerId, bids) {
-  console.log('HEJ NU I DATA');
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
   let allPlayersId = Object.keys(room.players);
