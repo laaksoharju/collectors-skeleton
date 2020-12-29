@@ -56,6 +56,10 @@ Data.prototype.getUILabels = function(roomId) {
 Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
   let room = {};
   room.players = {};
+  room.calcPlayersTurnsPerformed = 0;
+  room.setNextPlayer = false;
+  room.firstTojoin = true;
+  room.turnToPlay = null;
   room.playerColors = ["violet", "blue", "brown", "grey"];
   room.lang = lang;
   room.deck = this.createDeck(lang);
@@ -196,6 +200,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 14,
       clickCardTimes: 1,
+      becomeFirstPlayer: true,
     },
     {
       cost: 0,
@@ -290,7 +295,20 @@ Data.prototype.createDeck = function() {
 };
 
 Data.prototype.joinGame = function(roomId, playerId) {
+  console.log('dataHandler joinGame');
+
   let room = this.rooms[roomId];
+
+  if (room.firstTojoin){
+    room.turnToPlay = true;
+    room.firstTojoin = false;
+
+  }
+  else {
+    room.turnToPlay = false;
+
+  }
+
   if (typeof room !== "undefined") {
     if (typeof room.players[playerId] !== "undefined") {
       console.log(
@@ -316,7 +334,14 @@ Data.prototype.joinGame = function(roomId, playerId) {
         cardsForCash: 0,
         auction_amount: 0,
         start_auction: true,
-        deckCardAvailable:false
+        playersTurn: room.turnToPlay,
+        starts_round: room.turnToPlay,
+        clickedOnBottle: false,
+        playerState:
+        {
+          saleItems: [],
+          action: "",
+        }
       };
       return true;
     }
@@ -344,8 +369,19 @@ Data.prototype.updatePoints = function(roomId, player, points) {
   if (typeof room !== "undefined") {
     room.points[player] += points;
     return room.points;
-  } else return {};
+  }
+  else return {};
 };
+
+Data.prototype.getPlayerState = function (roomId, playerId)
+{
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined')
+  {
+    return room.players[playerId].playerState;
+  }
+  else return {};
+}
 
 Data.prototype.updatePlayerName = function(roomId, playerId, playerName) {
   let room = this.rooms[roomId];
@@ -357,6 +393,8 @@ Data.prototype.updatePlayerName = function(roomId, playerId, playerName) {
 };
 
 Data.prototype.nextRound = function(roomId) {
+
+  console.log('next round');
   let room = this.rooms[roomId];
   if (typeof room !== "undefined") {
     // PHASE 2: FILL POOLS
@@ -485,25 +523,53 @@ Data.prototype.nextRound = function(roomId) {
       }
     }
 
-    if (room.round == 2) {
-      room.workPlacement[0].cost = -1;
+    // PHASE 4: GET INCOME
+    for (var key in room.players) {
+      if (room.players.hasOwnProperty(key)) {
+        // Each player takes one coin for each income symbol on the player board that is not covered by a bottle
+        // Draw one card, unless a bottle covers the “draw one card” symbol.
+        if (room.players[key].bottles < 3) {
+          // Take one card
+          let card = room.deck.pop();
+          room.players[key].hand.push(card);
+          // Get three coins
+          room.players[key].money +=3;
+        } else if (room.players[key].bottles == 3) {
+          // Get three coins
+          room.players[key].money +=3;
+        } else if (room.players[key].bottles == 4) {
+          // Get two coins
+          room.players[key].money +=2;
+        }
+        // for each card tucked under the player board with an income symbol on it
+        room.players[key].money += room.players[key].cardsForCash;
+        room.players[key].cardsForCash = 0;
+      }
     }
-
-    if (room.round == 3) {
-      room.workPlacement[0].cost = -2;
-    }
-
-    if (room.round == 4) {
-      room.workPlacement[0].cost = -3;
-      room.workPlacement[0].clickCardTimes = 0;
-      room.workPlacement[0].cashForCard = 0;
-    }
-
-
 
     // PHASE 5: REMOVE A QUARTER TILE
     room.round = room.round + 1;
-    room.workPlacement[0].cost += 1;
+    if (room.round == 4) {
+      room.workPlacement[0].clickCardTimes = 0;
+      room.workPlacement[0].cashForCard = 0;
+    }
+    room.workPlacement[0].cost -= 1;
+
+
+    // PHASE 6: DECIDE WHO STARTS NEXT ROUND
+    console.log('Phase 6');
+    for (var key in room.players) {
+      console.log('Phase 6 for loop');
+          if (room.players[key].starts_round ){
+            room.players[key].playersTurn = true;
+          } else {
+            room.players[key].playersTurn = false;
+          }
+
+          console.log('next round: ' + key + ' ' +   room.players[key].playersTurn);
+    }
+
+
     return true;
   } else {
     console.log("Error moving to next round");
@@ -521,7 +587,6 @@ Data.prototype.updatePlayerAuction = function(
     room.players[playerId].auction_amount = auction_amount;
     return room.players;
   } else return {};
-  // console.log("From data handler, Room Id: " + roomId + ", player Id: " + playerId + ", new name: " + playerName);
 };
 
 /* returns players after a new card is drawn */
@@ -710,20 +775,31 @@ Data.prototype.buyCard = function(
         }
       }
     }
+    room.players[playerId].clickedOnBottle = false;
+  room.players[playerId].playerState.saleItems = [];
+  room.players[playerId].playerState.action = "";
   };
+
+Data.prototype.bottleClicked = function (roomId, playerId, saleItems, action, clickedOnBottle, cost)
+{
+  let room = this.rooms[roomId];
+  room.players[playerId].clickedOnBottle = clickedOnBottle;
+  room.players[playerId].playerState.saleItems = saleItems;
+  room.players[playerId].playerState.action = action;
+}
 
 
 Data.prototype.placeBottle = function(roomId, playerId, action, p) {
-  console.log("dataHandler type of this.rooms[roomId] " + this.rooms[roomId]);
+
+  this.calcPlayersTurns(roomId, playerId);
 
   var buttonId = p.buttonId;
   var cost = p.cost;
   let room = this.rooms[roomId];
 
-  /*for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
-    var card = room.players[playerId].hand[i];
-    room.$set(card, "available", true);
-  }*/
+
+  console.log("dataHandler typeof.this.players: " + typeof room.players[playerId]);
+
 
   if (typeof room !== "undefined") {
     let activePlacement = [];
@@ -738,6 +814,22 @@ Data.prototype.placeBottle = function(roomId, playerId, action, p) {
       activePlacement = room.workPlacement;
       room.players[playerId].money -= cost;
       room.players[playerId].bottles -= 1;
+
+      if(p.becomeFirstPlayer){
+
+        for (var key in room.players) {
+
+              if (key == playerId){
+                room.players[key].starts_round = true;
+              } else {
+                room.players[key].starts_round = false;
+              }
+
+        }
+
+      }
+
+
     } else if (action === "market") {
       activePlacement = room.marketPlacement;
       room.players[playerId].money -= cost;
@@ -827,6 +919,66 @@ Data.prototype.getDeckauctionCard = function(roomId) {
   if (typeof room !== "undefined") {
     return room.deckAuction;
   } else return [];
+};
+
+Data.prototype.calcPlayersTurns = function(roomId) {
+  let room = this.rooms[roomId];
+  room.calcPlayersTurnsPerformed += 1;
+  var nrOfLoops = 0;
+
+    for (var key in room.players) {
+
+        if (room.setNextPlayer){
+          if (room.players[key].bottles == 0){
+            room.players[key].playersTurn = false;
+          } else {
+            room.players[key].playersTurn = true;
+            room.setNextPlayer = false;
+          }
+        } else if (room.players[key].playersTurn) {
+          room.players[key].playersTurn = false;
+          room.setNextPlayer = true;
+        }
+
+
+        nrOfLoops += 1;
+        if (nrOfLoops == room.playerCount && room.setNextPlayer == true && room.calcPlayersTurnsPerformed == 1){
+          this.calcPlayersTurns(roomId);
+        }
+
+        console.log(key + ' ' +   room.players[key].playersTurn)
+
+    }
+
+    room.calcPlayersTurnsPerformed = 0;
+
+      /*else {
+        room.players[key].hasentPlayedInTurns += 1
+      }
+
+      if (room.players[key].hasentPlayedInTurns == room.playerCount - 1){
+        if (room.players[key].bottles == 0) {
+          room.players[key].hasentPlayedInTurns = 0;
+          this.calcPlayersTurns;
+        } else {
+          room.players[key].playersTurn = true;
+          room.players[key].hasentPlayedInTurns = 0;
+        }*/
+
+
+
+
+
+
+
+    /*  if (room.players[playerId].playersTurn == true){
+        room.players[playerId].playersTurn == false;
+
+
+      }*/
+
+
+
 };
 
 module.exports = Data;

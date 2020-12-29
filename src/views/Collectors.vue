@@ -417,7 +417,9 @@
                 <img
                   src="/images/player-cards-for-coins.png"
                   alt="Player Cards for Coins"
-                />x4
+                />x{{
+                  players[otherPlayerId].cardsForCash
+                }}
               </div>
             </div>
             <div
@@ -780,7 +782,6 @@ export default {
       cardClicked: 0,
       clickCardTimes: 0,
       chosenPlacementCost: null,
-
       marketValues: {
         fastaval: 0,
         movie: 0,
@@ -828,10 +829,19 @@ export default {
         workerIncome: 0,
         auctionIncome: 0,
       },
-
+      playerState: {
+        saleItems: [],
+        action: "",
+      },
       typeofaction: "skills",
 
       round: 0,
+
+      //sounds
+      audioBottlePlaced: new Audio("/sounds/zapsplat_household_aerosol_can_lid_down_on_wood_surface_001.mp3"),
+      cardMoved: new Audio("/sounds/zapsplat_leisure_playing_card_turn_over_on_top_of_deck_010_39239.mp3"),
+      newRound: new Audio("/sounds/zapsplat_multimedia_game_sound_bell_digital_synth_bright_harsh_ascend_level_up_002_40473.mp3"),
+      placeAuctionBid: new Audio("/sounds/zapsplat_foley_money_coin_australian_10_cent_set_down_and_spin_on_tiled_table_002_28219.mp3"),
     };
   },
   computed: {
@@ -840,10 +850,10 @@ export default {
     },
   },
   watch: {
-    players: function (newP, oldP) {
+    players: function (/*newP, oldP*/) {
       // console.log(Object.keys(newP).length);
       // console.log(Object.keys(oldP).length);
-      console.log(newP, oldP);
+      // console.log(newP, oldP);
       for (let p in this.players) {
         for (let c = 0; c < this.players[p].hand.length; c += 1) {
           if (typeof this.players[p].hand[c].item !== "undefined")
@@ -880,12 +890,18 @@ export default {
         this.workPlacement = d.placements.workPlacement;
         this.deckAuction = d.deckAuction;
         this.round = d.round;
+        this.playerState = d.playerState;
+        if (this.playerState.action !== "") {
+          this.handlePlayerState();
+        }
       }.bind(this)
     );
 
     this.$store.state.socket.on(
       "updateQuarter",
       function (d) {
+        this.newRound.play();
+        /*this.newRound1.play();*/
         this.players = d.players;
         this.itemsOnSale = d.itemsOnSale;
         this.skillsOnSale = d.skillsOnSale;
@@ -918,7 +934,10 @@ export default {
     this.$store.state.socket.on(
       "collectorsBottlePlaced",
       function (d) {
-        console.log(d);
+        console.log("collectorsBottlePlaced");
+
+
+        this.audioBottlePlaced.play();
 
         /*If i comment this away they shine prmanently*/
         this.buyPlacement = d.buyPlacement;
@@ -946,6 +965,13 @@ export default {
     );
 
     this.$store.state.socket.on(
+      "collectorsBottleClicked",
+      function (d) {
+        this.players = d;
+      }.bind(this)
+    );
+
+    this.$store.state.socket.on(
       "collectorsPointsUpdated",
       (d) => (this.points = d)
     );
@@ -967,6 +993,14 @@ export default {
     );
 
     this.$store.state.socket.on(
+      "updatePlayerNameAuction",
+      function (d) {
+        this.placeAuctionBid.play();
+        this.players = d;
+      }.bind(this)
+    );
+
+    this.$store.state.socket.on(
       "nextRound",
       function (d) {
         this.round = d.round;
@@ -976,6 +1010,7 @@ export default {
     this.$store.state.socket.on(
       "collectorsCardBought",
       function (d) {
+        this.cardMoved.play();
         console.log(d.playerId, "bought a card");
         this.players = d.players;
         this.itemsOnSale = d.itemsOnSale;
@@ -983,9 +1018,9 @@ export default {
         this.auctionCards = d.auctionCards;
         this.deckAuction = d.deckAuction;
         this.marketValues = d.marketValues;
+        this.deckCardAvailable = false;
 
-        this.cardClicked += 1;
-        if (this.cardClicked == this.clickCardTimes) {
+        if (this.cardClicked == this.clickCardTimes){
           this.handCardAvailable = false;
           this.cardClicked = 0;
           this.clickCardTimes = 0;
@@ -994,6 +1029,22 @@ export default {
     );
   },
   methods: {
+    handlePlayerState: function () {
+      var action = this.playerState.action;
+
+      if (action === "buy" || action === "market") {
+        this.itemsOnSale = this.playerState.saleItems;
+        this.highlightCards(this.itemsOnSale);
+      } else if (action === "skill") {
+        this.skillsOnSale = this.playerState.saleItems;
+        this.highlightCards(this.skillsOnSale);
+      }
+    },
+    highlightCards: function (cardsToHighlight) {
+      for (let i = 0; i < cardsToHighlight.length; i++) {
+        this.$set(cardsToHighlight[i], "available", true);
+      }
+    },
     selectAll: function (n) {
       n.target.select();
     },
@@ -1007,7 +1058,6 @@ export default {
       if (e.keyCode === 13) {
         if (e.target.value !== "") {
           this.playerName = e.target.value;
-          // alert("New name: " + this.playerName);
           this.$store.state.socket.emit("updatePlayerName", {
             roomId: this.$route.params.id,
             playerId: this.$store.state.playerId,
@@ -1052,6 +1102,7 @@ export default {
         if (val === this.$store.state.playerId && e.target.value !== "") {
           this.players[this.$store.state.playerId].auction_amount =
             e.target.value;
+            this.placeAuctionBid.play();
 
           this.$store.state.socket.emit("updatePlayerAuction", {
             roomId: this.$route.params.id,
@@ -1082,6 +1133,19 @@ export default {
         });
       }
 
+      this.saleItems = [];
+      if (action == "buy") this.saleItems = this.itemsOnSale;
+      else if (action == "skill") this.saleItems = this.skillsOnSale;
+      else if (action == "market") this.saleItems = this.itemsOnSale;
+
+      this.$store.state.socket.emit("collectorsBottleClicked", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        saleItems: this.saleItems,
+        action: action,
+        clickedOnBottle: true,
+      });
+
       this.chosenPlacementCost = p.cost;
       this.$store.state.socket.emit("collectorsPlaceBottle", {
         roomId: this.$route.params.id,
@@ -1104,6 +1168,9 @@ export default {
       return sortval[0];
     },
     buyCard: function (action, d) {
+
+      this.cardClicked += 1;
+      // console.log('collectors buyCard this.cardClicked: ' + this.cardClicked);
       if (action === "win_auction") {
         let max_val = this.getmax();
 
@@ -1116,7 +1183,6 @@ export default {
             card: d.card,
             action: action,
             cost: this.marketValues[d.card.market],
-
             start_auction: this.players[this.playerId].start_auction,
             deckCardAvailable: this.players[this.playerId].deckCardAvailable,
             p: d.p,
@@ -1461,7 +1527,8 @@ footer a:visited {
 }
 
 .player-hand .cardslots div {
-  transfrom: scale(03) translate(-110%, -110%);
+  transfrom: scale(0.3) translate(-110%, -110%);
+
 }
 
 /* .cardslots {
@@ -1798,7 +1865,7 @@ p {
 
 .quarter-tiles {
   position: relative;
-  top: -5.1em;
+  top: -5.7em;
   left: 0.1em;
   width: 5.5em;
   height: 2.5em;

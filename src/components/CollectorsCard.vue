@@ -36,6 +36,8 @@ export default {
 
   methods: {
     doAction: function () {
+      // console.log("I was clicked and my foo is: " + this.card.foo);
+      // console.log("My available value: " + this.card.available);
       this.$emit("doAction");
     },
   },
@@ -58,7 +60,7 @@ export default {
   /*animation: jiggle 1s ease-in-out;
   animation-iteration-count: infinite;*/
 
-  box-shadow: 0 0 30px red;
+  box-shadow: 0 0 80px blue;
 }
 
 @keyframes jiggle {
