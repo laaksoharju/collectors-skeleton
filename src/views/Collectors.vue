@@ -836,6 +836,12 @@ export default {
 
       start_auction: true,
       round: 0,
+
+      //sounds
+      audioBottlePlaced: new Audio("/sounds/zapsplat_household_aerosol_can_lid_down_on_wood_surface_001.mp3"),
+      cardMoved: new Audio("/sounds/zapsplat_leisure_playing_card_turn_over_on_top_of_deck_010_39239.mp3"),
+      newRound: new Audio("/sounds/zapsplat_multimedia_game_sound_bell_digital_synth_bright_harsh_ascend_level_up_002_40473.mp3"),
+      placeAuctionBid: new Audio("/sounds/zapsplat_foley_money_coin_australian_10_cent_set_down_and_spin_on_tiled_table_002_28219.mp3"),
     };
   },
   computed: {
@@ -889,6 +895,8 @@ export default {
     this.$store.state.socket.on(
       "updateQuarter",
       function (d) {
+        this.newRound.play();
+        /*this.newRound1.play();*/
         this.players = d.players;
         this.itemsOnSale = d.itemsOnSale;
         this.skillsOnSale = d.skillsOnSale;
@@ -920,7 +928,10 @@ export default {
     this.$store.state.socket.on(
       "collectorsBottlePlaced",
       function (d) {
-        console.log(d);
+        console.log("collectorsBottlePlaced");
+
+
+        this.audioBottlePlaced.play();
 
         /*If i comment this away they shine prmanently*/
         this.buyPlacement = d.buyPlacement;
@@ -967,6 +978,14 @@ export default {
     );
 
     this.$store.state.socket.on(
+      "updatePlayerNameAuction",
+      function (d) {
+        this.placeAuctionBid.play();
+        this.players = d;
+      }.bind(this)
+    );
+
+    this.$store.state.socket.on(
       "nextRound",
       function (d) {
         this.round = d.round;
@@ -976,6 +995,7 @@ export default {
     this.$store.state.socket.on(
       "collectorsCardBought",
       function (d) {
+        this.cardMoved.play();
         console.log(d.playerId, "bought a card");
         this.players = d.players;
         this.itemsOnSale = d.itemsOnSale;
@@ -983,9 +1003,9 @@ export default {
         this.auctionCards = d.auctionCards;
         this.deckAuction = d.deckAuction;
         this.marketValues = d.marketValues;
-        // this.deckCardAvailable = false;
-        this.cardClicked += 1;
-        if (this.cardClicked == this.clickCardTimes) {
+        this.deckCardAvailable = false;
+
+        if (this.cardClicked == this.clickCardTimes){
           this.handCardAvailable = false;
           this.cardClicked = 0;
           this.clickCardTimes = 0;
@@ -1052,6 +1072,7 @@ export default {
         if (val === this.$store.state.playerId && e.target.value !== "") {
           this.players[this.$store.state.playerId].auction_amount =
             e.target.value;
+            this.placeAuctionBid.play();
 
           this.$store.state.socket.emit("updatePlayerAuction", {
             roomId: this.$route.params.id,
@@ -1104,6 +1125,9 @@ export default {
       return sortval[0];
     },
     buyCard: function (action, d) {
+
+      this.cardClicked += 1;
+      console.log('collectors buyCard this.cardClicked: ' + this.cardClicked);
       if (action === "win_auction") {
         let max_val = this.getmax();
         console.log(max_val.id, this.playerId);
@@ -1117,7 +1141,6 @@ export default {
             card: d.card,
             action: action,
             cost: this.marketValues[d.card.market],
-
             start_auction: this.players[this.playerId].start_auction,
             p: d.p,
           });
@@ -1133,8 +1156,7 @@ export default {
           this.players[this.playerId].start_auction = true;
         }
         // document.getElementById("players_auction").hidden = this.start_auction;
-        console.log("*****************'");
-        console.log(action);
+
         this.$store.state.socket.emit("collectorsBuyCard", {
           roomId: this.$route.params.id,
           playerId: this.playerId,
@@ -1458,7 +1480,8 @@ footer a:visited {
 }
 
 .player-hand .cardslots div {
-  transfrom: scale(03) translate(-110%, -110%);
+  transfrom: scale(0.3) translate(-110%, -110%);
+
 }
 
 /* .cardslots {
@@ -1795,7 +1818,7 @@ p {
 
 .quarter-tiles {
   position: relative;
-  top: -5.1em;
+  top: -5.7em;
   left: 0.1em;
   width: 5.5em;
   height: 2.5em;
