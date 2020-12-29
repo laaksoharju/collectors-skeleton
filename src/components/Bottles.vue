@@ -102,15 +102,19 @@ export default {
       console.log('bottles place bottle');
 
 // console.log(this.typeofaction);
-      this.$emit("placeBottle", p);
 
 
-      if (this.itemsOnSale !== undefined) {
-          this.highlightAvailableCards(p.cost);
+          if (this.player.playersTurn){
 
-      }
+              this.$emit("placeBottle", p);
 
-      this.highlightAvailableCards(p.cost);
+              if (this.itemsOnSale !== undefined) {
+                  this.highlightAvailableCards(p.cost);
+
+              }
+
+
+          }
     },
     isAvailableCards: function (card, cost) {
       if (this.marketValues[card.item] <= this.player.money - cost) {
