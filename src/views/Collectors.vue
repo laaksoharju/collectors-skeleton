@@ -618,6 +618,7 @@ function(d) {
           playerId: this.playerId,
           card: card,
           auctionCard: this.auctionCards,
+          cost: this.chosenPlacementCost
         }
       );
 

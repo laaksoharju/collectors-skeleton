@@ -108,6 +108,7 @@ export default {
 
   startWinnerCard: function(action){
     console.log('started winner card with action'+action);
+    
     this.$emit('startWinnerCard', action);
   },
 
