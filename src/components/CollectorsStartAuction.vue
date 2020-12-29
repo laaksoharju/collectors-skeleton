@@ -20,12 +20,14 @@
 
 <button  id = "bidPlacementButton" @click="startBidding()">Place bid!</button>
 
-<button  id = "stopAuctionButton" @click="stopAuction()">Stop auction!</button>
-<!--
-  <div class = "EnergyBottleCoinWhiteTwo"></div>  Olika flaskor med vita coins, 1 2 eller 0
-  <div class = "EnergyBottleCoinWhiteOne"></div>
-  <div class = "EnergyBottleCoinWhiteNoll"></div>
-  <div class = "EnergyBottleCoinWhiteNoll second"></div> -->
+<button  id = "stopAuctionButton" @click="stopAuction()">Stop! </button>
+
+<div class="winner">
+Winner: {{auctionWinner}}
+</div>
+
+
+
 
  <!--<div class="buttons" v-for="(p, index) in placement" :key="index"> -->
 <div class="buttons" v-for="(p, index) in placement" :key="'Auction Button'+index">
@@ -52,6 +54,9 @@
    </button>
  </div>
 
+
+
+
 <div class = "start-auction" >
   <div v-for="(card, index) in auctionCards" :key="index">
     <CollectorsCard
@@ -59,6 +64,15 @@
       :availableAction="card.available"
       @doAction="startAuction(card)"/>
   </div>
+</div>
+
+<div class="auctionButtons" v-for="(value, key) in players" :key = "key">
+
+
+  <button class = "auctionSkill" v-if="auctionWinner === key" @click="startWinnerCard('skill')"> PLACE AS SKILL </button>
+  <button class = "auctionMarket" v-if="auctionWinner === key" @click="startWinnerCard('market')"> PLACE IN MARKET </button>
+  <button class = "auctionItem" v-if="auctionWinner === key" @click="startWinnerCard('item')"> PLACE AS ITEM </button>
+
 </div>
 </div>
 </template>
@@ -70,12 +84,15 @@ export default {
   name: 'CollectorsStartAuction',
   components: {
     CollectorsCard
+
   },
   props: {
     labels: Object,
+    players: Object,
     player: Object,
     auctionCards: Array,
     cardUpForAuction: Object,
+    auctionWinner: String,
     //bids: Object,
     marketValues: Object,
     placement: Array,
@@ -88,6 +105,12 @@ export default {
         this.highlightAvailableCards()
         }
       },
+
+  startWinnerCard: function(action){
+    console.log('started winner card with action'+action);
+    this.$emit('startWinnerCard', action);
+  },
+
 
   startBidding: function (){
      var bid = Number(document.getElementById("bidSquare").value);
@@ -266,6 +289,28 @@ form {
 
   .buttons{
     border-radius: 9px;
+  }
+
+  .auctionButtons{
+    grid-column: 3;
+    grid-row: 7;
+    place-self: right;
+  }
+
+  .winner{
+    grid-row:2;
+    grid-column:1;
+    place-self: top center;
+    font-size: 12px;
+  }
+
+  #stopAuctionButton{
+    border-radius: 9px;
+    height: 20px;
+    width: 50px;
+    grid-row:2;
+    grid-column:1;
+    place-self: end center;
   }
 
   #buttonNollSecond {

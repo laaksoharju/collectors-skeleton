@@ -105,14 +105,30 @@ function sockets(io, socket, data) {
 
     socket.on('collectorsStopAuction', function(d){
       data.stopAuction(d.roomId, d.playerId, d.cardUpForAuction)
-      io.to(d.roomId).emit('collectorsStoppingAuction', {
+      console.log( data.getAuctionWinner(d.roomId), "INNE I SOCKET COLLECTOR AUCTION WINNER");
+      io.to(d.roomId).emit('collectorsAuctionStopped', {
         playerId: d.playerId,
         players: data.getPlayers(d.roomId),
-        cardUpForAuction: data.getCardUpForAuction(d.roomId)
+        cardUpForAuction: data.getCardUpForAuction(d.roomId),
+        auctionWinner: data.getAuctionWinner(d.roomId)
         }
       );
     }
     );
+
+    socket.on('collectorsWinnerCard', function(d){
+      data.startWinnerCard(d.roomId, d.playerId, d.cardUpForAuction, d.action)
+
+      io.to(d.roomId).emit('collectorsWinnerCardStarted', {
+        playerId: d.playerId,
+        players: data.getPlayers(d.roomId),
+        cardUpForAuction: data.getCardUpForAuction(d.roomId),
+        auctionWinner: data.getAuctionWinner(d.roomId),
+        marketValues: data.getMarketValues(d.roomId)
+        }
+      );
+    }
+  );
     socket.on('collectorsStartBidding', function(d){
     //  data.startBidding(d.roomId, d.playerId)
     console.log(data.getPlayers(d.roomId));
