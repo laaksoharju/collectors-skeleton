@@ -185,13 +185,14 @@ Data.prototype.joinGame = function (roomId, playerId) {
         skills: [],
         items: [],
         income: [],
-        secret: [],
+        secret: [], 
         color: colors[Object.keys(room.players).length],
         bottles: 2, //ska vara 2!!
         availableBottles: 2, //ska vara 2!!
         active: this.setActivePlayer(roomId),
-        dispBottles: false
-      };
+        dispBottles: false,
+        chooseSecret: true, //ska vara true
+      }; 
       return true;
     }
     console.log("Player", playerId, "was declined due to player limit");
@@ -676,6 +677,25 @@ Data.prototype.getAuctionCards = function (roomId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     return room.auctionCards;
+  } else return [];
+}
+
+Data.prototype.setSecret = function (roomId, playerId, secretCard) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+      let d = [];
+      for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
+        // since card comes from the client, it is NOT the same object (reference)
+        // so we need to compare properties for determining equality      
+        if (room.players[playerId].hand[i].x === secretCard.x &&
+          room.players[playerId].hand[i].y === secretCard.y) {
+          d = room.players[playerId].hand.splice(i, 1);
+          break;
+        }
+      }
+    room.players[playerId].secret.push(...d); //... delar upp arrayen i separata objekt
+    room.players[playerId].chooseSecret=false;
+    return room.players;
   } else return [];
 }
 

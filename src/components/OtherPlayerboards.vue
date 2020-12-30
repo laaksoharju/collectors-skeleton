@@ -86,8 +86,9 @@ export default {
     .showPlayerBoard {
       /*height: 600px;
       width: 1000px;*/
-      height: 600px;
-      width: 1000px;
+      height: 30vw; /*30vw;*/
+      width: 40vw; /*40vw;*/
+      border-bottom: 1px solid black;
     }
 
     /*.showPlayerBoard {
