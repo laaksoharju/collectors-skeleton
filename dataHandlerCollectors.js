@@ -56,6 +56,7 @@ Data.prototype.getUILabels = function(roomId) {
 Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
   let room = {};
   room.players = {};
+  room.highestPoints = 0;
   room.calcPlayersTurnsPerformed = 0;
   room.setNextPlayer = false;
   room.firstTojoin = true;
@@ -78,6 +79,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 1,
       clickCardTimes: 1,
+
     },
     {
       cost: 1,
@@ -336,6 +338,8 @@ Data.prototype.joinGame = function(roomId, playerId) {
         playersTurn: room.turnToPlay,
         starts_round: room.turnToPlay,
         clickedOnBottle: false,
+        points: 0,
+        winner: null,
         playerState:
         {
           saleItems: [],
@@ -609,6 +613,8 @@ Data.prototype.buyCard = function(
   p,
   start_auction
 ) {
+
+  console.log('datahandler buy card p: ' + typeof p);
   let room = this.rooms[roomId];
   if (typeof room !== "undefined") {
     let c = null;
@@ -677,6 +683,10 @@ Data.prototype.buyCard = function(
       // }
       room.players[playerId].skills.push(...c);
 
+      if (card.skill === 'bottle'){
+        room.players[playerId].bottles += 1;
+      }
+
     } else if (action === "auction") {
       for (let i = 0; i < room.auctionCards.length; i += 1) {
         if (
@@ -698,6 +708,16 @@ Data.prototype.buyCard = function(
       });
 
       // room.players[playerId].items.push(...c);
+
+      for (var key in room.players) {
+
+          for (var i in room.players[key].skills){
+            if(room.players[key].skills[i].skill === 'auctionIncome'){
+              room.players[key].money += 1;
+            }
+          }
+      }
+
 
     } else if (action === "win_auction") {
       for (let i = 0; i < room.deckAuction.length; i += 1) {
@@ -746,6 +766,7 @@ Data.prototype.buyCard = function(
 
       if (p.raiseValue > 0){
         room.market.push(card);
+        console.log('raise market value');
       }
 
         /*var string = card.item;
@@ -780,7 +801,8 @@ Data.prototype.bottleClicked = function (roomId, playerId, saleItems, action, cl
 }
 
 
-Data.prototype.placeBottle = function(roomId, playerId, action, p) {
+Data.prototype.placeBottle = function(roomId, playerId, action, p, money) {
+
 
   this.calcPlayersTurns(roomId, playerId);
 
@@ -788,7 +810,9 @@ Data.prototype.placeBottle = function(roomId, playerId, action, p) {
   var cost = p.cost;
   let room = this.rooms[roomId];
 
-  room.players[playerId].money -= cost;
+    console.log('room.players[playerId].skills: ' + room.players[playerId].skills);
+  room.players[playerId].money = money;
+
   room.players[playerId].bottles -= 1;
 
   console.log("dataHandler typeof.this.players: " + typeof room.players[playerId]);
@@ -805,6 +829,7 @@ Data.prototype.placeBottle = function(roomId, playerId, action, p) {
       activePlacement = room.auctionPlacement;
     } else if (action === "work") {
       activePlacement = room.workPlacement;
+
 
 
       if(p.becomeFirstPlayer){
@@ -943,33 +968,72 @@ Data.prototype.calcPlayersTurns = function(roomId) {
 
     room.calcPlayersTurnsPerformed = 0;
 
-      /*else {
-        room.players[key].hasentPlayedInTurns += 1
-      }
 
-      if (room.players[key].hasentPlayedInTurns == room.playerCount - 1){
-        if (room.players[key].bottles == 0) {
-          room.players[key].hasentPlayedInTurns = 0;
-          this.calcPlayersTurns;
-        } else {
-          room.players[key].playersTurn = true;
-          room.players[key].hasentPlayedInTurns = 0;
-        }*/
-
-
-
-
-
-
-
-    /*  if (room.players[playerId].playersTurn == true){
-        room.players[playerId].playersTurn == false;
-
-
-      }*/
 
 
 
 };
+
+  Data.prototype.endGame = function(roomId) {
+      console.log('datahandler endGame roomID: ' + roomId);
+      let room = this.rooms[roomId];
+      var marketValues = this.getMarketValues(roomId);
+      console.log('datahandler endGame marketValues: ' + marketValues['fastaval']);
+
+
+
+      //calculate points for each players items
+      for (var playerId in room.players) {
+        console.log(playerId);
+
+        var player = room.players[playerId];
+
+        //calculate points for each players items
+        for (var i in player.items) {
+          var itemsValue = marketValues[player.items[i].item];
+          console.log('datahandler endgam itemsValue: ' + itemsValue);
+          player.points += itemsValue;
+
+        }
+
+        //calculate points for each players money
+        player.points += Math.floor(player.money / 3);
+
+        //compare players points
+        if (player.points > room.highestPoints){
+          room.highestPoints = player.points;
+          player.winner = true;
+
+        }
+
+
+
+      }
+
+      //declair winner
+      for (var playerId in room.players) {
+        console.log(playerId);
+
+        var player = room.players[playerId];
+
+        if (player.winner === true){
+          console.log('the winner is playerId: ' +  playerId + ' with points: ' + player.points)
+        }
+
+
+      }
+
+
+
+
+
+
+
+
+
+
+  };
+
+
 
 module.exports = Data;

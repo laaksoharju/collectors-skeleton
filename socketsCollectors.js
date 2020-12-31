@@ -57,7 +57,7 @@ function sockets(io, socket, data) {
     );
   });
   socket.on("collectorsBuyCard", function(d) {
-    console.log("sockets collectorBuyCard");
+    console.log("sockets collectorBuyCard type of d.p: " + typeof d.p);
 
     data.buyCard(
       d.roomId,
@@ -65,8 +65,9 @@ function sockets(io, socket, data) {
       d.card,
       d.cost,
       d.action,
-      d.start_auction,
       d.p,
+      d.start_auction,
+
 
 
     );
@@ -83,13 +84,21 @@ function sockets(io, socket, data) {
   });
   socket.on("collectorsPlaceBottle", function(d) {
     console.log("sockets placeBottle");
-    data.placeBottle(d.roomId, d.playerId, d.action, d.p, d.hand);
+    data.placeBottle(d.roomId, d.playerId, d.action, d.p, d.money);
 
     console.log("sockets placeBottle after data.placeBottle");
     io.to(d.roomId).emit(
       "collectorsBottlePlaced",
       data.getPlacements(d.roomId)
     );
+  });
+
+
+
+  socket.on("endGame", function(roomId) {
+    console.log("endGame socket");
+    data.endGame(roomId);
+
   });
 
   socket.on('collectorsBottleClicked', function (d)

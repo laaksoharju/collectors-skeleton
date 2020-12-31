@@ -110,7 +110,7 @@ export default {
       if (card.available) {
 
 
-        this.$emit("buyCard", {card: card, p: "buttonClicked"});
+        this.$emit("buyCard", {card: card, p: this.buttonClicked});
         // this.highlightAvailableCards();
       }
     },

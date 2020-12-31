@@ -2,6 +2,8 @@
   <div>
     <main>
       <div class="collectors-game">
+
+
         <section class="buy_item">
           <CollectorsBuyActions
             v-if="players[playerId]"
@@ -108,6 +110,7 @@
           </section>
 
           <section class="work_bottle">
+              <button class = "end_game"   @click="endGame(p)">End Game</button>
             <Bottles
               v-if="players[playerId]"
               :labels="labels"
@@ -178,6 +181,7 @@
                   alt="Player Cards for Coins"
                 />{{ this.players[this.playerId].cardsForCash }}
               </div>
+
             </div>
             <div class="player-hand">
               <div class="secret-card">
@@ -421,6 +425,15 @@
                   players[otherPlayerId].cardsForCash
                 }}
               </div>
+
+              <div class="player-nr-cards">
+                <img
+                  src="/images/backOfCard.png"
+                  alt="Players number of cards"
+                />x{{players[otherPlayerId].hand.length + 1}}
+              </div>
+
+
             </div>
             <div
               class="player-bottles"
@@ -764,6 +777,7 @@ export default {
       maxSizes: { x: 0, y: 0 },
       labels: {},
       players: {},
+
       // playerId: {
       //   hand: [],
       //   money: 1,
@@ -781,6 +795,7 @@ export default {
       deckAuction: [],
       cardClicked: 0,
       clickCardTimes: 0,
+      recieveExtraCard: 0,
       chosenPlacementCost: null,
       marketValues: {
         fastaval: 0,
@@ -1022,11 +1037,19 @@ export default {
           this.handCardAvailable = false;
           this.cardClicked = 0;
           this.clickCardTimes = 0;
+
         }
       }.bind(this)
     );
   },
   methods: {
+
+    endGame: function() {
+
+      this.$store.state.socket.emit("endGame", this.$route.params.id);
+
+    },
+
     handlePlayerState: function () {
       var action = this.playerState.action;
 
@@ -1112,24 +1135,47 @@ export default {
       }
     },
     placeBottle: function (action, p) {
-      this.clickCardTimes = p.clickCardTimes;
+
+
+      this.players[this.playerId].money -= p.cost;
+
+      if (action === 'work'){
+
+        if (this.players[this.playerId].skills.length > 0){
+              for (var i in this.players[this.playerId].skills){
+                if (this.players[this.playerId].skills[i].skill === 'workerIncome'){
+                  this.players[this.playerId].money += 2;
+                }
+                if (this.players[this.playerId].skills[i].skill === 'workerCard'){
+                  this.recieveExtraCard += 1;
+                  console.log('placebottle workerCard');
+                }
+              }
+          }
+         }
+
+      this.clickCardTimes = p.clickCardTimes
+
 
       console.log("collectors place bottle");
+      console.log('players[playerId].skills : ' + this.players[this.playerId].skills);
       this.buttonClicked = p;
 
-      if (p.cashForCard > 0) {
+      if (p.cashForCard  > 0) {
         this.handCardAvailable = true;
       }
       if (p.raiseValue > 0 && p.raiseValue !== undefined) {
         this.handCardAvailable = true;
       }
 
-      for (let i = 0; i < p.recieveCards; i += 1) {
+      for (let i = 0; i < p.recieveCards + this.recieveExtraCard; i += 1) {
         this.$store.state.socket.emit("collectorsDrawCard", {
           roomId: this.$route.params.id,
           playerId: this.$store.state.playerId,
         });
       }
+
+      this.recieveExtraCard = 0;
 
       this.saleItems = [];
       if (action == "buy") this.saleItems = this.itemsOnSale;
@@ -1150,7 +1196,8 @@ export default {
         playerId: this.playerId,
         action: action,
         p: p,
-        hand: this.players[this.playerId].hand,
+
+        money: this.players[this.playerId].money,
       });
     },
     drawCard: function () {
@@ -1167,6 +1214,7 @@ export default {
     },
     buyCard: function (action, d) {
 
+      console.log('collectors buycard p: ' + typeof d.p );
       this.cardClicked += 1;
       // console.log('collectors buyCard this.cardClicked: ' + this.cardClicked);
       if (action === "win_auction") {
@@ -1275,6 +1323,12 @@ footer a:visited {
   grid-template-columns: 0.8fr 1.2fr 2.5fr;
   grid-gap: 0.5em;
   grid-template-rows: 1fr 4fr 1.1fr;
+}
+
+.end_game{
+  height: 10vh;
+  width: 10vw;
+  z-index: 5;
 }
 .playerboard {
   position: absolute;
@@ -1625,6 +1679,20 @@ footer a:visited {
   height: 4vh;
   /* padding-top: 5px; */
 }
+
+.player-nr-cards {
+  grid-column: 4;
+  grid-row: 1;
+  width: 10vh;
+}
+
+.player-nr-cards img {
+  height: 4vh;
+
+  /* padding-top: 5px; */
+}
+
+
 
 .player-hand {
   grid-column: 1;
