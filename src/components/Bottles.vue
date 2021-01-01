@@ -119,13 +119,15 @@ export default {
           this.highlightAvailableCards(p.cost);
         }
       }*/
+        if (this.player.playersTurn){
+          console.log('Bottles emit placeBottle');
+          this.$emit("placeBottle", p);
 
-      console.log('Bottles emit placeBottle');
-      this.$emit("placeBottle", p);
+          if (this.itemsOnSale !== undefined){
+            this.highlightAvailableCards(p.cost);
+          }
 
-      if (this.itemsOnSale !== undefined){
-        this.highlightAvailableCards(p.cost);
-      }
+        }
     },
     highlightAvailableCards: function (cost = 100) {
       for (let i = 0; i < this.itemsOnSale.length; i += 1) {

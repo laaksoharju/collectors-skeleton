@@ -56,6 +56,7 @@ Data.prototype.getUILabels = function(roomId) {
 Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
   let room = {};
   room.players = {};
+  room.winnerId = null,
   room.highestPoints = 0;
   room.calcPlayersTurnsPerformed = 0;
   room.setNextPlayer = false;
@@ -324,14 +325,14 @@ Data.prototype.joinGame = function(roomId, playerId) {
       room.players[playerId] = {
         playerName: playerId,
         hand: room.deck.splice(0, 2), // Two cards are kept secret and form the hands of each player
-        money: Object.keys(room.players).length + 2,
+        money: Object.keys(room.players).length + 20,
         points: 0,
         skills: [],
         items: [],
         income: [],
         secret: room.deck.splice(0, 1), // picks one card and places it face down, tucked under their player board at the position marked with a treasure chest.
         color: room.playerColors.pop(),
-        bottles: 2,
+        bottles: 10,
         cardsForCash: 0,
         auction_amount: 0,
         start_auction: true,
@@ -757,35 +758,30 @@ Data.prototype.buyCard = function(
     }
     //exchanges a card in hand for income
     else if (action === "hand") {
-      console.log("dataHandler room.fastaval: " + room.fastaval);
-      console.log("button sent to buyCard: " + p);
+        console.log("dataHandler room.fastaval: " + room.fastaval);
+        console.log("button sent to buyCard: " + p);
 
-      if (p.cashForCard > 0) {
-        room.players[playerId].cardsForCash += 1;
-      }
-
-      if (p.raiseValue > 0){
-        room.market.push(card);
-        console.log('raise market value');
-      }
-
-        /*var string = card.item;
-
-          console.log('raiseValue string: ' + string);
-
-          room.string += 1;
-          console.log('dataHandler raiseValue: ' + room.string);*/
-      }
-
-      for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
-        if (
-          room.players[playerId].hand[i].x === card.x &&
-          room.players[playerId].hand[i].y === card.y
-        ) {
-          room.players[playerId].hand.splice(i, 1);
-          break;
+        if (p.cashForCard > 0) {
+          room.players[playerId].cardsForCash += 1;
         }
-      }
+
+        if (p.raiseValue > 0){
+          room.market.push(card);
+          console.log('raise market value');
+        }
+
+        for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
+          if (
+            room.players[playerId].hand[i].x === card.x &&
+            room.players[playerId].hand[i].y === card.y
+          ) {
+            room.players[playerId].hand.splice(i, 1);
+            break;
+          }
+        }
+    }
+
+
     }
     room.players[playerId].clickedOnBottle = false;
   room.players[playerId].playerState.saleItems = [];
@@ -975,58 +971,120 @@ Data.prototype.calcPlayersTurns = function(roomId) {
 };
 
   Data.prototype.endGame = function(roomId) {
-      console.log('datahandler endGame roomID: ' + roomId);
+
+      //get room and market values
       let room = this.rooms[roomId];
       var marketValues = this.getMarketValues(roomId);
-      console.log('datahandler endGame marketValues: ' + marketValues['fastaval']);
 
 
-
-      //calculate points for each players items
+      //loop thorugh players
       for (var playerId in room.players) {
-        console.log(playerId);
 
-        var player = room.players[playerId];
+            console.log(playerId);
 
-        //calculate points for each players items
+            //player being calculated
+            var player = room.players[playerId];
+
+
+            //check end-game skills of player
+            var skillVpAll = 0;
+            var skillVpFastaval = 0;
+            var skillVpMovie = 0;
+            var skillVpTechnology = 0;
+            var skillVpFigures = 0;
+            var skillVpMusic = 0;
+
+            for (var i in player.skills){
+              if(player.skills[i].skill === 'VP-all'){
+                skillVpAll += 1;
+              }
+
+              if(player.skills[i].skill === 'VP-fastaval'){
+                skillVpFastaval += 1;
+              }
+
+              if(player.skills[i].skill === 'VP-movie'){
+                 skillVpMovie += 1;
+              }
+
+              if(player.skills[i].skill === 'VP-technology'){
+                skillVpTechnology += 1;
+              }
+              if(player.skills[i].skill === 'VP-figures'){
+                skillVpFigures += 1;
+              }
+              if(player.skills[i].skill === 'VP-music'){
+                skillVpMusic += 1;
+              }
+
+            }
+
+
+
+        /*//calculate points for players items----------
         for (var i in player.items) {
-          var itemsValue = marketValues[player.items[i].item];
-          console.log('datahandler endgam itemsValue: ' + itemsValue);
-          player.points += itemsValue;
+            var itemsValue = marketValues[player.items[i].item];
+            console.log('datahandler endgam itemsValue: ' + itemsValue);
+            player.points += itemsValue;
 
-        }
+        }*/
 
-        //calculate points for each players money
-        player.points += Math.floor(player.money / 3);
+            //add players secret card to items
+            player.items.push(player.secret);
 
-        //compare players points
-        if (player.points > room.highestPoints){
-          room.highestPoints = player.points;
-          player.winner = true;
+            //calculate and add points from items and check if player has one of every item
+            for (var i in player.items){
+              if (player.items[i].item === 'fastaval'){
 
-        }
+                  var itemsValue = marketValues['fastaval'] + skillVpFastaval;
+                  var hasFastaval = true;
+
+              } else if (player.items[i].item === 'movie'){
+
+                  var itemsValue = marketValues['movie'] + skillVpMovie;
+                  var hasMovie = true;
+
+              } else if (player.items[i].item === 'technology'){
+                  var itemsValue = marketValues['technology'] + skillVpTechnology;
+                  var hasTechnology = true;
+
+              } else if (player.items[i].item === 'figures'){
+
+                  var itemsValue = marketValues['figures'] + skillVpFigures;
+                  var hasFigures = true;
+
+              } else if (player.items[i].item === 'music'){
+
+                  var itemsValue = marketValues['music'] + skillVpMusic;
+                  var hasMusic = true;
+
+              }
+              console.log('datahandler endgame itemsValue: ' + itemsValue);
+
+              player.points += itemsValue;
+
+              }
+
+              //if player has one of every item, add points given by VP-all
+              if( hasFastaval && hasMovie && hasTechnology && hasFigures && hasMusic && skillVpAll > 0){
+                  player.points += 5 * skillVpAll;
+              }
 
 
+              //calculate points from players money
+              player.points += Math.floor(player.money / 3);
+                  console.log('total points for ' + playerId + ' : ' + player.points);
+
+              //compare players points with previous players an decide winner
+              if (player.points > room.highestPoints){
+                room.highestPoints = player.points;
+                player.winner = true;
+                room.winnerId = playerId
+              }
+
+      console.log('the winner is playerId: ' +  room.winnerId + ' with points: ' + room.highestPoints);
 
       }
-
-      //declair winner
-      for (var playerId in room.players) {
-        console.log(playerId);
-
-        var player = room.players[playerId];
-
-        if (player.winner === true){
-          console.log('the winner is playerId: ' +  playerId + ' with points: ' + player.points)
-        }
-
-
-      }
-
-
-
-
-
 
 
 
