@@ -191,7 +191,7 @@
               <div class="secret-card">
                 <CollectorsCard
                   :card="players[playerId].secret"
-                  :key='secret'
+                  
                 />
 
 
