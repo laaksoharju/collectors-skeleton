@@ -3,6 +3,20 @@
     <main>
       <div class="table">
           <h1>COLLECTORS</h1>
+          <div v-if="winner !== ''">
+            <h5 class = "endedGame">
+            THE WINNER IS {{winner}}
+          </h5>
+            <div v-for="(value, key) in players" :key = "key">
+              <div v-for="(valuevalue,keykey) in value" :key ="keykey">
+                <div v-if="keykey == 'points'">
+                  <h6 class = "playerpoint">
+                   {{key}}'s points: {{valuevalue}}
+                 </h6>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <label for="Name">Username</label><br>
           <input type="text" id="userName" placeholder="Username">
@@ -222,15 +236,17 @@
 
       <div class="roundCounter">
         <h3> Round:  </h3>
-        <button class="roundButton"  @click= "changeRound">
+        <button class="roundButton"  @click= "changeRound(); endGame(currentRound)">
           <div v-if="currentRound < 5">
             <h5> {{currentRound}} </h5> <h3> Press here when round {{currentRound}} is over.</h3>
           </div>
-          <div v-else>
+          <div v-else >
             <h5> Game Ended </h5>
           </div>
         </button>
       </div>
+
+
 
       <!-- Ruta för att visa vilka spelare som är i rummet -->
       <div class="showPlayers">
@@ -345,6 +361,7 @@ export default {
       market:[],
       cardUpForAuction: {},
       auctionWinner: "",
+      winner: "",
       chosenAction: "",
       highestBid: 0,
       rules: ""
@@ -446,6 +463,14 @@ export default {
       }.bind(this)
     );
 
+    this.$store.state.socket.on('collectorsEndedGame',
+      function(d) {
+          this.winner = d.winner;
+          this.players = d.players
+          console.log("ended game socket collectors.vue" + d.winner)
+      }.bind(this)
+    );
+
     this.$store.state.socket.on('collectorsAuctionStarted',
     function(d) {
       console.log(d.playerId, "Started an auction");
@@ -458,7 +483,6 @@ export default {
   this.$store.state.socket.on('collectorsAuctionStopped',
   function(d) {
     console.log(d.playerId, "Stopped an auction");
-    console.log(d.auctionWinner, "socket ish auction winner")
     this.players = d.players;
     this.cardUpForAuction = d.cardUpForAuction;
     this.auctionWinner = d.auctionWinner;
@@ -681,6 +705,19 @@ startWinnerCard: function(action){
           }
         );
     },
+
+    endGame: function(currentRound){
+      console.log("currentround end"+currentRound)
+      if (currentRound == 4){
+        console.log("inne i if end")
+        this.$store.state.socket.emit('collectorsEndGame', {
+            roomId: this.$route.params.id,
+            marketValues: this.marketValues
+
+            }
+          );
+      }
+    },
     ruleFunction: function() {
       var placement = document.getElementById("ruleContent");
       var rules1=
@@ -792,6 +829,7 @@ h5 {
   .table {
     padding-left: 50px;
     padding-right: 50px;
+
   }
   .board {
 	display: grid;
@@ -944,7 +982,18 @@ h5 {
     grid-row: 16/span 2;
     text-align: center;
   }
+  h6{
+    text-align: center;
+    font-style:italic;
+    font-size: 20px;
+    text-shadow: 1px 2px 2px blue;
+    margin-bottom: 0px;
+    margin-top: 0px;
 
+  }
+.endedGame{
+  text-shadow: 1px 2px 2px green;
+}
 #userName {
   background-color: #76B0B7;
 }
