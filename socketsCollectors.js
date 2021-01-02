@@ -62,6 +62,7 @@ function sockets(io, socket, data) {
       );
     });
 
+
     socket.on('collectorsPlaceWorkBottle', function(d) {
       data.placeWorkBottle(d.roomId, d.playerId, d.workActionId, d.cost);
       io.to(d.roomId).emit('collectorsWorkBottlePlaced',

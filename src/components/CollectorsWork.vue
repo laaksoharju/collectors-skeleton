@@ -13,35 +13,36 @@
       </div>
     </div>
 
-    <div class="buttons" v-for="(p, index) in placement" :key="index">
+    <div class="buttons" v-for="(p, workActionId) in placement" :key="workActionId">
 
-      <button id="alt1" v-if="p.playerId===null && p.cost===-1"
+      <button id="alt1" v-if="p.playerId===null && workActionId === 0"
       :disabled="cannotAfford(p.cost)"
       @click = "placeBottle(p)">
         <div class = "Alt1">
         </div>
       </button>
 
-      <button id="alt2" v-if="p.playerId===null && p.cost===1 "
+      <button id="alt2" v-if="p.playerId===null && workActionId === 1 "
       :disabled="cannotAfford(p.cost)"
       @click="placeBottle(p)">
         <div class = "Alt2">
-
         </div>
       </button>
 
-        <button id="alt3" v-if="p.playerId===null && p.cost===0 && index === 2"
+        <button id="alt3" v-if="p.playerId===null && workActionId === 2"
         :disabled="cannotAfford(p.cost)"
         @click="placeBottle(p)">
           <div class = "Alt3">
           </div>
         </button>
-        <button id="alt4" v-if="p.playerId===null && p.cost===0 && index === 3"
+
+        <button id="alt4" v-if="p.playerId===null && workActionId === 3"
         :disabled="cannotAfford(p.cost)"
         @click="placeBottle(p)">
           <div class = "Alt4">
           </div>
         </button>
+
     </div>
 
 
