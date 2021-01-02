@@ -348,14 +348,14 @@ Data.prototype.joinGame = function(roomId, playerId) {
       room.players[playerId] = {
         playerName: playerId,
         hand: room.deck.splice(0, 3), // Two cards are kept secret and form the hands of each player
-        money: Object.keys(room.players).length + 20,
+        money: Object.keys(room.players).length + 2,
         points: 0,
         skills: [],
         items: [],
         income: [],
-        secret: [], 
+        secret: {}, 
         color: room.playerColors.pop(),
-        bottles: 10,
+        bottles: 2,
         cardsForCash: 0,
         auction_amount: 0,
         start_auction: true,
@@ -1022,11 +1022,10 @@ Data.prototype.calcPlayersTurns = function(roomId) {
       //loop thorugh players
       for (var playerId in room.players) {
 
-            console.log(playerId);
+            console.log('Calculating score for player '+ playerId);
 
             //player being calculated
             var player = room.players[playerId];
-
 
             //check end-game skills of player
             var skillVpAll = 0;
@@ -1072,8 +1071,9 @@ Data.prototype.calcPlayersTurns = function(roomId) {
         }*/
 
             //add players secret card to items
-            player.items.push(player.secret);
+            //player.items.push(player.secret[0]);
 
+            console.log('Player points before starting: ' + player.points);
             //calculate and add points from items and check if player has one of every item
             for (var i in player.items){
               if (player.items[i].item === 'fastaval'){
@@ -1101,20 +1101,23 @@ Data.prototype.calcPlayersTurns = function(roomId) {
                   var hasMusic = true;
 
               }
-              console.log('datahandler endgame itemsValue: ' + itemsValue);
-
               player.points += itemsValue;
-
+              console.log('Item: ' + player.items[i].item + ' Value:' + itemsValue);
               }
+              
+
 
               //if player has one of every item, add points given by VP-all
               if( hasFastaval && hasMovie && hasTechnology && hasFigures && hasMusic && skillVpAll > 0){
                   player.points += 5 * skillVpAll;
               }
-
+              console.log('datahandler endgame itemsValue: ' + player.points);
 
               //calculate points from players money
-              player.points += Math.floor(player.money / 3);
+              let moneyValue = Math.floor(player.money / 3);
+              console.log('datahandler endgame moneyValue: ' + moneyValue);
+
+              player.points += moneyValue;
                   console.log('total points for ' + playerId + ' : ' + player.points);
 
               //compare players points with previous players an decide winner
@@ -1123,10 +1126,8 @@ Data.prototype.calcPlayersTurns = function(roomId) {
                 player.winner = true;
                 room.winnerId = playerId
               }
-
-      console.log('the winner is playerId: ' +  room.winnerId + ' with points: ' + room.highestPoints);
-
       }
+      console.log('the winner is playerId: ' +  room.winnerId + ' with points: ' + room.highestPoints);
 
 
 
