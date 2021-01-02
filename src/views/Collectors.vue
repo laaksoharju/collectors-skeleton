@@ -569,6 +569,7 @@ function(d) {
     placeBottle: function (action, cost) {
       this.chosenPlacementCost = cost;
       this.chosenAction = action;
+      console.log('bajs')
       this.$store.state.socket.emit('collectorsPlaceBottle', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
