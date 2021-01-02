@@ -62,11 +62,11 @@ Data.prototype.createRoom = function (roomId, playerCount, lang = "en") {
   room.deck = this.createDeck(lang);
   room.playerCount = playerCount;
   room.playerOrder = [];
-  room.dispBottles = Boolean;
   room.itemsOnSale = room.deck.splice(0, 5);
   room.skillsOnSale = room.deck.splice(0, 5);
   room.auctionCards = room.deck.splice(0, 4);
   room.market = [];
+  room.readyForNextRound = new Set();
   room.buyPlacement = [{
       cost: 1,
       playerId: null
@@ -185,12 +185,14 @@ Data.prototype.joinGame = function (roomId, playerId) {
         skills: [],
         items: [],
         income: [],
-        secret: [],
+        secret: [], 
         color: colors[Object.keys(room.players).length],
         bottles: 2, //ska vara 2!!
         availableBottles: 2, //ska vara 2!!
-        active: this.setActivePlayer(roomId)
-      };
+        active: this.setActivePlayer(roomId),
+        dispBottles: false,
+        chooseSecret: true, //ska vara true
+      }; 
       return true;
     }
     console.log("Player", playerId, "was declined due to player limit");
@@ -233,20 +235,32 @@ Data.prototype.getBottleIncome = function (roomId, playerId, bottleIncome) {
     let card = room.deck.pop();
     room.players[playerId].hand.push(card);
   }
-  room.dispBottles = false;
+  room.players[playerId].dispBottles = false;
+  room.nextRound = true;
+  //Väntar in alla!
+  for(let i = 0; i<room.playerOrder.length; i++){
+    if(room.players[room.playerOrder[i]].dispBottles){
+      room.nextRound = false;
+      return;
+    }
+  }
 }
 
-Data.prototype.startNextRound = function (roomId) {
+Data.prototype.startNextRound = function(roomId, playerId){
   let room = this.rooms[roomId];
-  room.round += 1;
-  this.rotateCards(roomId);
-  this.resetPlacements(roomId);
-  for (let i = 0; i < room.playerOrder.length; i++) {
-    room.players[room.playerOrder[i]].availableBottles = room.players[room.playerOrder[i]].bottles;
-    room.players[room.playerOrder[i]].money = room.players[room.playerOrder[i]].money + room.players[room.playerOrder[i]].income.length;
+  room.readyForNextRound.add(playerId); //väntar in alla 
+  if(room.readyForNextRound.size == room.playerCount){
+    room.round += 1;
+    this.rotateCards(roomId);
+    this.resetPlacements(roomId);
+    for (let i = 0; i < room.playerOrder.length; i++) {
+      room.players[room.playerOrder[i]].availableBottles = room.players[room.playerOrder[i]].bottles;
+      room.players[room.playerOrder[i]].money = room.players[room.playerOrder[i]].money + room.players[room.playerOrder[i]].income.length;
+    }
+    room.players[room.playerOrder[0]].active = true; //första spelaren blir aktiv igen, ändra t den som har token
+    room.nextRound = false;
+    room.readyForNextRound = new Set(); //nollställer set
   }
-  room.players[room.playerOrder[0]].active = true; //första spelaren blir aktiv igen, ändra t den som har token
-  room.nextRound = false;
 }
 
 Data.prototype.resetPlacements = function (roomId) {
@@ -277,6 +291,34 @@ Data.prototype.getPlayers = function (id) {
     return room.players;
   } else return {};
 }
+
+Data.prototype.countPoints = function (roomId){
+  let room = this.rooms[roomId]
+  if(typeof room !== 'undefined'){
+    //loopar varje spelare
+    for(let i=0; i < room.playerOrder.length; i ++){
+      let player = room.players[room.playerOrder[i]];
+      //Poäng för varje item utifrån marketvalue!!
+      for(let j = 0; j < player.items.length; j++){
+        if (player.items[j].item === "fastaval") {
+          player.points += this.getMarketValues(roomId).fastaval;
+        } else if (player.items[j].item === "movie") {
+          player.points += this.getMarketValues(roomId).movie;
+        } else if (player.items[j].item === "technology") {
+          player.points += this.getMarketValues(roomId).technology;
+        } else if (player.items[j].item === "figures") {
+          player.points += this.getMarketValues(roomId).figures;
+        } else if (player.items[j].item === "music") {
+          player.points += this.getMarketValues(roomId).music;
+        }
+      }
+      //poäng för pengar
+      let moneyToPoints = Math.floor(player.money / 3);
+      player.points += moneyToPoints;
+    }
+  }
+}
+
 
 Data.prototype.updatePoints = function (roomId, player, points) {
   let room = this.rooms[roomId]
@@ -421,8 +463,9 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost) {
     room.players[playerId].active = false;
     room.players[playerId].availableBottles -= 1;
     if (this.setNextActivePlayer(roomId, playerId)) {
-      room.nextRound = true;
-
+      for(let i=0; i <room.playerOrder.length; i++){
+        room.players[room.playerOrder[i]].dispBottles = true;
+      }
     }
   }
 }
@@ -497,7 +540,9 @@ Data.prototype.buyRaiseValue = function (roomId, playerId, cards, cost) {
     room.players[playerId].active = false;
     room.players[playerId].availableBottles -= 1;
     if (this.setNextActivePlayer(roomId, playerId)) {
-      room.nextRound = true;
+      for(let i=0; i <room.playerOrder.length; i++){
+        room.players[room.playerOrder[i]].dispBottles = true;
+      }
     }
   }
 }
@@ -531,7 +576,9 @@ Data.prototype.buySkillCard = function (roomId, playerId, card, cost) {
     room.players[playerId].active = false;
     room.players[playerId].availableBottles -= 1;
     if (this.setNextActivePlayer(roomId, playerId)) {
-      room.nextRound = true;
+      for(let i=0; i <room.playerOrder.length; i++){
+        room.players[room.playerOrder[i]].dispBottles = true;
+      }
     }
   }
 }
@@ -564,10 +611,10 @@ Data.prototype.getNextRound = function (roomId) {
   return room.nextRound;
 }
 
-Data.prototype.getDispBottles = function (roomId) {
-  let room = this.rooms[roomId];
+/*Data.prototype.getDispBottles = function(roomId){
+  let room= this.rooms[roomId];
   return room.dispBottles;
-}
+}*/
 
 /* returns the hand of the player */
 Data.prototype.getCards = function (roomId, playerId) {
@@ -689,5 +736,24 @@ Data.prototype.workerIncome = function () {
 }
 
 
+
+Data.prototype.setSecret = function (roomId, playerId, secretCard) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+      let d = [];
+      for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
+        // since card comes from the client, it is NOT the same object (reference)
+        // so we need to compare properties for determining equality      
+        if (room.players[playerId].hand[i].x === secretCard.x &&
+          room.players[playerId].hand[i].y === secretCard.y) {
+          d = room.players[playerId].hand.splice(i, 1);
+          break;
+        }
+      }
+    room.players[playerId].secret.push(...d); //... delar upp arrayen i separata objekt
+    room.players[playerId].chooseSecret=false;
+    return room.players;
+  } else return [];
+}
 
 module.exports = Data;

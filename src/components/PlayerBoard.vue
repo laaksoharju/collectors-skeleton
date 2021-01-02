@@ -133,15 +133,16 @@
             <p>&#36;{{ player.money }}</p>
           </div>
         </div>
+        <!--
         <div id="secretSection">
           <div id="secretCard">
-            <!-- <h2>Secret card</h2> -->
+            <h2>Secret card</h2>
             <div class="button">
               <InfoButtons :modalProps="mySecretCardProps" />
             </div>
             <div>{{ player.secret }}</div>
           </div>
-        </div>
+        </div>-->
       </div>
     </div>
   </div>
@@ -369,7 +370,8 @@ export default {
 <style scoped>
 #mainBoard {
   width: 100%;
-  height: fit-content;
+  height: 100%;
+  
   display: grid;
   grid-template-columns: 2fr 1fr;
   grid-template-rows: 1fr 1.5fr;
@@ -378,7 +380,7 @@ export default {
   color: black;
   border: 1px solid black;
   /*margin: 5px;*/
-  padding: 10px;
+  /*padding: 10px;*/
   /*border-radius: 3px;*/
 }
 #mainBoard h2 {
