@@ -353,7 +353,7 @@ Data.prototype.joinGame = function(roomId, playerId) {
         skills: [],
         items: [],
         income: [],
-        secret: {}, 
+        secret: {},
         color: room.playerColors.pop(),
         bottles: 2,
         cardsForCash: 0,
@@ -371,6 +371,8 @@ Data.prototype.joinGame = function(roomId, playerId) {
           action: "",
         }
       };
+
+
       return true;
     }
     console.log("Player", playerId, "was declined due to player limit");
@@ -787,8 +789,8 @@ Data.prototype.buyCard = function(
 
         //add card to secret card
         if (room.players[playerId].choseSecretCard){
-          card.available = false;
-          room.players[playerId].secret.push(card);
+
+          room.players[playerId].secret = card;
           room.players[playerId].choseSecretCard = false;
 
         }
@@ -1104,7 +1106,7 @@ Data.prototype.calcPlayersTurns = function(roomId) {
               player.points += itemsValue;
               console.log('Item: ' + player.items[i].item + ' Value:' + itemsValue);
               }
-              
+
 
 
               //if player has one of every item, add points given by VP-all

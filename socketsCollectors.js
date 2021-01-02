@@ -3,6 +3,7 @@ function sockets(io, socket, data) {
     data.createRoom(d.roomId, d.playerCount, d.lang);
   });
   socket.on("collectorsLoaded", function(d) {
+
     socket.join(d.roomId);
     if (data.joinGame(d.roomId, d.playerId)) {
       socket.emit("collectorsInitialize", {
@@ -15,7 +16,7 @@ function sockets(io, socket, data) {
         placements: data.getPlacements(d.roomId),
         round: data.getRound(d.roomId),
         decKAuction: data.getDeckauctionCard(d.roomId),
-        playerState: data.getPlayerState(d.roomId, d.playerId)
+        playerState: data.getPlayerState(d.roomId, d.playerId),
       });
     }
   });

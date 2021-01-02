@@ -182,16 +182,23 @@
                 />{{ this.players[this.playerId].cardsForCash }}
               </div>
 
+              <div>
+                <button class="chose-secret-card" v-if="noSecretCard" @click="choseSecretCard()">Chose secret card</button>
+              </div>
+
             </div>
             <div class="player-hand">
               <div class="secret-card">
                 <CollectorsCard
-                  v-for="(card, index) in players[playerId].secret"
-                  :card="card"
-                  :availableAction="card.available"
-                  :key="'secret' + index"
+                  :card="players[playerId].secret"
+                  :key='secret'
                 />
+
+
+
               </div>
+
+
               <div class="cardslots" v-if="players[playerId]">
                 <CollectorsBuyActions
                   v-if="players[playerId]"
@@ -859,6 +866,8 @@ export default {
       cardMoved: new Audio("/sounds/zapsplat_leisure_playing_card_turn_over_on_top_of_deck_010_39239.mp3"),
       newRound: new Audio("/sounds/zapsplat_multimedia_game_sound_bell_digital_synth_bright_harsh_ascend_level_up_002_40473.mp3"),
       placeAuctionBid: new Audio("/sounds/zapsplat_foley_money_coin_australian_10_cent_set_down_and_spin_on_tiled_table_002_28219.mp3"),
+
+      noSecretCard: true,
     };
   },
   computed: {
@@ -911,14 +920,7 @@ export default {
           this.handlePlayerState();
         }
 
-        if (this.players[this.playerId].choseSecretCard){
-          this.handCardAvailable = true;
 
-        /*  this.$store.state.socket.emit("choseSecretCard", {
-            roomId: this.$route.params.id,
-            playerId: this.$store.state.playerId,
-          });*/
-        }
       }.bind(this)
     );
 
@@ -1042,12 +1044,19 @@ export default {
         this.marketValues = d.marketValues;
         this.deckCardAvailable = false;
 
-        if (this.cardClicked >= this.clickCardTimes){
-          this.handCardAvailable = false;
-          this.cardClicked = 0;
-          this.clickCardTimes = 0;
 
-        }
+          if (this.cardClicked >= this.clickCardTimes){
+            this.handCardAvailable = false;
+            this.cardClicked = 0;
+            this.clickCardTimes = 0;
+          }
+
+
+        /*if (this.players[this.playerId].choseSecretCard){
+          this.players[this.playerId].choseSecretCard;
+          this.handCardAvailable = false;
+
+        }*/
       }.bind(this)
     );
   },
@@ -1056,6 +1065,12 @@ export default {
     endGame: function() {
 
       this.$store.state.socket.emit("endGame", this.$route.params.id);
+
+    },
+
+    choseSecretCard: function() {
+      this.handCardAvailable = true;
+      this.noSecretCard = false;
 
     },
 
@@ -1953,5 +1968,12 @@ p {
 
 .quarter-tiles:hover {
   outline: 2px dashed black;
+}
+
+.chose-secret-card {
+
+  border: 0.4vh solid red;
+  height: 10vh;
+  width: 10vw;
 }
 </style>
