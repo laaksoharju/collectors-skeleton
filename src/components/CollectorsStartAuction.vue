@@ -262,6 +262,7 @@ form {
 #bidPlacementButton {
   height: 30px;
   width: 50px;
+  font-size: 12px ;
     grid-column: 2;
     grid-row: 10;
     margin-top: 40%;
@@ -311,11 +312,17 @@ form {
 
   #stopAuctionButton{
     border-radius: 9px;
+    background-color: #C86262;
     height: 20px;
     width: 50px;
     grid-row:10;
     grid-column:3;
     place-self: end center;
+    border: 2px solid #A22626;
+  }
+  #stopAuctionButton:hover {
+    background-color: #A22626;
+    border: 2px solid #C86262;
   }
 
   #buttonNollSecond {
