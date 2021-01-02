@@ -113,6 +113,7 @@
             :marketValues="marketValues"
             :placement="auctionPlacement"
             :auctionWinner="auctionWinner"
+            :highestBid="highestBid"
             @startAuction="whichAction($event)"
             @startBidding="startBidding($event)"
             @stopAuction="stopAuction($event)"
