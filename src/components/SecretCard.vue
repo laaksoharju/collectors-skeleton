@@ -76,16 +76,16 @@ export default {
 
   display: grid;
   /*grid-template-columns: 1fr 1fr 1fr;*/
-  grid-template-columns: repeat(auto-fill, 230px);
-  grid-template-rows: repeat(auto-fill, 280px);
+  grid-template-columns: repeat(auto-fill, 170px);
+  grid-template-rows: repeat(auto-fill, 224px);
 }
 
 .cardslots {
   margin: 40px;
 
   display: grid;
-  width: 200px;
-  height: 280px;
+  width: 160px;
+  height: 224px;
 
   animation: jiggle 1s ease-in-out;
   animation-iteration-count: infinite;
