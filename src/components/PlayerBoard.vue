@@ -378,10 +378,14 @@ export default {
   grid-gap: 10px;
   text-align: center;
   color: black;
-  border: 1px solid black;
-  /*margin: 5px;*/
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+  border-left: 2px solid black;
+  margin-top: 2px;
+  margin-bottom: 2px;
   /*padding: 10px;*/
-  /*border-radius: 3px;*/
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
 }
 #mainBoard h2 {
   font-size: 90%;

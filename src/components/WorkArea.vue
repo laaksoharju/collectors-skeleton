@@ -189,11 +189,13 @@ export default {
 #workArea {
   /*background-color: rgb(235, 235, 109);*/
   background-color: #f5f2cc; /* #ffe599ff;*/
-  width: 100%;
+  /*width: 100%;*/
   border: 1px solid #e9de4b;
   display: flex;
   align-items: center;
   flex-direction: column;
+  border-radius: 10px;
+  margin: 2px;
 }
 
 .rectangular {
