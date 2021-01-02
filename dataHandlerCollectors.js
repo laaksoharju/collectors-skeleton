@@ -262,6 +262,8 @@ Data.prototype.startWinnerCard = function(roomId, playerId, cardUpForAuction, ac
   let room = this.rooms[roomId];
 
   if (typeof room !== 'undefined') {
+
+    console.log("data handler start winner card")
     if(action==='skill'){
       room.players[playerId].skills.push(room.cardUpForAuction);
     }
