@@ -110,7 +110,7 @@ function sockets(io, socket, data) {
 
     socket.on('collectorsStopAuction', function(d){
       data.stopAuction(d.roomId, d.playerId, d.cardUpForAuction)
-      console.log( data.getAuctionWinner(d.roomId), "INNE I SOCKET COLLECTOR AUCTION WINNER");
+
       io.to(d.roomId).emit('collectorsAuctionStopped', {
         playerId: d.playerId,
         players: data.getPlayers(d.roomId),
@@ -163,6 +163,13 @@ function sockets(io, socket, data) {
       data.countRounds(d.roomId, d.currentPlayer));
     });
 
+    socket.on('collectorsEndGame', function(d) {
+      data.endGame(d.roomId, d.marketValues)
+      io.to(d.roomId).emit('collectorsEndedGame',{
+        winner: data.getWinner(d.roomId),
+        players: data.getPlayers(d.roomId)
+      });
+    });
 }
 
 module.exports = sockets;
