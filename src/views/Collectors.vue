@@ -1,19 +1,24 @@
 <template>
   <div>
     <main>
-      <div v-if="players[playerId].dispBottles">
-        <BottlesPlayerboard 
+    
+      <div v-if="players[playerId] && players[playerId].chooseSecret">
+        <!--<div class="secret">-->
+        <SecretCard
           v-if="players[playerId]"
-          :player="players[playerId]" 
-          :labels="labels"
-          @getBottleIncome ="getBottleIncome($event)"
+          :player="players[playerId]"
+          :allCardsChosen="allCardsChosen"
+          @selectAction="setSecret($event)"
         />
       </div>
-      
-      <h1>I am player {{ playerId }}</h1>
-      <h1> {{labels.round}} {{round}} </h1>
-      <div v-for="(player, index) in players" :key="index" :player="player">
-        <h1 v-if="player.active"> It's {{index}}'s turn! </h1>
+
+      <div v-if="players[playerId].dispBottles">
+        <BottlesPlayerboard
+          v-if="players[playerId]"
+          :player="players[playerId]"
+          :labels="labels"
+          @getBottleIncome="getBottleIncome($event)"
+        />
       </div>
       <div class="layout_wrapper">
         <div id="game-board">
@@ -67,17 +72,29 @@
 
           <!-- glöm ej ändra från buy på de ovan-->
         </div>
+        <div class="second-column">
+          <div id="game-info">
+            <h1>I am player {{ playerId }}</h1>
+            <h1>{{ labels.round }} {{ round }}</h1>
+            <div
+              v-for="(player, index) in players"
+              :key="index"
+              :player="player"
+            >
+              <h1 v-if="player.active">It's {{ index }}'s turn!</h1>
+            </div>
+          </div>
 
-        <WorkArea
-          v-if="players[playerId]"
-          :color="players[playerId].color"
-          :labels="labels"
-          :player="players[playerId]"
-          :placement="buyPlacement"
-          @circleClicked="circleClicked($event)"
-          class="gridWork"
-        />
-
+          <WorkArea
+            v-if="players[playerId]"
+            :color="players[playerId].color"
+            :labels="labels"
+            :player="players[playerId]"
+            :placement="buyPlacement"
+            @circleClicked="circleClicked($event)"
+            id="work_area"
+          />
+        </div>
         <div id="hand_playerboard">
           <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
 
@@ -88,9 +105,11 @@
             @selectAction="selectAction($event)"
           />
         </div>
+        <div id="other_players">
+          <OtherPlayerboards :Players="players" :playerId="playerId" />
+        </div>
       </div>
 
-      <OtherPlayerboards :Players="players" :playerId="playerId" />
       <!--  {{ buyPlacement }} {{ chosenPlacementCost }}-->
 
       <div class="buttons">
@@ -176,6 +195,7 @@ import RaiseValueSection from "@/components/RaiseValueSection.vue";
 import AuctionSection from "@/components/AuctionSection.vue";
 import BottlesPlayerboard from "@/components/BottlesPlayerboard.vue";
 import Hand from "@/components/Hand.vue";
+import SecretCard from "@/components/SecretCard.vue";
 
 export default {
   name: "Collectors",
@@ -190,6 +210,7 @@ export default {
     AuctionSection,
     BottlesPlayerboard,
     Hand,
+    SecretCard,
   },
   data: function () {
     return {
@@ -215,6 +236,7 @@ export default {
       //   income: [],
       //   secret: []
       // }
+      secret: [],
       buyPlacement: [],
       skillPlacement: [],
       auctionPlacement: [],
@@ -281,7 +303,7 @@ export default {
     },
   },
   watch: {
-      players: function (newP, oldP) {
+    players: function (newP, oldP) {
       console.log(newP, oldP);
       for (let p in this.players) {
         for (let c = 0; c < this.players[p].hand.length; c += 1) {
@@ -299,9 +321,9 @@ export default {
         }
       }
     },
-    nextRound: function(){
-      if(this.nextRound){
-        if(this.round < 4){
+    nextRound: function () {
+      if (this.nextRound) {
+        if (this.round < 4) {
           this.startNextRound();
         } else {
           this.countPoints();
@@ -377,7 +399,6 @@ export default {
         this.auctionPlacement = d.placement.auctionPlacement;
         this.round = d.round;
       }.bind(this)
-      
     );
 
     this.$store.state.socket.on(
@@ -410,19 +431,18 @@ export default {
 
     this.$store.state.socket.on(
       "bottleIncomeGained",
-      function(d){
+      function (d) {
         this.players = d.players;
         this.nextRound = d.nextRound;
       }.bind(this)
     );
 
-
-    this.$store.state.socket.on("pointsCounted",
-    function(d){
-      this.players = d.players;
-    }.bind(this)
+    this.$store.state.socket.on(
+      "pointsCounted",
+      function (d) {
+        this.players = d.players;
+      }.bind(this)
     );
-
   },
   methods: {
     selectAll: function (n) {
@@ -439,16 +459,14 @@ export default {
 
       if (this.allCardsChosen) {
         this.buyRaiseValue();
-        this.selectedCards.splice(0,1);
-      }
-
-      else if(this.selectedCards.length == 2){
-        this.allCardsChosen = true
+        this.selectedCards.splice(0, 1);
+      } else if (this.selectedCards.length == 2) {
+        this.allCardsChosen = true;
 
         this.buyRaiseValue();
         this.selectedCards.splice(0, 2);
       } else {
-        console.log("Please choose another card: ")
+        console.log("Please choose another card: ");
       }
     },
     placeBottle: function (type, action, p) {
@@ -474,7 +492,7 @@ export default {
     },
 
     buyRaiseValue: function () {
-      console.log("Detta skickas alltså till server: ")
+      console.log("Detta skickas alltså till server: ");
       console.log(this.selectedCards);
       this.$store.state.socket.emit("buyRaiseValue", {
         roomId: this.$route.params.id,
@@ -503,21 +521,28 @@ export default {
     startNextRound: function () {
       this.$store.state.socket.emit("startNextRound", {
         roomId: this.$route.params.id,
-        playerId: this.playerId
+        playerId: this.playerId,
       });
     },
-    getBottleIncome: function(bottleIncome){
+    getBottleIncome: function (bottleIncome) {
       this.$store.state.socket.emit("getBottleIncome", {
         playerId: this.playerId,
         roomId: this.$route.params.id,
         bottleIncome,
       });
     },
-    countPoints: function(){
+    countPoints: function () {
       this.$store.state.socket.emit("countPoints", {
         roomId: this.$route.params.id,
       });
-    }
+    },
+    setSecret: function (card) {
+        this.$store.state.socket.emit("collectorsSetSecret", {
+          roomId: this.$route.params.id,
+          playerId: this.playerId,
+          secret: card,
+        });
+    },
   },
 };
 </script>
@@ -544,19 +569,54 @@ main {
 
 .layout_wrapper {
   display: grid;
-  grid-template-columns: 70% 30%;
+  grid-template-columns: 60% 40%;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+}
+
+#game-board {
+  overflow: hidden;
+  grid-row: 1;
+}
+
+.second-column {
+  grid-column: 2;
+  grid-template-rows: 20% 80%;
+  height: 100%;
+}
+
+#game-info {
+  grid-row: 1;
+  margin-left: 1vw;
+}
+
+#work_area {
+  grid-row: 2;
 }
 
 #hand_playerboard {
   display: grid;
-  grid-template-columns: 50% 50%;
-  height: 400px; /*DENNA GJORDE ATT DRAW CARD FÖRFLYTTADES NERÅT*/
-  /*overflow: hidden; MED DENNA SÅ FÖRSIVNNER PROBLEMET MED ATT DRAW CARD LIGGER PÅ PLAYERBOARD, MEN DÅ FÖRSVINNER
-  RULLISTAN OCH SÅ ÄNDRAS SIZEN PÅ HELA GRIDEN. OM DENNA INTE ÄR MED SÅ LIGGER DRAW CARD I PLAYERBOARD, MEN 
-  RULLLISTAN FINNS DÅ DVS.*/
+  grid-template-columns: 60% 40%;
+  grid-row: 2;
+  height: 60vh;
 }
 
-/*TRANSITION*/
+#other_players {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+/*SECRET SECTION - TA BORT?*/
+.secretSection {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+/*TRANSITION - TA BORT???*/
 .slide-enter-active,
 .slide-leave-active {
   transition: transform 0.5s ease, opacity 0.5s ease;
@@ -674,7 +734,7 @@ footer a:visited {
 
 h1 {
   color: #222;
-  font-size: 32px;
+  font-size: 20.5px;
   font-weight: 900;
   margin-bottom: 15px;
 }

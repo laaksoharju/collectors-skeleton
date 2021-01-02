@@ -85,5 +85,11 @@ function sockets(io, socket, data) {
     })
   })
 
+  socket.on('collectorsSetSecret', function (d) {
+    io.to(d.roomId).emit('pointsCounted' , {
+      players: data.setSecret(d.roomId, d.playerId, d.secret)
+    })
+  })
+
 }
 module.exports = sockets;

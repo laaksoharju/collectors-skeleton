@@ -1,6 +1,7 @@
 <template>
   <div>
     <div id="workArea">
+      <!---buttonTest kommer att bytas ut till det vi får av Mikael-->
       <div class="info">
         <InfoButtons :modalProps="workProps" />
       </div>
@@ -189,7 +190,7 @@ export default {
   /*background-color: rgb(235, 235, 109);*/
   background-color: #f5f2cc; /* #ffe599ff;*/
   width: 100%;
-  border: 1px solid black;
+  border: 1px solid #e9de4b;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -216,8 +217,8 @@ export default {
   color: black;
   /*grid-column: 1;*/
   grid-column: 2;
-  width: 100px;
-  height: 20px;
+  width: 100%;
+  height: 20%;
   text-align: center;
   font-size: 50px;
   border: 1px solid black;
@@ -239,7 +240,7 @@ export default {
 
 .firstArea p {
   color: black;
-  font-size: 14px;
+  font-size: 60%;
   font-weight: bold;
   text-align: right;
   grid-column: 5;
@@ -252,7 +253,7 @@ export default {
         text-align: center;
         font-size: 50px;
         width: 100px;
-        height: 100px;
+        height: 100px;s
         color: black;
         background-color: white;
         border-radius: 50%;
