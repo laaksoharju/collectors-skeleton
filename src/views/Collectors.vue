@@ -559,6 +559,7 @@ function(d) {
         }
       );
     },
+
     placeBottleWork: function (p) {
       this.chosenPlacementCost = p.cost;
       this.chosenAction = p.action;

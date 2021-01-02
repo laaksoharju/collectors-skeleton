@@ -76,7 +76,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
                         {cost:2, playerId: null},
                         {cost:2, playerId: null},
                         {cost:3, playerId: null} ];
-  room.skillPlacement = [ {cost:0, playerId: null},
+  room.skillPlacement = [ {cost:0, playerId: null },
                           {cost:0, playerId: null},
                           {cost:0, playerId: null},
                           {cost:1, playerId: null},
@@ -416,16 +416,14 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost) {
     else if (action === "market") {
       activePlacement = room.marketPlacement;
     }
-    else if (action === "work") {
-      activePlacement = room.workPlacement;
-    }
+
 
     if (room.players[playerId].playerBottles > 0){
       room.players[playerId].playerBottles = room.players[playerId].playerBottles - 1;
     }
     for(let i = 0; i < activePlacement.length; i += 1) {
         if( activePlacement[i].cost === cost &&
-            activePlacement[i].playerId === null ) {
+          activePlacement[i].playerId === null ) {
           activePlacement[i].playerId = playerId;
           break;
         }
@@ -442,24 +440,28 @@ Data.prototype.placeWorkBottle = function (roomId, playerId, workActionId, cost)
       room.players[playerId].playerBottles = room.players[playerId].playerBottles - 1;
     }
     for(let i = 0; i < activePlacement.length; i += 1) {
-        if( activePlacement[i].cost === cost &&
-            activePlacement[i].playerId === null ) {
+        if( activePlacement[i].workActionId === workActionId &&
+            activePlacement[i].playerId === null &&
+          activePlacement[i].cost === cost ) {
           activePlacement[i].playerId = playerId;
           break;
         }
     }
-    if (workActionId===0 ){
-      this.drawCard(roomId, playerId);
-      this.drawCard(roomId, playerId);
-      room.players[playerId].money -= cost;
-    }
 
-    if (workActionId===1 ){
+    if (workActionId === 0 ){
     room.players[playerId].money += cost;
     //radera flaska, får ej va med i framtida ronder, gör om de finns tid
     }
 
-    if (workActionId===2 ){
+    if (workActionId === 1 ){
+      this.drawCard(roomId, playerId);
+      this.drawCard(roomId, playerId);
+      room.players[playerId].money += cost;
+    }
+
+
+
+    if (workActionId === 2 ){
       this.drawCard(roomId, playerId);
       //let nuvarandeSpelare= room.players[playerId].order
 
@@ -470,7 +472,7 @@ Data.prototype.placeWorkBottle = function (roomId, playerId, workActionId, cost)
 
     }
 
-    if (workActionId===3 ){
+    if (workActionId === 3 ){
       this.drawCard(roomId, playerId);
       let c = room.players[playerId].hand.splice(0,1);
       room.players[playerId].secret.push(...c);
