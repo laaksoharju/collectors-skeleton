@@ -115,13 +115,13 @@ Data.prototype.joinGame = function (roomId, playerId) {
     }
     else if (Object.keys(room.players).length < room.playerCount) {
       console.log("Player", playerId, "joined for the first time");
-      room.players[playerId] = { hand: room.deck.splice(0, 3),
+      room.players[playerId] = { hand: room.deck.splice(0, 2),
                                  money: 1,
                                  points: 0,
                                  skills: [],
                                  items: [],
                                  income: [],
-                                 secret: [],
+                                 secret: room.deck.splice(0,1),
                                  bids: 0,
                                  color: '',
                                  playerBottles: 0,
@@ -262,6 +262,8 @@ Data.prototype.startWinnerCard = function(roomId, playerId, cardUpForAuction, ac
   let room = this.rooms[roomId];
 
   if (typeof room !== 'undefined') {
+
+    console.log("data handler start winner card")
     if(action==='skill'){
       room.players[playerId].skills.push(room.cardUpForAuction);
     }
