@@ -404,6 +404,7 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost, placement
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     let activePlacement = [];
+    console.log(placementID);
     console.log("placebottle activeplacemt" + action);
     if (action === "buy") {
       console.log("action placebottle");
@@ -433,7 +434,7 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost, placement
       console.log(activePlacement[i].playerId);
 
         if( activePlacement[i].cost === cost &&
-        //    activePlacement[i].placementID === placementID &&
+            activePlacement[i].placementID === placementID &&
             activePlacement[i].playerId === null ) {
 
             console.log("handler 2" + activePlacement[i].placementID);

@@ -56,7 +56,7 @@ function sockets(io, socket, data) {
       );
     });
     socket.on('collectorsPlaceBottle', function(d) {
-      console.log(d.action);
+      console.log("hejhejhejehejeheheh"+ d.placementID);
       data.placeBottle(d.roomId, d.playerId, d.action, d.cost, d.placementID);
       console.log("Socket placebottle1"+ d.action);
       io.to(d.roomId).emit('collectorsBottlePlaced',

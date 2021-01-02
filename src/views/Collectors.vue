@@ -334,6 +334,7 @@ export default {
       marketPlacement: [],
       workPlacement: [],
       chosenPlacementCost: null,
+      chosenPlacementID: null,
       marketValues: { fastaval: 0,
                      movie: 0,
                      technology: 0,
@@ -545,6 +546,8 @@ function(d) {
     placeBottle: function (action, cost, placementID) {
       this.chosenPlacementCost = cost;
       this.chosenAction = action;
+      this.chosenPlacementID = placementID;
+      console.log("blaaaaa" + action, placementID);
       this.$store.state.socket.emit('collectorsPlaceBottle', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
