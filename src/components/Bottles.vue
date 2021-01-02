@@ -67,7 +67,12 @@
       </div>
 
       <div v-if="p.playerId !== null">
-        {{ p.playerId }}
+
+                     <img
+                     class="bottlePlaced"
+                        :src="playerBottle[p.color]"
+                        alt="bottle"
+                      />
       </div>
     </div>
   </div>
@@ -76,6 +81,25 @@
 <script>
 export default {
   name: "Bottles",
+
+  data: function () {
+    return {
+
+
+      playerBottle: {
+        violet: "images/violet_bottle.png",
+        blue: "images/blue_bottle.png",
+        brown: "images/brown_bottle.png",
+        grey: "images/grey_bottle.png",
+      }
+
+    };
+
+  },
+
+
+
+
 
   props: {
     labels: Object,
@@ -225,6 +249,15 @@ export default {
   padding: 0.5rem;
   font-size: 0.5rem;
   background-image: url("/images/auctionBottleMedal.jpg");
+}
+.bottlePlaced{
+
+  width: 3.3vw;
+  height: 6.8vh;
+  border-radius: 5px;
+  background-size: 100% 100%;
+
+
 }
 .recieveMoney {
   color: LimeGreen;

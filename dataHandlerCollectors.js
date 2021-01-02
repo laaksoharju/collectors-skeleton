@@ -80,6 +80,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 1,
       clickCardTimes: 1,
+      color: null,
 
     },
     {
@@ -90,6 +91,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 2,
       clickCardTimes: 1,
+      color: null,
     },
     {
       cost: 2,
@@ -99,6 +101,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 3,
       clickCardTimes: 1,
+      color: null,
     },
     {
       cost: 2,
@@ -108,6 +111,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 4,
       clickCardTimes: 1,
+      color: null,
     },
     {
       cost: 3,
@@ -117,6 +121,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 5,
       clickCardTimes: 1,
+      color: null,
     },
   ];
   room.skillPlacement = [
@@ -128,6 +133,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 6,
       clickCardTimes: 1,
+      color: null,
     },
     {
       cost: 0,
@@ -137,6 +143,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 7,
       clickCardTimes: 1,
+      color: null,
     },
     {
       cost: 0,
@@ -146,6 +153,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 8,
       clickCardTimes: 1,
+      color: null,
     },
     {
       cost: 1,
@@ -155,6 +163,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 9,
       clickCardTimes: 1,
+      color: null,
     },
     {
       cost: 1,
@@ -164,6 +173,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 10,
       clickCardTimes: 1,
+      color: null,
     },
   ];
   room.workPlacement = [
@@ -175,6 +185,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 2,
       buttonId: 11,
       clickCardTimes: 2,
+      color: null,
     },
     {
       cost: -1,
@@ -184,6 +195,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 12,
       clickCardTimes: 1,
+      color: null,
     },
     {
       cost: 1,
@@ -193,6 +205,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 13,
       clickCardTimes: 1,
+      color: null,
     },
     {
       cost: 0,
@@ -203,6 +216,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       buttonId: 14,
       clickCardTimes: 1,
       becomeFirstPlayer: true,
+      color: null,
     },
     {
       cost: 0,
@@ -212,6 +226,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 1,
       buttonId: 15,
       clickCardTimes: 1,
+      color: null,
     },
   ];
   room.auctionPlacement = [
@@ -223,6 +238,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 16,
       clickCardTimes: 1,
+      color: null,
     },
     {
       cost: -1,
@@ -232,6 +248,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 17,
       clickCardTimes: 1,
+      color: null,
     },
     {
       cost: 0,
@@ -241,6 +258,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 18,
       clickCardTimes: 1,
+      color: null,
     },
     {
       cost: 0,
@@ -250,6 +268,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       cashForCard: 0,
       buttonId: 19,
       clickCardTimes: 1,
+      color: null,
     },
   ];
   room.marketPlacement = [
@@ -262,6 +281,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       buttonId: 20,
       raiseValue: 2,
       clickCardTimes: 2,
+      color: null,
     },
     {
       cost: 2,
@@ -272,6 +292,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       buttonId: 21,
       raiseValue: 2,
       clickCardTimes: 2,
+      color: null,
     },
     {
       cost: 0,
@@ -282,6 +303,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
       buttonId: 22,
       raiseValue: 1,
       clickCardTimes: 1,
+      color: null,
     },
   ];
   room.round = 1;
@@ -301,15 +323,16 @@ Data.prototype.joinGame = function(roomId, playerId) {
 
   let room = this.rooms[roomId];
 
+  //set who starts, first to join starts the game
   if (room.firstTojoin){
     room.turnToPlay = true;
     room.firstTojoin = false;
-
   }
   else {
     room.turnToPlay = false;
 
   }
+
 
   if (typeof room !== "undefined") {
     if (typeof room.players[playerId] !== "undefined") {
@@ -324,13 +347,13 @@ Data.prototype.joinGame = function(roomId, playerId) {
       console.log("Player", playerId, "joined for the first time");
       room.players[playerId] = {
         playerName: playerId,
-        hand: room.deck.splice(0, 2), // Two cards are kept secret and form the hands of each player
+        hand: room.deck.splice(0, 3), // Two cards are kept secret and form the hands of each player
         money: Object.keys(room.players).length + 20,
         points: 0,
         skills: [],
         items: [],
         income: [],
-        secret: room.deck.splice(0, 1), // picks one card and places it face down, tucked under their player board at the position marked with a treasure chest.
+        secret: [], 
         color: room.playerColors.pop(),
         bottles: 10,
         cardsForCash: 0,
@@ -341,6 +364,7 @@ Data.prototype.joinGame = function(roomId, playerId) {
         clickedOnBottle: false,
         points: 0,
         winner: null,
+        choseSecretCard: true,
         playerState:
         {
           saleItems: [],
@@ -759,17 +783,33 @@ Data.prototype.buyCard = function(
     //exchanges a card in hand for income
     else if (action === "hand") {
         console.log("dataHandler room.fastaval: " + room.fastaval);
-        console.log("button sent to buyCard: " + p);
+        console.log("hand datahandler secret " + p);
 
-        if (p.cashForCard > 0) {
-          room.players[playerId].cardsForCash += 1;
+        //add card to secret card
+        if (room.players[playerId].choseSecretCard){
+          card.available = false;
+          room.players[playerId].secret.push(card);
+          room.players[playerId].choseSecretCard = false;
+
         }
 
-        if (p.raiseValue > 0){
-          room.market.push(card);
-          console.log('raise market value');
+        if (p !== null){
+
+            //get cash for card clicked
+            if (p.cashForCard > 0) {
+              room.players[playerId].cardsForCash += 1;
+            }
+
+
+            //raise value of card clicked
+            if (p.raiseValue > 0){
+              room.market.push(card);
+              console.log('raise market value');
+            }
         }
 
+
+        //remove card from hand
         for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
           if (
             room.players[playerId].hand[i].x === card.x &&
@@ -853,6 +893,8 @@ Data.prototype.placeBottle = function(roomId, playerId, action, p, money) {
         activePlacement[i].playerId === null
       ) {
         activePlacement[i].playerId = playerId;
+        activePlacement[i].color = room.players[playerId].color;
+
         break;
       }
     }

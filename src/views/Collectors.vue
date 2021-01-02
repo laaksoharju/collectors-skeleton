@@ -910,6 +910,15 @@ export default {
         if (this.playerState.action !== "") {
           this.handlePlayerState();
         }
+
+        if (this.players[this.playerId].choseSecretCard){
+          this.handCardAvailable = true;
+
+        /*  this.$store.state.socket.emit("choseSecretCard", {
+            roomId: this.$route.params.id,
+            playerId: this.$store.state.playerId,
+          });*/
+        }
       }.bind(this)
     );
 
@@ -1033,7 +1042,7 @@ export default {
         this.marketValues = d.marketValues;
         this.deckCardAvailable = false;
 
-        if (this.cardClicked == this.clickCardTimes){
+        if (this.cardClicked >= this.clickCardTimes){
           this.handCardAvailable = false;
           this.cardClicked = 0;
           this.clickCardTimes = 0;
@@ -1136,11 +1145,14 @@ export default {
     },
     placeBottle: function (action, p) {
 
+    //button clicked(needed for CollectorsBuyActions)
+    this.buttonClicked = p;
 
-      this.players[this.playerId].money -= p.cost;
+    //calculate money left after placement
+    this.players[this.playerId].money -= p.cost;
 
+    //skills workerIncom and workerCard
       if (action === 'work'){
-
         if (this.players[this.playerId].skills.length > 0){
               for (var i in this.players[this.playerId].skills){
                 if (this.players[this.playerId].skills[i].skill === 'workerIncome'){
@@ -1152,15 +1164,10 @@ export default {
                 }
               }
           }
-         }
-
-      this.clickCardTimes = p.clickCardTimes
+        }
 
 
-      console.log("collectors place bottle");
-      console.log('players[playerId].skills : ' + this.players[this.playerId].skills);
-      this.buttonClicked = p;
-
+      //decide if cards in hand should be activated/available
       if (p.cashForCard  > 0) {
         this.handCardAvailable = true;
       }
@@ -1168,14 +1175,21 @@ export default {
         this.handCardAvailable = true;
       }
 
+      //number of times cards in hand has to be clicked before beeing deactivated
+      if (this.handCardAvailable){
+        this.clickCardTimes = p.clickCardTimes;
+      }
+
+      //draw cards from deck to hand
       for (let i = 0; i < p.recieveCards + this.recieveExtraCard; i += 1) {
         this.$store.state.socket.emit("collectorsDrawCard", {
           roomId: this.$route.params.id,
           playerId: this.$store.state.playerId,
         });
       }
-
       this.recieveExtraCard = 0;
+
+
 
       this.saleItems = [];
       if (action == "buy") this.saleItems = this.itemsOnSale;
