@@ -542,12 +542,13 @@ function(d) {
       }
       );
     },
-    placeBottle: function (action, cost) {
+    placeBottle: function (action, cost, placementID) {
       this.chosenPlacementCost = cost;
       this.chosenAction = action;
       this.$store.state.socket.emit('collectorsPlaceBottle', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
+          placementID: placementID,
           action: action,
           cost: cost,
         }
