@@ -350,6 +350,7 @@ export default {
       marketPlacement: [],
       workPlacement: [],
       chosenPlacementCost: null,
+      chosenPlacementSkillID: null,
       marketValues: { fastaval: 0,
                      movie: 0,
                      technology: 0,
@@ -566,13 +567,15 @@ function(d) {
       }
       );
     },
-    placeBottle: function (action, cost) {
+    placeBottle: function (action,skillID, cost) {
       this.chosenPlacementCost = cost;
+      this.chosenPlacementSkillID = skillID;
       this.chosenAction = action;
       this.$store.state.socket.emit('collectorsPlaceBottle', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
           action: action,
+          skillID: skillID,
           cost: cost,
         }
       );
