@@ -21,7 +21,7 @@
         />
       </div>
       <div class="layout_wrapper">
-        <div id="game-board">
+        <div class="first-column">
           <ItemSection
             v-if="players[playerId]"
             :labels="labels"
@@ -73,6 +73,20 @@
           <!-- glöm ej ändra från buy på de ovan-->
         </div>
         <div class="second-column">
+          
+          <WorkArea
+            v-if="players[playerId]"
+            :color="players[playerId].color"
+            :labels="labels"
+            :player="players[playerId]"
+            :placement="buyPlacement"
+            @circleClicked="circleClicked($event)"
+            id="work_area"
+          />
+
+        </div>
+
+        <div class="third-column"> 
           <div id="game-info">
             <h1>I am player {{ playerId }}</h1>
             <h1>{{ labels.round }} {{ round }}</h1>
@@ -85,29 +99,19 @@
             </div>
           </div>
 
-          <WorkArea
-            v-if="players[playerId]"
-            :color="players[playerId].color"
-            :labels="labels"
-            :player="players[playerId]"
-            :placement="buyPlacement"
-            @circleClicked="circleClicked($event)"
-            id="work_area"
-          />
+            <OtherPlayerboards :Players="players" :playerId="playerId" />
         </div>
-        <div id="hand_playerboard">
-          <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
 
-          <Hand
-            v-if="players[playerId]"
-            :player="players[playerId]"
-            :allCardsChosen="allCardsChosen"
-            @selectAction="selectAction($event)"
-          />
-        </div>
-        <div id="other_players">
-          <OtherPlayerboards :Players="players" :playerId="playerId" />
-        </div>
+        <div id="hand_playerboard">
+            <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
+
+            <Hand
+              v-if="players[playerId]"
+              :player="players[playerId]"
+              :allCardsChosen="allCardsChosen"
+              @selectAction="selectAction($event)"
+            />
+          </div>
       </div>
 
       <!--  {{ buyPlacement }} {{ chosenPlacementCost }}-->
@@ -569,12 +573,12 @@ main {
 
 .layout_wrapper {
   display: grid;
-  grid-template-columns: 60% 40%;
+  grid-template-columns: 50% 30% 20%;
   grid-template-rows: auto 1fr;
   overflow: hidden;
 }
 
-#game-board {
+.first-column {
   overflow: hidden;
   grid-row: 1;
 }
@@ -585,9 +589,17 @@ main {
   height: 100%;
 }
 
+.third-column{
+  grid-column: 3;
+  grid-row:auto;
+}
+
 #game-info {
   grid-row: 1;
   margin-left: 1vw;
+}
+#game-info h1{
+  font-size: 80%;
 }
 
 #work_area {
@@ -597,13 +609,9 @@ main {
 #hand_playerboard {
   display: grid;
   grid-template-columns: 60% 40%;
+  grid-column: 1/3;
   grid-row: 2;
   height: 60vh;
-}
-
-#other_players {
-  grid-column: 2;
-  grid-row: 2;
 }
 
 /*SECRET SECTION - TA BORT?*/
