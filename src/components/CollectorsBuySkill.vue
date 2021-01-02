@@ -127,25 +127,27 @@ export default {
 .buy-cards {
   width: 80%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 105px);
-  grid-template-rows: repeat(auto-fill, 145px);
+  grid-template-columns: repeat(auto-fill, 85px);
+  grid-template-rows: repeat(auto-fill, 117px);
 }
-.button-section {
+/*.button-section {
   width: 20%;
-}
+}*/
 
 .buttons {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
+  grid-template-columns: repeat(auto-fill, 50px);
+  margin-right:10px;
 }
 
 .board-section {
-  width: 100%;
   padding: 10px;
   align-items: center;
   display: flex;
   flex-direction: row-reverse;
   border: 1px solid #19181850;
+  border-radius: 10px;
+  margin: 2px;
 }
 
 #skill-section {

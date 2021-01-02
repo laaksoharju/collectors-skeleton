@@ -549,7 +549,7 @@ export default {
 
 <style scoped>
 .board-section {
-  width: 100%;
+  /*width: 100%;*/
   padding: 10px;
   align-items: center;
   display: flex;

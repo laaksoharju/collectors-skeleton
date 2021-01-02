@@ -132,20 +132,17 @@ export default {
 <style scoped>
 #RaiseValueSection {
   background-color: #b4a7d6ff;
+  border-radius: 10px;
+  margin: 2px;
 }
-.buy-cards {
-  width: 80%;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
-  grid-template-rows: repeat(auto-fill, 180px);
-}
-.button-section {
+
+/*.button-section {
   width: 20%;
-}
+}*/
 
 .buttons {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
+  grid-template-columns: repeat(auto-fill, 50px);
 }
 
 .clickedButton {
@@ -158,17 +155,19 @@ export default {
 
 .raise-value-slot-container {
   width: 80%;
+  height: fit-content;
   display: grid;
-  grid-template-rows: 1.5fr 1fr;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   text-align: center;
   color: black;
+  font-size: 80%;
   font-weight: bold;
+
 }
 .raise-value-slot {
   background-color: #6d9eebff;
-  width: 4vw;
-  height: 4vw;
+  width: 3vw;
+  height: 3vw;
   border-radius: 50%;
   border: 1px solid #19181850;
   display: flex;
@@ -176,25 +175,26 @@ export default {
   align-items: center;
   margin-left: auto;
   margin-right: auto;
+
 }
 #rvMovie {
   background: url("/images/RAISEVAL-FILM.png");
-  background-size: 4vw 4vw;
+  background-size: 3vw 3vw;
 }
 #rvFigures {
   background: url("/images/RAISEVAL-ROBOT.png");
-  background-size: 4vw 4vw;
+  background-size: 3vw 3vw;
 }
 #rvTechnology {
   background: url("/images/RAISEVAL-IT.png");
-  background-size: 4vw 4vw;
+  background-size: 3vw 3vw;
 }
 #rvMusic {
   background: url("/images/RAISEVAL-MUSIC.png");
-  background-size: 4vw 4vw;
+  background-size: 3vw 3vw;
 }
 #rvFastaval {
   background: url("/images/RAISEVAL-PINGVIN.png");
-  background-size: 4vw 4vw;
+  background-size: 3vw 3vw;
 }
 </style>

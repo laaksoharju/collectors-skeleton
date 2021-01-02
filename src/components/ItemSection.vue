@@ -126,16 +126,14 @@ export default {
 .buy-cards {
   width: 80%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 105px);
-  grid-template-rows: repeat(auto-fill, 145px);
-}
-.button-section {
-  width: 20%;
+  grid-template-columns: repeat(auto-fill, 85px);
+  grid-template-rows: repeat(auto-fill, 117px);
 }
 
 .buttons {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
+  grid-template-columns: repeat(auto-fill, 50px);
+  margin-right: 10px;
 }
 
 .clickedButton {
@@ -147,12 +145,13 @@ export default {
 }
 
 .board-section {
-  width: 50%;
   padding: 10px;
   align-items: center;
   display: flex;
   flex-direction: row-reverse;
   border: 1px solid #19181850;
+  border-radius: 10px;
+  margin: 2px;
 }
 
 #item-section {
@@ -161,8 +160,8 @@ export default {
 
 .cardslots {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 105px);
-  grid-template-rows: repeat(auto-fill, 145px);
+  grid-template-columns: repeat(auto-fill, 85px);
+  grid-template-rows: repeat(auto-fill, 117px);
 }
 .cardslots div {
   transform: scale(0.5) translate(-50%, -50%);
