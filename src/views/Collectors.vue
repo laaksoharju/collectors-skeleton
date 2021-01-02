@@ -524,7 +524,7 @@ export default {
 
 <style scoped>
 .board-section {
-  width: 100%;
+  /*width: 100%;*/
   padding: 10px;
   align-items: center;
   display: flex;
@@ -544,7 +544,7 @@ main {
 
 .layout_wrapper {
   display: grid;
-  grid-template-columns: 70% 30%;
+  grid-template-columns: 60% 30%;
 }
 
 #hand_playerboard {
