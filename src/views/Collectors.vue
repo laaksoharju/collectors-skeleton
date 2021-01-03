@@ -1,9 +1,10 @@
 <template>
   <div>
     <main>
+
+      <!-- SecretCard och BottlesPlayerboard är popup -->
     
       <div v-if="players[playerId] && players[playerId].chooseSecret">
-        <!--<div class="secret">-->
         <SecretCard
           v-if="players[playerId]"
           :player="players[playerId]"
@@ -20,6 +21,8 @@
           @getBottleIncome="getBottleIncome($event)"
         />
       </div>
+
+
       <div class="layout_wrapper">
         <div class="first-column">
           <ItemSection
@@ -70,10 +73,9 @@
             @placeBottle="placeBottle('auctionType', 'auction', $event)"
           />
 
-          <!-- glöm ej ändra från buy på de ovan-->
         </div>
+
         <div class="second-column">
-          
           <WorkArea
             v-if="players[playerId]"
             :color="players[playerId].color"
@@ -99,22 +101,20 @@
             </div>
           </div>
 
-            <OtherPlayerboards :Players="players" :playerId="playerId" />
+          <OtherPlayerboards :Players="players" :playerId="playerId" />
         </div>
 
         <div id="hand_playerboard">
-            <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
+          <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
 
-            <Hand
-              v-if="players[playerId]"
-              :player="players[playerId]"
-              :allCardsChosen="allCardsChosen"
-              @selectAction="selectAction($event)"
-            />
-          </div>
+          <Hand
+            v-if="players[playerId]"
+            :player="players[playerId]"
+            :allCardsChosen="allCardsChosen"
+            @selectAction="selectAction($event)"
+          />
+        </div>
       </div>
-
-      <!--  {{ buyPlacement }} {{ chosenPlacementCost }}-->
 
       <div class="buttons">
         <button @click="drawCard">
@@ -580,18 +580,17 @@ main {
 
 .first-column {
   overflow: hidden;
-  grid-row: 1;
+  grid-row: 1/2;
 }
 
 .second-column {
-  grid-column: 2;
-  grid-template-rows: 20% 80%;
-  height: 100%;
+  grid-column: 2/3;
+  grid-row: 1/2;
 }
 
 .third-column{
-  grid-column: 3;
-  grid-row:auto;
+  grid-column: 3/4;
+  grid-row: 1/3;
 }
 
 #game-info {
@@ -602,16 +601,15 @@ main {
   font-size: 80%;
 }
 
-#work_area {
+/*#work_area {
   grid-row: 2;
-}
+}*/
 
 #hand_playerboard {
+  height: 60vh;
   display: grid;
   grid-template-columns: 60% 40%;
-  grid-column: 1/3;
-  grid-row: 2;
-  height: 60vh;
+  grid-column: 1/4;
 }
 
 /*SECRET SECTION - TA BORT?*/

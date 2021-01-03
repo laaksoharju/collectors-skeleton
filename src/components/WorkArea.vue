@@ -187,9 +187,7 @@ export default {
     
 <style scoped>
 #workArea {
-  /*background-color: rgb(235, 235, 109);*/
   background-color: #f5f2cc; /* #ffe599ff;*/
-  /*width: 100%;*/
   border: 1px solid #e9de4b;
   display: flex;
   align-items: center;
@@ -200,13 +198,12 @@ export default {
 
 .rectangular {
   margin: 7px;
-  height: 70px;
   width: 90%;
+  height: 70px;
   color: black;
   background-color: #f5f2cc; /* #ffe599ff;*/
   border: 3px solid grey;
-  /*display: flex;
-            justify-content: space-around;*/
+  border-radius: 10px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }
@@ -217,7 +214,6 @@ export default {
 
 .buttonTest {
   color: black;
-  /*grid-column: 1;*/
   grid-column: 2;
   width: 100%;
   height: 20%;
