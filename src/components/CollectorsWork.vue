@@ -80,6 +80,7 @@ export default {
       console.log("nu körs placeBottle i work")
       this.$emit('placeBottleWork', p);
     },
+
     highlightAvailableCards: function (cost=100) {
       for (let i = 0; i < this.skillsOnSale.length; i += 1) {
         if (this.marketValues[this.skillsOnSale[i].item] <= this.player.money - cost) {

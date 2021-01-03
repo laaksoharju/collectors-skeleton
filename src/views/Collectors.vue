@@ -62,7 +62,7 @@
              :marketValues="marketValues"
              :placement="skillPlacement"
              @getSkill="whichAction($event)"
-             @placeBottle="placeBottle('skill', $event)"
+             @placeBottle="placeBottle('skill', $event )"
         />
 
         <CollectorsBuyItem v-if="players[playerId]"
@@ -344,6 +344,7 @@ export default {
       marketPlacement: [],
       workPlacement: [],
       chosenPlacementCost: null,
+      chosenPlacementId: null,
       marketValues: { fastaval: 0,
                      movie: 0,
                      technology: 0,
@@ -546,14 +547,16 @@ function(d) {
       }
       );
     },
-    placeBottle: function (action, cost) {
-      this.chosenPlacementCost = cost;
+    placeBottle: function (action, p) {
+      this.chosenPlacementId = p.cost;
+      this.chosenPlacementCost = p.cost;
       this.chosenAction = action;
       this.$store.state.socket.emit('collectorsPlaceBottle', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
           action: action,
-          cost: cost,
+          cost: p.cost,
+          placementId: p.placementId,
         }
       );
     },
