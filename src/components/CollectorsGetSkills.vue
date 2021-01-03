@@ -4,14 +4,33 @@
 
 
 <div class="buttons" v-for="(p, index) in placement" :key="index">
-  <button id="noCoinButton" v-if="p.playerId===null & p.cost===0"
+  <button id="noCoinButton" v-if="p.playerId===null & p.skillID===0"
+  :disabled="cannotAfford(p.cost)"
+  @click="placeBottle(p)">
+    <div class = "EnergyBottles">
+    </div>
+  </button>
+  <button id="noCoinButton" v-if="p.playerId===null & p.skillID===1"
+  :disabled="cannotAfford(p.cost)"
+  @click="placeBottle(p)">
+    <div class = "EnergyBottles">
+    </div>
+  </button>
+  <button id="noCoinButton" v-if="p.playerId===null & p.skillID===2"
   :disabled="cannotAfford(p.cost)"
   @click="placeBottle(p)">
     <div class = "EnergyBottles">
     </div>
   </button>
 
-  <button id="coinButton" v-if="p.playerId===null & p.cost===1"
+  <button id="coinButton" v-if="p.playerId===null & p.skillID===3"
+  :disabled="cannotAfford(p.cost)"
+  @click="placeBottle(p)">
+    <div class = "EnergyBottlesCoin">
+    </div>
+  </button>
+
+  <button id="coinButton" v-if="p.playerId===null & p.skillID===4"
   :disabled="cannotAfford(p.cost)"
   @click="placeBottle(p)">
     <div class = "EnergyBottlesCoin">
@@ -77,7 +96,7 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
-      this.$emit('placeBottle', p.cost);
+      this.$emit('placeBottle',p.skillID, p.cost);
       this.highlightAvailableCards(p.cost);
     },
     highlightAvailableCards: function (cost=100) {

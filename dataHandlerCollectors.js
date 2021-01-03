@@ -72,23 +72,23 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.winner = "";
   room.highestBid = 0;
   room.market = [];
-  room.buyPlacement = [ {cost:1, playerId: null, placementID:0},
-                        {cost:1, playerId: null, placementID:1},
-                        {cost:2, playerId: null, placementID:2},
-                        {cost:2, playerId: null, placementID:3},
-                        {cost:3, playerId: null, placementID:4} ];
-  room.skillPlacement = [ {cost:0, playerId: null, placementID:0},
-                          {cost:0, playerId: null, placementID:1},
-                          {cost:0, playerId: null, placementID:2},
-                          {cost:1, playerId: null, placementID:3},
-                          {cost:1, playerId: null, placementID:4} ];
-  room.auctionPlacement = [ {cost:-2, playerId: null, placementID:0},
-                            {cost:-1, playerId: null, placementID:1},
-                            {cost:0, playerId: null, placementID:2},
-                            {cost:0, playerId: null, placementID:3} ];
-  room.marketPlacement = [ {cost:0, playerId: null, placementID:0},
-                           {cost:-2, playerId: null, placementID:1},
-                           {cost:0, playerId: null, placementID:2} ];
+  room.buyPlacement = [ {cost:1, playerId: null,skillID:0 },
+                        {cost:1, playerId: null, skillID:1},
+                        {cost:2, playerId: null, skillID:2},
+                        {cost:2, playerId: null, skillID:3},
+                        {cost:3, playerId: null, skillID:4} ];
+  room.skillPlacement = [ {cost:0, playerId: null, skillID:0 },
+                          {cost:0, playerId: null, skillID:1},
+                          {cost:0, playerId: null, skillID:2},
+                          {cost:1, playerId: null, skillID:3},
+                          {cost:1, playerId: null, skillID:4} ];
+  room.auctionPlacement = [ {cost:-2, playerId: null, skillID:0},
+                            {cost:-1, playerId: null, skillID:1},
+                            {cost:0, playerId: null, skillID:2},
+                            {cost:0, playerId: null,skillID:3} ];
+  room.marketPlacement = [ {cost:0, playerId: null, skillID:0},
+                           {cost:-2, playerId: null, skillID:1},
+                           {cost:0, playerId: null,  skillID:2} ];
   room.workPlacement = [ {cost:1, playerId: null, workActionId:0},
                             {cost:-1, playerId: null, workActionId:1},
                             {cost:0, playerId: null, workActionId:2},
@@ -462,7 +462,7 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost) {
   }
 }
 
-Data.prototype.placeBottle = function (roomId, playerId, action, cost, placementID) {
+Data.prototype.placeBottle = function (roomId, playerId, action,skillID, cost) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     let activePlacement = [];
@@ -490,16 +490,8 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost, placement
     }
     console.log("handler if loop");
     for(let i = 0; i < activePlacement.length; i += 1) {
-      console.log("handler 1");
-      console.log(activePlacement[i].cost, cost);
-      console.log(activePlacement[i].placementID, placementID);
-      console.log(activePlacement[i].playerId);
-
-        if( activePlacement[i].cost === cost &&
-            activePlacement[i].placementID === placementID &&
-            activePlacement[i].playerId === null ) {
-
-            console.log("handler 2" + activePlacement[i].placementID);
+        if( activePlacement[i].skillID === skillID &&
+          activePlacement[i].playerId === null ) {
           activePlacement[i].playerId = playerId;
           break;
         }

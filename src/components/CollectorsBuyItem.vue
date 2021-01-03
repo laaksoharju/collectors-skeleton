@@ -6,9 +6,9 @@
 <!--Ser till att alt hamnar i en rad, med en tom column innan -->
 <div></div>
 
-   <div class="buttons" v-for="(p, placementID) in placement" :key="placementID">
+   <div class="buttons" v-for="(p, skillID) in placement" :key="'Item Button'+skillID">
      <button id="oneCoinButton"
-       v-if="p.playerId===null && placementID===0"
+       v-if="p.playerId===null && p.skillID===0"
        :disabled="cannotAfford(p.cost)"
        @click="placeBottle(p)">
        <div class = "ItemBottleCoinOne">
@@ -16,7 +16,7 @@
       </button>
 
       <button id="oneCoinButton"
-        v-if="p.playerId===null && placementID===1"
+        v-if="p.playerId===null && p.skillID===1"
         :disabled="cannotAfford(p.cost)"
         @click="placeBottle(p)">
         <div class = "ItemBottleCoinOne">
@@ -24,7 +24,7 @@
        </button>
 
       <button id="twoCoinButton"
-        v-if="p.playerId===null && placementID===2"
+        v-if="p.playerId===null && p.skillID===2"
         :disabled="cannotAfford(p.cost)"
         @click="placeBottle(p)">
         <div class = "ItemBottleCoinTwo">
@@ -32,15 +32,15 @@
      </button>
 
      <button id="twoCoinButton"
-       v-if="p.playerId===null && placementID===3"
+       v-if="p.playerId===null && p.skillID===3"
        :disabled="cannotAfford(p.cost)"
        @click="placeBottle(p)">
        <div class = "ItemBottleCoinTwo">
        </div>
-    </button>
+     </button>
 
      <button id="threeCoinButton"
-       v-if="p.playerId===null && placementID===4"
+       v-if="p.playerId===null && p.skillID===4"
        :disabled="cannotAfford(p.cost)"
        @click="placeBottle(p)">
        <div class = "ItemBottleCoinThree">
@@ -96,8 +96,7 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
-      console.log("iteeeeeeem" + p.placementID);
-      this.$emit('placeBottle', p.cost, p.placementID);
+      this.$emit('placeBottle',p.skillID, p.cost);
       this.highlightAvailableCards(p.cost);
     },
     highlightAvailableCards: function (cost=100) {
