@@ -32,7 +32,6 @@
 
 <script>
 import CollectorsCard from '@/components/CollectorsCard.vue'
-
 export default {
   name: 'CollectorsBuyActions',
   components: {
@@ -88,7 +87,6 @@ export default {
         this.highlightAvailableCards()
       }
     }
-
   }
 }
 </script>
@@ -98,5 +96,4 @@ export default {
     display: grid;
     grid-template-columns: repeat(auto-fill, 130px);
   }
-
 </style>

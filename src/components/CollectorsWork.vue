@@ -52,7 +52,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'CollectorsWork',
   components: {
@@ -64,7 +63,6 @@ export default {
     placement: Array,
     skillsOnSale: Array,
     marketValues: Object,
-
   },
   methods: {
     cannotAfford: function (cost) {
@@ -102,9 +100,6 @@ export default {
 </script>
 
 <style scoped>
-
-
-
 .workPool{
   grid-column: 3/span 5;
   grid-row: 6/span 5;
@@ -119,7 +114,6 @@ export default {
   /*border: 3px solid #4C7B80;*/
   border-top: 2px solid #4C7B80;
 }
-
 .titleWorkPool {
   font-style: italic;
   font-size: 50px;
@@ -129,7 +123,6 @@ export default {
 }
 .buttons{
 }
-
 .quarterImage {
   grid-column: 3;
   grid-row: 2;
@@ -166,7 +159,6 @@ export default {
   background-image: url('/images/quarterTile4.png');
   background-size: cover;
 }
-
 .Alt1 {
   width: 120px;
   height: 45px;
@@ -211,7 +203,6 @@ export default {
   border-radius: 5px;
   border: 2px solid #DDD359;
 }
-
 .workdeck{
   grid-column: 2;
   grid-row: 3;
@@ -220,19 +211,13 @@ export default {
   width: 67.5px;
   height: 95.5px;
 }
-
-
-
-
 .work-Card {
   grid-row: 2;
   transform: scale(0.25);
 /*  place-self:center; förstör!! */
 }
-
 .work-Card div:hover{
   transform: scale(1.5)translate(-25%,0);
   z-index: 1;
 }
-
 </style>
