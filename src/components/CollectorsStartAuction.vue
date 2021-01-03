@@ -1,4 +1,3 @@
-
 <template>
 
 <div class = "auctionPool">
@@ -89,12 +88,10 @@ Highest bid: {{highestBid}}
 
 <script>
 import CollectorsCard from '@/components/CollectorsCard.vue'
-
 export default {
   name: 'CollectorsStartAuction',
   components: {
     CollectorsCard
-
   },
   props: {
     labels: Object,
@@ -107,7 +104,6 @@ export default {
     //bids: Object,
     marketValues: Object,
     placement: Array,
-
   },
   methods: {
     startAuction: function (card) {
@@ -116,27 +112,21 @@ export default {
         this.highlightAvailableCards()
         }
       },
-
   startWinnerCard: function(action){
     console.log('started winner card with action'+action);
-
     this.$emit('startWinnerCard', action);
   },
-
-
   startBidding: function (){
      var bid = Number(document.getElementById("bidSquare").value);
      this.player.bids = bid;
      console.log(this.player, "started bidding");
      this.$emit('startBidding', this.player.bids);
-
   },
 //Stop auction - här skickas det kort som är upp to auction vidare
   stopAuction: function (){
     console.log(this.cardUpForAuction, "stopAuction i CollectorsStartAuction");
      this.$emit('stopAuction', this.cardUpForAuction);
   },
-
   cannotAfford: function (cost) {
     let minCost = 100;
     for(let key in this.marketValues) {
@@ -152,7 +142,6 @@ export default {
     this.$emit('placeBottle', p);
     this.highlightAvailableCards(p.cost);
   },
-
    highlightAvailableCards: function (cost=100){
       for (let i = 0; i < this.auctionCards.length; i += 1) {
           this.$set(this.auctionCards[i], "available", true);
@@ -170,7 +159,6 @@ export default {
 </script>
 
 <style scoped>
-
 .auctionPool{
   grid-column: 8/span 2;
   grid-row: 2/span 13;
@@ -185,7 +173,6 @@ export default {
   grid-auto-flow: column;
   border: 2px solid #4C7B80;
 }
-
 .titleAuctionPool{
 grid-column: 1;
 grid-row: 1;
@@ -194,48 +181,37 @@ font-size: 50px;
 text-shadow: 2px 2px 4px #75755C;
 font-size: 20px;
 }
-
-
 .EnergyBottleCoinWhiteNoll{
   width:45px;
   height:45px;
   background-image:  url('/images/Coin-white.png');
   background-size: cover;
-
 }
-
 .second{
   grid-column: 1;
   grid-row: 5;
 }
-
 .EnergyBottleCoinWhiteTwo{
   width:45px;
   height:45px;
   background-image:  url('/images/Coin-white-2.png');
   background-size: cover;
-
 }
-
 .EnergyBottleCoinWhiteOne{
   width:45px;
   height:45px;
   background-image:  url('/images/Coin-white-1.png');
   background-size: cover;
-
 }
-
 .auctionCard {
     transform: scale(0.25);
     grid-column: 3;
     place-self: top
   }
-
 .auctionCard div:hover{
     transform: scale(2)translate(-25%,0);
     z-index: 1;
   }
-
 .auctionSquare{
   grid-column: 1;
   grid-row: 7;
@@ -247,7 +223,6 @@ font-size: 20px;
   text-shadow: 2px 2px 4px pink;
   font-size: 14px;
   }
-
   .bidSquare {
     grid-column: 1;
     grid-row: 10;
@@ -257,15 +232,12 @@ font-size: 20px;
   width: 40px;
   height: 20px;
   grid-column: 2;
-
 }
-
 form {
   grid-column: 1;
   grid-row: 8;
   font-size: 13px;
 }
-
 #bidPlacementButton {
   height: 30px;
   width: 50px;
@@ -277,12 +249,10 @@ form {
     border-radius: 12px;
     border: 2px solid #BD5467;
   }
-
 #bidPlacementButton:hover {
   background-color: #BD5467;
   border: 2px solid lightpink;
 }
-
   .cardUpForAuction {
   transform: scale(0.45);
   grid-column: 1;
@@ -290,7 +260,6 @@ form {
   height: 70px;
   width: 50px;
   }
-
   .start-auction{
     transform: scale(0.25);
     grid-column: 2;
@@ -299,24 +268,20 @@ form {
     transform: scale(1.25)translate(-15%,0);
     z-index: 1;
   }
-
   .buttons{
     border-radius: 9px;
   }
-
   .auctionButtons{
     grid-column: 3;
     grid-row: 7;
     place-self: right;
   }
-
   .winner{
     grid-row:2;
     grid-column:1;
     place-self: top center;
     font-size: 12px;
   }
-
   #stopAuctionButton{
     border-radius: 9px;
     background-color: #C86262;
@@ -331,7 +296,6 @@ form {
     background-color: #A22626;
     border: 2px solid #C86262;
   }
-
   #buttonNollSecond {
     background-color: white;
     border-radius: 5px;
@@ -349,16 +313,13 @@ form {
     border-radius: 5px;
     border: 2px solid #D4D4B8;
   }
-
   #buttonTwo {
     background-color: white;
     border-radius: 5px;
     border: 2px solid #D4D4B8;
   }
-
   .buttons div:hover {
     transform: scale(1.5)translate(0,0);
     z-index: 1;
   }
-
 </style>

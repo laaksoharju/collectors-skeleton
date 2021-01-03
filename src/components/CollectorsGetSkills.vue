@@ -98,7 +98,6 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
-      console.log(p.placementId);
       this.$emit('placeBottle', p);
       this.highlightAvailableCards(p.cost);
     },

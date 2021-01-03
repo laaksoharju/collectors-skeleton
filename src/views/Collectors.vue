@@ -546,7 +546,6 @@ function(d) {
       );
     },
     placeBottle: function (action, p) {
-      console.log(action, p.cost, p.placementId);
       this.chosenPlacementId = p.cost;
       this.chosenPlacementCost = p.cost;
       this.chosenAction = action;
@@ -559,7 +558,6 @@ function(d) {
         }
       );
     },
-
     placeBottleWork: function (p) {
       this.chosenPlacementCost = p.cost;
       this.chosenAction = p.action;

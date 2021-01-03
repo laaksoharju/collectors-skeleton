@@ -56,7 +56,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'CollectorsMarket',
   /*components: {
@@ -83,7 +82,6 @@ export default {
       }
       return (this.player.money < minCost);
     },
-
   highlightAvailableCards: function () {           //LÖST!! :D : problemet är  if vilkoret! highlitar sista kortet bara första gången!
       //for (let i = 0; i < this.skillsOnSale.length; i += 1) { gamla villkoret
       for (let i = this.skillsOnSale.length -1 ; i >= 0 ; i -= 1) {     //kollar baklänges!
@@ -98,19 +96,16 @@ export default {
     }
   }
 }
-
 </script>
 
 
 <style scoped>
-
 .titleMarketPool {
   font-style: italic;
   font-size: 50px;
   text-shadow: 2px 2px 4px #4678CC;
   font-size: 20px;
 }
-
 .marketPool{
   grid-column: 3/span 5;
   grid-row: 11/span 4;
@@ -123,15 +118,12 @@ export default {
   grid-template-rows: repeat(5, 27.5px);
   border-bottom: 2px solid #4C7B80;
   border-top: 2px solid #4C7B80;
-
   }
-
 .chategoryValues {
   grid-column: auto;
   grid-row: 5;
   font-size: 90%;
 }
-
   .iconBird {
     width: 30px;
     height: 40px;
@@ -151,7 +143,6 @@ export default {
     grid-column: 4;
     grid-row: 10;
   }
-
   .iconMusic {
     width: 30px;
     height: 40px;
@@ -179,16 +170,13 @@ export default {
     grid-column: 3;
     grid-row: 10;
   }
-
   .buttons{
   /*  place-self: stretch;*/
   }
-
   .buttons div:hover {
     transform: scale(1.5)translate(0,0);
     z-index: 1;
   }
-
   .bottleCoins {
     width:50px;
     height:50px;
