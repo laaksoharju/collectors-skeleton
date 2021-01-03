@@ -4,6 +4,7 @@
       v-for="(card, index) in itemsOnSale"
       :key="index"
       :class="[`cardslots ${index}`]"
+      :id="!deckCardAvailable === true ? `cardid` : ''"
     >
       <!-- {{ deckCardAvailable }} -->
       <CollectorsCard
@@ -103,10 +104,8 @@ export default {
     //   }
     // },
     buyCard: function (card) {
-      if (card.available) {
-
-
-        this.$emit("buyCard", {card: card, p: "buttonClicked"});
+      if (card.available || this.deckCardAvailable === true) {
+        this.$emit("buyCard", { card: card, p: "buttonClicked" });
         // this.highlightAvailableCards();
       }
     },

@@ -70,6 +70,20 @@
             />
           </div>
         </section>
+        <div class="activeplayer">
+          <div>
+            <img
+              :class="[
+                'player_avatar',
+                { avatar: this.players[playerId].playersTurn },
+              ]"
+              src="../../public/images/player_avatar/worker_man2.png"
+              v-bind:style="{
+                'background-color': this.players[this.currentPlayerId].color,
+              }"
+            />
+          </div>
+        </div>
 
         <div class="game main-board">
           <section class="item_bottle">
@@ -417,9 +431,7 @@
                 <img
                   src="/images/player-cards-for-coins.png"
                   alt="Player Cards for Coins"
-                />x{{
-                  players[otherPlayerId].cardsForCash
-                }}
+                />x{{ players[otherPlayerId].cardsForCash }}
               </div>
             </div>
             <div
@@ -792,7 +804,9 @@ export default {
       itemsOnSale: [],
       skillsOnSale: [],
       auctionCards: [],
+      playersTurn: false,
       handClicked: 0,
+      currentPlayerId: "hello",
       handCardAvailable: false,
       buttonClicked: null,
       playerid: 0,
@@ -838,10 +852,18 @@ export default {
       round: 0,
 
       //sounds
-      audioBottlePlaced: new Audio("/sounds/zapsplat_household_aerosol_can_lid_down_on_wood_surface_001.mp3"),
-      cardMoved: new Audio("/sounds/zapsplat_leisure_playing_card_turn_over_on_top_of_deck_010_39239.mp3"),
-      newRound: new Audio("/sounds/zapsplat_multimedia_game_sound_bell_digital_synth_bright_harsh_ascend_level_up_002_40473.mp3"),
-      placeAuctionBid: new Audio("/sounds/zapsplat_foley_money_coin_australian_10_cent_set_down_and_spin_on_tiled_table_002_28219.mp3"),
+      audioBottlePlaced: new Audio(
+        "/sounds/zapsplat_household_aerosol_can_lid_down_on_wood_surface_001.mp3"
+      ),
+      cardMoved: new Audio(
+        "/sounds/zapsplat_leisure_playing_card_turn_over_on_top_of_deck_010_39239.mp3"
+      ),
+      newRound: new Audio(
+        "/sounds/zapsplat_multimedia_game_sound_bell_digital_synth_bright_harsh_ascend_level_up_002_40473.mp3"
+      ),
+      placeAuctionBid: new Audio(
+        "/sounds/zapsplat_foley_money_coin_australian_10_cent_set_down_and_spin_on_tiled_table_002_28219.mp3"
+      ),
     };
   },
   computed: {
@@ -889,6 +911,7 @@ export default {
         this.auctionPlacement = d.placements.auctionPlacement;
         this.workPlacement = d.placements.workPlacement;
         this.deckAuction = d.deckAuction;
+        this.currentPlayerId = d.currentPlayerId;
         this.round = d.round;
         this.playerState = d.playerState;
         if (this.playerState.action !== "") {
@@ -914,6 +937,7 @@ export default {
         this.workPlacement = d.placements.workPlacement;
         this.round = d.round;
         this.deckAuction = d.deckAuction;
+        this.currentPlayerId = d.currentPlayerId;
 
         /*this.start_auction = d.start_auction;*/
       }.bind(this)
@@ -936,7 +960,6 @@ export default {
       function (d) {
         console.log("collectorsBottlePlaced");
 
-
         this.audioBottlePlaced.play();
 
         /*If i comment this away they shine prmanently*/
@@ -948,6 +971,7 @@ export default {
 
         this.workPlacement = d.workPlacement;
         this.players = d.players;
+        this.currentPlayerId = d.currentPlayerId;
       }.bind(this)
     );
 
@@ -1020,7 +1044,7 @@ export default {
         this.marketValues = d.marketValues;
         this.deckCardAvailable = false;
 
-        if (this.cardClicked == this.clickCardTimes){
+        if (this.cardClicked == this.clickCardTimes) {
           this.handCardAvailable = false;
           this.cardClicked = 0;
           this.clickCardTimes = 0;
@@ -1102,7 +1126,7 @@ export default {
         if (val === this.$store.state.playerId && e.target.value !== "") {
           this.players[this.$store.state.playerId].auction_amount =
             e.target.value;
-            this.placeAuctionBid.play();
+          this.placeAuctionBid.play();
 
           this.$store.state.socket.emit("updatePlayerAuction", {
             roomId: this.$route.params.id,
@@ -1168,9 +1192,9 @@ export default {
       return sortval[0];
     },
     buyCard: function (action, d) {
-
-      this.cardClicked += 1;
+      // this.cardClicked += 1;
       // console.log('collectors buyCard this.cardClicked: ' + this.cardClicked);
+
       if (action === "win_auction") {
         let max_val = this.getmax();
 
@@ -1182,13 +1206,12 @@ export default {
             playerId: this.playerId,
             card: d.card,
             action: action,
-            cost: this.marketValues[d.card.market],
+            cost: max_val.auction_amount,
             start_auction: this.players[this.playerId].start_auction,
             deckCardAvailable: this.players[this.playerId].deckCardAvailable,
             p: d.p,
           });
 
-          document.getElementsByClassName("0").remove();
           // document.getElementById("players_auction").hidden = false;
         } else {
           alert("You can not take the card");
@@ -1202,7 +1225,7 @@ export default {
           this.players[this.playerId].deckCardAvailable = false;
         }
         // document.getElementById("players_auction").hidden = this.start_auction;
-        console.log('collectors buycard emit collectorsbuycard');
+        console.log("collectors buycard emit collectorsbuycard");
         this.$store.state.socket.emit("collectorsBuyCard", {
           roomId: this.$route.params.id,
           playerId: this.playerId,
@@ -1229,8 +1252,8 @@ export default {
     },
     countskills: function (skills, card) {
       var count = 0;
-      Object.keys(skills).forEach(function (prop) {
-        if (skills[prop]["skill"] === card) {
+      Object.keys(skills).forEach(function (i) {
+        if (skills[i]["skill"] === card) {
           count += 1;
         }
       });
@@ -1436,6 +1459,12 @@ footer a:visited {
   grid-column: 3/4;
   grid-row: 2/3;
 }
+
+::v-deep .player-hand .cardslots .buy-cards .cardslots .card {
+  position: relative;
+  top: 33rem;
+  transform: scale(2) translate(-50%, -50%);
+}
 .item_bottle {
   background-color: rgb(219, 197, 195);
   grid-column: 2/4;
@@ -1526,11 +1555,6 @@ footer a:visited {
   z-index: 6;
 }
 
-.player-hand .cardslots div {
-  transfrom: scale(0.3) translate(-110%, -110%);
-
-}
-
 /* .cardslots {
   display: grid;
   grid-template-columns: repeat(auto-fill, 80px);
@@ -1552,7 +1576,7 @@ footer a:visited {
 
 .secret-card div:hover,
 .cardslots div:hover {
-  transform: scale(1) translate(-25%, 0);
+  transform: scale(0.7) translate(-55%, 0);
   z-index: 1;
   opacity: 1;
 }
@@ -1873,6 +1897,53 @@ p {
   border-radius: 5px;
   cursor: pointer;
   /* border:none; */
+}
+
+@-moz-keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.player_avatar {
+  position: relative;
+  right: -110rem;
+  top: 0.5rem;
+
+  width: 5rem;
+  height: 4rem;
+
+  border-radius: 10rem;
+
+  border: 3px solid rgb(247, 247, 144);
+}
+.avatar {
+  animation: blink normal 2s infinite cubic-bezier(1, -0.49, 0.1, 1.15);
+}
+.your_turn {
+  position: relative;
+  right: -101.5rem;
+  top: -4.5rem;
+}
+.activeplayer {
+  position: absolute;
 }
 
 .quarter-tiles:hover {

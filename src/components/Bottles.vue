@@ -109,13 +109,13 @@ export default {
       if (
         !this.player.clickedOnBottle &&
         this.player.money >= p.cost &&
-        this.player.bottles > 0 &&
-        this.player.playersTurn
+        this.player.bottles > 0
+        // this.player.playersTurn
       ) {
-        console.log('Bottles emit placeBottle');
+        console.log("Bottles emit placeBottle");
         this.$emit("placeBottle", p);
 
-        if (this.itemsOnSale !== undefined){
+        if (this.itemsOnSale !== undefined) {
           this.highlightAvailableCards(p.cost);
         }
       }
@@ -130,12 +130,8 @@ export default {
     },
 
     cardsInHand: function (card) {
-        this.$set(card, "available", true);
-
-
+      this.$set(card, "available", true);
     },
-
-
 
     buyCard: function (card) {
       if (card.available) {

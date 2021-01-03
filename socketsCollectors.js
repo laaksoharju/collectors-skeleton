@@ -16,7 +16,9 @@ function sockets(io, socket, data) {
         placements: data.getPlacements(d.roomId),
         round: data.getRound(d.roomId),
         decKAuction: data.getDeckauctionCard(d.roomId),
-        playerState: data.getPlayerState(d.roomId, d.playerId)
+        playerState: data.getPlayerState(d.roomId, d.playerId),
+        currentPlayerId: data.getCurrentPlayerId(d.roomId),
+
       });
     }
   });
@@ -45,6 +47,8 @@ function sockets(io, socket, data) {
         deckAuction: data.getDeckauctionCard(d.roomId),
         placements: data.getPlacements(d.roomId),
         round: data.getRound(d.roomId),
+        currentPlayerId: data.getCurrentPlayerId(d.roomId),
+        
       });
     }
   });

@@ -60,6 +60,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
   room.setNextPlayer = false;
   room.firstTojoin = true;
   room.turnToPlay = null;
+  room.currentPlayerId=null;
   room.playerColors = ["violet", "blue", "brown", "grey"];
   room.lang = lang;
   room.deck = this.createDeck(lang);
@@ -302,6 +303,7 @@ Data.prototype.joinGame = function(roomId, playerId) {
   if (room.firstTojoin){
     room.turnToPlay = true;
     room.firstTojoin = false;
+    room.currentPlayerId = playerId;
 
   }
   else {
@@ -562,6 +564,7 @@ Data.prototype.nextRound = function(roomId) {
       console.log('Phase 6 for loop');
           if (room.players[key].starts_round ){
             room.players[key].playersTurn = true;
+            room.currentPlayerId=key
           } else {
             room.players[key].playersTurn = false;
           }
@@ -861,6 +864,7 @@ Data.prototype.getPlacements = function(roomId) {
       marketPlacement: room.marketPlacement,
       workPlacement: room.workPlacement,
       players: room.players,
+      currentPlayerId: room.currentPlayerId,
     };
   } else return {};
 };
@@ -916,6 +920,12 @@ Data.prototype.getDeckauctionCard = function(roomId) {
     return room.deckAuction;
   } else return [];
 };
+Data.prototype.getCurrentPlayerId = function(roomId) {
+  let room = this.rooms[roomId];
+  if (typeof room !== "undefined") {
+    return room.currentPlayerId;
+  } else return [];
+};
 
 Data.prototype.calcPlayersTurns = function(roomId) {
   let room = this.rooms[roomId];
@@ -929,6 +939,7 @@ Data.prototype.calcPlayersTurns = function(roomId) {
             room.players[key].playersTurn = false;
           } else {
             room.players[key].playersTurn = true;
+            room.currentPlayerId = key;
             room.setNextPlayer = false;
           }
         } else if (room.players[key].playersTurn) {
