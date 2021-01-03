@@ -216,4 +216,122 @@ export default {
   border-radius: 5px;
   border: 2px solid #6894DF;
 }
+@media screen and (max-width: 800px) {
+  .titleMarketPool {
+    font-style: italic;
+    font-size: 50px;
+    text-shadow: 2px 2px 4px #4678CC;
+    font-size: 20px;
+  }
+  .marketPool{
+    grid-column: 3/span 5;
+    grid-row: 13/span 4;
+    width: auto;
+    height: auto;
+    background-color: #cfdcf2;
+    color: black;
+    display: grid;
+    grid-template-columns: repeat(5, 90px);
+    grid-template-rows: repeat(5, 27.5px);
+    border-right: 2px solid #4C7B80;
+    border-top: 2px solid #4C7B80;
+    }
+  .chategoryValues {
+    grid-column: auto;
+    grid-row: 5;
+    font-size: 90%;
+  }
+    .iconBird {
+      width: 30px;
+      height: 40px;
+      background-position:center;
+      background-image: url('/images/iconBird.PNG');
+      background-size: cover;
+      place-self: center;
+      grid-column: 1;
+      grid-row: 10;
+    }
+    .iconRobot {
+      width: 30px;
+      height: 40px;
+      background-image: url('/images/iconRobot.PNG');
+      background-size: cover;
+      place-self: center;
+      grid-column: 4;
+      grid-row: 10;
+    }
+    .iconMusic {
+      width: 30px;
+      height: 40px;
+      background-image: url('/images/iconMusic.PNG');
+      background-size: cover;
+      place-self: center;
+      grid-column: 5;
+      grid-row: 10;
+    }
+    .iconFilm {
+      width: 30px;
+      height: 40px;
+      background-image: url('/images/iconFilm.PNG');
+      background-size: cover;
+      place-self: center;
+      grid-column: 2;
+      grid-row: 10;
+    }
+    .iconTech {
+      width: 30px;
+      height: 40px;
+      background-image: url('/images/iconTech.PNG');
+      background-size: cover;
+      place-self: center;
+      grid-column: 3;
+      grid-row: 10;
+    }
+    .buttons{
+    /*  place-self: stretch;*/
+    }
+    .buttons div:hover {
+      transform: scale(1.5)translate(0,0);
+      z-index: 1;
+    }
+    .bottleCoins {
+      width:50px;
+      height:50px;
+      background-image: url('/images/marketbottletwocoins.PNG');
+      background-size: cover;
+      grid-column: 2;
+      grid-row: 2;
+    }
+    #coinsButton {
+      background-color: #cfdcf2;
+      border-radius: 5px;
+      border: 2px solid #6894DF;
+    }
+    .bottleOneFlag {
+      width:50px;
+      height:50px;
+      background-image: url('/images/marketbottleoneflagg.PNG') ;
+      background-size: cover;
+      grid-column: 3;
+      grid-row: 2;
+    }
+    #oneFlag {
+      background-color: #cfdcf2;
+      border-radius: 5px;
+      border: 2px solid #6894DF;
+    }
+  .bottleTwoFlags {
+    width:50px;
+    height:50px;
+    background-image: url('/images/marketbottletwoflaggs.PNG') ;
+    background-size: cover;
+    grid-column: 4;
+    grid-row: 2;
+  }
+  #twoFlags {
+    background-color: #cfdcf2;
+    border-radius: 5px;
+    border: 2px solid #6894DF;
+  }
+}
   </style>

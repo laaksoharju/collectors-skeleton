@@ -1056,9 +1056,289 @@ h5 {
     transform: scale(2)translate(-25%,0);
     z-index: 1;
   }
+
+  /*MOBIL VERISION*/
+
   @media screen and (max-width: 800px) {
     main {
       width:90vw;
+      background-color: lightblue;
+    }
+    h1 {
+      text-align: left;
+      font-style:italic;
+      font-size: 40px;
+      text-shadow: 2px 2px 4px blue;
+      margin-bottom: 0px;
+    }
+    h3 {
+      font-size: 12px;
+    }
+    h5 {
+      text-align: center;
+      font-style:italic;
+      font-size: 20px;
+      text-shadow: 1px 2px 2px blue;
+      margin-bottom: 0px;
+      margin-top: 0px;
+    }
+      header {
+        user-select: none;
+        position: fixed;
+        width:100%;
+        pointer-events: none;
+      }
+    .table {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+.board {
+  display: grid;
+  grid-template-columns: repeat(15,90px);
+  grid-template-rows: repeat(20, 45px);
+  grid-gap: 0px;
+  margin: 20px ;
+  background: $black;
+  border: 2px solid $black;
+}
+
+    .blackBottle{
+      width:32px;
+      height:32px;
+      background-image:  url('/images/player-bottle-black.png');
+      background-size: cover;
+    }
+    #black {
+      background-color: #474342;
+      border-radius: 5px;
+      border: 2px solid #E3A688;
+    }
+    .blueBottle{
+      width:32px;
+      height:32px;
+      background-image:  url('/images/player-bottle-blue.png');
+      background-size: cover;
+    }
+    #blue {
+      background-color: #12B3A9 ;
+      border-radius: 5px;
+      border: 2px solid #E3A688;
+    }
+    .brownBottle{
+      width:32px;
+      height:32px;
+      background-image:  url('/images/player-bottle-brown.png');
+      background-size: cover;
+    }
+    #brown {
+      background-color: #B79048 ;
+      border-radius: 5px;
+      border: 2px solid #E3A688;
+    }
+    .purpleBottle{
+      width:32px;
+      height:32px;
+      background-image:  url('/images/player-bottle-purple.png');
+      background-size: cover;
+    }
+    #purple {
+      background-color: #6B2977;
+      border-radius: 5px;
+      border: 2px solid #E3A688;
+    }
+  .playerBottles {
+    grid-row: 1;
+    grid-column: 4;
+  }
+    .playerBoard {
+      grid-column: 1/span 5;
+      grid-row: 22/span 6;
+      width: auto;
+      height: auto;
+      background-color: pink ;
+      color: black;
+      display: grid;
+      grid-template-columns: repeat(8, 51px);
+      grid-template-rows: repeat(4,67px);
+      grid-auto-flow: row;
+      grid-column-gap: 5px;
+      grid-row-gap: 5px;
+      border: 2px solid #4C7B80;
+    }
+  .playerTitle {
+    grid-row: 1;
+    grid-column: 1 / span 3;
+    font-style: italic;
+    font-size: 50px;
+    text-shadow: 2px 2px 4px #BD5467;
+    font-size: 20px;
+  }
+  .myMoney {
+    grid-row: 3 ;
+    grid-column: 7/span 2;
+    place-self: top;
+  }
+  .skillTitle {
+    grid-row: 3;
+    place-self: end;
+  }
+    .chosenSkillCard {
+      grid-row: 3;
+      transform: scale(0.2);
+    }
+  .secretTitle{
+    grid-row:1 ;
+    grid-column: 7 /span 2;
+  }
+    .chosenSecret {
+      grid-row: 1;
+      grid-column: 7;
+      transform: scale(0.2);
+    }
+
+  .itemTitle {
+    grid-row:2;
+    place-self: end;
+  }
+    .chosenItemCard {
+      grid-row: 2;
+      transform: scale(0.2);
+    }
+    .playerHand {
+      grid-column: 11/span 5;
+      grid-row: 8/span 4;
+      display: grid;
+      grid-template-columns: repeat(1, 450px);
+      grid-template-rows: repeat(4,60px);
+    }
+    .playerHandTitle {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    .turnCounter {
+      background-color: #60AB4D;
+      color:white;
+      grid-column: 4/ span 2;
+      grid-row: 1;
+      text-align: center;
+    }
+    .roundCounter {
+      background-color: #4C7B80;
+      color:white;
+      grid-column: 6/ span 2;
+      grid-row: 1;
+      text-align: center;
+    }
+    h6{
+      text-align: center;
+      font-style:italic;
+      font-size: 20px;
+      text-shadow: 1px 2px 2px blue;
+      margin-bottom: 0px;
+      margin-top: 0px;
+    }
+  .endedGame{
+    text-shadow: 1px 2px 2px green;
+  }
+  #userName {
+    background-color: #76B0B7;
+  }
+  #linkSquare {
+    background-color: #76B0B7;
+  }
+    #userNameButton {
+      grid-column: 1;
+      grid-row: 1;
+      background-color: #5A99A1;
+    }
+    .showPlayers {
+      background-color: #406c72;
+      color: white;
+      grid-column: 1/span 2;
+      grid-row: 1/span 3;
+      text-align: center;
+      border: 5px dotted pink ;
+    }
+    .buttons{
+      grid-column: 1;
+      grid-row: 10;
+    }
+    .turnButton {
+      background-color: #B1E168;
+      cursor: pointer;
+      border: 10px dotted #60AB4D ;
+      text-align: center;
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    }
+    .turnButton:hover {
+    background-color: #60AB4D;
+    color: white;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    }
+    .roundButton:hover {
+    background-color: #4C7B80;
+    color: white;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    }
+    .roundButton {
+      background-color: lightblue;
+      cursor: pointer;
+      border: 10px dotted #4C7B80 ;
+      text-align: center;
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    }
+    #rulesButton {
+      margin: 5px 50px 5px 50px;
+      padding: 1px 100px 1px;
+      cursor:pointer;
+      transition-duration: 0.4s;
+      background-color: #f08080 ;
+      color:white;
+    }
+    #ruleContent {
+      margin: 50px 50px 50px 50px;
+      padding: 10px 10px;
+      font-size: 20px;
+      font-style: oblique;
+    }
+    footer {
+      margin-top: 5em auto;
+    }
+    footer a {
+      text-decoration: none;
+      border-bottom: 2px dotted ivory;
+    }
+    footer a:visited {
+      color:ivory;
+    }
+    .otherCoins {
+      grid-column: 1;
+      grid-row: 4;
+    }
+    .cardslots {
+      grid-column: 1;
+      grid-row: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 130px);
+      grid-template-rows: repeat(auto-fill, 1px);
+    }
+    .cardslots div {
+      transform: scale(0.5); /* scale - minska kortens strl*/
+      transition:0.2s;
+      transition-timing-function: ease-out;
+      z-index: 0;
+    }
+    .cardslots div:hover {
+      transform: scale(0.6);
+      z-index: 1;
+    }
+    .itemCard{
+      grid-row: 2;
+      transform: scale(0.25);
+    }
+    .itemCard div:hover{
+      transform: scale(2)translate(-25%,0);
+      z-index: 1;
     }
   }
 </style>

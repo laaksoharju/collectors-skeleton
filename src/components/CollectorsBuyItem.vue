@@ -198,4 +198,85 @@ export default {
   background-image:  url('/images/item-bottle-coin-three.png');
   background-size: cover;
 }
+
+@media screen and (max-width: 800px) {
+  .titleItemPool {
+    grid-column: 6 / span 2;
+    font-style: italic;
+    font-size: 50px;
+    text-shadow: 2px 2px 4px red;
+    font-size: 20px;
+  }
+  .itemPool{
+    grid-column: 3/span 5 ;
+    grid-row: 4/span 4;
+    width: auto;
+    height: auto;
+  /*  grid-template-columns: repeat(100, 12px);
+    grid-template-rows: repeat(100,150px);*/
+    background-color: #f0d9cc ;
+    color: black;
+    display: grid;
+    grid-template-columns: repeat(6, 50px);
+    grid-template-rows: repeat(3,50px);
+    grid-column-gap: 25px;
+    grid-auto-flow: row;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: 2px solid #4C7B80;
+    border-right: 2px solid #4C7B80;
+  }
+  .buttons{
+    grid-row: 1;
+    place-self: stretch;
+    background-color: #f0d9cc;
+  }
+  .buttons div:hover {
+    transform: scale(1.5)translate(0,0);
+    z-index: 1;
+  }
+  .itemCard {
+    grid-row: 2;
+    transform: scale(0.25);
+  /*  place-self:center; förstör!! */
+  }
+  .itemCard div:hover{
+    transform: scale(1.5)translate(-25%,0);
+    z-index: 1;
+  }
+  .ItemBottleCoinOne{
+    width:50px;
+    height:50px;
+    background-image:  url('/images/item-bottle-coin-one.png');
+    background-size: cover;
+  }
+  #oneCoinButton {
+    background-color: #f9dcce;
+    border-radius: 5px;
+    border: 2px solid #E3A688;
+  }
+  #twoCoinButton {
+    background-color: #f9dcce;
+    border-radius: 5px;
+    border: 2px solid #E3A688;
+  }
+  #threeCoinButton {
+    background-color: #f9dcce;
+    border-radius: 5px;
+    border: 2px solid #E3A688;
+  }
+  .ItemBottleCoinTwo{
+    width:50px;
+    height:50px;
+    background-image:  url('/images/item-bottle-coin-two.png');
+    background-size: cover;
+  }
+  .ItemBottleCoinThree{
+    width:50px;
+    height:50px;
+    background-image:  url('/images/item-bottle-coin-three.png');
+    background-size: cover;
+  }
+}
 </style>
