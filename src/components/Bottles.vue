@@ -130,7 +130,7 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
-      /*if (
+      if (
       !this.player.clickedOnBottle &&
         this.player.money >= p.cost &&
         this.player.bottles > 0
@@ -142,8 +142,8 @@ export default {
         if (this.itemsOnSale !== undefined){
           this.highlightAvailableCards(p.cost);
         }
-      }*/
-        if (this.player.playersTurn){
+      }
+        /*if (this.player.playersTurn){
           console.log('Bottles emit placeBottle');
           this.$emit("placeBottle", p);
 
@@ -151,7 +151,7 @@ export default {
             this.highlightAvailableCards(p.cost);
           }
 
-        }
+        }*/
     },
     highlightAvailableCards: function (cost = 100) {
       for (let i = 0; i < this.itemsOnSale.length; i += 1) {

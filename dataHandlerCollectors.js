@@ -348,14 +348,14 @@ Data.prototype.joinGame = function(roomId, playerId) {
       room.players[playerId] = {
         playerName: playerId,
         hand: room.deck.splice(0, 3), // Two cards are kept secret and form the hands of each player
-        money: Object.keys(room.players).length + 2,
+        money: Object.keys(room.players).length + 20,
         points: 0,
         skills: [],
         items: [],
         income: [],
         secret: {},
         color: room.playerColors.pop(),
-        bottles: 2,
+        bottles: 10,
         cardsForCash: 0,
         auction_amount: 0,
         start_auction: true,

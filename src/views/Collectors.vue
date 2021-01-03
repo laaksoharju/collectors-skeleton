@@ -110,7 +110,7 @@
           </section>
 
           <section class="work_bottle">
-              <button class = "end_game"   @click="endGame(p)">End Game</button>
+              <button class = "end_game"   @click="endGame()">End Game</button>
             <Bottles
               v-if="players[playerId]"
               :labels="labels"
@@ -239,7 +239,7 @@
               <!-- if the active player has already buy an item -->
               <div
                 v-for="(card, index) in players[playerId].items"
-                :key="index"
+                :key="'items' + index"
                 class="player-items"
               >
                 <div v-if="card.item === 'movie'" class="player-items-1">
@@ -283,7 +283,7 @@
 
               <div
                 v-for="(card, index) in players[playerId].skills"
-                :key="index"
+                :key="'skills' + index"
                 class="player-skills"
               >
                 <div v-if="card.skill === 'bottle'" class="player-skills-1">
@@ -1131,6 +1131,7 @@ export default {
           otherPlayers.push(id);
         }
       }
+      console.log('getotherplayerId');
       return otherPlayers;
     },
     getallPlayersAuction: function () {
