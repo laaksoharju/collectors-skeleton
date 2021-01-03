@@ -4,23 +4,27 @@
       <div>
         <h1>COLLECTORS</h1>
       </div>
+      <div>
+      <h2>Welcome to play Collectors! / Välkommen att spela Collectors! <nav>
+      </nav>Start by choosing a language! / Börja genom att välja språk!</h2>
+      </div>
 
-      <button title="Rules!" type="button" id="rulesButton" class="rulesButton" v-on:click="setSprak">
+      <button title="Svenska" type="button" id="languageButton" class="rulesButton" v-on:click="setSprak">
         <h2>Svenska</h2>
       </button>
-      <button title="Rules!" type="button" id="rulesButton" class="rulesButton" v-on:click="setSprakEn">
+      <button title="English" type="button" id="languageButton" class="rulesButton" v-on:click="setSprakEn">
         <h2>English</h2>
       </button>
 
       <div>
-        <h3> Welcome to play Collectors, please choose a setup for the game.<nav>
-        </nav>In the next step you will get a link to send to the other players. </h3>
+        <h3>{{ labels.setup }} </h3>
+        <h3> {{ labels.nextStep }} </h3>
 
           <a id='firstButton' href="#identifier"><img src='https://website-bamedag.netdna-ssl.com/fileadmin/media/_processed_/8/8/csm_7-9-months-introtext_7588a3bb0c.jpg' alt="Span" width="200"></a>
       </div>
       <ul>
         <div v-for="i in 3" :key="i">
-          <button id=startButton @click="setupCollectors(i+1, 'en')"><h3>Set up a game of Collectors for {{i+1}} players </h3></button>
+          <button id=startButton @click="setupCollectors(i+1, 'en')"><h3>{{ labels.gameSetup }}{{i+1}} {{ labels.players }} </h3></button>
         </div>
         <!--Rule button and id for where the text prints out -->
         <button title="Rules!" type="button" id="rulesButton" class="rulesButton" v-on:click="ruleFunction">
@@ -161,24 +165,25 @@ cursor:pointer;
 transition-duration: 0.4s;
 background-color: #3B737A ;
 color:white;
+height: 50px;
+width: 500px;
 }
 #beginner{
   padding: 1px 125px 1px;
 }
 #firstButton{
-  cursor:pointer;
-  opacity: 1;
   margin-left: 180px;
   margin-right: 200px;
 }
-#firstButton:hover{
-}
+
 #startButton:hover{
   background-color: #F89D94;
+
 }
 /*id rulebutton*/
 #rulesButton:hover {
   background-color: #b22222;
+
 }
 /*class rulebutton*/
 #rulesButton {
@@ -187,11 +192,27 @@ color:white;
   transition-duration: 0.4s;
   background-color: #f08080 ;
   color:white;
+  height: 50px;
+  width: 500px;
 }
 #ruleContent {
   margin: 50px 50px 50px 50px;
   padding: 10px 10px;
   font-size: 20px;
   font-style: oblique;
+}
+#languageButton:hover {
+  background-color: #b22222;
+
+}
+/*class rulebutton*/
+#languageButton {
+  place-self: center;
+  cursor:pointer;
+  transition-duration: 0.4s;
+  background-color: #f08080 ;
+  color:white;
+  height: 50px;
+  width: 250px;
 }
 </style>

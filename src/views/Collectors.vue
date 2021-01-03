@@ -932,6 +932,12 @@ h5 {
     grid-column: 7;
     transform: scale(0.2);
   }
+
+.chosenSecret div:hover{
+    transform: scale(2)translate(15%,0);
+    z-index: 1;
+}
+
 .itemTitle {
   grid-row:2;
   place-self: end;
