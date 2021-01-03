@@ -362,22 +362,19 @@ Data.prototype.changeTurn = function (roomId, playerId) {
 Data.prototype.newRound = function (roomId, skillsOnSale,itemsOnSale, auctionCards){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
-      console.log("inne i data new round")
-      let playerCounter = room.playerCount+2;
-      console.log("playerCounter"+playerCounter);
-      console.log("length of item"+itemsOnSale.length);
-      if (room.itemsOnSale.length < playerCounter){
-        console.log("inne i if data new round")
-        for (let i = room.itemsOnSale.length; i < room.playerCount+2; i+=1){
-          console.log("inne i for i if new round data")
-          let c = room.deck.splice(0, 1);
-          room.itemsOnSale.push(c);
 
-        }
-        }
+      let playerCounter = room.playerCount+2;
+      
+      if (room.itemsOnSale.length < playerCounter){
+          for (let i = room.itemsOnSale.length; i < room.playerCount+1; i+=1){
+            let card = room.deck.pop();
+            room.itemsOnSale.push(card);
+          }
+      }
+    }
 
   }
-}
+
 
 
 Data.prototype.endGame = function (roomId, marketValues){
@@ -472,7 +469,7 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost) {
       // so we need to compare properties for determining equality
       if (room.itemsOnSale[i].x === card.x &&
           room.itemsOnSale[i].y === card.y) {
-        c = room.itemsOnSale.splice(i,1, {});
+        c = room.itemsOnSale.splice(i,1);
         break;
       }
     }
@@ -589,6 +586,7 @@ Data.prototype.placeWorkBottle = function (roomId, playerId, workActionId, cost)
 Data.prototype.getCards = function (roomId, playerId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
+    console.log("INNE I GETCARDS")
     let i = room.players.map(d => d.playerId).indexOf(playerId)
     return room.players[i].hand;
   }
