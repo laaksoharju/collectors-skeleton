@@ -6,25 +6,41 @@
 <!--Ser till att alt hamnar i en rad, med en tom column innan -->
 <div></div>
 
-   <div class="buttons" v-for="(p, index) in placement" :key="'Item Button'+index">
+   <div class="buttons" v-for="(p, skillID) in placement" :key="'Item Button'+skillID">
      <button id="oneCoinButton"
-       v-if="p.playerId===null && p.cost===1"
+       v-if="p.playerId===null && p.skillID===0"
        :disabled="cannotAfford(p.cost)"
        @click="placeBottle(p)">
        <div class = "ItemBottleCoinOne">
        </div>
       </button>
 
+      <button id="oneCoinButton"
+        v-if="p.playerId===null && p.skillID===1"
+        :disabled="cannotAfford(p.cost)"
+        @click="placeBottle(p)">
+        <div class = "ItemBottleCoinOne">
+        </div>
+       </button>
+
       <button id="twoCoinButton"
-        v-if="p.playerId===null && p.cost===2"
+        v-if="p.playerId===null && p.skillID===2"
         :disabled="cannotAfford(p.cost)"
         @click="placeBottle(p)">
         <div class = "ItemBottleCoinTwo">
         </div>
      </button>
 
+     <button id="twoCoinButton"
+       v-if="p.playerId===null && p.skillID===3"
+       :disabled="cannotAfford(p.cost)"
+       @click="placeBottle(p)">
+       <div class = "ItemBottleCoinTwo">
+       </div>
+     </button>
+
      <button id="threeCoinButton"
-       v-if="p.playerId===null && p.cost===3"
+       v-if="p.playerId===null && p.skillID===4"
        :disabled="cannotAfford(p.cost)"
        @click="placeBottle(p)">
        <div class = "ItemBottleCoinThree">
@@ -33,7 +49,7 @@
 
      <div v-if="p.playerId !== null">
        {{p.playerId}}
-       
+
      </div>
    </div>
 
@@ -80,7 +96,7 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
-      this.$emit('placeBottle', p.cost);
+      this.$emit('placeBottle',p.skillID, p.cost);
       this.highlightAvailableCards(p.cost);
     },
     highlightAvailableCards: function (cost=100) {

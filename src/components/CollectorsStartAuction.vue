@@ -22,8 +22,11 @@
 
 <button  id = "stopAuctionButton" @click="stopAuction()">Stop! </button>
 
+
+
 <div class="winner">
 Winner: {{auctionWinner}}
+Highest bid: {{highestBid}}
 </div>
 
 
@@ -93,6 +96,7 @@ export default {
     auctionCards: Array,
     cardUpForAuction: Object,
     auctionWinner: String,
+    highestBid: Number,
     //bids: Object,
     marketValues: Object,
     placement: Array,
@@ -108,7 +112,7 @@ export default {
 
   startWinnerCard: function(action){
     console.log('started winner card with action'+action);
-    
+
     this.$emit('startWinnerCard', action);
   },
 
@@ -211,13 +215,13 @@ font-size: 20px;
   height:45px;
   background-image:  url('/images/Coin-white-1.png');
   background-size: cover;
-  grid-column: 1;
-  grid-row: 3;
+
 }
 
 .auctionCard {
     transform: scale(0.25);
-    grid-column: 2;
+    grid-column: 3;
+    place-self: top
   }
 
 .auctionCard div:hover{
@@ -257,7 +261,8 @@ form {
 
 #bidPlacementButton {
   height: 30px;
-  width: 100px;
+  width: 50px;
+  font-size: 12px ;
     grid-column: 2;
     grid-row: 10;
     margin-top: 40%;
@@ -307,11 +312,17 @@ form {
 
   #stopAuctionButton{
     border-radius: 9px;
+    background-color: #C86262;
     height: 20px;
     width: 50px;
-    grid-row:2;
-    grid-column:1;
+    grid-row:10;
+    grid-column:3;
     place-self: end center;
+    border: 2px solid #A22626;
+  }
+  #stopAuctionButton:hover {
+    background-color: #A22626;
+    border: 2px solid #C86262;
   }
 
   #buttonNollSecond {

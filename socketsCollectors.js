@@ -61,11 +61,12 @@ function sockets(io, socket, data) {
       );
     });
     socket.on('collectorsPlaceBottle', function(d) {
-      data.placeBottle(d.roomId, d.playerId, d.action, d.cost);
+      data.placeBottle(d.roomId, d.playerId, d.action, d.skillID, d.cost);
       io.to(d.roomId).emit('collectorsBottlePlaced',
          data.getPlacements(d.roomId)
       );
     });
+
 
     socket.on('collectorsPlaceWorkBottle', function(d) {
       data.placeWorkBottle(d.roomId, d.playerId, d.workActionId, d.cost);
@@ -110,7 +111,7 @@ function sockets(io, socket, data) {
 
     socket.on('collectorsStopAuction', function(d){
       data.stopAuction(d.roomId, d.playerId, d.cardUpForAuction)
-      console.log( data.getAuctionWinner(d.roomId), "INNE I SOCKET COLLECTOR AUCTION WINNER");
+
       io.to(d.roomId).emit('collectorsAuctionStopped', {
         playerId: d.playerId,
         players: data.getPlayers(d.roomId),
@@ -163,6 +164,13 @@ function sockets(io, socket, data) {
       data.countRounds(d.roomId, d.currentPlayer));
     });
 
+    socket.on('collectorsEndGame', function(d) {
+      data.endGame(d.roomId, d.marketValues)
+      io.to(d.roomId).emit('collectorsEndedGame',{
+        winner: data.getWinner(d.roomId),
+        players: data.getPlayers(d.roomId)
+      });
+    });
 }
 
 module.exports = sockets;
