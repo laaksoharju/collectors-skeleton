@@ -232,7 +232,7 @@
 
       <div class="roundCounter">
         <h3> Round:  </h3>
-        <button class="roundButton"  @click= "changeRound(); endGame(currentRound)">
+        <button class="roundButton"  @click= "changeRound(); endGame(currentRound); newRound(currentRound)">
           <div v-if="currentRound < 5">
             <h5> {{currentRound}} </h5> <h3> Press here when round {{currentRound}} is over.</h3>
           </div>
@@ -458,6 +458,13 @@ export default {
           this.currentRound = d;
       }.bind(this)
     );
+
+    this.$store.state.socket.on('collectorsNewlyRounded',
+      function(d) {
+          this.itemsOnSale = d.itemsOnSale;
+          console.log("new round i socket collectors")
+      }.bind(this)
+    );
     this.$store.state.socket.on('collectorsEndedGame',
       function(d) {
           this.winner = d.winner;
@@ -548,7 +555,8 @@ function(d) {
       );
     },
     placeBottle: function (action, p) {
-      this.chosenPlacementId = p.cost;
+
+      this.chosenPlacementId = p.placementId;
       this.chosenPlacementCost = p.cost;
       this.chosenAction = action;
       this.$store.state.socket.emit('collectorsPlaceBottle', {
@@ -612,16 +620,20 @@ function(d) {
           playerId: this.playerId,
           card: card,
           skill: this.skillsOnSale,
+          cost: this.chosenPlacementCost
+
         }
       );
     },
     startAuction: function (card) {
+      console.log()
       console.log("startAuction", card);
       this.$store.state.socket.emit('collectorsStartAuction', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
           card: card,
           auctionCard: this.auctionCards,
+          cost: this.chosenPlacementCost
         }
       );
     },
@@ -687,6 +699,20 @@ startWinnerCard: function(action){
         this.$store.state.socket.emit('collectorsEndGame', {
             roomId: this.$route.params.id,
             marketValues: this.marketValues
+            }
+          );
+      }
+    },
+
+    newRound: function(currentRound){
+      console.log("currentround newround"+currentRound)
+      if (currentRound != 4){
+        console.log("inne i if new round")
+        this.$store.state.socket.emit('collectorsNewRound', {
+            roomId: this.$route.params.id,
+            skillsOnSale: this.skillsOnSale,
+            itemsOnSale: this.itemsOnSale,
+            auctionCards: this.auctionCards
             }
           );
       }
