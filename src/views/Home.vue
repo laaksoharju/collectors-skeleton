@@ -42,7 +42,6 @@
 
 <script>
 // @ is an alias to /src
-
 export default {
   name: 'Home',
   data: function () {
@@ -66,7 +65,6 @@ export default {
         lang: lang });
       this.$router.push("/room/" + this.$store.state.roomId);
     },
-
     setSprak: function(){
       this.$store.commit('SET_LANG','se')
       console.log(this.$store.state.lang)
@@ -80,7 +78,6 @@ export default {
     ruleFunction: function() {
       //console.log("button clicked");
       var placement = document.getElementById("ruleContent");
-
       var rules1=
       ["Collectors is a game for 2-4 players and the winning player is " +
       "the one with the most valuable collection of rare collectables " +
@@ -117,18 +114,14 @@ export default {
       "in the skill pool or from the lowest card in the auction pool. "];
       var rules7 = ["The cards used in Collectors have multiple functions, " +
       "see the picture below for an explanation:"]
-
       let pic = ['/images/kort.png'];
       document.getElementById("myImage").src = pic[0];
       document.getElementById("myImage").height = 350;
-
       var linebreak0 = document.createElement("p"); var linebreak1 = document.createElement("p");
       var linebreak2 = document.createElement("p"); var linebreak3 = document.createElement("p");
       var linebreak4 = document.createElement("p");  var linebreak5 = document.createElement("p");
       var linebreak6 = document.createElement("p");
-
       var text= document.createElement("div");
-
       var output1 = document.createTextNode(rules1);
       var output2 = document.createTextNode(rules2);
       var output3 = document.createTextNode(rules3);
@@ -136,8 +129,6 @@ export default {
       var output5 = document.createTextNode(rules5);
       var output6 = document.createTextNode(rules6);
       var output7 = document.createTextNode(rules7);
-
-
       text.appendChild(output1); text.appendChild(linebreak0);
       text.appendChild(output2); text.appendChild(linebreak1);
       text.appendChild(output3); text.appendChild(linebreak2);
@@ -145,12 +136,9 @@ export default {
       text.appendChild(output5); text.appendChild(linebreak4);
       text.appendChild(output6); text.appendChild(linebreak5);
       text.appendChild(output7); text.appendChild(linebreak6);
-
       placement.appendChild(text);
-
     }
 }};
-
 </script>
 
 <style scoped>
@@ -165,10 +153,8 @@ export default {
 h1 {
   font-style: italic;
   font-size: 50px;
-
   text-shadow: 2px 2px 4px blue;
 }
-
   #startButton {
 padding: 1px 80px 1px;
 cursor:pointer;
@@ -176,23 +162,17 @@ transition-duration: 0.4s;
 background-color: #3B737A ;
 color:white;
 }
-
 #beginner{
   padding: 1px 125px 1px;
 }
-
 #firstButton{
   cursor:pointer;
   opacity: 1;
   margin-left: 180px;
   margin-right: 200px;
 }
-
 #firstButton:hover{
-
-
 }
-
 #startButton:hover{
   background-color: #F89D94;
 }
@@ -200,7 +180,6 @@ color:white;
 #rulesButton:hover {
   background-color: #b22222;
 }
-
 /*class rulebutton*/
 #rulesButton {
   padding: 1px 100px 1px;
@@ -209,13 +188,10 @@ color:white;
   background-color: #f08080 ;
   color:white;
 }
-
 #ruleContent {
   margin: 50px 50px 50px 50px;
   padding: 10px 10px;
   font-size: 20px;
   font-style: oblique;
 }
-
-
 </style>

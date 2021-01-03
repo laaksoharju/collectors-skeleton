@@ -32,18 +32,14 @@ export default {
     background-image: url('/images/collectors-cards.png');
     border-radius: 10px;
   }
-
   .available-to-choose {
     animation: jiggle 1s ease-in-out;
     animation-iteration-count:infinite;
     box-shadow: 0 0 10px yellow;
   }
-
   @keyframes jiggle {
     0% {transform:rotate(0.5deg);}
     50% {transform:rotate(-0.5deg);}
     100% {transform:rotate(0.5deg);}
   }
-
-
 </style>
