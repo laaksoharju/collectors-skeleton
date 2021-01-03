@@ -81,6 +81,7 @@ export default {
     placeBottle: function (p) {
       this.$emit('placeBottle', p);
     },
+
     highlightAvailableCards: function (cost=100) {
       for (let i = 0; i < this.skillsOnSale.length; i += 1) {
         if (this.marketValues[this.skillsOnSale[i].item] <= this.player.money - cost) {

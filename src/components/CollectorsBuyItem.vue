@@ -6,9 +6,10 @@
 <!--Ser till att alt hamnar i en rad, med en tom column innan -->
 <div></div>
 
-   <div class="buttons" v-for="(p, skillID) in placement" :key="'Item Button'+skillID">
+   <div class="buttons" v-for="(p, placementId) in placement" :key="'Item Button'+placementId">
+
      <button id="oneCoinButton"
-       v-if="p.playerId===null && p.skillID===0"
+       v-if="p.playerId===null && p.cost===1 && p.placementId === 0"
        :disabled="cannotAfford(p.cost)"
        @click="placeBottle(p)">
        <div class = "ItemBottleCoinOne">
@@ -16,7 +17,7 @@
       </button>
 
       <button id="oneCoinButton"
-        v-if="p.playerId===null && p.skillID===1"
+        v-if="p.playerId===null && p.cost===1 && p.placementId === 1"
         :disabled="cannotAfford(p.cost)"
         @click="placeBottle(p)">
         <div class = "ItemBottleCoinOne">
@@ -24,7 +25,7 @@
        </button>
 
       <button id="twoCoinButton"
-        v-if="p.playerId===null && p.skillID===2"
+        v-if="p.playerId===null && p.cost===2 && p.placementId === 2"
         :disabled="cannotAfford(p.cost)"
         @click="placeBottle(p)">
         <div class = "ItemBottleCoinTwo">
@@ -32,15 +33,15 @@
      </button>
 
      <button id="twoCoinButton"
-       v-if="p.playerId===null && p.skillID===3"
+       v-if="p.playerId===null && p.cost===2 && p.placementId === 3"
        :disabled="cannotAfford(p.cost)"
        @click="placeBottle(p)">
        <div class = "ItemBottleCoinTwo">
        </div>
-     </button>
+    </button>
 
      <button id="threeCoinButton"
-       v-if="p.playerId===null && p.skillID===4"
+       v-if="p.playerId===null && p.cost===3 && p.placementId === 4"
        :disabled="cannotAfford(p.cost)"
        @click="placeBottle(p)">
        <div class = "ItemBottleCoinThree">
@@ -70,7 +71,6 @@
 
 <script>
 import CollectorsCard from '@/components/CollectorsCard.vue'
-
 export default {
   name: 'CollectorsBuyItem',
   components: {
@@ -96,7 +96,7 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
-      this.$emit('placeBottle',p.skillID, p.cost);
+      this.$emit('placeBottle', p);
       this.highlightAvailableCards(p.cost);
     },
     highlightAvailableCards: function (cost=100) {
@@ -128,7 +128,6 @@ export default {
   text-shadow: 2px 2px 4px red;
   font-size: 20px;
 }
-
 .itemPool{
   grid-column: 3/span 5 ;
   grid-row: 2/span 4;
@@ -138,7 +137,6 @@ export default {
   grid-template-rows: repeat(100,150px);*/
   background-color: #f0d9cc ;
   color: black;
-
   display: grid;
   grid-template-columns: repeat(6, 50px);
   grid-template-rows: repeat(3,50px);
@@ -147,32 +145,26 @@ export default {
   padding-left: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
-
   border-top: 2px solid #4C7B80;
 }
-
 .buttons{
   grid-row: 1;
   place-self: stretch;
   background-color: #f0d9cc;
 }
-
 .buttons div:hover {
   transform: scale(1.5)translate(0,0);
   z-index: 1;
 }
-
 .itemCard {
   grid-row: 2;
   transform: scale(0.25);
 /*  place-self:center; förstör!! */
 }
-
 .itemCard div:hover{
   transform: scale(1.5)translate(-25%,0);
   z-index: 1;
 }
-
 .ItemBottleCoinOne{
   width:50px;
   height:50px;
@@ -200,7 +192,6 @@ export default {
   background-image:  url('/images/item-bottle-coin-two.png');
   background-size: cover;
 }
-
 .ItemBottleCoinThree{
   width:50px;
   height:50px;

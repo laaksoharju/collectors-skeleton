@@ -22,9 +22,9 @@
     <div class = "bottleOneFlag"> </div>
     <div class = "bottleCoins"> </div>-->
 
-<div class="buttons" v-for="(p, index) in placement" :key="index">
+<div class="buttons" v-for="(p, placementId) in placement" :key="placementId">
     <button id="twoFlags"
-      v-if="p.playerId===null && index ===0 "
+      v-if="p.playerId===null && p.placementId ===0"
       :disabled="cannotAfford(p.cost)"
       @click="placeBottle(p)">
       <div class = "bottleTwoFlags">
@@ -32,7 +32,7 @@
      </button>
 
      <button id="oneFlag"
-       v-if="p.playerId===null && index===1"
+       v-if="p.playerId===null && p.placementId ===1"
        :disabled="cannotAfford(p.cost)"
        @click="placeBottle(p)">
        <div class = "bottleOneFlag">
@@ -40,7 +40,7 @@
     </button>
 
     <button id="coinsButton"
-      v-if="p.playerId===null && index===2"
+      v-if="p.playerId===null && p.placementId===2"
       :disabled="cannotAfford(p.cost)"
       @click="placeBottle(p)">
       <div class = "bottleCoins">
@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     placeBottle: function (p) {
-      this.$emit('placeBottle', p.cost);
+      this.$emit('placeBottle', p);
       this.highlightAvailableCards();
     },
     cannotAfford: function (cost) {

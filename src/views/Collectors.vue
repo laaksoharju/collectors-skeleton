@@ -62,7 +62,7 @@
              :marketValues="marketValues"
              :placement="skillPlacement"
              @getSkill="whichAction($event)"
-             @placeBottle="placeBottle('skill', $event)"
+             @placeBottle="placeBottle('skill', $event )"
         />
 
         <CollectorsBuyItem v-if="players[playerId]"
@@ -89,7 +89,6 @@
 <!-- HAR INTE VÅGAT RADERA WORK ÄN HELT MEN FINNS SOM COMPONENT NU
        <div class = "workPool">
          <div class= "titleWorkPool" >Work Pool</div>
-
          <div class = "quarterImage">
            <div class= "quarter1" v-if="currentRound === 1" >
           </div>
@@ -100,7 +99,6 @@
            <div class= "quarter4" v-if="currentRound === 4" >
            </div>
          </div>
-
          <div class = "Alt1"></div>
          <div class = "Alt2"></div>
          <div class = "Alt3"></div>
@@ -115,7 +113,7 @@
           :skillsOnSale="skillsOnSale"
           :marketValues="marketValues"
           @drawCard="drawCard($event)"
-          @placeBottle="placeBottleWork( $event)"
+          @placeBottle="placeBottleWork($event)"
           />
 
        <CollectorsStartAuction v-if="players[playerId]"
@@ -274,7 +272,6 @@
 
 <!--
   Här : {{allPlayersId}}
-
     {{buyPlacement}} {{chosenPlacementCost}}
 -->
 
@@ -312,7 +309,6 @@ import CollectorsStartAuction from '@/components/CollectorsStartAuction.vue'
 import CollectorsBuyItem from '@/components/CollectorsBuyItem.vue'
 import CollectorsMarket from '@/components/CollectorsMarket.vue'
 import CollectorsWork from '@/components/CollectorsWork.vue'
-
 export default {
   name: 'Collectors',
   components: {
@@ -350,7 +346,7 @@ export default {
       marketPlacement: [],
       workPlacement: [],
       chosenPlacementCost: null,
-      chosenPlacementSkillID: null,
+      chosenPlacementId: null,
       marketValues: { fastaval: 0,
                      movie: 0,
                      technology: 0,
@@ -413,7 +409,6 @@ export default {
         this.marketPlacement = d.placements.marketPlacement;
         this.auctionPlacement = d.placements.auctionPlacement;
         this.workPlacement = d.placements.workPlacement;
-
       }.bind(this));
     this.$store.state.socket.on('collectorsBottlePlaced',
       function(d) {
@@ -423,13 +418,11 @@ export default {
         this.auctionPlacement = d.auctionPlacement;
         this.workPlacement = d.workPlacement;
       }.bind(this));
-
       this.$store.state.socket.on('collectorsWorkBottlePlaced',
         function(d) {
           this.players= d.players;
           this.workPlacement = d.placements.workPlacement;
         }.bind(this));
-
     this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
     this.$store.state.socket.on('collectorsCardDrawn',
       function(d) {
@@ -463,7 +456,6 @@ export default {
           this.currentRound = d;
       }.bind(this)
     );
-
     this.$store.state.socket.on('collectorsEndedGame',
       function(d) {
           this.winner = d.winner;
@@ -471,7 +463,6 @@ export default {
           console.log("ended game socket collectors.vue" + d.winner)
       }.bind(this)
     );
-
     this.$store.state.socket.on('collectorsAuctionStarted',
     function(d) {
       console.log(d.playerId, "Started an auction");
@@ -480,17 +471,14 @@ export default {
       this.cardUpForAuction = d.cardUpForAuction;
     }.bind(this)
   );
-
   this.$store.state.socket.on('collectorsAuctionStopped',
   function(d) {
     console.log(d.playerId, "Stopped an auction");
     this.players = d.players;
     this.cardUpForAuction = d.cardUpForAuction;
     this.auctionWinner = d.auctionWinner;
-
   }.bind(this)
 );
-
   this.$store.state.socket.on('collectorsMarketStarted',
   function(d) {
     console.log(d.playerId, "Started market");
@@ -500,7 +488,6 @@ export default {
     this.marketValues = d.marketValues;  //lagt till marketValues
   }.bind(this)
 );
-
   this.$store.state.socket.on('collectorsBiddingStarted',
   function(d) {
     console.log(d.players, "BIDDING STARTED I COLLECTORS.VUE");
@@ -509,23 +496,18 @@ export default {
     console.log(d.highestBid, "högsta budet");
   }.bind(this)
 );
-
 this.$store.state.socket.on('collectorsColorChosen',
 function(d) {
   this.players = d.players;
   console.log(d.playerId, "choosed a ", d.players[d.playerId].color," color bottle");
-
-
 }.bind(this)
 );
-
 this.$store.state.socket.on('collectorsMoneyStarted',
 function(d) {
   this.players = d.players;
   console.log(d.playerId, "starts with ", d.players[d.playerId].money," coins");
 }.bind(this)
 );
-
 this.$store.state.socket.on('collectorsWinnerCardStarted',
 function(d) {
   this.players = d.players;
@@ -534,9 +516,7 @@ function(d) {
   this.marketValues = d.marketValues;
 }.bind(this)
 );
-
 },
-
   methods: {
     selectAll: function (n) {
       n.target.select();
@@ -548,7 +528,6 @@ function(d) {
       this.$store.state.playerId = userName;
     //  this.players[playerId] = userName;
       console.log(this.$store.state.playerId);
-
     },
     chooseColor: function(color, playerBottles){
       this.$store.state.socket.emit('collectorsChooseColor',{
@@ -559,7 +538,6 @@ function(d) {
       }
       );
     },
-
     startMoney: function(){
       this.$store.state.socket.emit('collectorsStartMoney',{
       roomId: this.$route.params.id,
@@ -567,16 +545,17 @@ function(d) {
       }
       );
     },
-    placeBottle: function (action,skillID, cost) {
-      this.chosenPlacementCost = cost;
-      this.chosenPlacementSkillID = skillID;
+    placeBottle: function (action, p) {
+      console.log(action, p.cost, p.placementId);
+      this.chosenPlacementId = p.cost;
+      this.chosenPlacementCost = p.cost;
       this.chosenAction = action;
       this.$store.state.socket.emit('collectorsPlaceBottle', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
           action: action,
-          skillID: skillID,
-          cost: cost,
+          cost: p.cost,
+          placementId: p.placementId,
         }
       );
     },
@@ -632,7 +611,6 @@ function(d) {
         }
       );
     },
-
     startAuction: function (card) {
       console.log("startAuction", card);
       this.$store.state.socket.emit('collectorsStartAuction', {
@@ -643,7 +621,6 @@ function(d) {
           cost: this.chosenPlacementCost
         }
       );
-
     },
     startMarket: function (card) {
       console.log("startMarket", card);
@@ -652,7 +629,6 @@ function(d) {
           playerId: this.playerId,
           card: card,
         //  cardUpForMarket: this.cardUpForMarket,
-
         }
       );
     },
@@ -669,12 +645,8 @@ function(d) {
               }
         );
   },
-
   stopAuction: function () {
     console.log("Starting stop auction", this.cardUpForAuction);
-
-
-
     this.$store.state.socket.emit('collectorsStopAuction', {
         roomId: this.$route.params.id,
         playerId: this.playerId,
@@ -682,7 +654,6 @@ function(d) {
           }
     );
 },
-
 startWinnerCard: function(action){
   console.log("start winner card collectors.vue med action "+action)
   this.$store.state.socket.emit('collectorsWinnerCard', {
@@ -692,8 +663,6 @@ startWinnerCard: function(action){
     action: action,
   });
 },
-
-
     changeTurn: function () {
       this.$store.state.socket.emit('collectorsChangeTurn', {
           roomId: this.$route.params.id,
@@ -701,7 +670,6 @@ startWinnerCard: function(action){
           }
         );
       },
-
     changeRound: function () {
       this.$store.state.socket.emit('collectorsChangeRound', {
           roomId: this.$route.params.id,
@@ -709,7 +677,6 @@ startWinnerCard: function(action){
           }
         );
     },
-
     endGame: function(currentRound){
       console.log("currentround end"+currentRound)
       if (currentRound == 4){
@@ -717,7 +684,6 @@ startWinnerCard: function(action){
         this.$store.state.socket.emit('collectorsEndGame', {
             roomId: this.$route.params.id,
             marketValues: this.marketValues
-
             }
           );
       }
@@ -792,7 +758,6 @@ startWinnerCard: function(action){
 /* den här funktionen tror jag ej används:
         countRounds: function () {
           console.log("TEST RÄKNA RUNDOR");
-
           this.$store.state.socket.emit('collectorsCountRounds', {
               roomId: this.$route.params.id,
               currentPlayer: this.currentPlayer
@@ -804,7 +769,6 @@ startWinnerCard: function(action){
 </script>
 
 <style scoped>
-
 h1 {
   text-align: center;
   font-style:italic;
@@ -820,7 +784,6 @@ h5 {
   margin-bottom: 0px;
   margin-top: 0px;
 }
-
   header {
     user-select: none;
     position: fixed;
@@ -833,7 +796,6 @@ h5 {
   .table {
     padding-left: 50px;
     padding-right: 50px;
-
   }
   .board {
 	display: grid;
@@ -847,7 +809,6 @@ h5 {
   .playerBottleButton div:hover{
     transform: scale(1.5)translate(0,0);
     z-index: 1;
-
   }
   .blackBottle{
     width:32px;
@@ -893,13 +854,10 @@ h5 {
     border-radius: 5px;
     border: 2px solid #E3A688;
   }
-
 .playerBottles {
   grid-row: 1;
   grid-column: 4;
-
 }
-
   .playerBoard {
     grid-column: 11/span 5;
     grid-row: 2/span 6;
@@ -923,13 +881,11 @@ h5 {
   text-shadow: 2px 2px 4px #BD5467;
   font-size: 20px;
 }
-
 .myMoney {
   grid-row: 3 ;
   grid-column: 7/span 2;
   place-self: top;
 }
-
 .skillTitle {
   grid-row: 3;
   place-self: end;
@@ -937,7 +893,6 @@ h5 {
   .chosenSkillCard {
     grid-row: 3;
     transform: scale(0.2);
-
   }
 .secretTitle{
   grid-row:1 ;
@@ -948,16 +903,13 @@ h5 {
     grid-column: 7;
     transform: scale(0.2);
   }
-
 .itemTitle {
   grid-row:2;
   place-self: end;
-
 }
   .chosenItemCard {
     grid-row: 2;
     transform: scale(0.2);
-
   }
   .playerHand {
     grid-column: 11/span 5;
@@ -966,12 +918,10 @@ h5 {
     grid-template-columns: repeat(1, 450px);
     grid-template-rows: repeat(4,60px);
   }
-
   .playerHandTitle {
     grid-column: 1;
     grid-row: 1;
   }
-
   .turnCounter {
     background-color: #60AB4D;
     color:white;
@@ -993,7 +943,6 @@ h5 {
     text-shadow: 1px 2px 2px blue;
     margin-bottom: 0px;
     margin-top: 0px;
-
   }
 .endedGame{
   text-shadow: 1px 2px 2px green;
@@ -1009,7 +958,6 @@ h5 {
     grid-row: 1;
     background-color: #5A99A1;
   }
-
   .showPlayers {
     background-color: #406c72;
     color: white;
@@ -1053,15 +1001,12 @@ h5 {
     transition-duration: 0.4s;
     background-color: #f08080 ;
     color:white;
-
   }
-
   #ruleContent {
     margin: 50px 50px 50px 50px;
     padding: 10px 10px;
     font-size: 20px;
     font-style: oblique;
-
   }
   footer {
     margin-top: 5em auto;
@@ -1098,13 +1043,10 @@ h5 {
     grid-row: 2;
     transform: scale(0.25);
   }
-
   .itemCard div:hover{
     transform: scale(2)translate(-25%,0);
     z-index: 1;
   }
-
-
   @media screen and (max-width: 800px) {
     main {
       width:90vw;

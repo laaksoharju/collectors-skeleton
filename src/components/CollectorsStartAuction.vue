@@ -35,21 +35,28 @@ Highest bid: {{highestBid}}
  <!--<div class="buttons" v-for="(p, index) in placement" :key="index"> -->
 <div class="buttons" v-for="(p, index) in placement" :key="'Auction Button'+index">
 
-   <button id="buttonNollSecond" v-if="p.playerId===null & p.cost===0"
+   <button id="buttonNollSecond" v-if="p.playerId===null && p.cost===0 && p.placementId=== 0"
    :disabled="cannotAfford(p.cost)"
    @click="placeBottle(p)">
      <div class = "EnergyBottleCoinWhiteNoll second">
      </div>
    </button>
 
-   <button id="buttonOne" v-if="p.playerId===null & p.cost===-1"
+   <button id="buttonNollFirst" v-if="p.playerId===null && p.cost===0 && p.placementId=== 1 "
+   :disabled="cannotAfford(p.cost)"
+   @click="placeBottle(p)">
+     <div class = "EnergyBottleCoinWhiteNoll second">
+     </div>
+   </button>
+
+   <button id="buttonOne" v-if="p.playerId===null && p.cost===-1"
    :disabled="cannotAfford(p.cost)"
    @click="placeBottle(p)">
      <div class = "EnergyBottleCoinWhiteOne">
      </div>
    </button>
 
-   <button id="buttonTwo" v-if="p.playerId===null & p.cost===-2"
+   <button id="buttonTwo" v-if="p.playerId===null && p.cost===-2"
    :disabled="cannotAfford(p.cost)"
    @click="placeBottle(p)">
      <div class = "EnergyBottleCoinWhiteTwo">
@@ -142,7 +149,7 @@ export default {
     return this.marketValues[card.market];
   },
   placeBottle: function (p) {
-    this.$emit('placeBottle', p.cost);
+    this.$emit('placeBottle', p);
     this.highlightAvailableCards(p.cost);
   },
 
@@ -326,6 +333,12 @@ form {
   }
 
   #buttonNollSecond {
+    background-color: white;
+    border-radius: 5px;
+    border: 2px solid #D4D4B8;
+  }
+
+  #buttonNollFirst {
     background-color: white;
     border-radius: 5px;
     border: 2px solid #D4D4B8;

@@ -3,34 +3,38 @@
   <div class= "titleSkillPool" >Skill Pool</div>
 
 
-<div class="buttons" v-for="(p, index) in placement" :key="index">
-  <button id="noCoinButton" v-if="p.playerId===null & p.skillID===0"
-  :disabled="cannotAfford(p.cost)"
-  @click="placeBottle(p)">
-    <div class = "EnergyBottles">
-    </div>
-  </button>
-  <button id="noCoinButton" v-if="p.playerId===null & p.skillID===1"
-  :disabled="cannotAfford(p.cost)"
-  @click="placeBottle(p)">
-    <div class = "EnergyBottles">
-    </div>
-  </button>
-  <button id="noCoinButton" v-if="p.playerId===null & p.skillID===2"
+<div class="buttons" v-for="(p, placementId) in placement" :key="placementId">
+
+  <button id="noCoinButton" v-if="p.playerId===null && p.cost===0 && p.placementId === 0"
   :disabled="cannotAfford(p.cost)"
   @click="placeBottle(p)">
     <div class = "EnergyBottles">
     </div>
   </button>
 
-  <button id="coinButton" v-if="p.playerId===null & p.skillID===3"
+
+  <button id="noCoinButton" v-if="p.playerId===null && p.cost===0 && p.placementId === 1"
+  :disabled="cannotAfford(p.cost)"
+  @click="placeBottle(p)">
+    <div class = "EnergyBottles">
+    </div>
+  </button>
+
+  <button id="noCoinButton" v-if="p.playerId===null && p.cost===0 && p.placementId === 2"
+  :disabled="cannotAfford(p.cost)"
+  @click="placeBottle(p)">
+    <div class = "EnergyBottles">
+    </div>
+  </button>
+
+  <button id="coinButton" v-if="p.playerId===null && p.cost===1 && p.placementId === 3 "
   :disabled="cannotAfford(p.cost)"
   @click="placeBottle(p)">
     <div class = "EnergyBottlesCoin">
     </div>
   </button>
 
-  <button id="coinButton" v-if="p.playerId===null & p.skillID===4"
+  <button id="coinButton" v-if="p.playerId===null && p.cost===1 && p.placementId === 4 "
   :disabled="cannotAfford(p.cost)"
   @click="placeBottle(p)">
     <div class = "EnergyBottlesCoin">
@@ -63,7 +67,6 @@
 
 <script>
 import CollectorsCard from '@/components/CollectorsCard.vue'
-
 export default {
   name: 'CollectorsGetSkills',
   components: {
@@ -78,7 +81,6 @@ export default {
   },
   methods: {
     getSkill: function (card) {
-
       if (card.available){
         this.$emit('getSkill', card);
         this.highlightAvailableCards();
@@ -96,7 +98,8 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
-      this.$emit('placeBottle',p.skillID, p.cost);
+      console.log(p.placementId);
+      this.$emit('placeBottle', p);
       this.highlightAvailableCards(p.cost);
     },
     highlightAvailableCards: function (cost=100) {
@@ -115,7 +118,6 @@ export default {
 </script>
 
 <style scoped>
-
 .titleSkillPool {
   grid-column: 1 / span 2;
   font-style: italic;
@@ -138,16 +140,13 @@ export default {
   grid-column-gap: 10px;
   grid-auto-flow: column;
   border: 2px solid #4C7B80;
-
   }
-
 .EnergyBottles{
   width:50px;
   height:50px;
   background-image:  url('/images/Gain-skill-bottle.png');
   background-size: cover;
 }
-
 .EnergyBottlesCoin{
   width:50px;
   height:50px;
@@ -162,11 +161,8 @@ export default {
   transform: scale(1.25)translate(15%,0);
   z-index: 1;
 }
-
 .buttons{
-
 }
-
 #noCoinButton {
   background-color: #dfeccc;
   border-radius: 5px;
@@ -177,7 +173,6 @@ export default {
   border-radius: 5px;
   border: 2px solid #A3B77F;
 }
-
 .buttons div:hover {
   transform: scale(1.5)translate(0,0);
   z-index: 1;
