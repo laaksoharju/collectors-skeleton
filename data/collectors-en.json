@@ -4,5 +4,9 @@
 	"endTurn": "End turn",
 	"buyCard": "Buy a card",
 	"readRules": "Click here to read the rules!",
-	"rules": ""
-}
+	"rules": "",
+	"setup": "Please choose a setup for the game.",
+	"nextStep": "In the next page you will recieve an invite link to send to the other players.",
+	"gameSetup": "Set up a game for ",
+	"players": " players"
+	}

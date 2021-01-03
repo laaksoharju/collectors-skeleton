@@ -542,7 +542,11 @@ Data.prototype.placeWorkBottle = function (roomId, playerId, workActionId, cost)
 
               console.log('order före ändring',  room.players[playerId].order)
         room.players[playerId].order = (room.players[playerId].order - (switchOrder - 1) + room.playerCount) % room.playerCount //FEL I EKV
+        if (room.players[playerId].order === 0){
+          room.players[playerId].order = room.playerCount;
+        }
         console.log(playerId, 's order efter ändring',  room.players[playerId].order)
+
       }
 
   }

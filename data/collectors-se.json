@@ -3,5 +3,11 @@
 	"invite": "Bjud in andra spelare med den här länken:",
 	"endTurn": "Avsluta runda",
 	"buyCard": "Köp ett kort",
-	"readRules": "Klicka här för att läsa reglerna"
+	"readRules": "Klicka här för att läsa reglerna",
+	"rules": "",
+	"setup":"Vänligen välj hur många spelare ni är.",
+	"nextStep": "På nästa sidan kommer du att få en länk att skicka till de andra spelarna.",
+	"gameSetup": "Starta ett spel med ",
+	"players": " spelare"
+
 }
