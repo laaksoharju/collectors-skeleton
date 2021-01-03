@@ -70,6 +70,14 @@
             />
           </div>
         </section>
+        <div
+          v-if="!this.players[this.playerId].start_auction"
+          class="auction_announce"
+        >
+          <button @click="announce_click()" id="auction_announce">
+            click here
+          </button>
+        </div>
         <div class="activeplayer">
           <div>
             <img
@@ -122,6 +130,7 @@
           </section>
 
           <section class="work_bottle">
+            <button class="end_game" @click="endGame()">End Game</button>
             <Bottles
               v-if="players[playerId]"
               :labels="labels"
@@ -192,16 +201,22 @@
                   alt="Player Cards for Coins"
                 />{{ this.players[this.playerId].cardsForCash }}
               </div>
+
+              <div>
+                <button
+                  class="chose-secret-card"
+                  v-if="this.players[this.playerId].choseSecretCard"
+                  @click="choseSecretCard()"
+                >
+                  Click to chose secret card
+                </button>
+              </div>
             </div>
             <div class="player-hand">
               <div class="secret-card">
-                <CollectorsCard
-                  v-for="(card, index) in players[playerId].secret"
-                  :card="card"
-                  :availableAction="card.available"
-                  :key="'secret' + index"
-                />
+                <CollectorsCard :card="players[playerId].secret" />
               </div>
+
               <div class="cardslots" v-if="players[playerId]">
                 <CollectorsBuyActions
                   v-if="players[playerId]"
@@ -242,7 +257,7 @@
               <!-- if the active player has already buy an item -->
               <div
                 v-for="(card, index) in players[playerId].items"
-                :key="index"
+                :key="'items' + index"
                 class="player-items"
               >
                 <div v-if="card.item === 'movie'" class="player-items-1">
@@ -286,7 +301,7 @@
 
               <div
                 v-for="(card, index) in players[playerId].skills"
-                :key="index"
+                :key="'skills' + index"
                 class="player-skills"
               >
                 <div v-if="card.skill === 'bottle'" class="player-skills-1">
@@ -432,6 +447,13 @@
                   src="/images/player-cards-for-coins.png"
                   alt="Player Cards for Coins"
                 />x{{ players[otherPlayerId].cardsForCash }}
+              </div>
+
+              <div class="player-nr-cards">
+                <img
+                  src="/images/backOfCard.png"
+                  alt="Players number of cards"
+                />x{{ players[otherPlayerId].hand.length + 1 }}
               </div>
             </div>
             <div
@@ -776,6 +798,7 @@ export default {
       maxSizes: { x: 0, y: 0 },
       labels: {},
       players: {},
+
       // playerId: {
       //   hand: [],
       //   money: 1,
@@ -793,6 +816,7 @@ export default {
       deckAuction: [],
       cardClicked: 0,
       clickCardTimes: 0,
+      recieveExtraCard: 0,
       chosenPlacementCost: null,
       marketValues: {
         fastaval: 0,
@@ -863,6 +887,9 @@ export default {
       ),
       placeAuctionBid: new Audio(
         "/sounds/zapsplat_foley_money_coin_australian_10_cent_set_down_and_spin_on_tiled_table_002_28219.mp3"
+      ),
+      secretCardButton: new Audio(
+        "/sounds/zapsplat_household_alarm_clock_button_press_12967.mp3"
       ),
     };
   },
@@ -1044,15 +1071,34 @@ export default {
         this.marketValues = d.marketValues;
         this.deckCardAvailable = false;
 
-        if (this.cardClicked == this.clickCardTimes) {
+        if (this.cardClicked >= this.clickCardTimes) {
           this.handCardAvailable = false;
           this.cardClicked = 0;
           this.clickCardTimes = 0;
         }
+
+        /*if (this.players[this.playerId].choseSecretCard){
+          this.players[this.playerId].choseSecretCard;
+          this.handCardAvailable = false;
+
+        }*/
       }.bind(this)
     );
   },
   methods: {
+    endGame: function () {
+      this.secretCardButton.play();
+
+      var roomId = this.$route.params.id;
+      this.$store.state.socket.emit("endGame", roomId);
+    },
+
+    choseSecretCard: function () {
+      this.secretCardButton.play();
+      this.handCardAvailable = true;
+      /*this.players[this.playerId].choseSecretCard = false;*/
+    },
+
     handlePlayerState: function () {
       var action = this.playerState.action;
 
@@ -1105,6 +1151,7 @@ export default {
           otherPlayers.push(id);
         }
       }
+      console.log("getotherplayerId");
       return otherPlayers;
     },
     getallPlayersAuction: function () {
@@ -1138,11 +1185,30 @@ export default {
       }
     },
     placeBottle: function (action, p) {
-      this.clickCardTimes = p.clickCardTimes;
-
-      console.log("collectors place bottle");
+      //button clicked(needed for CollectorsBuyActions)
       this.buttonClicked = p;
 
+      //calculate money left after placement
+      this.players[this.playerId].money -= p.cost;
+
+      //skills workerIncom and workerCard
+      if (action === "work") {
+        if (this.players[this.playerId].skills.length > 0) {
+          for (var i in this.players[this.playerId].skills) {
+            if (
+              this.players[this.playerId].skills[i].skill === "workerIncome"
+            ) {
+              this.players[this.playerId].money += 2;
+            }
+            if (this.players[this.playerId].skills[i].skill === "workerCard") {
+              this.recieveExtraCard += 1;
+              console.log("placebottle workerCard");
+            }
+          }
+        }
+      }
+
+      //decide if cards in hand should be activated/available
       if (p.cashForCard > 0) {
         this.handCardAvailable = true;
       }
@@ -1150,12 +1216,19 @@ export default {
         this.handCardAvailable = true;
       }
 
-      for (let i = 0; i < p.recieveCards; i += 1) {
+      //number of times cards in hand has to be clicked before beeing deactivated
+      if (this.handCardAvailable) {
+        this.clickCardTimes = p.clickCardTimes;
+      }
+
+      //draw cards from deck to hand
+      for (let i = 0; i < p.recieveCards + this.recieveExtraCard; i += 1) {
         this.$store.state.socket.emit("collectorsDrawCard", {
           roomId: this.$route.params.id,
           playerId: this.$store.state.playerId,
         });
       }
+      this.recieveExtraCard = 0;
 
       this.saleItems = [];
       if (action == "buy") this.saleItems = this.itemsOnSale;
@@ -1176,7 +1249,8 @@ export default {
         playerId: this.playerId,
         action: action,
         p: p,
-        hand: this.players[this.playerId].hand,
+
+        money: this.players[this.playerId].money,
       });
     },
     drawCard: function () {
@@ -1192,7 +1266,8 @@ export default {
       return sortval[0];
     },
     buyCard: function (action, d) {
-      // this.cardClicked += 1;
+      console.log("collectors buycard p: " + typeof d.p);
+      this.cardClicked += 1;
       // console.log('collectors buyCard this.cardClicked: ' + this.cardClicked);
 
       if (action === "win_auction") {
@@ -1261,6 +1336,11 @@ export default {
       // console.log(this.playerskill[card]);
       return count;
     },
+    announce_click: function () {
+      var btn = document.getElementById("auction_announce");
+      btn.style.display = "none";
+      this.secretCardButton.play();
+    },
   },
 };
 </script>
@@ -1304,6 +1384,12 @@ footer a:visited {
   grid-template-columns: 0.8fr 1.2fr 2.5fr;
   grid-gap: 0.5em;
   grid-template-rows: 1fr 4fr 1.1fr;
+}
+
+.end_game {
+  height: 10vh;
+  width: 10vw;
+  z-index: 5;
 }
 .playerboard {
   position: absolute;
@@ -1656,6 +1742,18 @@ footer a:visited {
   /* padding-top: 5px; */
 }
 
+.player-nr-cards {
+  grid-column: 4;
+  grid-row: 1;
+  width: 10vh;
+}
+
+.player-nr-cards img {
+  height: 4vh;
+
+  /* padding-top: 5px; */
+}
+
 .player-hand {
   grid-column: 1;
   grid-row: 2;
@@ -1948,5 +2046,26 @@ p {
 
 .quarter-tiles:hover {
   outline: 2px dashed black;
+}
+#auction_announce {
+  position: relative;
+  top: -70rem;
+  left: -30rem;
+  /* "this.style.display='none'" */
+  box-shadow: 0 0 90px black;
+  height: 10rem;
+  width: 20rem;
+  z-index: 20;
+}
+
+.chose-secret-card {
+  position: relative;
+  left: 0.5vw;
+  top: -4.5vh;
+  border: 0.4vh dashed red;
+  height: 18vh;
+  width: 6vw;
+  border-radius: 0.5vh;
+  background-color: Transparent;
 }
 </style>

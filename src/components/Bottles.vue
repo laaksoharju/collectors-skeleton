@@ -67,7 +67,7 @@
       </div>
 
       <div v-if="p.playerId !== null">
-        {{ p.playerId }}
+        <img class="bottlePlaced" :src="playerBottle[p.color]" alt="bottle" />
       </div>
     </div>
   </div>
@@ -76,6 +76,17 @@
 <script>
 export default {
   name: "Bottles",
+
+  data: function () {
+    return {
+      playerBottle: {
+        violet: "images/violet_bottle.png",
+        blue: "images/blue_bottle.png",
+        brown: "images/brown_bottle.png",
+        grey: "images/grey_bottle.png",
+      },
+    };
+  },
 
   props: {
     labels: Object,
@@ -110,7 +121,6 @@ export default {
         !this.player.clickedOnBottle &&
         this.player.money >= p.cost &&
         this.player.bottles > 0
-        // this.player.playersTurn
       ) {
         console.log("Bottles emit placeBottle");
         this.$emit("placeBottle", p);
@@ -119,6 +129,15 @@ export default {
           this.highlightAvailableCards(p.cost);
         }
       }
+      /*if (this.player.playersTurn){
+          console.log('Bottles emit placeBottle');
+          this.$emit("placeBottle", p);
+
+          if (this.itemsOnSale !== undefined){
+            this.highlightAvailableCards(p.cost);
+          }
+
+        }*/
     },
     highlightAvailableCards: function (cost = 100) {
       for (let i = 0; i < this.itemsOnSale.length; i += 1) {
@@ -150,7 +169,7 @@ export default {
 }
 .buttons {
   position: relative;
-  z-index: 5;
+  z-index: 6;
 }
 
 .cardslots div {
@@ -212,6 +231,12 @@ export default {
   padding: 0.5rem;
   font-size: 0.5rem;
   background-image: url("/images/auctionBottleMedal.jpg");
+}
+.bottlePlaced {
+  width: 3.3vw;
+  height: 6.8vh;
+  border-radius: 5px;
+  background-size: 100% 100%;
 }
 .recieveMoney {
   color: LimeGreen;
