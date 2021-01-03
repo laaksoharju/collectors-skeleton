@@ -116,7 +116,7 @@ export default {
 }
 
 div.handPlayer {
-  overflow-x: scroll;
+  overflow-y: scroll;
   white-space: nowrap;
 }
 
