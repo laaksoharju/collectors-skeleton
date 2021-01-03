@@ -206,7 +206,7 @@ font-size: 20px;
 .auctionCard {
     transform: scale(0.25);
     grid-column: 3;
-    place-self: top
+    place-self: top;
   }
 .auctionCard div:hover{
     transform: scale(2)translate(-25%,0);
@@ -322,4 +322,170 @@ form {
     transform: scale(1.5)translate(0,0);
     z-index: 1;
   }
+@media screen and (max-width: 800px) {
+  .auctionPool{
+    grid-column: 1/span 7;
+    grid-row: 17/span 4;
+    width: auto;
+    height: auto;
+    background-color: beige;
+    color: black;
+    display: grid;
+    grid-template-columns: repeat(10, 62.9px);
+    grid-template-rows: repeat(3,60px);
+    grid-row-gap: 10px;
+    grid-auto-flow: row;
+    border: 2px solid #4C7B80;
+  }
+  .titleAuctionPool{
+  grid-column: 1;
+  grid-row: 1;
+  font-style: italic;
+  font-size: 50px;
+  text-shadow: 2px 2px 4px #75755C;
+  font-size: 20px;
+  }
+  .EnergyBottleCoinWhiteNoll{
+    width:45px;
+    height:45px;
+    background-image:  url('/images/Coin-white.png');
+    background-size: cover;
+  }
+  .second{
+    grid-column: 1;
+    grid-row: 5;
+  }
+  .EnergyBottleCoinWhiteTwo{
+    width:45px;
+    height:45px;
+    background-image:  url('/images/Coin-white-2.png');
+    background-size: cover;
+  }
+  .EnergyBottleCoinWhiteOne{
+    width:45px;
+    height:45px;
+    background-image:  url('/images/Coin-white-1.png');
+    background-size: cover;
+  }
+  .auctionCard {
+      transform: scale(0.25);
+      grid-row: 2;
+
+    }
+  .auctionCard div:hover{
+      transform: scale(2)translate(-25%,0);
+      z-index: 1;
+    }
+  .auctionSquare{
+    grid-column: 9;
+    grid-row: 1;
+    height: 170px;
+    width: 110px;
+    border: 5px dotted pink;
+    font-style: italic;
+    font-size: 50px;
+    text-shadow: 2px 2px 4px pink;
+    font-size: 14px;
+    }
+    .bidSquare {
+      grid-column: 1;
+      grid-row: 10;
+      margin-top: 20%;
+    }
+  #bidSquare {
+    width: 40px;
+    height: 20px;
+    grid-column: 2;
+  }
+  form {
+    grid-column: 1;
+    grid-row: 8;
+    font-size: 13px;
+  }
+  #bidPlacementButton {
+    height: 30px;
+    width: 50px;
+    font-size: 12px ;
+      grid-column: 5;
+      grid-row: 3;
+      margin-top: 40%;
+      background-color: lightpink;
+      border-radius: 12px;
+      border: 2px solid #BD5467;
+    }
+  #bidPlacementButton:hover {
+    background-color: #BD5467;
+    border: 2px solid lightpink;
+  }
+    .cardUpForAuction {
+    transform: scale(0.45);
+    grid-column: 3;
+    grid-row: 2;
+    height: 70px;
+    width: 50px;
+    }
+    .start-auction{
+      transform: scale(0.25);
+      grid-column: 2;
+    }
+    .start-auction div:hover{
+      transform: scale(1.25)translate(-15%,0);
+      z-index: 1;
+    }
+    .buttons{
+      border-radius: 9px;
+    }
+    .auctionButtons{
+      grid-column: 4;
+      grid-row: 3;
+      place-self: right;
+    }
+    .winner{
+      grid-row:2;
+      grid-column:1;
+      place-self: top center;
+      font-size: 12px;
+    }
+    #stopAuctionButton{
+      border-radius: 9px;
+      background-color: #C86262;
+      height: 20px;
+      width: 50px;
+      grid-row:10;
+      grid-column:3;
+      place-self: end center;
+      border: 2px solid #A22626;
+    }
+    #stopAuctionButton:hover {
+      background-color: #A22626;
+      border: 2px solid #C86262;
+    }
+    #buttonNollSecond {
+      background-color: white;
+      border-radius: 5px;
+      border: 2px solid #D4D4B8;
+    }
+
+    #buttonNollFirst {
+      background-color: white;
+      border-radius: 5px;
+      border: 2px solid #D4D4B8;
+    }
+
+    #buttonOne {
+      background-color: white;
+      border-radius: 5px;
+      border: 2px solid #D4D4B8;
+    }
+    #buttonTwo {
+      background-color: white;
+      border-radius: 5px;
+      border: 2px solid #D4D4B8;
+    }
+    .buttons div:hover {
+      transform: scale(1.5)translate(0,0);
+      z-index: 1;
+    }
+}
+
 </style>
