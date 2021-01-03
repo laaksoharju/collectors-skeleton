@@ -501,6 +501,7 @@ Data.prototype.placeBottle = function (roomId, playerId, action,skillID, cost) {
 }
 
 Data.prototype.placeWorkBottle = function (roomId, playerId, workActionId, cost) {
+  console.log("inne i  datahandlers placeWorkBottle");
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     let activePlacement = room.workPlacement;

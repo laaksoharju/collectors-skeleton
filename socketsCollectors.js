@@ -69,6 +69,7 @@ function sockets(io, socket, data) {
 
 
     socket.on('collectorsPlaceWorkBottle', function(d) {
+      console.log("inne i  sockets collectorsPlaceWorkBottle");
       data.placeWorkBottle(d.roomId, d.playerId, d.workActionId, d.cost);
       io.to(d.roomId).emit('collectorsWorkBottlePlaced',
         { placements: data.getPlacements(d.roomId),

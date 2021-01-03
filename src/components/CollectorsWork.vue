@@ -79,7 +79,8 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
-      this.$emit('placeBottle', p);
+      console.log("nu körs placeBottle i work")
+      this.$emit('placeBottleWork', p);
     },
     highlightAvailableCards: function (cost=100) {
       for (let i = 0; i < this.skillsOnSale.length; i += 1) {

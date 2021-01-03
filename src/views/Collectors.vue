@@ -116,7 +116,7 @@
 
           :marketValues="marketValues"
           @drawCard="drawCard($event)"
-          @placeBottle="placeBottle('work', $event)"
+          @placeBottleWork="placeBottleWork($event)"
           />
 
        <CollectorsStartAuction v-if="players[playerId]"
@@ -563,6 +563,7 @@ function(d) {
     },
 
     placeBottleWork: function (p) {
+      console.log("inne i  collectors PlaceBottleWork");
       this.chosenPlacementCost = p.cost;
       this.chosenAction = p.action;
       this.$store.state.socket.emit('collectorsPlaceWorkBottle', {
