@@ -183,7 +183,7 @@
               </div>
 
               <div>
-                <button class="chose-secret-card" v-if="noSecretCard" @click="choseSecretCard()">Chose secret card</button>
+                <button class="chose-secret-card" v-if="this.players[this.playerId].choseSecretCard" @click="choseSecretCard()">Click to chose secret card</button>
               </div>
 
             </div>
@@ -191,7 +191,7 @@
               <div class="secret-card">
                 <CollectorsCard
                   :card="players[playerId].secret"
-                  
+
                 />
 
 
@@ -866,8 +866,9 @@ export default {
       cardMoved: new Audio("/sounds/zapsplat_leisure_playing_card_turn_over_on_top_of_deck_010_39239.mp3"),
       newRound: new Audio("/sounds/zapsplat_multimedia_game_sound_bell_digital_synth_bright_harsh_ascend_level_up_002_40473.mp3"),
       placeAuctionBid: new Audio("/sounds/zapsplat_foley_money_coin_australian_10_cent_set_down_and_spin_on_tiled_table_002_28219.mp3"),
+      secretCardButton: new Audio("/sounds/zapsplat_household_alarm_clock_button_press_12967.mp3"),
 
-      noSecretCard: true,
+
     };
   },
   computed: {
@@ -1064,13 +1065,17 @@ export default {
 
     endGame: function() {
 
-      this.$store.state.socket.emit("endGame", this.$route.params.id);
+      this.secretCardButton.play();
+
+      var roomId = this.$route.params.id;
+      this.$store.state.socket.emit("endGame", roomId );
 
     },
 
     choseSecretCard: function() {
+      this.secretCardButton.play();
       this.handCardAvailable = true;
-      this.noSecretCard = false;
+      /*this.players[this.playerId].choseSecretCard = false;*/
 
     },
 
@@ -1972,8 +1977,16 @@ p {
 
 .chose-secret-card {
 
-  border: 0.4vh solid red;
-  height: 10vh;
-  width: 10vw;
+  position: relative;
+  left: 0.5vw;
+  top: -4.5vH;
+  border: 0.4vh dashed red;
+  height: 18vh;
+  width: 6vw;
+  border-radius: 0.5vh;
+  background-color: Transparent;
+
 }
+
+
 </style>

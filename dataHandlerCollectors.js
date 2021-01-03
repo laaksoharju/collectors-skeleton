@@ -1073,7 +1073,7 @@ Data.prototype.calcPlayersTurns = function(roomId) {
         }*/
 
             //add players secret card to items
-            //player.items.push(player.secret[0]);
+            player.items.push(player.secret);
 
             console.log('Player points before starting: ' + player.points);
             //calculate and add points from items and check if player has one of every item
