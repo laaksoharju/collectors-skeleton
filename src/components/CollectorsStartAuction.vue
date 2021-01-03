@@ -66,14 +66,14 @@ Highest bid: {{highestBid}}
 
 
 
-<div class = "start-auction" >
-  <div v-for="(card, index) in auctionCards" :key="index">
+
+  <div class = "start-auction"  v-for="(card, index) in auctionCards" :key="index">
     <CollectorsCard
       :card="card"
       :availableAction="card.available"
       @doAction="startAuction(card)"/>
   </div>
-</div>
+
 
 <div class="auctionButtons" v-for="(value, key) in players" :key = "key">
 
@@ -170,7 +170,7 @@ export default {
   grid-template-columns: repeat(3, 60px);
   grid-template-rows: repeat(10,48.5px);
   grid-row-gap: 10px;
-  grid-auto-flow: column;
+  grid-auto-flow: row;
   border: 2px solid #4C7B80;
 }
 .titleAuctionPool{
@@ -338,7 +338,7 @@ form {
     border: 2px solid #4C7B80;
   }
   .titleAuctionPool{
-  grid-column: 1;
+  grid-column: 1 /span 2;
   grid-row: 1;
   font-style: italic;
   font-size: 50px;
@@ -367,19 +367,11 @@ form {
     background-image:  url('/images/Coin-white-1.png');
     background-size: cover;
   }
-  .auctionCard {
-      transform: scale(0.25);
-      grid-row: 2;
 
-    }
-  .auctionCard div:hover{
-      transform: scale(2)translate(-25%,0);
-      z-index: 1;
-    }
   .auctionSquare{
     grid-column: 9;
     grid-row: 1;
-    height: 170px;
+    height: 160px;
     width: 110px;
     border: 5px dotted pink;
     font-style: italic;
@@ -388,8 +380,8 @@ form {
     font-size: 14px;
     }
     .bidSquare {
-      grid-column: 1;
-      grid-row: 10;
+      grid-column: 7;
+      grid-row: 1;
       margin-top: 20%;
     }
   #bidSquare {
@@ -406,8 +398,8 @@ form {
     height: 30px;
     width: 50px;
     font-size: 12px ;
-      grid-column: 5;
-      grid-row: 3;
+      grid-column: 8;
+      grid-row: 1;
       margin-top: 40%;
       background-color: lightpink;
       border-radius: 12px;
@@ -418,11 +410,10 @@ form {
     border: 2px solid lightpink;
   }
     .cardUpForAuction {
-    transform: scale(0.45);
-    grid-column: 3;
-    grid-row: 2;
-    height: 70px;
-    width: 50px;
+    transform: scale(0.40);
+    grid-column: 9;
+    grid-row: 1;
+
     }
     .start-auction{
       transform: scale(0.25);
@@ -442,7 +433,7 @@ form {
     }
     .winner{
       grid-row:2;
-      grid-column:1;
+      grid-column:8;
       place-self: top center;
       font-size: 12px;
     }
@@ -451,9 +442,9 @@ form {
       background-color: #C86262;
       height: 20px;
       width: 50px;
-      grid-row:10;
-      grid-column:3;
-      place-self: end center;
+      grid-row:2;
+      grid-column:7;
+      place-self: start;
       border: 2px solid #A22626;
     }
     #stopAuctionButton:hover {

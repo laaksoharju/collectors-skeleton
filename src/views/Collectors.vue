@@ -1088,7 +1088,6 @@ h5 {
   @media screen and (max-width: 800px) {
     main {
       width:90vw;
-      background-color: lightblue;
     }
     h1 {
       text-align: left;
