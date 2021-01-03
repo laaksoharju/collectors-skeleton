@@ -8,6 +8,9 @@
       <button title="Rules!" type="button" id="rulesButton" class="rulesButton" v-on:click="setSprak">
         <h2>Svenska</h2>
       </button>
+      <button title="Rules!" type="button" id="rulesButton" class="rulesButton" v-on:click="setSprakEn">
+        <h2>English</h2>
+      </button>
 
       <div>
         <h3> Welcome to play Collectors, please choose a setup for the game.<nav>
@@ -21,7 +24,7 @@
         </div>
         <!--Rule button and id for where the text prints out -->
         <button title="Rules!" type="button" id="rulesButton" class="rulesButton" v-on:click="ruleFunction">
-          <h2>Click here to read the rules!</h2>
+          <h2>{{ labels.readRules }}</h2>
         </button>
 
         <div id="ruleContent">
@@ -44,11 +47,17 @@ export default {
   name: 'Home',
   data: function () {
     return {
+  labels: {},
   rules: ""
   }
 },
   created: function () {
     this.$store.commit('SET_ROOM_ID');
+    this.$store.state.socket.on('collectorsHomeLabels',
+      function(labels) {
+        this.labels = labels;
+        console.log(labels);
+      }.bind(this));
   },
   methods: {
     setupCollectors: function (playerCount, lang="en") {
@@ -63,6 +72,10 @@ export default {
       console.log(this.$store.state.lang)
     },
 
+    setSprakEn: function(){
+      this.$store.commit('SET_LANG','en')
+      console.log(this.$store.state.lang)
+    },
 
     ruleFunction: function() {
       //console.log("button clicked");

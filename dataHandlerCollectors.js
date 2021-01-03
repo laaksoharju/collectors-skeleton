@@ -54,6 +54,11 @@ Data.prototype.getUILabels = function (roomId) {
   else return {};
 }
 
+Data.prototype.getUILabelsLang = function (lang) {
+    var ui = require("./data/collectors-" + lang + ".json");
+    return ui;
+}
+
 Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   let room = {};
   room.players = {};
@@ -455,20 +460,23 @@ Data.prototype.placeWorkBottle = function (roomId, playerId, workActionId, cost)
     }
 
     if (workActionId===1 ){
-    room.players[playerId].money += cost;
+    room.players[playerId].money -= cost;
     //radera flaska, får ej va med i framtida ronder, gör om de finns tid
     }
 
     if (workActionId===2 ){
       this.drawCard(roomId, playerId);
-      //let nuvarandeSpelare= room.players[playerId].order
 
-    //  if (room.players[playerId].order === 1)
-    //  let nuvarandeSpelare= room.players[playerId].order
-      //room.players[playerId].order === 1
+      let switchOrder = room.players[playerId].order;
 
+      for (let playerId in room.players ){
 
-    }
+              console.log('order före ändring',  room.players[playerId].order)
+      room.players[playerId].order = (room.players[playerId].order - (switchOrder - 1) + room.playerCount) % room.playerCount
+        console.log('order efter ändring',  room.players[playerId].order)
+      }
+
+  }
 
     if (workActionId===3 ){
       this.drawCard(roomId, playerId);

@@ -11,7 +11,7 @@
           </button>
 
             <!-- Låta spelare välja färg på flaska  -->
-          <div class="playerBottleButton" v-if="players[playerId] && players[playerId].color === ''">
+          <div class="playerBottleButton" v-if="players[playerId].color === ''">
           Choose your bottle color
 
           <!-- choosecolor - välja flaskfärg, startmoney - sätter pengarna för spelare vid start  -->
@@ -58,6 +58,7 @@
           :marketValues="marketValues"
           :placement="buyPlacement"
           @buyCard="buyCard($event)"
+          @drawCard="drawCard($event)"
           @placeBottle="placeBottle('buy', $event)"
           />
 
@@ -98,27 +99,23 @@
           :player="players[playerId]"
           :currentRound="currentRound"
           :placement="workPlacement"
-          :skillsOnSale="skillsOnSale"
+
           :marketValues="marketValues"
           @drawCard="drawCard($event)"
-          @placeBottle="placeBottleWork( $event)"
+          @placeBottle="placeBottle('work', $event)"
           />
 
        <CollectorsStartAuction v-if="players[playerId]"
             :labels="labels"
-            :players="players"
             :player="players[playerId]"
             :auctionCards="auctionCards"
             :cardUpForAuction="cardUpForAuction"
             :marketValues="marketValues"
             :placement="auctionPlacement"
-            :auctionWinner="auctionWinner"
             @startAuction="whichAction($event)"
             @startBidding="startBidding($event)"
             @stopAuction="stopAuction($event)"
             @placeBottle="placeBottle('auction', $event)"
-            @startWinnerCard="startWinnerCard($event)"
-
             />
 
        <div v-if="players[playerId]" class="playerBoard">
@@ -133,11 +130,6 @@
                   :card="card"
                   />
            </div>
-           <div class="chosenSecret" v-for="(card, index) in players[playerId].secret" :card="card" :key="index">
-                 <CollectorsCard
-                 :card="card"
-                 />
-          </div>
              <!-- Visa spelarens färg och iterera fram rätt antal energybottles på playerboard -->
            <div class="playerBottles">
                 <div v-if="('black' === players[playerId].color)">
@@ -173,8 +165,7 @@
         <!-- visa spelarens kort i handen, förstår inte varför korten blir pyttesmå -->
         <div class="cardslots" v-if="players[playerId]">
           <div v-for="(card, index) in players[playerId].hand" :key="index">
-          <CollectorsCard  :card="card" :availableAction="card.available" @doAction="buyCard(card)" />
-
+          <CollectorsCard  :card="card" :availableAction="card.available" @doAction="buyCard(card)"/>
         </div>
       </div>
 
@@ -230,7 +221,7 @@
     </div>
 
     <button title="Rules!" type="button" id="rulesButton" class="rulesButton" v-on:click="ruleFunction">
-      <h2>Click here to read the rules!</h2>
+      <h2> {{ labels.readRules }}</h2>
     </button>
     <div id="ruleContent">
     </div>
@@ -347,10 +338,10 @@ export default {
                      music: 0 },
       itemsOnSale: [],
       skillsOnSale: [],
+    //  workDeck: [],
       auctionCards: [],
       market:[],
       cardUpForAuction: {},
-      auctionWinner: "",
       chosenAction: "",
       highestBid: 0,
       rules: ""
@@ -395,13 +386,13 @@ export default {
         this.itemsOnSale = d.itemsOnSale;
         this.marketValues = d.marketValues;
         this.skillsOnSale = d.skillsOnSale;
+      //  this.workDeck = d.workDeck;
         this.auctionCards = d.auctionCards;
         this.buyPlacement = d.placements.buyPlacement;
         this.skillPlacement = d.placements.skillPlacement;
         this.marketPlacement = d.placements.marketPlacement;
         this.auctionPlacement = d.placements.auctionPlacement;
         this.workPlacement = d.placements.workPlacement;
-
       }.bind(this));
     this.$store.state.socket.on('collectorsBottlePlaced',
       function(d) {
@@ -411,13 +402,6 @@ export default {
         this.auctionPlacement = d.auctionPlacement;
         this.workPlacement = d.workPlacement;
       }.bind(this));
-
-      this.$store.state.socket.on('collectorsWorkBottlePlaced',
-        function(d) {
-          this.players= d.players;
-          this.workPlacement = d.placements.workPlacement;
-        }.bind(this));
-
     this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
     this.$store.state.socket.on('collectorsCardDrawn',
       function(d) {
@@ -452,6 +436,7 @@ export default {
       }.bind(this)
     );
 
+
     this.$store.state.socket.on('collectorsAuctionStarted',
     function(d) {
       console.log(d.playerId, "Started an auction");
@@ -464,11 +449,8 @@ export default {
   this.$store.state.socket.on('collectorsAuctionStopped',
   function(d) {
     console.log(d.playerId, "Stopped an auction");
-    console.log(d.auctionWinner, "socket ish auction winner")
     this.players = d.players;
     this.cardUpForAuction = d.cardUpForAuction;
-    this.auctionWinner = d.auctionWinner;
-
   }.bind(this)
 );
 
@@ -504,15 +486,6 @@ this.$store.state.socket.on('collectorsMoneyStarted',
 function(d) {
   this.players = d.players;
   console.log(d.playerId, "starts with ", d.players[d.playerId].money," coins");
-}.bind(this)
-);
-
-this.$store.state.socket.on('collectorsWinnerCardStarted',
-function(d) {
-  this.players = d.players;
-  this.auctionWinner = d.auctionWinner;
-  this.cardUpForAuction = d.cardUpForAuction;
-  this.marketValues = d.marketValues;
 }.bind(this)
 );
 
@@ -559,17 +532,6 @@ function(d) {
         }
       );
     },
-    placeBottleWork: function (p) {
-      this.chosenPlacementCost = p.cost;
-      this.chosenAction = p.action;
-      this.$store.state.socket.emit('collectorsPlaceWorkBottle', {
-          roomId: this.$route.params.id,
-          playerId: this.playerId,
-          workActionId: p.workActionId,
-          cost: p.cost,
-        }
-      );
-    },
     whichAction: function (card){
       if (this.chosenAction === "skill") {
         this.getSkill(card)
@@ -584,14 +546,8 @@ function(d) {
         console.log("whichAction = work")
       }
     },
-    drawCard: function () {
-      this.$store.state.socket.emit('collectorsDrawCard', {
-          roomId: this.$route.params.id,
-          playerId: this.playerId
-        }
-      );
-    },
     buyCard: function (card) {
+      console.log("buyCard", card);
       this.$store.state.socket.emit('collectorsBuyCard', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
@@ -600,6 +556,15 @@ function(d) {
         }
       );
     },
+
+    drawCard: function () {
+      this.$store.state.socket.emit('collectorsDrawCard', {
+          roomId: this.$route.params.id,
+          playerId: this.playerId
+        }
+      );
+    },
+
     getSkill: function (card) {
       console.log("getSkill", card);
       this.$store.state.socket.emit('collectorsGetSkill', {
@@ -611,6 +576,17 @@ function(d) {
       );
     },
 
+     getWorkCards: function (card) {
+      console.log("getWorkCards", card);
+      this.$store.state.socket.emit('collectorsGetWorkCards', {
+          roomId: this.$route.params.id,
+          playerId: this.playerId,
+          card: card,
+          workCard: this.workDeck,
+        }
+      );
+    },
+
     startAuction: function (card) {
       console.log("startAuction", card);
       this.$store.state.socket.emit('collectorsStartAuction', {
@@ -618,7 +594,6 @@ function(d) {
           playerId: this.playerId,
           card: card,
           auctionCard: this.auctionCards,
-          cost: this.chosenPlacementCost
         }
       );
 
@@ -651,8 +626,6 @@ function(d) {
   stopAuction: function () {
     console.log("Starting stop auction", this.cardUpForAuction);
 
-
-
     this.$store.state.socket.emit('collectorsStopAuction', {
         roomId: this.$route.params.id,
         playerId: this.playerId,
@@ -660,18 +633,6 @@ function(d) {
           }
     );
 },
-
-startWinnerCard: function(action){
-  console.log("start winner card collectors.vue med action "+action)
-  this.$store.state.socket.emit('collectorsWinnerCard', {
-    roomId: this.$route.params.id,
-    playerId: this.playerId,
-    card: this.cardUpForAuction,
-    action: action,
-  });
-},
-
-
     changeTurn: function () {
       this.$store.state.socket.emit('collectorsChangeTurn', {
           roomId: this.$route.params.id,
@@ -763,7 +724,7 @@ startWinnerCard: function(action){
               currentPlayer: this.currentPlayer
               }
             );
-          } */
+          }*/
   }
 }
 </script>
@@ -857,7 +818,108 @@ h5 {
     border-radius: 5px;
     border: 2px solid #E3A688;
   }
+  /*.marketPool{
+    grid-column: 3/span 5;
+    grid-row: 11/span 4;
+    width: auto;
+    height: auto;
+    background-color: #c9d5e1;
+    color: black;
+    display: grid;
+    grid-template-columns: repeat(5, 60px);
+    grid-template-rows: repeat(5, 27.5px);
+    }*/
 
+/* Har ej vågat radera WORK än, men finns i component
+.titleWorkPool {
+  font-style: italic;
+  font-size: 50px;
+  text-shadow: 2px 2px 4px yellow;
+  font-size: 20px;
+}
+  .workPool{
+    grid-column: 3/span 5;
+    grid-row: 6/span 5;
+    width: auto;
+    height: auto;
+    display:grid;
+    grid-template-columns: repeat(2, 224px);
+    grid-template-rows: repeat(3,50px);
+    background-color: #f5f2cc;
+    color: black;
+
+    border-top: 2px solid #4C7B80;
+  }
+  .quarterImage {
+    grid-column: 2;
+    grid-row: 3;
+  }
+  .quarter1 {
+    grid-column: 2 ;
+    grid-row: 1;
+    width: 140px;
+    height: 62px;
+    background-image: url('/images/quarterTile1.png');
+    background-size: cover;
+  }
+  .quarter2 {
+    grid-column: 2 ;
+    grid-row: 1;
+    width: 140px;
+    height: 62px;
+    background-image: url('/images/quarterTile2.png');
+    background-size: cover;
+  }
+  .quarter3 {
+    grid-column: 2 ;
+    grid-row: 1;
+    width: 140px;
+    height: 62px;
+    background-image: url('/images/quarterTile3.png');
+    background-size: cover;
+  }
+  .quarter4 {
+    grid-column: 2 ;
+    grid-row: 1;
+    width: 140px;
+    height: 62px;
+    background-image: url('/images/quarterTile4.png');
+    background-size: cover;
+  }
+
+  .Alt1 {
+    grid-column: 1 ;
+    grid-row: 1;
+    width: 130px;
+    height: 60px;
+    background-image: url('/images/WorkPoolAlt1.jpg');
+    background-size: cover;
+  }
+  .Alt2 {
+    grid-column: 1 ;
+    grid-row: 2;
+    width: 130px;
+    height: 60px;
+    background-image: url('/images/WorkPoolAlt2.jpg');
+    background-size: cover;
+  }
+  .Alt3 {
+    grid-column: 1 / span 2 ;
+    grid-row: 3;
+    width: 130px;
+    height: 60px;
+    background-image: url('/images/WorkPoolAlt3.jpg');
+    background-size: cover;
+  }
+  .Alt4 {
+    grid-column: 1 ;
+    grid-row: 4;
+    width: 152px;
+    height: 60px;
+    background-image: url('/images/WorkPoolAlt4.jpg');
+    background-size: cover;
+  }
+  */
 
   .playerBoard {
     grid-column: 11/span 5;
@@ -887,10 +949,6 @@ h5 {
 }
   .chosenSkillCard {
     grid-row: 3;
-    transform: scale(0.25);
-  }
-  .chosenSecret {
-    grid-row: 2;
     transform: scale(0.25);
   }
   .chosenItemCard {

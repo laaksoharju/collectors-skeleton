@@ -2,6 +2,11 @@ function sockets(io, socket, data) {
     socket.on('setupCollectors', function(d) {
       data.createRoom(d.roomId, d.playerCount, d.lang);
     })
+    socket.on('setLang', function(lang) {
+      socket.emit('collectorsHomeLabels',
+      data.getUILabelsLang(lang));
+
+    })
     socket.on('collectorsLoaded', function(d) {
       socket.join(d.roomId);
       if (data.joinGame(d.roomId, d.playerId)) {
