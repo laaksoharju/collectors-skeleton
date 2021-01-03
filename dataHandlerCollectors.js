@@ -208,7 +208,7 @@ Data.prototype.startMoney = function(roomId, playerId){
   }
 }
 //getSkill har jag skapat
-Data.prototype.getSkill = function (roomId, playerId, card, skill) {
+Data.prototype.getSkill = function (roomId, playerId, card, skill, cost) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     let c = null;
@@ -225,6 +225,7 @@ Data.prototype.getSkill = function (roomId, playerId, card, skill) {
       }
     }
     room.players[playerId].skills.push(...c);
+    room.players[playerId].money -= cost;
 
   }
 }
@@ -244,6 +245,7 @@ Data.prototype.startAuction = function (roomId, playerId, card, auctionCard, cos
       }
     }
   }
+  console.log(cost+"cost i startauction data")
   room.players[playerId].money -= cost;
 }
 
@@ -356,6 +358,27 @@ Data.prototype.changeTurn = function (roomId, playerId) {
   }
   else return "";
 }
+
+Data.prototype.newRound = function (roomId, skillsOnSale,itemsOnSale, auctionCards){
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+      console.log("inne i data new round")
+      let playerCounter = room.playerCount+2;
+      console.log("playerCounter"+playerCounter);
+      console.log("length of item"+itemsOnSale.length);
+      if (room.itemsOnSale.length < playerCounter){
+        console.log("inne i if data new round")
+        for (let i = room.itemsOnSale.length; i < room.playerCount+2; i+=1){
+          console.log("inne i for i if new round data")
+          let c = room.deck.splice(0, 1);
+          room.itemsOnSale.push(c);
+
+        }
+        }
+
+  }
+}
+
 
 Data.prototype.endGame = function (roomId, marketValues){
   let room = this.rooms[roomId];
@@ -472,6 +495,7 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost) {
 Data.prototype.placeBottle = function (roomId, playerId, action, cost, placementId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
+    console.log("placementId i data"+placementId+"cost"+cost)
     let activePlacement = [];
     if (action === "buy") {
       activePlacement = room.buyPlacement;
