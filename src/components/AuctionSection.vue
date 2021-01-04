@@ -57,9 +57,12 @@
           <input type="button" value="Send to items" @click="auctionToHand('items')" />
           <input type="button" value="Send to skills" @click="auctionToHand('skills')" />
           <input type="button" value="Send to raiseval" @click="auctionToHand('raiseval')" />
+        <div v-if="p.playerId !== null">
+         <!-- {{ p.playerId }} -->
         </div>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
@@ -80,6 +83,7 @@ export default {
     placement: Array,
     highestBid: Number,
     highestBiddingPlayer: String,
+    allCardsChosen: Boolean,
   },
   data: function () {
     return {
@@ -131,6 +135,15 @@ export default {
       if (card.available) {
         this.$emit("buyAuctionCard", card);
         this.highlightAvailableCards();
+   }
+    },
+    selectAction: function (card) {
+      if (card.available) {      
+        this.$emit("selectAction", card);
+
+        this.allCardsChosen
+          ? this.highlightAvailableCards()
+          : this.$set(card, "available", false);
       }
     },
 
@@ -166,8 +179,8 @@ export default {
 .buy-cards {
   width: 80%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
-  grid-template-rows: repeat(auto-fill, 180px);
+  grid-template-columns: repeat(auto-fill, 85px);
+  grid-template-rows: repeat(auto-fill, 117px);
 }
 .button-section {
   width: 20%;
@@ -203,8 +216,8 @@ export default {
 
 .cardslots {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
-  grid-template-rows: repeat(auto-fill, 180px);
+  grid-template-columns: repeat(auto-fill, 85px);
+  grid-template-rows: repeat(auto-fill, 117px);
 }
 .cardslots div {
   transform: scale(0.5) translate(-50%, -50%);

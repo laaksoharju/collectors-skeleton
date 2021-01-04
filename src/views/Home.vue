@@ -1,5 +1,13 @@
 <template>
+
   <div class="center">
+
+    <div>
+      <h2>hej</h2>
+      <DemoButton/>
+      <MenuButton/>
+    
+    </div>
     <div id="welcomeMessage">
       <h1>Collectors</h1>
       <h3>Welcome to the game Collectors where you compete against other players about who's collection is the most valuable. </h3>
@@ -52,10 +60,15 @@
 </template>
 
 <script>
-// @ is an alias to /src
+import DemoButton from "../components/DemoButton.vue";
+import MenuButton from "../components/MenuButton.vue";
 
 export default {
   name: "Home",
+  components: {
+    DemoButton,
+    MenuButton,
+  },
   created: function () {
     this.$store.commit("SET_ROOM_ID");
   },
@@ -119,7 +132,7 @@ a:hover {
   cursor: pointer;
   display: inline-block;
   padding: 15px 25px;
-  background-image: linear-gradient(to right, #cc2e50, #ff5858);
+  background-image: linear-gradient(to right, gray, black);
   border-radius: 8px;
   color: #fff;
   font-weight: 700;

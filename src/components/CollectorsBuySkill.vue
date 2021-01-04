@@ -26,10 +26,17 @@
           </button>
           <div v-if="p.playerId !== null">
             <!-- {{ p.playerId }} -->
+          <div
+            class="clickedButton"
+            v-if="p.playerId !== null && typeof players !== 'undefined'"
+            :style="{ backgroundColor: players[p.playerId].color }"
+          >
+            {{ p.playerId }}
           </div>
         </div>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
@@ -49,6 +56,8 @@ export default {
     skillsOnSale: Array,
     marketValues: Object,
     placement: Array,
+    allCardsChosen: Boolean,
+    players: Object,
   },
 
   data: function () {
@@ -77,8 +86,7 @@ export default {
     },
 
     placeBottle: function (p) {
-
-      this.$emit("placeBottle", p.cost);
+      this.$emit("placeBottle", p);
       this.highlightAvailableCards(p.cost);
     },
     highlightAvailableCards: function (cost = 100) {
@@ -108,11 +116,10 @@ export default {
     },
     selectAction: function (card) {
       if (card.available) {
-
         this.$emit("selectAction", card);
-
-
-        this.highlightAvailableCards();
+        this.allCardsChosen
+          ? this.highlightAvailableCards()
+          : this.$set(card, "available", false);
       }
     },
   },
@@ -123,25 +130,27 @@ export default {
 .buy-cards {
   width: 80%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
-  grid-template-rows: repeat(auto-fill, 180px);
+  grid-template-columns: repeat(auto-fill, 85px);
+  grid-template-rows: repeat(auto-fill, 117px);
 }
-.button-section {
+/*.button-section {
   width: 20%;
-}
+}*/
 
 .buttons {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
+  grid-template-columns: repeat(auto-fill, 50px);
+  margin-right:10px;
 }
 
 .board-section {
-  width: 100%;
   padding: 10px;
   align-items: center;
   display: flex;
   flex-direction: row-reverse;
   border: 1px solid #19181850;
+  border-radius: 10px;
+  margin: 2px;
 }
 
 #skill-section {
@@ -150,8 +159,8 @@ export default {
 
 .cardslots {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
-  grid-template-rows: repeat(auto-fill, 180px);
+  grid-template-columns: repeat(auto-fill, 105px);
+  grid-template-rows: repeat(auto-fill, 145px);
 }
 .cardslots div {
   transform: scale(0.5) translate(-50%, -50%);
@@ -253,5 +262,13 @@ p {
 .slide-enter,
 .slide-leave-to {
   transform: translateY(-50%) translateX(100vw);
+}
+
+.clickedButton {
+  border: 1px solid rgb(118, 118, 118);
+  border-radius: 2px;
+  text-align: center;
+  align-items: flex-start;
+  color: black;
 }
 </style>

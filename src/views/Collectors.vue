@@ -1,16 +1,34 @@
 <template>
   <div>
     <main>
-      <h1>I am player {{ playerId }}</h1>
-      <h1 v-if="players[playerId].active">my turn!</h1>
+
+      <!-- SecretCard och BottlesPlayerboard är popup -->
+    
+      <div v-if="players[playerId] && players[playerId].chooseSecret">
+        <SecretCard
+          v-if="players[playerId]"
+          :player="players[playerId]"
+          :allCardsChosen="allCardsChosen"
+          @selectAction="setSecret($event)"
+        />
+      </div>
+
+      <div v-if="players[playerId].dispBottles">
+        <BottlesPlayerboard
+          v-if="players[playerId]"
+          :player="players[playerId]"
+          :labels="labels"
+          @getBottleIncome="getBottleIncome($event)"
+        />
+      </div>
+
 
       <div class="layout_wrapper">
-        <div id="game-board">
+        <div class="first-column">
           <ItemSection
             v-if="players[playerId]"
             :labels="labels"
             :player="players[playerId]"
-            :currentAction="currentAction"
             :itemsOnSale="itemsOnSale"
             :marketValues="marketValues"
             :placement="buyPlacement"
@@ -26,6 +44,8 @@
             :marketValues="marketValues"
             :placement="skillPlacement"
             @buySkillCard="buySkillCard($event)"
+            :allCardsChosen="allCardsChosen"
+            :players="players"
             @selectAction="selectAction($event)"
             @placeBottle="placeBottle('skillType', 'skill', $event)"
           />
@@ -37,8 +57,9 @@
             :marketValues="marketValues"
             :auctionCards="auctionCards"
             :placement="marketPlacement"
+            :players="players"
             @selectAction="selectAction($event)"
-            @placeBottle="placeBottle('marketType', 'buy', $event)"
+            @placeBottle="placeBottle('marketType', 'market', $event)"
           />
           <AuctionSection
             v-if="players[playerId]"
@@ -47,7 +68,7 @@
             :auctionCards="auctionCards"
             :upForAuction="upForAuction"
             :marketValues="marketValues"
-            :placement="skillPlacement"
+            :placement="auctionPlacement"
             :highestBid="highestBid"
             :highestBiddingPlayer="highestBiddingPlayer"
             :numberOfPasses="numberOfPasses"
@@ -58,26 +79,65 @@
             @auctionToHand="auctionToHand($event)"
             @placeBottle="placeBottle('auctionType', 'skill', $event)"
           />
+        
+
+          
 
 
           <!-- glöm ej ändra från buy på de ovan-->
+          <div>
+      <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
+      <OtherPlayerboards :players="players" :playerId="playerId"
+            :placement="auctionPlacement"
+            :allCardsChosen="allCardsChosen"
+            @selectAction="selectAction($event)"
+            @placeBottle="placeBottle('auctionType', 'auction', $event)"
+          />
+
+        </div>
         </div>
 
-        <WorkArea
-          v-if="players[playerId]"
-          :color="players[playerId].color"
-          :labels="labels"
-          :player="players[playerId]"
-          :placement="buyPlacement"
-          @circleClicked="circleClicked($event)"
-          class="gridWork"
-        />
+        <div class="second-column">
+          <WorkArea
+            v-if="players[playerId]"
+            :color="players[playerId].color"
+            :labels="labels"
+            :player="players[playerId]"
+            :placement="buyPlacement"
+            @circleClicked="circleClicked($event)"
+            id="work_area"
+          />
+
+        </div>
+
+        <div class="third-column"> 
+          <div id="game-info">
+            <h1>I am player {{ playerId }}</h1>
+            <h1>{{ labels.round }} {{ round }}</h1>
+            <div
+              v-for="(player, index) in players"
+              :key="index"
+              :player="player"
+            >
+              <h1 v-if="player.active">It's {{ index }}'s turn!</h1>
+            </div>
+          </div>
+          </div>
+
+          <OtherPlayerboards :Players="players" :playerId="playerId" />
+        
+
+        <div id="hand_playerboard">
+          <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
+
+          <Hand
+            v-if="players[playerId]"
+            :player="players[playerId]"
+            :allCardsChosen="allCardsChosen"
+            @selectAction="selectAction($event)"
+          />
+        </div>
       </div>
-
-      <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
-      <OtherPlayerboards :Players="players" :playerId="playerId" />
-
-      <!--  {{ buyPlacement }} {{ chosenPlacementCost }}-->
 
       <div class="buttons">
         <button @click="drawCard">
@@ -128,16 +188,6 @@
             />
           </div>
         </div>
-        Hand
-        <div class="cardslots" v-if="players[playerId]">
-          <CollectorsCard
-            v-for="(card, index) in players[playerId].hand"
-            :card="card"
-            :availableAction="card.available"
-            @doAction="buyCard(card)"
-            :key="index"
-          />
-        </div>
       </div>
     </main>
     {{ players }}
@@ -168,8 +218,11 @@ import CollectorsBuySkill from "@/components/CollectorsBuySkill.vue";
 import WorkArea from "@/components/WorkArea.vue";
 import ItemSection from "@/components/ItemSection.vue";
 import PlayerBoard from "@/components/PlayerBoard.vue";
-import RaiseValueSection from "../components/RaiseValueSection.vue";
-import AuctionSection from "../components/AuctionSection.vue";
+import RaiseValueSection from "@/components/RaiseValueSection.vue";
+import AuctionSection from "@/components/AuctionSection.vue";
+import BottlesPlayerboard from "@/components/BottlesPlayerboard.vue";
+import Hand from "@/components/Hand.vue";
+import SecretCard from "@/components/SecretCard.vue";
 
 export default {
   name: "Collectors",
@@ -182,15 +235,16 @@ export default {
     OtherPlayerboards,
     RaiseValueSection,
     AuctionSection,
+    BottlesPlayerboard,
+    Hand,
+    SecretCard,
   },
   data: function () {
     return {
       publicPath: "localhost:8080/#", //"collectors-groupxx.herokuapp.com/#",
       touchScreen: false,
       nextRound: Boolean,
-      highestBid: 0,
-      highestBiddingPlayer: '',
-      numberOfPasses: 0,
+      round: 1,
       myCards: [],
       maxSizes: { x: 0, y: 0 },
       labels: {},
@@ -209,12 +263,15 @@ export default {
       //   income: [],
       //   secret: []
       // }
+      secret: [],
       buyPlacement: [],
       skillPlacement: [],
       auctionPlacement: [],
       marketPlacement: [],
       chosenPlacementCost: null,
       currentAction: String,
+      allCardsChosen: true,
+      selectedCards: [],
       marketValues: {
         fastaval: 0,
         movie: 0,
@@ -294,7 +351,11 @@ export default {
     },
     nextRound: function () {
       if (this.nextRound) {
-        this.startNextRound();
+        if (this.round < 4) {
+          this.startNextRound();
+        } else {
+          this.countPoints();
+        }
       }
     },
   },
@@ -354,9 +415,9 @@ export default {
     this.$store.state.socket.on(
       "nextRoundStarted",
       function (d) {
-        this.itemsOnSale = d.rotatedCards.itemsOnSale;
-        this.skillsOnSale = d.rotatedCards.skillsOnSale;
-        this.auctionCards = d.rotatedCards.auctionCards;
+        this.itemsOnSale = d.itemsOnSale;
+        this.skillsOnSale = d.skillsOnSale;
+        this.auctionCards = d.auctionCards;
         this.marketValues = d.marketValues;
         this.nextRound = d.nextRound;
         this.players = d.players;
@@ -364,6 +425,7 @@ export default {
         this.skillPlacement = d.placement.skillPlacement;
         this.marketPlacement = d.placement.marketPlacement;
         this.auctionPlacement = d.placement.auctionPlacement;
+        this.round = d.round;
       }.bind(this)
     );
 
@@ -373,7 +435,6 @@ export default {
         console.log(d.playerId, "bought a card");
         this.players = d.players;
         this.itemsOnSale = d.itemsOnSale;
-        this.nextRound = d.nextRound;
       }.bind(this)
     );
     this.$store.state.socket.on(
@@ -393,48 +454,21 @@ export default {
         console.log(d.playerId, "bought a skill card");
         this.players = d.players;
         this.skillsOnSale = d.skillsOnSale;
+      }.bind(this)
+    );
+
+    this.$store.state.socket.on(
+      "bottleIncomeGained",
+      function (d) {
+        this.players = d.players;
         this.nextRound = d.nextRound;
       }.bind(this)
     );
 
     this.$store.state.socket.on(
-      "collectorsAuctionCardBought",
-      function (d) {
-        console.log(d.playerId, "Started an Auction");
-        this.players = d.players;
-        this.auctionCards = d.auctionCards;
-        this.upForAuction = d.upForAuction;
-      }.bind(this)
-    );
-
-    this.$store.state.socket.on(
-      "collectorsAuctionSentToHand",
+      "pointsCounted",
       function (d) {
         this.players = d.players;
-        this.auctionCards = d.auctionCards;
-        this.upForAuction = d.upForAuction;
-        this.highestBid = d.highestBid;
-        this.destination = d.destination;
-        this.highestBiddingPlayer = d.highestBiddingPlayer;
-      }.bind(this)
-    );
-
-    this.$store.state.socket.on(
-      "collectorsPlacedBid",
-      function (d) {
-        console.log(d.playerId, "Placed a bid");
-        this.players = d.players;
-        this.highestBid = d.bid;
-        this.highestBiddingPlayer = d.playerId;
-      }.bind(this)
-    );
-
-    this.$store.state.socket.on(
-      "collectorsPassedBid",
-      function (d) {
-        console.log(d.playerId, "Passed a bid");
-        this.players = d.players;
-        this.upForAuction = d.upForAuction;
       }.bind(this)
     );
   },
@@ -445,17 +479,37 @@ export default {
     selectAction: function (card) {
       this.currentAction == "itemType" ? this.buyCard(card) : null;
       this.currentAction == "skillType" ? this.buySkillCard(card) : null;
-      this.currentAction == "marketType" ? this.buyRaiseValue(card) : null;
       this.currentAction == "auctionType" ? this.startAuction(card) : null; //Funktionen existerar inte än
+      this.currentAction == "marketType" ? this.manageMarketAction(card) : null;
     },
-    placeBottle: function (type, action, cost) {
+    manageMarketAction: function (card) {
+      this.selectedCards.push(card);
+
+      if (this.allCardsChosen) {
+        this.buyRaiseValue();
+        this.selectedCards.splice(0, 1);
+      } else if (this.selectedCards.length == 2) {
+        this.allCardsChosen = true;
+
+        this.buyRaiseValue();
+        this.selectedCards.splice(0, 2);
+      } else {
+        console.log("Please choose another card: ");
+      }
+    },
+    placeBottle: function (type, action, p) {
       this.currentAction = type;
-      this.chosenPlacementCost = cost;
+      p.chooseTwoCards
+        ? (this.allCardsChosen = false)
+        : (this.allCardsChosen = true);
+
+      this.chosenPlacementCost = p.cost;
       this.$store.state.socket.emit("collectorsPlaceBottle", {
         roomId: this.$route.params.id,
         playerId: this.playerId,
         action: action,
-        cost: cost,
+        cost: p.cost,
+        id: p.id,
       });
     },
     drawCard: function () {
@@ -465,11 +519,13 @@ export default {
       });
     },
 
-    buyRaiseValue: function (card) {
+    buyRaiseValue: function () {
+      console.log("Detta skickas alltså till server: ");
+      console.log(this.selectedCards);
       this.$store.state.socket.emit("buyRaiseValue", {
         roomId: this.$route.params.id,
         playerId: this.playerId,
-        card: card,
+        cards: this.selectedCards,
         cost: this.chosenPlacementCost,
       });
     },
@@ -487,7 +543,7 @@ export default {
         roomId: this.$route.params.id,
         playerId: this.playerId,
         card: card,
-        cost: this.marketValues[card.market] + this.chosenPlacementCost,
+        cost: this.chosenPlacementCost,
       });
     },
     buyAuctionCard: function (card) {
@@ -535,13 +591,32 @@ export default {
         playerId: this.playerId,
       });
     },
+    getBottleIncome: function (bottleIncome) {
+      this.$store.state.socket.emit("getBottleIncome", {
+        playerId: this.playerId,
+        roomId: this.$route.params.id,
+        bottleIncome,
+      });
+    },
+    countPoints: function () {
+      this.$store.state.socket.emit("countPoints", {
+        roomId: this.$route.params.id,
+      });
+    },
+    setSecret: function (card) {
+        this.$store.state.socket.emit("collectorsSetSecret", {
+          roomId: this.$route.params.id,
+          playerId: this.playerId,
+          secret: card,
+        });
+    },
   },
 };
 </script>
 
 <style scoped>
 .board-section {
-  width: 100%;
+  /*width: 100%;*/
   padding: 10px;
   align-items: center;
   display: flex;
@@ -561,37 +636,56 @@ main {
 
 .layout_wrapper {
   display: grid;
-  grid-template-columns: 70% 30%;
-  /*grid-template-columns: 40% 10%;*/
+  grid-template-columns: 50% 30% 20%;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
 }
 
-.gridItem {
-  grid-column: 1;
-  grid-row: 1;
+.first-column {
+  overflow: hidden;
+  grid-row: 1/2;
 }
 
-/*.gridGame {
-  grid-column: 1;
+.second-column {
+  grid-column: 2/3;
+  grid-row: 1/2;
+}
+
+.third-column{
+  grid-column: 3/4;
+  grid-row: 1/3;
+}
+
+#game-info {
   grid-row: 1;
+  margin-left: 1vw;
+}
+#game-info h1{
+  font-size: 80%;
+}
+
+/*#work_area {
+  grid-row: 2;
 }*/
 
-.gridWork {
-  grid-column: 2;
-  /*grid-column: 1;*/
+#hand_playerboard {
+  height: 60vh;
+  display: grid;
+  grid-template-columns: 60% 40%;
+  grid-column: 1/4;
 }
 
-.gridOtherBoard {
-  grid-column: 3;
-  /*grid-column: 2;*/
-  /*grid-row: 1;*/
+/*SECRET SECTION - TA BORT?*/
+.secretSection {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.9);
 }
 
-.gridPlayerboard {
-  grid-column: 1 / span 2;
-  grid-row: 2;
-}
-
-/*TRANSITION*/
+/*TRANSITION - TA BORT???*/
 .slide-enter-active,
 .slide-leave-active {
   transition: transform 0.5s ease, opacity 0.5s ease;
@@ -609,8 +703,8 @@ footer a:visited {
 }
 .my-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
-  grid-template-rows: repeat(auto-fill, 180px);
+  grid-template-columns: repeat(auto-fill, 105px);
+  grid-template-rows: repeat(auto-fill, 145px);
 }
 .my-cards div {
   transform: scale(0.5) translate(-50%, -50%);
@@ -637,8 +731,8 @@ footer a:visited {
 }
 .cardslots {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
-  grid-template-rows: repeat(auto-fill, 180px);
+  grid-template-columns: repeat(auto-fill, 105px);
+  grid-template-rows: repeat(auto-fill, 145px);
 }
 .cardslots div {
   transform: scale(0.5) translate(-50%, -50%);
@@ -709,7 +803,7 @@ footer a:visited {
 
 h1 {
   color: #222;
-  font-size: 32px;
+  font-size: 20.5px;
   font-weight: 900;
   margin-bottom: 15px;
 }
