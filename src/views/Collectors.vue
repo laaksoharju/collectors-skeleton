@@ -461,6 +461,14 @@ export default {
         this.itemsOnSale = d.itemsOnSale;
       }.bind(this)
     );
+
+      this.$store.state.socket.on('collectorsSkillValueCaught',
+        function(d) {
+
+          this.players = d.players;
+
+        }.bind(this)
+      );
     this.$store.state.socket.on('collectorsSkillCaught',
       function(d) {
         console.log(d.playerId, "Got a skill");
@@ -648,6 +656,14 @@ function(d) {
         }
       );
     },
+    getSkillValue: function (card) {
+      this.$store.state.socket.emit('collectorsGetSkillValue', {
+          roomId: this.$route.params.id,
+          playerId: this.playerId,
+          card:card
+        }
+      );
+    },
 
     getSkill: function (card) {
       this.$store.state.socket.emit('collectorsGetSkill', {
@@ -658,7 +674,9 @@ function(d) {
           cost: this.chosenPlacementCost
 
         }
+
       );
+      this.getSkillValue(card);
     },
     startAuction: function (card) {
       console.log()

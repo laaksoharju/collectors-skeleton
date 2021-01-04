@@ -77,6 +77,15 @@ function sockets(io, socket, data) {
       );
     });
 
+    socket.on('collectorsGetSkillValue', function(d){
+      data.getSkillValue(d.roomId, d.playerId, d.card, d.skill)
+      io.to(d.roomId).emit('collectorsSkillValueCaught', {
+          playerId: d.playerId,
+          players: data.getPlayers(d.roomId),
+        }
+      );
+    });
+
     socket.on('collectorsGetSkill', function(d) {
       data.getSkill(d.roomId, d.playerId, d.card, d.skill, d.cost)
       io.to(d.roomId).emit('collectorsSkillCaught', {

@@ -131,6 +131,8 @@ Data.prototype.joinGame = function (roomId, playerId) {
                                  bids: 0,
                                  color: '',
                                  playerBottles: 0,
+                                 bottles:2,
+                                 auctionSkillCounter:0,
                                  order: Object.keys(room.players).length+1,
 
                                };
@@ -230,6 +232,24 @@ Data.prototype.getSkill = function (roomId, playerId, card, skill, cost) {
   }
 }
 
+Data.prototype.getSkillValue= function (roomId, playerId, card, skill){
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+
+    if(card.skill === "bottle" ){
+      room.players[playerId].playerBottles += 1;
+      room.players[playerId].bottles += 1;
+    }
+
+    if(card.skill=== "auctionIncome") {
+      room.players[playerId].auctionSkillCounter += 1;
+    }
+
+  }
+
+}
+
+
 Data.prototype.startAuction = function (roomId, playerId, card, auctionCard, cost) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
@@ -244,8 +264,25 @@ Data.prototype.startAuction = function (roomId, playerId, card, auctionCard, cos
         break;
       }
     }
+
+
+    }
+
+  for (let playerId in room.players){
+    if( room.players[playerId].auctionSkillCounter > 0){
+
+      room.players[playerId].money += room.players[playerId].auctionSkillCounter;
+    }
   }
-  console.log(cost+"cost i startauction data")
+
+
+  /*for (let i = 0; i < room.players.lenght; i+=1){
+    console.log(room.players[i])
+    if( room.players[i].auctionSkillCounter > 0){
+
+      room.players[i].money += room.players[i].auctionSkillCounter;
+    }
+  }*/
   room.players[playerId].money -= cost;
 }
 
@@ -364,7 +401,9 @@ Data.prototype.fillBottles= function(roomId, players){
   if (typeof room !== 'undefined') {
 
     for (let playerId in room.players){
-      room.players[playerId].playerBottles = 2;
+      room.players[playerId].playerBottles = room.players[playerId].bottles;
+
+
     }
   }
 }
