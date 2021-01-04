@@ -320,7 +320,7 @@ form {
 @media screen and (max-width: 800px) {
   .auctionPool{
     grid-column: 1/span 7;
-    grid-row: 18/span 1;
+    grid-row: 18/span 4;
     width: auto;
     height: auto;
     background-color: beige;
@@ -414,12 +414,17 @@ form {
 
     }
     .start-auction{
-      transform: scale(0.25);
       grid-column-start: 1;
+      grid-column-end: 7;
+      display: grid;
+      grid-template-columns: 12vw 12vw 12vw 12vw;
+      transform: scale(1);
+
     }
 
     #start-auctionID{
-      grid-row: 2;
+      transform: scale(0.25);
+      transform-origin: 0 0;
     }
 
     .start-auction div:hover{
