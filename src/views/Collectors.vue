@@ -162,7 +162,12 @@
         </div>
       </div>
 
-      <Scoreboard />
+      <Scoreboard
+        v-if="gameFinished"
+        :players="players"
+        :currentPlayer="players[playerId]"
+        @resetGame="resetGame($event)"
+      />
     </main>
     {{ players }}
     <!-- <h1>MARKET VALUES: </h1>{{ marketValues }} -->
@@ -199,7 +204,6 @@ import Hand from "@/components/Hand.vue";
 import SecretCard from "@/components/SecretCard.vue";
 import Scoreboard from "@/components/Scoreboard.vue";
 
-
 export default {
   name: "Collectors",
   components: {
@@ -221,6 +225,7 @@ export default {
       publicPath: "localhost:8080/#", //"collectors-groupxx.herokuapp.com/#",
       touchScreen: false,
       nextRound: Boolean,
+      gameFinished: true,
       round: 1,
       myCards: [],
       maxSizes: { x: 0, y: 0 },
@@ -331,6 +336,7 @@ export default {
           this.startNextRound();
         } else {
           this.countPoints();
+          this.gameFinished = true;
         }
       }
     },
@@ -451,6 +457,9 @@ export default {
   methods: {
     selectAll: function (n) {
       n.target.select();
+    },
+    resetGame: function () {
+      this.gameFinished = false;
     },
     selectAction: function (card) {
       this.currentAction == "itemType" ? this.buyCard(card) : null;
