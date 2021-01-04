@@ -162,6 +162,7 @@
         </div>
       </div>
 
+      <Scoreboard />
     </main>
     {{ players }}
     <!-- <h1>MARKET VALUES: </h1>{{ marketValues }} -->
@@ -196,6 +197,8 @@ import AuctionSection from "@/components/AuctionSection.vue";
 import BottlesPlayerboard from "@/components/BottlesPlayerboard.vue";
 import Hand from "@/components/Hand.vue";
 import SecretCard from "@/components/SecretCard.vue";
+import Scoreboard from "@/components/Scoreboard.vue";
+
 
 export default {
   name: "Collectors",
@@ -211,6 +214,7 @@ export default {
     BottlesPlayerboard,
     Hand,
     SecretCard,
+    Scoreboard,
   },
   data: function () {
     return {
