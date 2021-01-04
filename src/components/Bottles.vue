@@ -99,6 +99,9 @@ export default {
   },
   methods: {
     isAvailableCards: function (card, cost) {
+      console.log("*********");
+      console.log(this.player.money);
+
       if (this.marketValues[card.item] <= this.player.money - cost) {
         this.$set(card, "available", true);
       } else {
@@ -106,6 +109,7 @@ export default {
       }
     },
     cannotAfford: function (cost) {
+      console.log("check money of bottle");
       let minCost = 100;
       for (let key in this.marketValues) {
         if (cost + this.marketValues[key] < minCost)
@@ -117,17 +121,18 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
+      console.log("###########");
+      console.log(this.player.money);
       if (
         !this.player.clickedOnBottle &&
         this.player.money >= p.cost &&
         this.player.bottles > 0
       ) {
-        console.log("Bottles emit placeBottle");
-        this.$emit("placeBottle", p);
-
         if (this.itemsOnSale !== undefined) {
           this.highlightAvailableCards(p.cost);
         }
+        console.log("Bottles emit placeBottle");
+        this.$emit("placeBottle", p);
       }
       /*if (this.player.playersTurn){
           console.log('Bottles emit placeBottle');

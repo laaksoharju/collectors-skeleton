@@ -93,7 +93,7 @@ function sockets(io, socket, data) {
   });
   socket.on("collectorsPlaceBottle", function(d) {
     console.log("sockets placeBottle");
-    data.placeBottle(d.roomId, d.playerId, d.action, d.p, d.money);
+    data.placeBottle(d.roomId, d.playerId, d.action, d.p );
 
     console.log("sockets placeBottle after data.placeBottle");
     io.to(d.roomId).emit(

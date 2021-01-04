@@ -986,6 +986,7 @@ export default {
       "collectorsBottlePlaced",
       function (d) {
         console.log("collectorsBottlePlaced");
+        console.log(d.players[this.playerId].money);
 
         this.audioBottlePlaced.play();
 
@@ -1188,18 +1189,10 @@ export default {
       //button clicked(needed for CollectorsBuyActions)
       this.buttonClicked = p;
 
-      //calculate money left after placement
-      this.players[this.playerId].money -= p.cost;
-
-      //skills workerIncom and workerCard
+      //skill  workerCard
       if (action === "work") {
         if (this.players[this.playerId].skills.length > 0) {
           for (var i in this.players[this.playerId].skills) {
-            if (
-              this.players[this.playerId].skills[i].skill === "workerIncome"
-            ) {
-              this.players[this.playerId].money += 2;
-            }
             if (this.players[this.playerId].skills[i].skill === "workerCard") {
               this.recieveExtraCard += 1;
               console.log("placebottle workerCard");
@@ -1249,8 +1242,6 @@ export default {
         playerId: this.playerId,
         action: action,
         p: p,
-
-        money: this.players[this.playerId].money,
       });
     },
     drawCard: function () {

@@ -352,14 +352,14 @@ Data.prototype.joinGame = function(roomId, playerId) {
       room.players[playerId] = {
         playerName: playerId,
         hand: room.deck.splice(0, 3), // Two cards are kept secret and form the hands of each player
-        money: Object.keys(room.players).length + 20,
+        money: Object.keys(room.players).length + 2,
         points: 0,
         skills: [],
         items: [],
         income: [],
         secret: {},
         color: room.playerColors.pop(),
-        bottles: 10,
+        bottles: 2,
         cardsForCash: 0,
         auction_amount: 0,
         start_auction: true,
@@ -848,7 +848,7 @@ Data.prototype.bottleClicked = function (roomId, playerId, saleItems, action, cl
 }
 
 
-Data.prototype.placeBottle = function(roomId, playerId, action, p, money) {
+Data.prototype.placeBottle = function(roomId, playerId, action, p) {
 
 
   this.calcPlayersTurns(roomId, playerId);
@@ -856,11 +856,33 @@ Data.prototype.placeBottle = function(roomId, playerId, action, p, money) {
   var buttonId = p.buttonId;
   var cost = p.cost;
   let room = this.rooms[roomId];
+  console.log( room.players[playerId].money);
+
+//remove one bottle for a player 
+  room.players[playerId].bottles -= 1;
+
+      //calculate money left after placement
+      room.players[playerId].money -= p.cost;
+      console.log( room.players[playerId].money);
+
+
+      //skill workerIncome 
+      if (action === "work") {
+        if (room.players[playerId].skills.length > 0) {
+          for (var i in room.players[playerId].skills) {
+            if (
+              room.players[playerId].skills[i].skill === "workerIncome"
+            ) {
+              room.players[playerId].money += 2;
+            }
+            
+          }
+        }
+      }
 
     console.log('room.players[playerId].skills: ' + room.players[playerId].skills);
-  room.players[playerId].money = money;
+  // room.players[playerId].money = money;
 
-  room.players[playerId].bottles -= 1;
 
   console.log("dataHandler typeof.this.players: " + typeof room.players[playerId]);
 
@@ -909,6 +931,8 @@ Data.prototype.placeBottle = function(roomId, playerId, action, p, money) {
         break;
       }
     }
+    console.log("datataaaaaaaa")
+    console.log(room.players[playerId].money);
   }
 };
 /* returns the hand of the player */
