@@ -48,12 +48,17 @@
             :upForAuction="upForAuction"
             :marketValues="marketValues"
             :placement="skillPlacement"
+            :highestBid="highestBid"
+            :highestBiddingPlayer="highestBiddingPlayer"
+            :numberOfPasses="numberOfPasses"
             @buyAuctionCard="buyAuctionCard($event)"
             @selectAction="selectAction($event)"
-            @placeBid="placeBid()"
+            @placeBid="placeBid($event)"
             @passed="passed($event)"
+            @auctionToHand="auctionToHand($event)"
             @placeBottle="placeBottle('auctionType', 'skill', $event)"
           />
+
 
           <!-- glöm ej ändra från buy på de ovan-->
         </div>
@@ -183,6 +188,9 @@ export default {
       publicPath: "localhost:8080/#", //"collectors-groupxx.herokuapp.com/#",
       touchScreen: false,
       nextRound: Boolean,
+      highestBid: 0,
+      highestBiddingPlayer: '',
+      numberOfPasses: 0,
       myCards: [],
       maxSizes: { x: 0, y: 0 },
       labels: {},
@@ -400,10 +408,33 @@ export default {
     );
 
     this.$store.state.socket.on(
+      "collectorsAuctionSentToHand",
+      function (d) {
+        this.players = d.players;
+        this.auctionCards = d.auctionCards;
+        this.upForAuction = d.upForAuction;
+        this.highestBid = d.highestBid;
+        this.destination = d.destination;
+        this.highestBiddingPlayer = d.highestBiddingPlayer;
+      }.bind(this)
+    );
+
+    this.$store.state.socket.on(
       "collectorsPlacedBid",
       function (d) {
         console.log(d.playerId, "Placed a bid");
         this.players = d.players;
+        this.highestBid = d.bid;
+        this.highestBiddingPlayer = d.playerId;
+      }.bind(this)
+    );
+
+    this.$store.state.socket.on(
+      "collectorsPassedBid",
+      function (d) {
+        console.log(d.playerId, "Passed a bid");
+        this.players = d.players;
+        this.upForAuction = d.upForAuction;
       }.bind(this)
     );
   },
@@ -467,19 +498,31 @@ export default {
         cost: this.marketValues[card.market] + this.chosenPlacementCost,
       });
     },
+    auctionToHand: function (d) {
+      this.$store.state.socket.emit("collectorsAuctionToHand", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        card: this.upForAuction[0],
+        cost: this.highestBid,
+        destination: d
+      });
+    },
     placeBid: function (bid) {
       console.log('collectors.vue ' + bid)
+      if(bid > this.highestBid){
       this.$store.state.socket.emit("collectorsPlaceBid", {
         roomId: this.$route.params.id,
         playerId: this.playerId,
         bid: bid,
       });
+      this.highestBid = bid;
+      this.highestBiddingPlayer = this.playerId;
+      }
     },
     passed: function () {
       this.$store.state.socket.emit("collectorsPassed", {
         roomId: this.$route.params.id,
         playerId: this.playerId,
-        cost: 10,
       });
     },
     rotateCards: function () {

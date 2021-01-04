@@ -77,6 +77,17 @@ function sockets(io, socket, data) {
     );
   });
 
+  socket.on('collectorsAuctionToHand', function(d) {
+    data.auctionToHand(d.roomId, d.playerId, d.card, d.cost, d.destination)
+    io.to(d.roomId).emit('collectorsAuctionSentToHand', { 
+        playerId: d.playerId,
+        players: data.getPlayers(d.roomId),
+        auctionCards: data.getAuctionCards(d.roomId),
+        upForAuction: data.getUpForAuctionCards(d.roomId),
+      }
+    );
+  });
+
   socket.on('collectorsPlaceBottle', function (d) {
     data.placeBottle(d.roomId, d.playerId, d.action, d.cost);
     io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId));
@@ -86,13 +97,18 @@ function sockets(io, socket, data) {
     data.placeBid(d.roomId, d.playerId, d.bid);
     io.to(d.roomId).emit('collectorsPlacedBid', { 
       playerId: d.playerId,
-      players: data.getPlayers(d.roomId)
+      players: data.getPlayers(d.roomId),
+      bid: d.bid
     });
   });
 
   socket.on('collectorsPassed', function (d) {
-    data.passed(d.roomId, d.playerId, d.action, d.cost);
-    io.to(d.roomId).emit('collectorsBidPlace', data.getPlacements(d.roomId));
+    data.passed(d.roomId, d.playerId, d.action);
+    io.to(d.roomId).emit('collectorsPassedBid', {
+      playerId: d.playerId,
+      players: data.getPlayers(d.roomId),
+      upForAuction: data.getUpForAuctionCards(d.roomId)
+    });
   });
 }
 

@@ -43,11 +43,20 @@
           </div>
         </div>
         <div class="placeBid-section">
-          <button v-on:click="currentBid++">
-            Your bid: {{ currentBid }}
-          </button>
-          <button v-on:click="placeBid()"> Place bid </button>
-          <input type="button" value="pass" @click="passed()" />
+          <button v-on:click="currentBid++">Your bid: {{ currentBid }}</button>
+          <button v-on:click="placeBid()">Place bid</button>
+          <input type="button" value="Pass" @click="passed()" />
+        </div>
+        <div>
+        Current highets bid:
+        {{ highestBid }}
+        placed by: 
+        {{ highestBiddingPlayer }}
+        </div>
+        <div>
+          <input type="button" value="Send to items" @click="auctionToHand('items')" />
+          <input type="button" value="Send to skills" @click="auctionToHand('skills')" />
+          <input type="button" value="Send to raiseval" @click="auctionToHand('raiseval')" />
         </div>
       </div>
     </div>
@@ -69,11 +78,13 @@ export default {
     upForAuction: Array,
     marketValues: Object,
     placement: Array,
+    highestBid: Number,
+    highestBiddingPlayer: String,
   },
-  data: function() {
-  return{
-  currentBid: 0
-  }
+  data: function () {
+    return {
+      currentBid: 0,
+    };
   },
   methods: {
     cannotAfford: function (cost) {
@@ -123,8 +134,23 @@ export default {
       }
     },
 
+    auctionToHand: function (d){
+      if (d == 'items'){
+        this.$emit("auctionToHand", 'items')
+      }
+      if (d == 'skills'){
+        this.$emit("auctionToHand", 'skills')
+      }
+      if (d == 'raiseval'){
+        this.$emit("auctionToHand", 'raiseval')
+      }
+      this.highlightAvailableCards();
+      this.upForAuction = [];
+    },
+
     placeBid: function () {
-      console.log('auctionsection '+this.currentBid);
+      console.log("auctionsection " + this.currentBid);
+      this.player.activeBidder = true;
       this.$emit("placeBid", this.currentBid);
     },
     passed: function () {
