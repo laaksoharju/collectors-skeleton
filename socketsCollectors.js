@@ -181,6 +181,8 @@ function sockets(io, socket, data) {
         itemsOnSale: data.getItemsOnSale(d.roomId),
         auctionCards: data.getAuctionCards(d.roomId),
         placements: data.getPlacements(d.roomId),
+        marketValues: data.getMarketValues(d.roomId),
+
       });
     });
 }

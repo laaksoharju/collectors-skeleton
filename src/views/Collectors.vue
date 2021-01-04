@@ -469,6 +469,8 @@ export default {
           this.auctionPlacement= d.placements.auctionPlacement;
           this.marketPlacement= d.placements.marketPlacement;
           this.workPlacement= d.placements.workPlacement;
+          this.marketValues = d.marketValues;  
+
       }.bind(this)
     );
     this.$store.state.socket.on('collectorsEndedGame',

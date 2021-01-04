@@ -303,7 +303,7 @@ Data.prototype.startMarket = function (roomId, playerId, card) {
 
           if (room.skillsOnSale[i].x === card.x &&
               room.skillsOnSale[i].y === card.y) {
-                let temp = room.skillsOnSale.splice(i,1, {});
+                let temp = room.skillsOnSale.splice(i,1);
                 room.market.push(temp[0]);
                 break;
           //  c = room.skillsOnSale.splice(i,1, {});
@@ -362,6 +362,20 @@ Data.prototype.changeTurn = function (roomId, playerId) {
 Data.prototype.newRound = function (roomId, skillsOnSale,itemsOnSale, auctionCards){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
+
+    for (let i = 0; i < room.skillsOnSale.length; i += 1) {
+
+      if (room.skillsOnSale[i]=room.skillsOnSale[0]) {
+            let temp = room.skillsOnSale.splice(i,1);
+            room.market.push(temp[0]);
+            break;
+      //  c = room.skillsOnSale.splice(i,1, {});
+
+
+    }
+  }
+
+
 
       let playerCounter = room.playerCount+2;
 
