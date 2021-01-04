@@ -97,7 +97,7 @@
         </div>
         </div>
 
-        <div class="second-column">
+       <div class="second-column">
           <WorkArea
             v-if="players[playerId]"
             :color="players[playerId].color"
@@ -122,7 +122,10 @@
               <h1 v-if="player.active">It's {{ index }}'s turn!</h1>
             </div>
           </div>
-          </div>
+
+          <OtherPlayerboards :Players="players" :playerId="playerId" />
+        </div>
+
 
           <OtherPlayerboards :Players="players" :playerId="playerId" />
         
