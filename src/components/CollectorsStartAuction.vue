@@ -66,14 +66,14 @@ Highest bid: {{highestBid}}
 
 
 
-
-  <div class = "start-auction"  v-for="(card, index) in auctionCards" :key="index">
+<div class = "start-auction">
+  <div id = "start-auctionID" v-for="(card, index) in auctionCards" :key="index">
     <CollectorsCard
       :card="card"
       :availableAction="card.available"
       @doAction="startAuction(card)"/>
   </div>
-
+</div>
 
 <div class="auctionButtons" v-for="(value, key) in players" :key = "key">
 
@@ -415,8 +415,13 @@ form {
     }
     .start-auction{
       transform: scale(0.25);
-      grid-column: 2;
+      grid-column-start: 1;
     }
+
+    #start-auctionID{
+      grid-row: 2;
+    }
+
     .start-auction div:hover{
       transform: scale(1.25)translate(-15%,0);
       z-index: 1;

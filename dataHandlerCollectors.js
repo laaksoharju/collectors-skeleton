@@ -703,7 +703,7 @@ Data.prototype.placeWorkBottle = function (roomId, playerId, workActionId, cost)
   }
 }
 
-Data.prototype.placeQuarterBottle = function (roomId, playerId, currentRoundID, cost) {
+Data.prototype.placeQuarterBottle = function (roomId, playerId, currentRound, cost) {
   console.log("inne i  datahandlers placeQuarterBottle");
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
@@ -713,35 +713,37 @@ Data.prototype.placeQuarterBottle = function (roomId, playerId, currentRoundID, 
       room.players[playerId].playerBottles = room.players[playerId].playerBottles - 1;
     }
     for(let i = 0; i < activePlacement.length; i += 1) {
-      console.log("active placement currentround id i data: "+activePlacement[i].currentRoundID, currentRoundID);
-        if( activePlacement[i].currentRoundID === currentRoundID &&
-            activePlacement[i].playerId === null &&
-          activePlacement[i].cost === cost ) {
+      console.log("active placement currentround id i data: "+activePlacement[i].currentRoundID, currentRound);
+      console.log("activePlacement[i].cost === cost i data: "+activePlacement[i].cost, cost);
+        if( activePlacement[i].currentRoundID === currentRound &&
+            activePlacement[i].playerId === null
+            //&& activePlacement[i].cost === cost 
+        ) {
           console.log("inne i if :)");
           activePlacement[i].playerId = playerId;
           break;
         }
     }
 
-    if (currentRoundID === 0 ){
+    if (currentRound === 0 ){
     room.players[playerId].money += cost;
     //radera flaska, får ej va med i framtida ronder, gör om de finns tid
     }
 
-    if (currentRoundID === 1 ){
+    if (currentRound === 1 ){
       this.drawCard(roomId, playerId);
       this.drawCard(roomId, playerId);
       room.players[playerId].money += cost;
     }
 
-    if (currentRoundID === 2 ){
+    if (currentRound === 2 ){
       this.drawCard(roomId, playerId);
       let switchOrder = room.players[playerId].order;
       for (let playerId in room.players ){
 
     }
 
-    if (currentRoundID === 3 ){
+    if (currentRound === 3 ){
       this.drawCard(roomId, playerId);
       let c = room.players[playerId].hand.splice(0,1);
       room.players[playerId].secret.push(...c);

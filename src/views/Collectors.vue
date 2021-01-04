@@ -641,10 +641,11 @@ function(d) {
     placeQuarterBottle: function (p) {
       this.chosenPlacementCost = p.cost;
       this.chosenAction = p.action;
+      console.log("currentroundid i collectors vue: "+(this.currentRound-1));
       this.$store.state.socket.emit('collectorsPlaceQuarterBottle', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
-          currentRoundID: p.currentRoundID,
+          currentRound: this.currentRound-1,
           cost: p.cost,
         }
       );
