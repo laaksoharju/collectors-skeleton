@@ -73,12 +73,10 @@ export default {
       this.$store.commit('SET_LANG','se')
       console.log(this.$store.state.lang)
     },
-
     setSprakEn: function(){
       this.$store.commit('SET_LANG','en')
       console.log(this.$store.state.lang)
     },
-
     ruleFunction: function() {
       //console.log("button clicked");
       var placement = document.getElementById("ruleContent");
@@ -175,15 +173,12 @@ width: 500px;
   margin-left: 180px;
   margin-right: 200px;
 }
-
 #startButton:hover{
   background-color: #F89D94;
-
 }
 /*id rulebutton*/
 #rulesButton:hover {
   background-color: #b22222;
-
 }
 /*class rulebutton*/
 #rulesButton {
@@ -203,7 +198,6 @@ width: 500px;
 }
 #languageButton:hover {
   background-color: #b22222;
-
 }
 /*class rulebutton*/
 #languageButton {

@@ -5,28 +5,29 @@
           <h1>COLLECTORS</h1>
           <div v-if="winner !== ''">
             <h5 class = "endedGame">
-            THE WINNER IS {{winner}}
+              {{ labels.winner }}  {{winner}}
           </h5>
             <div v-for="(value, key) in players" :key = "key">
               <div v-for="(valuevalue,keykey) in value" :key ="keykey">
                 <div v-if="keykey == 'points'">
                   <h6 class = "playerpoint">
-                   {{key}}'s points: {{valuevalue}}
+                   {{key}} {{labels.endPoints}} {{valuevalue}}
                  </h6>
                 </div>
               </div>
             </div>
           </div>
 
-          <label for="Name">Username</label><br>
+    <!--      <label for="Name">Username</label><br>
           <input type="text" id="userName" placeholder="Username">
           <button id="userNameButton" type='submit' @click="changeUserName()" >
             Change Name
-          </button>
+          </button>-->
 
+          <div class="board">
             <!-- Låta spelare välja färg på flaska  -->
           <div class="playerBottleButton" v-if="players[playerId].color === ''">
-          Choose your bottle color
+           {{labels.bottleColor}}
 
           <!-- choosecolor - välja flaskfärg, startmoney - sätter pengarna för spelare vid start  -->
           <button id = "black"
@@ -51,10 +52,13 @@
           </button>
         </div>
 
+        <div class="labelLink" >
           {{ labels.invite }}
+        </div>
           <input id="linkSquare" type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
 
-      <div class="board">
+
+
         <CollectorsGetSkills v-if="players[playerId]"
              :labels="labels"
              :player="players[playerId]"
@@ -111,10 +115,12 @@
           :player="players[playerId]"
           :currentRound="currentRound"
           :placement="workPlacement"
+          :quarterPlacement="quarterPlacement"
 
           :marketValues="marketValues"
           @drawCard="drawCard($event)"
           @placeBottleWork="placeBottleWork($event)"
+          @placeQuarterBottle="placeQuarterBottle($event)"
           />
 
        <CollectorsStartAuction v-if="players[playerId]"
@@ -137,7 +143,7 @@
             <div class="skillTitle">
               {{labels.skillcard}}
             </div>
-             <div class="chosenSkillCard" v-for="(card, index) in players[playerId].skills" :card="card" :key="index">
+             <div class="chosenSkillCard" v-for="(card, index) in players[playerId].skills" :card="card" :key="'Skill card chosen'+index">
                   <CollectorsCard
                   :card="card"
                   />
@@ -145,7 +151,7 @@
             <div class="itemTitle">
                   {{labels.itemcard}}
             </div>
-            <div class="chosenItemCard" v-for="(card, index) in players[playerId].items" :card="card" :key="index">
+            <div class="chosenItemCard" v-for="(card, index) in players[playerId].items" :card="card" :key="'Item'+index">
                   <CollectorsCard
                   :card="card"
                   />
@@ -153,7 +159,7 @@
            <div class="secretTitle">
                    {{labels.secretcard}}
            </div>
-           <div class="chosenSecret" v-for="(card, index) in players[playerId].secret" :card="card" :key="index">
+           <div class="chosenSecret" v-for="(card, index) in players[playerId].secret" :card="card" :key="'Secret'+index">
                  <CollectorsCard
                  :card="card"
                  />
@@ -162,7 +168,7 @@
           <div class="incomeCard">
                   {{labels.incomecard}}
           </div>
-          <div class="chosenIncome" v-for="(card, index) in players[playerId].income" :card="card" :key="index">
+          <div class="chosenIncome" v-for="(card, index) in players[playerId].income" :card="card" :key="'Income'+index">
                 <CollectorsCard
                 :card="card"
                 />
@@ -206,7 +212,7 @@
         </div>
 
       <div class="playerHand">
-        <div class="playerHandTitle"> {{playerId}}'s Hand </div>
+        <div class="playerHandTitle"> {{playerId}} {{labels.playerHand}} </div>
         <!-- visa spelarens kort i handen, förstår inte varför korten blir pyttesmå -->
         <div class="cardslots" v-if="players[playerId]">
           <div v-for="(card, index) in players[playerId].hand" :key="index">
@@ -217,11 +223,11 @@
         <!-- visa hur mycket pengar man har -->
 
           <div class = "otherCoins">
-            Other players info:
+            {{labels.otherPlayerInfo}}
             <div v-for="(value, key) in players" :key = "key">
               <div v-for="(valuevalue,keykey) in value" :key ="keykey">
                 <li v-if="keykey == 'money' && key != playerId ">
-                   {{key}}'s coins: {{valuevalue}}
+                   {{key}} {{labels.otherCoins}} {{valuevalue}}
                 </li>
               </div>
             </div>
@@ -282,7 +288,7 @@
   Här : {{allPlayersId}}
     {{buyPlacement}} {{chosenPlacementCost}}
 -->
-
+<!--
       <CollectorsBuyActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
@@ -292,14 +298,21 @@
         @buyCard="buyCard($event)"
         @placeBottle="placeBottle('buy', $event)"
         />
-
+-->
 </main>
-    {{players}}
+  <!--  {{players}}
     {{marketValues}}
     <button v-if="players[playerId]" @click="players[playerId].money += 1">
       fake more money
-    </button>
+    </button> -->
     <footer>
+      <footer>
+        <hr>
+      &copy; COLLECTORS 2021<br>
+    </footer>
+
+
+
       <!--  <p>
           {{ labels.invite }}
           <input type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
@@ -311,7 +324,7 @@
 <script>
 /*eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }]*/
 import CollectorsCard from '@/components/CollectorsCard.vue'
-import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
+//import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
 import CollectorsGetSkills from '@/components/CollectorsGetSkills.vue'
 import CollectorsStartAuction from '@/components/CollectorsStartAuction.vue'
 import CollectorsBuyItem from '@/components/CollectorsBuyItem.vue'
@@ -321,7 +334,7 @@ export default {
   name: 'Collectors',
   components: {
     CollectorsCard,
-    CollectorsBuyActions,
+  //  CollectorsBuyActions,
     CollectorsGetSkills,
     CollectorsStartAuction,
     CollectorsBuyItem,
@@ -353,6 +366,7 @@ export default {
       auctionPlacement: [],
       marketPlacement: [],
       workPlacement: [],
+      quarterPlacement: [],
       chosenPlacementCost: null,
       chosenPlacementId: null,
       marketValues: { fastaval: 0,
@@ -419,6 +433,7 @@ export default {
         this.marketPlacement = d.placements.marketPlacement;
         this.auctionPlacement = d.placements.auctionPlacement;
         this.workPlacement = d.placements.workPlacement;
+        this.quarterPlacement = d.placements.quarterPlacement;
       }.bind(this));
     this.$store.state.socket.on('collectorsBottlePlaced',
       function(d) {
@@ -427,12 +442,18 @@ export default {
         this.marketPlacement = d.marketPlacement;
         this.auctionPlacement = d.auctionPlacement;
         this.workPlacement = d.workPlacement;
+        this.quarterPlacement = d.quarterPlacement;
       }.bind(this));
       this.$store.state.socket.on('collectorsWorkBottlePlaced',
         function(d) {
           this.players= d.players;
           this.workPlacement = d.placements.workPlacement;
-        }.bind(this));
+          }.bind(this));
+          this.$store.state.socket.on('collectorsQuarterBottlePlaced',
+            function(d) {
+              this.players= d.players;
+              this.quarterPlacement = d.placements.quarterPlacement;
+              }.bind(this));
     this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
     this.$store.state.socket.on('collectorsCardDrawn',
       function(d) {
@@ -448,6 +469,11 @@ export default {
         this.itemsOnSale = d.itemsOnSale;
       }.bind(this)
     );
+      this.$store.state.socket.on('collectorsSkillValueCaught',
+        function(d) {
+          this.players = d.players;
+        }.bind(this)
+      );
     this.$store.state.socket.on('collectorsSkillCaught',
       function(d) {
         console.log(d.playerId, "Got a skill");
@@ -484,6 +510,11 @@ export default {
         this.players = d.players
     }.bind(this)
   );
+  this.$store.state.socket.on('collectorsGotIncome',
+  function(d) {
+      this.players = d.players
+  }.bind(this)
+);
     this.$store.state.socket.on('collectorsEndedGame',
       function(d) {
           this.winner = d.winner;
@@ -546,12 +577,12 @@ function(d) {
     selectAll: function (n) {
       n.target.select();
     },
-    changeUserName: function() {
+/*    changeUserName: function() {
      var userName = document.getElementById('userName').value;
       //var name = playerId();
       this.$store.state.playerId = userName;
     //  this.players[playerId] = userName;
-    },
+  },*/
     chooseColor: function(color, playerBottles){
       this.$store.state.socket.emit('collectorsChooseColor',{
       roomId: this.$route.params.id,
@@ -592,6 +623,18 @@ function(d) {
         }
       );
     },
+    placeQuarterBottle: function (p) {
+      this.chosenPlacementCost = p.cost;
+      this.chosenAction = p.action;
+      console.log("currentroundid i collectors vue: "+(this.currentRound-1));
+      this.$store.state.socket.emit('collectorsPlaceQuarterBottle', {
+          roomId: this.$route.params.id,
+          playerId: this.playerId,
+          currentRound: this.currentRound-1,
+          cost: p.cost,
+        }
+      );
+    },
     whichAction: function (card){
       if (this.chosenAction === "skill") {
         this.getSkill(card)
@@ -621,6 +664,14 @@ function(d) {
         }
       );
     },
+    getSkillValue: function (card) {
+      this.$store.state.socket.emit('collectorsGetSkillValue', {
+          roomId: this.$route.params.id,
+          playerId: this.playerId,
+          card:card
+        }
+      );
+    },
     getSkill: function (card) {
       this.$store.state.socket.emit('collectorsGetSkill', {
           roomId: this.$route.params.id,
@@ -630,6 +681,7 @@ function(d) {
           cost: this.chosenPlacementCost
         }
       );
+      this.getSkillValue(card);
     },
     startAuction: function (card) {
       console.log()
@@ -714,9 +766,17 @@ fillBottles: function()
       players: this.players
 });
 },
+getIncome: function()
+{
+  this.$store.state.socket.emit('collectorsGetIncome', {
+      roomId: this.$route.params.id,
+      players: this.players
+});
+},
     newRound: function(currentRound){
       if (currentRound != 4){
-      this.fillBottles()
+      this.fillBottles();
+      this.getIncome();
         this.$store.state.socket.emit('collectorsNewRound', {
             roomId: this.$route.params.id,
             skillsOnSale: this.skillsOnSale,
@@ -840,13 +900,30 @@ h5 {
 	grid-template-columns: repeat(15,90px);
 	grid-template-rows: repeat(20, 45px);
 	grid-gap: 0px;
-	margin: 20px ;
+	margin: 1px ;
 	background: $black;
 	border: 2px solid $black;
   }
+  .playerBottleButton {
+    grid-row: 1;
+    grid-column: 1 / span 5;
+    }
   .playerBottleButton div:hover{
     transform: scale(1.5)translate(0,0);
     z-index: 1;
+  }
+  .labelLink {
+    grid-column: 5 / span 3;
+    grid-row: 1;
+    place-self:end;
+  }
+  #linkSquare {
+    height: 10px;
+    place-self: end left;
+    width: 172px;
+    grid-column: 8;
+    background-color: #76B0B7;
+    color: white;
   }
   .blackBottle{
     width:32px;
@@ -997,9 +1074,6 @@ h5 {
 #userName {
   background-color: #76B0B7;
 }
-#linkSquare {
-  background-color: #76B0B7;
-}
   #userNameButton {
     grid-column: 1;
     grid-row: 1;
@@ -1126,15 +1200,17 @@ h5 {
     .table {
       padding-left: 5px;
       padding-right: 5px;
+      grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
     }
 .board {
   display: grid;
-  grid-template-columns: repeat(15,90px);
-  grid-template-rows: repeat(20, 45px);
+  /*grid-template-columns: repeat(15,90px);*/
+  grid-template-rows: repeat(6, 45px);
   grid-gap: 0px;
   margin: 20px ;
   background: $black;
   border: 2px solid $black;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 }
     .blackBottle{
       width:32px;
@@ -1186,7 +1262,7 @@ h5 {
   }
     .playerBoard {
       grid-column: 1/span 5;
-      grid-row: 22/span 6;
+      grid-row: 24/span 6;
       width: auto;
       height: auto;
       background-color: pink ;
@@ -1238,10 +1314,10 @@ h5 {
       transform: scale(0.2);
     }
     .playerHand {
-      grid-column: 11/span 5;
-      grid-row: 8/span 4;
+      grid-column: 6/span 5;
+      grid-row: 24/span 4;
       display: grid;
-      grid-template-columns: repeat(1, 450px);
+      grid-template-columns: repeat(1, 400px);
       grid-template-rows: repeat(4,60px);
     }
     .playerHandTitle {
@@ -1251,15 +1327,15 @@ h5 {
     .turnCounter {
       background-color: #60AB4D;
       color:white;
-      grid-column: 4/ span 2;
-      grid-row: 1;
+      grid-column: 3/ span 2;
+      grid-row: 2;
       text-align: center;
     }
     .roundCounter {
       background-color: #4C7B80;
       color:white;
-      grid-column: 6/ span 2;
-      grid-row: 1;
+      grid-column: 5/ span 2;
+      grid-row: 2 span ;
       text-align: center;
     }
     h6{
@@ -1276,8 +1352,20 @@ h5 {
   #userName {
     background-color: #76B0B7;
   }
+  .labelLink {
+    grid-column: 5 / span 2;
+    grid-row: 1;
+    place-self:end;
+    }
   #linkSquare {
+    height: 10px;
+    place-self: end left;
+    width: 100px;
+    grid-column: 6;
+    grid-row: 1;
     background-color: #76B0B7;
+    color: white;
+    font-size: 11px;
   }
     #userNameButton {
       grid-column: 1;
@@ -1288,7 +1376,7 @@ h5 {
       background-color: #406c72;
       color: white;
       grid-column: 1/span 2;
-      grid-row: 1/span 3;
+      grid-row: 2/span 3;
       text-align: center;
       border: 5px dotted pink ;
     }
@@ -1352,7 +1440,7 @@ h5 {
       grid-column: 1;
       grid-row: 1;
       display: grid;
-      grid-template-columns: repeat(auto-fill, 130px);
+      grid-template-columns: repeat(auto-fill, 70px);
       grid-template-rows: repeat(auto-fill, 1px);
     }
     .cardslots div {
