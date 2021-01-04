@@ -77,12 +77,23 @@ function sockets(io, socket, data) {
       );
     });
 
+
     socket.on('collectorsPlaceQuarterBottle', function(d) {
       console.log("inne i  sockets collectorsPlaceQuarterBottle"+d.currentRoundID);
       data.placeQuarterBottle(d.roomId, d.playerId, d.currentRoundID, d.cost);
       io.to(d.roomId).emit('collectorsQuarterBottlePlaced',
         { placements: data.getPlacements(d.roomId),
          players: data.getPlayers(d.roomId)}
+       );
+     });
+
+
+    socket.on('collectorsGetSkillValue', function(d){
+      data.getSkillValue(d.roomId, d.playerId, d.card, d.skill)
+      io.to(d.roomId).emit('collectorsSkillValueCaught', {
+          playerId: d.playerId,
+          players: data.getPlayers(d.roomId),
+        }
       );
     });
 
@@ -198,6 +209,13 @@ function sockets(io, socket, data) {
     socket.on('collectorsFillBottles', function(d) {
       data.fillBottles(d.roomId, d.players)
       io.to(d.roomId).emit('collectorsBottlesFilled',{
+        players: data.getPlayers(d.roomId)
+      });
+    });
+
+    socket.on('collectorsGetIncome', function(d) {
+      data.getIncome(d.roomId, d.players)
+      io.to(d.roomId).emit('collectorsGotIncome',{
         players: data.getPlayers(d.roomId)
       });
     });

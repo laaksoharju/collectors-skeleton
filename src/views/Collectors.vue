@@ -164,6 +164,16 @@
                  :card="card"
                  />
           </div>
+
+          <div class="incomeCard">
+                  Income Card:
+          </div>
+          <div class="chosenIncome" v-for="(card, index) in players[playerId].income" :card="card" :key="index">
+                <CollectorsCard
+                :card="card"
+                />
+         </div>
+
           <div class="myMoney" v-for="(value, key) in players" :key = "key">
                 <div v-for="(valuevalue,keykey) in value" :key ="keykey">
                   <div v-if="keykey == 'money' && key == playerId ">
@@ -462,6 +472,14 @@ export default {
         this.itemsOnSale = d.itemsOnSale;
       }.bind(this)
     );
+
+      this.$store.state.socket.on('collectorsSkillValueCaught',
+        function(d) {
+
+          this.players = d.players;
+
+        }.bind(this)
+      );
     this.$store.state.socket.on('collectorsSkillCaught',
       function(d) {
         console.log(d.playerId, "Got a skill");
@@ -501,6 +519,12 @@ export default {
         this.players = d.players
     }.bind(this)
   );
+
+  this.$store.state.socket.on('collectorsGotIncome',
+  function(d) {
+      this.players = d.players
+  }.bind(this)
+);
 
 
     this.$store.state.socket.on('collectorsEndedGame',
@@ -656,6 +680,14 @@ function(d) {
         }
       );
     },
+    getSkillValue: function (card) {
+      this.$store.state.socket.emit('collectorsGetSkillValue', {
+          roomId: this.$route.params.id,
+          playerId: this.playerId,
+          card:card
+        }
+      );
+    },
 
     getSkill: function (card) {
       this.$store.state.socket.emit('collectorsGetSkill', {
@@ -666,7 +698,9 @@ function(d) {
           cost: this.chosenPlacementCost
 
         }
+
       );
+      this.getSkillValue(card);
     },
     startAuction: function (card) {
       console.log()
@@ -753,9 +787,19 @@ fillBottles: function()
 
 });
 },
+
+getIncome: function()
+{
+  this.$store.state.socket.emit('collectorsGetIncome', {
+      roomId: this.$route.params.id,
+      players: this.players
+
+});
+},
     newRound: function(currentRound){
       if (currentRound != 4){
-      this.fillBottles()
+      this.fillBottles();
+      this.getIncome();
 
         this.$store.state.socket.emit('collectorsNewRound', {
             roomId: this.$route.params.id,
@@ -983,7 +1027,7 @@ h5 {
 }
 .myMoney {
   grid-row: 3 ;
-  grid-column: 7/span 2;
+  grid-column: 5/span 2;
   place-self: top;
 }
 .skillTitle {
@@ -1003,6 +1047,18 @@ h5 {
     grid-column: 7;
     transform: scale(0.2);
   }
+
+  .incomeCard{
+    grid-row:3 ;
+    grid-column: 7 /span 2;
+  }
+    .chosenIncome {
+      grid-row: 3 ;
+      grid-column: 7;
+      transform: scale(0.2);
+    }
+
+
 .itemTitle {
   grid-row:2;
   place-self: end;
