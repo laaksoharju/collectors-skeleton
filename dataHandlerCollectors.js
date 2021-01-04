@@ -219,7 +219,7 @@ Data.prototype.getSkill = function (roomId, playerId, card, skill, cost) {
       // so we need to compare properties for determining equalit
       if (room.skillsOnSale[i].x === card.x &&
           room.skillsOnSale[i].y === card.y) {
-        c = room.skillsOnSale.splice(i,1, {});
+        c = room.skillsOnSale.splice(i,1);
 
         break;
       }
@@ -239,7 +239,7 @@ Data.prototype.startAuction = function (roomId, playerId, card, auctionCard, cos
       // so we need to compare properties for determining equalit
       if (room.auctionCards[i].x === card.x &&
           room.auctionCards[i].y === card.y) {
-            let temp = room.auctionCards.splice(i,1, {});
+            let temp = room.auctionCards.splice(i,1);
             room.cardUpForAuction = temp[0];
         break;
       }
@@ -364,13 +364,50 @@ Data.prototype.newRound = function (roomId, skillsOnSale,itemsOnSale, auctionCar
   if (typeof room !== 'undefined') {
 
       let playerCounter = room.playerCount+2;
-      
+
       if (room.itemsOnSale.length < playerCounter){
           for (let i = room.itemsOnSale.length; i < room.playerCount+1; i+=1){
             let card = room.deck.pop();
             room.itemsOnSale.push(card);
           }
       }
+
+      if (room.skillsOnSale.length < playerCounter){
+          for (let i = room.skillsOnSale.length; i < room.playerCount+1; i+=1){
+            let card = room.deck.pop();
+            room.skillsOnSale.push(card);
+          }
+      }
+
+      if (room.auctionCards.length < playerCounter){
+          for (let i = room.auctionCards.length; i < room.playerCount+1; i+=1){
+            let card = room.deck.pop();
+            room.auctionCards.push(card);
+          }
+      }
+
+
+
+        for (let playerId in room.buyPlacement){
+        room.buyPlacement[playerId].playerId = null;
+      }
+
+      for (let playerId in room.skillPlacement){
+      room.skillPlacement[playerId].playerId = null;
+      }
+
+    for (let playerId in room.auctionPlacement){
+    room.auctionPlacement[playerId].playerId = null;
+      }
+
+      for (let playerId in room.workPlacement){
+        room.workPlacement[playerId].playerId = null;
+      }
+
+        for (let playerId in room.marketPlacement){
+          room.marketPlacement[playerId].playerId = null;
+          }
+
     }
 
   }
@@ -391,15 +428,12 @@ Data.prototype.endGame = function (roomId, marketValues){
 
     for (let player in room.players){
 
-      console.log('endgame data'+room.players[player]);
-
 
       while (room.players[player].money > 2){
 
 
         room.players[player].money = room.players[player].money - 3;
         room.players[player].points += 1;
-        console.log("här nu "+room.players[player].points)
       }
 
       for (let index in room.players[player].items){

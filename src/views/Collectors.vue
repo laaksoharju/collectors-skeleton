@@ -462,7 +462,13 @@ export default {
     this.$store.state.socket.on('collectorsNewlyRounded',
       function(d) {
           this.itemsOnSale = d.itemsOnSale;
-          console.log("new round i socket collectors"+ d.itemsOnSale)
+          this.skillsOnSale = d.skillsOnSale;
+          this.auctionCards = d.auctionCards;
+          this.buyPlacement= d.placements.buyPlacement;
+          this.skillPlacement= d.placements.skillPlacement;
+          this.auctionPlacement= d.placements.auctionPlacement;
+          this.marketPlacement= d.placements.marketPlacement;
+          this.workPlacement= d.placements.workPlacement;
       }.bind(this)
     );
     this.$store.state.socket.on('collectorsEndedGame',
@@ -499,10 +505,8 @@ export default {
 );
   this.$store.state.socket.on('collectorsBiddingStarted',
   function(d) {
-    console.log(d.players, "BIDDING STARTED I COLLECTORS.VUE");
     this.players = d.players;
     this.highestBid = d.highestBid;
-    console.log(d.highestBid, "högsta budet");
   }.bind(this)
 );
 this.$store.state.socket.on('collectorsColorChosen',
@@ -514,7 +518,6 @@ function(d) {
 this.$store.state.socket.on('collectorsMoneyStarted',
 function(d) {
   this.players = d.players;
-  console.log(d.playerId, "starts with ", d.players[d.playerId].money," coins");
 }.bind(this)
 );
 this.$store.state.socket.on('collectorsWinnerCardStarted',
@@ -532,11 +535,9 @@ function(d) {
     },
     changeUserName: function() {
      var userName = document.getElementById('userName').value;
-      console.log(userName);
       //var name = playerId();
       this.$store.state.playerId = userName;
     //  this.players[playerId] = userName;
-      console.log(this.$store.state.playerId);
     },
     chooseColor: function(color, playerBottles){
       this.$store.state.socket.emit('collectorsChooseColor',{
@@ -569,7 +570,6 @@ function(d) {
       );
     },
     placeBottleWork: function (p) {
-      console.log("inne i  collectors PlaceBottleWork");
       this.chosenPlacementCost = p.cost;
       this.chosenAction = p.action;
       this.$store.state.socket.emit('collectorsPlaceWorkBottle', {
@@ -590,12 +590,10 @@ function(d) {
       if (this.chosenAction === "auction") {
         this.startAuction(card)
       }
-      if (this.chosenAction === "work" ) {
-        console.log("whichAction = work")
-      }
+    //  if (this.chosenAction === "work" ) {
+    //  }
     },
     buyCard: function (card) {
-      console.log("buyCard", card);
       this.$store.state.socket.emit('collectorsBuyCard', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
@@ -614,7 +612,6 @@ function(d) {
     },
 
     getSkill: function (card) {
-      console.log("getSkill", card);
       this.$store.state.socket.emit('collectorsGetSkill', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
@@ -713,6 +710,7 @@ startWinnerCard: function(action){
             skillsOnSale: this.skillsOnSale,
             itemsOnSale: this.itemsOnSale,
             auctionCards: this.auctionCards
+
             }
           );
       }

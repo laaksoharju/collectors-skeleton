@@ -179,7 +179,8 @@ function sockets(io, socket, data) {
       io.to(d.roomId).emit('collectorsNewlyRounded',{
         skillsOnSale: data.getSkillsOnSale(d.roomId),
         itemsOnSale: data.getItemsOnSale(d.roomId),
-        auctionCards: data.getAuctionCards(d.roomId)
+        auctionCards: data.getAuctionCards(d.roomId),
+        placements: data.getPlacements(d.roomId),
       });
     });
 }
