@@ -170,7 +170,7 @@ export default {
   grid-template-columns: repeat(3, 60px);
   grid-template-rows: repeat(10,48.5px);
   grid-row-gap: 10px;
-  grid-auto-flow: row;
+  grid-auto-flow: column;
   border: 2px solid #4C7B80;
 }
 .titleAuctionPool{
@@ -186,6 +186,7 @@ font-size: 20px;
   height:45px;
   background-image:  url('/images/Coin-white.png');
   background-size: cover;
+  grid-column: 1;
 }
 .second{
   grid-column: 1;
@@ -203,15 +204,7 @@ font-size: 20px;
   background-image:  url('/images/Coin-white-1.png');
   background-size: cover;
 }
-.auctionCard {
-    transform: scale(0.25);
-    grid-column: 3;
-    place-self: top;
-  }
-.auctionCard div:hover{
-    transform: scale(2)translate(-25%,0);
-    z-index: 1;
-  }
+
 .auctionSquare{
   grid-column: 1;
   grid-row: 7;
@@ -263,6 +256,8 @@ form {
   .start-auction{
     transform: scale(0.25);
     grid-column: 2;
+  /*  grid-template-columns: repeat(auto-fill, 1px);
+    grid-template-rows: repeat(auto-fill, 70px);*/
   }
   .start-auction div:hover{
     transform: scale(1.25)translate(-15%,0);
@@ -325,17 +320,20 @@ form {
 @media screen and (max-width: 800px) {
   .auctionPool{
     grid-column: 1/span 7;
-    grid-row: 17/span 4;
+    grid-row: 18/span 1;
     width: auto;
     height: auto;
     background-color: beige;
     color: black;
     display: grid;
-    grid-template-columns: repeat(10, 62.9px);
+  /*  grid-template-columns: repeat(10, 62.9px);*/
     grid-template-rows: repeat(3,60px);
     grid-row-gap: 10px;
     grid-auto-flow: row;
     border: 2px solid #4C7B80;
+
+    grid-template-columns: repeat(auto-fit, minmax(-90px, 1fr));
+
   }
   .titleAuctionPool{
   grid-column: 1 /span 2;

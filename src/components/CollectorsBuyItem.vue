@@ -201,7 +201,10 @@ export default {
 
 @media screen and (max-width: 800px) {
   .titleItemPool {
-    grid-column: 6 / span 2;
+    grid-column: 6;
+    grid-row: 3;
+    place-self: end;
+
     font-style: italic;
     font-size: 50px;
     text-shadow: 2px 2px 4px red;
@@ -209,7 +212,7 @@ export default {
   }
   .itemPool{
     grid-column: 3/span 5 ;
-    grid-row: 4/span 4;
+    grid-row: 5/span 4;
     width: auto;
     height: auto;
   /*  grid-template-columns: repeat(100, 12px);
@@ -217,15 +220,18 @@ export default {
     background-color: #f0d9cc ;
     color: black;
     display: grid;
-    grid-template-columns: repeat(6, 50px);
+  /*  grid-template-columns: repeat(6, 50px);*/
     grid-template-rows: repeat(3,50px);
-    grid-column-gap: 25px;
+    grid-column-gap: 15px;
     grid-auto-flow: row;
-    padding-left: 10px;
+  /*  padding-left: 10px;*/
     padding-top: 10px;
     padding-bottom: 10px;
     border-top: 2px solid #4C7B80;
     border-right: 2px solid #4C7B80;
+
+    grid-template-columns: repeat(auto-fit, minmax(-100px, 1fr));
+
   }
   .buttons{
     grid-row: 1;
