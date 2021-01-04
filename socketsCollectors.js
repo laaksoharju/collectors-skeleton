@@ -185,6 +185,14 @@ function sockets(io, socket, data) {
 
       });
     });
+
+    socket.on('collectorsFillBottles', function(d) {
+      data.fillBottles(d.roomId, d.players)
+      io.to(d.roomId).emit('collectorsBottlesFilled',{
+        players: data.getPlayers(d.roomId)
+      });
+    });
+
 }
 
 module.exports = sockets;

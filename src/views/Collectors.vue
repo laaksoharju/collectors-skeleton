@@ -469,10 +469,18 @@ export default {
           this.auctionPlacement= d.placements.auctionPlacement;
           this.marketPlacement= d.placements.marketPlacement;
           this.workPlacement= d.placements.workPlacement;
-          this.marketValues = d.marketValues;  
+          this.marketValues = d.marketValues;
 
       }.bind(this)
     );
+
+    this.$store.state.socket.on('collectorsBottlesFilled',
+    function(d) {
+        this.players = d.players
+    }.bind(this)
+  );
+
+
     this.$store.state.socket.on('collectorsEndedGame',
       function(d) {
           this.winner = d.winner;
@@ -692,9 +700,7 @@ startWinnerCard: function(action){
         );
     },
     endGame: function(currentRound){
-      console.log("currentround end"+currentRound)
       if (currentRound == 4){
-        console.log("inne i if end")
         this.$store.state.socket.emit('collectorsEndGame', {
             roomId: this.$route.params.id,
             marketValues: this.marketValues
@@ -703,16 +709,23 @@ startWinnerCard: function(action){
       }
     },
 
+fillBottles: function()
+{
+  this.$store.state.socket.emit('collectorsFillBottles', {
+      roomId: this.$route.params.id,
+      players: this.players
+
+});
+},
     newRound: function(currentRound){
-      console.log("currentround newround"+currentRound)
       if (currentRound != 4){
-        console.log("inne i if new round")
+      this.fillBottles()
+
         this.$store.state.socket.emit('collectorsNewRound', {
             roomId: this.$route.params.id,
             skillsOnSale: this.skillsOnSale,
             itemsOnSale: this.itemsOnSale,
             auctionCards: this.auctionCards
-
             }
           );
       }

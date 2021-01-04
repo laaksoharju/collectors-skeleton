@@ -359,20 +359,41 @@ Data.prototype.changeTurn = function (roomId, playerId) {
   else return "";
 }
 
-Data.prototype.newRound = function (roomId, skillsOnSale,itemsOnSale, auctionCards){
+Data.prototype.fillBottles= function(roomId, players){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
 
+    for (let playerId in room.players){
+      room.players[playerId].playerBottles = 2;
+    }
+  }
+}
+
+
+Data.prototype.newRound = function (roomId, skillsOnSale,itemsOnSale, auctionCards){
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    let playerCounter = room.playerCount+2;
+
+
+//Kort från item till skill
     for (let i = 0; i < room.skillsOnSale.length; i += 1) {
 
       if (room.skillsOnSale[i]=room.skillsOnSale[0]) {
             let temp = room.skillsOnSale.splice(i,1);
             room.market.push(temp[0]);
             break;
-      //  c = room.skillsOnSale.splice(i,1, {});
 
 
     }
+  }
+
+  if (room.skillsOnSale.length < playerCounter){
+      for (let i = room.skillsOnSale.length; i < room.playerCount+1; i+=1){
+        let card = room.itemsOnSale.pop();
+        room.skillsOnSale.push(card);
+
+      }
   }
 
   for (let i = 0; i < room.auctionCards.length; i += 1) {
@@ -381,15 +402,13 @@ Data.prototype.newRound = function (roomId, skillsOnSale,itemsOnSale, auctionCar
           let temp = room.auctionCards.splice(i,1);
           room.market.push(temp[0]);
           break;
-    //  c = room.skillsOnSale.splice(i,1, {});
 
 
   }
 }
 
 
-
-      let playerCounter = room.playerCount+2;
+//Item pch auction fylls på
 
       if (room.itemsOnSale.length < playerCounter){
           for (let i = room.itemsOnSale.length; i < room.playerCount+1; i+=1){
@@ -398,12 +417,7 @@ Data.prototype.newRound = function (roomId, skillsOnSale,itemsOnSale, auctionCar
           }
       }
 
-      if (room.skillsOnSale.length < playerCounter){
-          for (let i = room.skillsOnSale.length; i < room.playerCount+1; i+=1){
-            let card = room.deck.pop();
-            room.skillsOnSale.push(card);
-          }
-      }
+
 
       if (room.auctionCards.length < playerCounter){
           for (let i = room.auctionCards.length; i < room.playerCount+1; i+=1){
@@ -413,7 +427,7 @@ Data.prototype.newRound = function (roomId, skillsOnSale,itemsOnSale, auctionCar
       }
 
 
-
+//Flaskorna förvonner
         for (let playerId in room.buyPlacement){
         room.buyPlacement[playerId].playerId = null;
       }
