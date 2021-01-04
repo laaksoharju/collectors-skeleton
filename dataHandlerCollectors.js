@@ -98,6 +98,11 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
                             {cost:-1, playerId: null, workActionId:1},
                             {cost:0, playerId: null, workActionId:2},
                             {cost:0, playerId: null, workActionId:3} ];
+  room.quarterPlacement = [ {cost:0, playerId: null, currentRoundID:0},
+                            {cost:1, playerId: null, currentRoundID:1},
+                            {cost:2, playerId: null, currentRoundID:2},
+                            {cost:3, playerId: null, currentRoundID:3} ];
+
   //FÖRSÖK ATT FÅ SPELARENS FLASKA ATT DYKA UPP EFTER KNAPPTRYCKNING
 
 
@@ -768,7 +773,8 @@ Data.prototype.placeWorkBottle = function (roomId, playerId, workActionId, cost)
       let c = room.players[playerId].hand.splice(0,1);
       room.players[playerId].income.push(...c);
     }
-
+  }
+}
 Data.prototype.placeQuarterBottle = function (roomId, playerId, currentRound, cost) {
   console.log("inne i  datahandlers placeQuarterBottle");
   let room = this.rooms[roomId];
@@ -792,31 +798,35 @@ Data.prototype.placeQuarterBottle = function (roomId, playerId, currentRound, co
     }
 
     if (currentRound === 0 ){
-    room.players[playerId].money += cost;
-    //radera flaska, får ej va med i framtida ronder, gör om de finns tid
+      this.drawCard(roomId, playerId);
+      this.drawCard(roomId, playerId);
+      let c = room.players[playerId].hand.splice(0,2);
+      room.players[playerId].income.push(...c);
+
     }
 
     if (currentRound === 1 ){
       this.drawCard(roomId, playerId);
       this.drawCard(roomId, playerId);
-      room.players[playerId].money += cost;
+      let c = room.players[playerId].hand.splice(0,2);
+      room.players[playerId].income.push(...c);
+      room.players[playerId].money += activePlacement[i].cost;
     }
 
     if (currentRound === 2 ){
       this.drawCard(roomId, playerId);
-      let switchOrder = room.players[playerId].order;
-      for (let playerId in room.players ){
-
+      this.drawCard(roomId, playerId);
+      let c = room.players[playerId].hand.splice(0,2);
+      room.players[playerId].income.push(...c);
+      room.players[playerId].money += activePlacement[i].cost;
     }
 
     if (currentRound === 3 ){
-      this.drawCard(roomId, playerId);
-      let c = room.players[playerId].hand.splice(0,1);
-      room.players[playerId].secret.push(...c);
+      room.players[playerId].money += activePlacement[i].cost;
+
       }
     }
   }
-}
 
 /* returns the hand of the player */
 Data.prototype.getCards = function (roomId, playerId) {

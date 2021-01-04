@@ -143,7 +143,7 @@
             <div class="skillTitle">
               Skill Cards:
             </div>
-             <div class="chosenSkillCard" v-for="(card, index) in players[playerId].skills" :card="card" :key="index">
+             <div class="chosenSkillCard" v-for="(card, index) in players[playerId].skills" :card="card" :key="'Skill card chosen'+index">
                   <CollectorsCard
                   :card="card"
                   />
@@ -151,7 +151,7 @@
             <div class="itemTitle">
                     Item Cards:
             </div>
-            <div class="chosenItemCard" v-for="(card, index) in players[playerId].items" :card="card" :key="index">
+            <div class="chosenItemCard" v-for="(card, index) in players[playerId].items" :card="card" :key="'Item'+index">
                   <CollectorsCard
                   :card="card"
                   />
@@ -159,7 +159,7 @@
            <div class="secretTitle">
                    Secret Card:
            </div>
-           <div class="chosenSecret" v-for="(card, index) in players[playerId].secret" :card="card" :key="index">
+           <div class="chosenSecret" v-for="(card, index) in players[playerId].secret" :card="card" :key="'Secret'+index">
                  <CollectorsCard
                  :card="card"
                  />
@@ -168,7 +168,7 @@
           <div class="incomeCard">
                   Income Card:
           </div>
-          <div class="chosenIncome" v-for="(card, index) in players[playerId].income" :card="card" :key="index">
+          <div class="chosenIncome" v-for="(card, index) in players[playerId].income" :card="card" :key="'Income'+index">
                 <CollectorsCard
                 :card="card"
                 />
