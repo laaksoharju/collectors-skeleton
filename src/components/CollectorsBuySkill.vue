@@ -24,6 +24,8 @@
           >
             ${{ p.cost }}
           </button>
+          <div v-if="p.playerId !== null">
+            <!-- {{ p.playerId }} -->
           <div
             class="clickedButton"
             v-if="p.playerId !== null && typeof players !== 'undefined'"
@@ -34,6 +36,7 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
