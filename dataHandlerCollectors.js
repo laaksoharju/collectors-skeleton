@@ -375,6 +375,18 @@ Data.prototype.newRound = function (roomId, skillsOnSale,itemsOnSale, auctionCar
     }
   }
 
+  for (let i = 0; i < room.auctionCards.length; i += 1) {
+
+    if (room.auctionCards[i]=room.auctionCards[0]) {
+          let temp = room.auctionCards.splice(i,1);
+          room.market.push(temp[0]);
+          break;
+    //  c = room.skillsOnSale.splice(i,1, {});
+
+
+  }
+}
+
 
 
       let playerCounter = room.playerCount+2;
