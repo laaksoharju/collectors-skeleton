@@ -187,19 +187,22 @@ export default {
   }
   .skillPool{
     grid-column: 1 / span 2;
-    grid-row: 4/span 13 ;
+    grid-row: 5/span 13 ;
     width: auto;
     height: auto;
     background-color: #dce5cc;
     color: black;
     padding-left: 10px;
     display: grid;
-    grid-template-columns: repeat(3, 50px);
+    /*grid-template-columns: repeat(3, 50px);*/
     grid-template-rows: repeat(6,50px);
     grid-row-gap: 25px;
     grid-column-gap: 10px;
     grid-auto-flow: column;
     border: 2px solid #4C7B80;
+
+    grid-template-columns: repeat(auto-fit, minmax(-10px, 1fr));
+
     }
   .EnergyBottles{
     width:50px;
@@ -238,9 +241,4 @@ export default {
     z-index: 1;
   }
 }
-@media screen and (max-width: 800px) {
-
-}
-
-
 </style>

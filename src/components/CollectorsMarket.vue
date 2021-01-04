@@ -216,6 +216,8 @@ export default {
   border-radius: 5px;
   border: 2px solid #6894DF;
 }
+
+
 @media screen and (max-width: 800px) {
   .titleMarketPool {
     font-style: italic;
@@ -225,16 +227,19 @@ export default {
   }
   .marketPool{
     grid-column: 3/span 5;
-    grid-row: 13/span 4;
+    grid-row: 14/span 4;
     width: auto;
     height: auto;
     background-color: #cfdcf2;
     color: black;
     display: grid;
-    grid-template-columns: repeat(5, 90px);
+    /*grid-template-columns: repeat(5, 90px);*/
     grid-template-rows: repeat(5, 27.5px);
     border-right: 2px solid #4C7B80;
     border-top: 2px solid #4C7B80;
+
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+
     }
   .chategoryValues {
     grid-column: auto;
