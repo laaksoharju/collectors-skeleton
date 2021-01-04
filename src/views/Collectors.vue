@@ -18,12 +18,13 @@
             </div>
           </div>
 
-          <label for="Name">Username</label><br>
+    <!--      <label for="Name">Username</label><br>
           <input type="text" id="userName" placeholder="Username">
           <button id="userNameButton" type='submit' @click="changeUserName()" >
             Change Name
-          </button>
+          </button>-->
 
+          <div class="board">
             <!-- Låta spelare välja färg på flaska  -->
           <div class="playerBottleButton" v-if="players[playerId].color === ''">
           Choose your bottle color
@@ -51,10 +52,13 @@
           </button>
         </div>
 
+        <div class="labelLink" >
           {{ labels.invite }}
+        </div>
           <input id="linkSquare" type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
 
-      <div class="board">
+
+
         <CollectorsGetSkills v-if="players[playerId]"
              :labels="labels"
              :player="players[playerId]"
@@ -272,7 +276,7 @@
   Här : {{allPlayersId}}
     {{buyPlacement}} {{chosenPlacementCost}}
 -->
-
+<!--
       <CollectorsBuyActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
@@ -282,14 +286,21 @@
         @buyCard="buyCard($event)"
         @placeBottle="placeBottle('buy', $event)"
         />
-
+-->
 </main>
-    {{players}}
+  <!--  {{players}}
     {{marketValues}}
     <button v-if="players[playerId]" @click="players[playerId].money += 1">
       fake more money
-    </button>
+    </button> -->
     <footer>
+      <footer>
+        <hr>
+      &copy; COLLECTORS 2021<br>
+    </footer>
+
+
+
       <!--  <p>
           {{ labels.invite }}
           <input type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
@@ -301,7 +312,7 @@
 <script>
 /*eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }]*/
 import CollectorsCard from '@/components/CollectorsCard.vue'
-import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
+//import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
 import CollectorsGetSkills from '@/components/CollectorsGetSkills.vue'
 import CollectorsStartAuction from '@/components/CollectorsStartAuction.vue'
 import CollectorsBuyItem from '@/components/CollectorsBuyItem.vue'
@@ -311,7 +322,7 @@ export default {
   name: 'Collectors',
   components: {
     CollectorsCard,
-    CollectorsBuyActions,
+  //  CollectorsBuyActions,
     CollectorsGetSkills,
     CollectorsStartAuction,
     CollectorsBuyItem,
@@ -530,14 +541,14 @@ function(d) {
     selectAll: function (n) {
       n.target.select();
     },
-    changeUserName: function() {
+/*    changeUserName: function() {
      var userName = document.getElementById('userName').value;
       console.log(userName);
       //var name = playerId();
       this.$store.state.playerId = userName;
     //  this.players[playerId] = userName;
       console.log(this.$store.state.playerId);
-    },
+    },*/
     chooseColor: function(color, playerBottles){
       this.$store.state.socket.emit('collectorsChooseColor',{
       roomId: this.$route.params.id,
@@ -831,14 +842,36 @@ h5 {
 	grid-template-columns: repeat(15,90px);
 	grid-template-rows: repeat(20, 45px);
 	grid-gap: 0px;
-	margin: 20px ;
+	margin: 1px ;
 	background: $black;
 	border: 2px solid $black;
   }
+
+  .playerBottleButton {
+    grid-row: 1;
+    grid-column: 1 / span 5;
+    }
+
   .playerBottleButton div:hover{
     transform: scale(1.5)translate(0,0);
     z-index: 1;
   }
+
+  .labelLink {
+    grid-column: 5 / span 3;
+    grid-row: 1;
+    place-self:end;
+  }
+
+  #linkSquare {
+    height: 10px;
+    place-self: end left;
+    width: 172px;
+    grid-column: 8;
+    background-color: #76B0B7;
+    color: white;
+  }
+
   .blackBottle{
     width:32px;
     height:32px;
@@ -979,9 +1012,7 @@ h5 {
 #userName {
   background-color: #76B0B7;
 }
-#linkSquare {
-  background-color: #76B0B7;
-}
+
   #userNameButton {
     grid-column: 1;
     grid-row: 1;
@@ -1110,15 +1141,18 @@ h5 {
     .table {
       padding-left: 5px;
       padding-right: 5px;
+      grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+
     }
 .board {
   display: grid;
-  grid-template-columns: repeat(15,90px);
-  grid-template-rows: repeat(20, 45px);
+  /*grid-template-columns: repeat(15,90px);*/
+  grid-template-rows: repeat(6, 45px);
   grid-gap: 0px;
   margin: 20px ;
   background: $black;
   border: 2px solid $black;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 }
 
     .blackBottle{
@@ -1171,7 +1205,7 @@ h5 {
   }
     .playerBoard {
       grid-column: 1/span 5;
-      grid-row: 22/span 6;
+      grid-row: 24/span 6;
       width: auto;
       height: auto;
       background-color: pink ;
@@ -1224,8 +1258,8 @@ h5 {
       transform: scale(0.2);
     }
     .playerHand {
-      grid-column: 11/span 5;
-      grid-row: 8/span 4;
+      grid-column: 6/span 5;
+      grid-row: 24/span 4;
       display: grid;
       grid-template-columns: repeat(1, 450px);
       grid-template-rows: repeat(4,60px);
@@ -1237,15 +1271,15 @@ h5 {
     .turnCounter {
       background-color: #60AB4D;
       color:white;
-      grid-column: 4/ span 2;
-      grid-row: 1;
+      grid-column: 3/ span 2;
+      grid-row: 2;
       text-align: center;
     }
     .roundCounter {
       background-color: #4C7B80;
       color:white;
-      grid-column: 6/ span 2;
-      grid-row: 1;
+      grid-column: 5/ span 2;
+      grid-row: 2 span ;
       text-align: center;
     }
     h6{
@@ -1262,9 +1296,24 @@ h5 {
   #userName {
     background-color: #76B0B7;
   }
+
+  .labelLink {
+    grid-column: 5 / span 2;
+    grid-row: 1;
+    place-self:end;
+    }
+
   #linkSquare {
+    height: 10px;
+    place-self: end left;
+    width: 100px;
+    grid-column: 6;
+    grid-row: 1;
     background-color: #76B0B7;
+    color: white;
+    font-size: 11px;
   }
+
     #userNameButton {
       grid-column: 1;
       grid-row: 1;
@@ -1274,7 +1323,7 @@ h5 {
       background-color: #406c72;
       color: white;
       grid-column: 1/span 2;
-      grid-row: 1/span 3;
+      grid-row: 2/span 3;
       text-align: center;
       border: 5px dotted pink ;
     }
@@ -1338,7 +1387,7 @@ h5 {
       grid-column: 1;
       grid-row: 1;
       display: grid;
-      grid-template-columns: repeat(auto-fill, 130px);
+      grid-template-columns: repeat(auto-fill, 70px);
       grid-template-rows: repeat(auto-fill, 1px);
     }
     .cardslots div {

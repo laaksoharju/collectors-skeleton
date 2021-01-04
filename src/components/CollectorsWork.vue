@@ -226,11 +226,11 @@ export default {
 @media screen and (max-width: 800px) {
   .workPool{
     grid-column: 3/span 5;
-    grid-row: 8/span 5;
+    grid-row: 9/span 5;
     width: auto;
     height: auto;
     display:grid;
-    grid-template-columns: repeat(3, 149px);
+    /*grid-template-columns: repeat(3, 149px);*/
     grid-template-rows: repeat(4,55px);
     grid-auto-flow: column;
     background-color: #f5f2cc;
@@ -238,6 +238,9 @@ export default {
     /*border: 3px solid #4C7B80;*/
     border-right: 2px solid #4C7B80;
     border-top: 2px solid #4C7B80;
+
+    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+
   }
   .titleWorkPool {
     font-style: italic;
