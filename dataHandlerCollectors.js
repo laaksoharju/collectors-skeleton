@@ -135,6 +135,11 @@ Data.prototype.joinGame = function (roomId, playerId) {
                                  auctionSkillCounter:0,
                                  workerIncomeCounter:0,
                                  workerCardCounter:0,
+                                 myFastaval: 0,
+                                 myFigures:0,
+                                 myMovie:0,
+                                 myMusic:0,
+                                 myTechnology:0,
                                  order: Object.keys(room.players).length+1,
 
                                };
@@ -254,6 +259,27 @@ Data.prototype.getSkillValue= function (roomId, playerId, card, skill){
     if(card.skill === "workerCard"){
       room.players[playerId].workerCardCounter += 1;
     }
+
+
+      if(card.skill === "VP-fastaval"){
+        room.players[playerId].myFastaval += 1;
+      }
+      if(card.skill === "VP-music"){
+        room.players[playerId].myMusic += 1;
+      }
+      if(card.skill === "VP-technology"){
+        room.players[playerId].myTechnology += 1;
+      }
+      if(card.skill === "VP-movies"){
+        room.players[playerId].myMovie += 1;
+      }
+      if(card.skill === "VP-figures"){
+        room.players[playerId].myFigures += 1;
+      }
+
+
+
+
 
   }
 
@@ -531,22 +557,48 @@ Data.prototype.endGame = function (roomId, marketValues){
         room.players[player].points += 1;
       }
 
+
       for (let index in room.players[player].items){
         let cardItem = room.players[player].items[index].item;
-        if (cardItem == "fastaval" && fastaval != 0){
-          room.players[player].points += fastaval
+
+        if (cardItem === "fastaval"){
+          if((fastaval >0) || (room.players[player].myFastaval >0)){
+          room.players[player].points += fastaval;
+          room.players[player].points += room.players[player].myFastaval;
+          }
+
         }
-        if (cardItem == "movie" && movie != 0){
-          room.players[player].points += movie
+
+        if (cardItem === "movie"){
+          if((movie >0) || (room.players[player].myMovie >0)){
+          room.players[player].points += movie;
+          room.players[player].points += room.players[player].myMovie;
+          }
+
         }
-        if (cardItem == "technology" && technology != 0){
-          room.players[player].points += technology
+
+        if (cardItem === "technology"){
+          if((movie >0) || (room.players[player].myTechnology >0)){
+          room.players[player].points += technology;
+          room.players[player].points += room.players[player].myTechnology;
+          }
+
         }
-        if (cardItem == "figures" && figures != 0){
-          room.players[player].points += figures
+
+        if (cardItem === "figures"){
+          if((figures >0) || (room.players[player].myFigures >0)){
+          room.players[player].points += figures;
+          room.players[player].points += room.players[player].myFigures;
+          }
+
         }
-        if (cardItem == "music" && music != 0){
-          room.players[player].points += music
+
+        if (cardItem === "music"){
+          if((music >0) || (room.players[player].myMusic >0)){
+          room.players[player].points += music;
+          room.players[player].points += room.players[player].myMusic;
+          }
+
         }
       }
 
@@ -677,7 +729,7 @@ Data.prototype.placeWorkBottle = function (roomId, playerId, workActionId, cost)
     if (room.players[playerId].workerCardCounter > 0){
       for (let i=0; i < room.players[playerId].workerCardCounter; i+=1){
         this.drawCard(roomId, playerId);
-      }  
+      }
     }
 
     if (workActionId === 0 ){
