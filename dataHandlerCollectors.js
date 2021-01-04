@@ -649,7 +649,7 @@ Data.prototype.placeWorkBottle = function (roomId, playerId, workActionId, cost)
     if (workActionId === 3 ){
       this.drawCard(roomId, playerId);
       let c = room.players[playerId].hand.splice(0,1);
-      room.players[playerId].secret.push(...c);
+      room.players[playerId].income.push(...c);
     }
 
 

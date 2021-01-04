@@ -158,6 +158,16 @@
                  :card="card"
                  />
           </div>
+
+          <div class="incomeCard">
+                  Income Card:
+          </div>
+          <div class="chosenIncome" v-for="(card, index) in players[playerId].income" :card="card" :key="index">
+                <CollectorsCard
+                :card="card"
+                />
+         </div>
+
           <div class="myMoney" v-for="(value, key) in players" :key = "key">
                 <div v-for="(valuevalue,keykey) in value" :key ="keykey">
                   <div v-if="keykey == 'money' && key == playerId ">
@@ -925,7 +935,7 @@ h5 {
 }
 .myMoney {
   grid-row: 3 ;
-  grid-column: 7/span 2;
+  grid-column: 5/span 2;
   place-self: top;
 }
 .skillTitle {
@@ -945,6 +955,18 @@ h5 {
     grid-column: 7;
     transform: scale(0.2);
   }
+
+  .incomeCard{
+    grid-row:3 ;
+    grid-column: 7 /span 2;
+  }
+    .chosenIncome {
+      grid-row: 3 ;
+      grid-column: 7;
+      transform: scale(0.2);
+    }
+
+
 .itemTitle {
   grid-row:2;
   place-self: end;
