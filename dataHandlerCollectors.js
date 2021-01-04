@@ -369,6 +369,20 @@ Data.prototype.fillBottles= function(roomId, players){
   }
 }
 
+Data.prototype.getIncome= function(roomId, players){
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+
+  for (let player in room.players){
+
+    for (let i =0; room.players[player].income.length; i+=1){
+      room.players[player].money += 1;
+      room.players[player].income.splice(i, 1);
+    }
+
+  }
+}
+}
 
 Data.prototype.newRound = function (roomId, skillsOnSale,itemsOnSale, auctionCards){
   let room = this.rooms[roomId];

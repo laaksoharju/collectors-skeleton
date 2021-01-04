@@ -193,6 +193,13 @@ function sockets(io, socket, data) {
       });
     });
 
+    socket.on('collectorsGetIncome', function(d) {
+      data.getIncome(d.roomId, d.players)
+      io.to(d.roomId).emit('collectorsGotIncome',{
+        players: data.getPlayers(d.roomId)
+      });
+    });
+
 }
 
 module.exports = sockets;

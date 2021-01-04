@@ -501,6 +501,12 @@ export default {
     }.bind(this)
   );
 
+  this.$store.state.socket.on('collectorsGotIncome',
+  function(d) {
+      this.players = d.players
+  }.bind(this)
+);
+
 
     this.$store.state.socket.on('collectorsEndedGame',
       function(d) {
@@ -570,7 +576,7 @@ function(d) {
       this.$store.state.playerId = userName;
     //  this.players[playerId] = userName;
   },*/
-  
+
     chooseColor: function(color, playerBottles){
       this.$store.state.socket.emit('collectorsChooseColor',{
       roomId: this.$route.params.id,
@@ -739,9 +745,19 @@ fillBottles: function()
 
 });
 },
+
+getIncome: function()
+{
+  this.$store.state.socket.emit('collectorsGetIncome', {
+      roomId: this.$route.params.id,
+      players: this.players
+
+});
+},
     newRound: function(currentRound){
       if (currentRound != 4){
-      this.fillBottles()
+      this.fillBottles();
+      this.getIncome();
 
         this.$store.state.socket.emit('collectorsNewRound', {
             roomId: this.$route.params.id,
