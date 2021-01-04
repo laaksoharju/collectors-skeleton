@@ -1,7 +1,6 @@
 <template>
   <div>
     <main>
-    
       <div v-if="players[playerId] && players[playerId].chooseSecret">
         <!--<div class="secret">-->
         <SecretCard
@@ -162,6 +161,7 @@
           </div>
         </div>
       </div>
+
     </main>
     {{ players }}
     <!-- <h1>MARKET VALUES: </h1>{{ marketValues }} -->
@@ -323,7 +323,7 @@ export default {
     },
     nextRound: function () {
       if (this.nextRound) {
-        if (this.round < 4) {
+        if (this.round < 2) {
           this.startNextRound();
         } else {
           this.countPoints();
@@ -465,8 +465,6 @@ export default {
 
         this.buyRaiseValue();
         this.selectedCards.splice(0, 2);
-      } else {
-        console.log("Please choose another card: ");
       }
     },
     placeBottle: function (type, action, p) {
@@ -537,11 +535,11 @@ export default {
       });
     },
     setSecret: function (card) {
-        this.$store.state.socket.emit("collectorsSetSecret", {
-          roomId: this.$route.params.id,
-          playerId: this.playerId,
-          secret: card,
-        });
+      this.$store.state.socket.emit("collectorsSetSecret", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        secret: card,
+      });
     },
   },
 };

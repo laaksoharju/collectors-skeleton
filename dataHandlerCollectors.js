@@ -185,14 +185,14 @@ Data.prototype.joinGame = function (roomId, playerId) {
         skills: [],
         items: [],
         income: [],
-        secret: [], 
+        secret: [],
         color: colors[Object.keys(room.players).length],
         bottles: 2, //ska vara 2!!
         availableBottles: 2, //ska vara 2!!
         active: this.setActivePlayer(roomId),
         dispBottles: false,
         chooseSecret: true, //ska vara true
-      }; 
+      };
       return true;
     }
     console.log("Player", playerId, "was declined due to player limit");
@@ -238,18 +238,18 @@ Data.prototype.getBottleIncome = function (roomId, playerId, bottleIncome) {
   room.players[playerId].dispBottles = false;
   room.nextRound = true;
   //Väntar in alla!
-  for(let i = 0; i<room.playerOrder.length; i++){
-    if(room.players[room.playerOrder[i]].dispBottles){
+  for (let i = 0; i < room.playerOrder.length; i++) {
+    if (room.players[room.playerOrder[i]].dispBottles) {
       room.nextRound = false;
       return;
     }
   }
 }
 
-Data.prototype.startNextRound = function(roomId, playerId){
+Data.prototype.startNextRound = function (roomId, playerId) {
   let room = this.rooms[roomId];
   room.readyForNextRound.add(playerId); //väntar in alla 
-  if(room.readyForNextRound.size == room.playerCount){
+  if (room.readyForNextRound.size == room.playerCount) {
     room.round += 1;
     this.rotateCards(roomId);
     this.resetPlacements(roomId);
@@ -292,29 +292,39 @@ Data.prototype.getPlayers = function (id) {
   } else return {};
 }
 
-Data.prototype.countPoints = function (roomId){
+Data.prototype.countPoints = function (roomId) {
   let room = this.rooms[roomId]
-  if(typeof room !== 'undefined'){
+  if (typeof room !== 'undefined') {
     //loopar varje spelare
-    for(let i=0; i < room.playerOrder.length; i ++){
+    for (let i = 0; i < room.playerOrder.length; i++) {
       let player = room.players[room.playerOrder[i]];
       //Poäng för varje item utifrån marketvalue!!
-      for(let j = 0; j < player.items.length; j++){
+      for (let j = 0; j < player.items.length; j++) {
         if (player.items[j].item === "fastaval") {
           player.points += this.getMarketValues(roomId).fastaval;
+          this.VPfastavalSkill(player);
         } else if (player.items[j].item === "movie") {
           player.points += this.getMarketValues(roomId).movie;
+          this.VPmovieSkill(player);
         } else if (player.items[j].item === "technology") {
           player.points += this.getMarketValues(roomId).technology;
+          this.VPtechnologySkill(player);
         } else if (player.items[j].item === "figures") {
           player.points += this.getMarketValues(roomId).figures;
+          this.VPfiguresSkill(player);
         } else if (player.items[j].item === "music") {
           player.points += this.getMarketValues(roomId).music;
+          this.VPmusicSkill(player);
         }
       }
       //poäng för pengar
       let moneyToPoints = Math.floor(player.money / 3);
       player.points += moneyToPoints;
+
+      //kollar om spelaren har VP-all skillen
+      for (let skill of player.skills) {
+        skill.skill == 'VP-all' ? this.VPallSkill(player) : null
+      }
     }
   }
 }
@@ -463,7 +473,7 @@ Data.prototype.buyCard = function (roomId, playerId, card, cost) {
     room.players[playerId].active = false;
     room.players[playerId].availableBottles -= 1;
     if (this.setNextActivePlayer(roomId, playerId)) {
-      for(let i=0; i <room.playerOrder.length; i++){
+      for (let i = 0; i < room.playerOrder.length; i++) {
         room.players[room.playerOrder[i]].dispBottles = true;
       }
     }
@@ -533,14 +543,14 @@ Data.prototype.buyRaiseValue = function (roomId, playerId, cards, cost) {
         }
       }
     }
-    room.market.push(c[0]);
+    c ? room.market.push(c[0]) : null;
     d ? room.market.push(d[0]) : null;
 
     room.players[playerId].money -= cost;
     room.players[playerId].active = false;
     room.players[playerId].availableBottles -= 1;
     if (this.setNextActivePlayer(roomId, playerId)) {
-      for(let i=0; i <room.playerOrder.length; i++){
+      for (let i = 0; i < room.playerOrder.length; i++) {
         room.players[room.playerOrder[i]].dispBottles = true;
       }
     }
@@ -576,7 +586,7 @@ Data.prototype.buySkillCard = function (roomId, playerId, card, cost) {
     room.players[playerId].active = false;
     room.players[playerId].availableBottles -= 1;
     if (this.setNextActivePlayer(roomId, playerId)) {
-      for(let i=0; i <room.playerOrder.length; i++){
+      for (let i = 0; i < room.playerOrder.length; i++) {
         room.players[room.playerOrder[i]].dispBottles = true;
       }
     }
@@ -680,52 +690,71 @@ Data.prototype.getAuctionCards = function (roomId) {
   } else return [];
 }
 
-Data.prototype.VPfiguresSkill = function () {
-  // VP-figures
-  // Get 1p more for each item of same sort (Same as Market Values?)
-  // 
+Data.prototype.VPfiguresSkill = function (player) { // Måste testas.
+  for (let card of player.skills) {
+    card.skills == 'VP-figures' ? player.points += 1 : null;
+  }
 }
 
-Data.prototype.VPmusicSkill = function () {
-  // VP-music
-  // Get 1p more for each item of same sort (Same as Market Values?)
-  // 
+Data.prototype.VPmusicSkill = function (player) {
+  for (let card of player.skills) {
+    card.skills == 'VP-music' ? player.points += 1 : null;
+  }
 }
 
-Data.prototype.VPfastavalSkill = function () {
-  // VP-fastaval
-  // Get 1p more for each item of same sort (Same as Market Values?)
+Data.prototype.VPfastavalSkill = function (player) {
+  for (let card of player.skills) {
+    card.skills == 'VP-fastaval' ? player.points += 1 : null;
+  }
 }
 
-Data.prototype.VPmovieSkill = function () {
-  // VP-movie
-  // Get 1p more for each item of same sort (Same as Market Values?)
-  // 
+Data.prototype.VPmovieSkill = function (player) {
+  for (let card of player.skills) {
+    card.skills == 'VP-movie' ? player.points += 1 : null;
+  }
 }
 
-Data.prototype.VPtechnologySkill = function () {
-  // VP-technology
-  // Get 1p more for each item of same sort (Same as Market Values?)
-  // 
+Data.prototype.VPtechnologySkill = function (player) {
+  for (let card of player.skills) {
+    card.skills == 'VP-technology' ? player.points += 1 : null;
+  }
 }
 
-Data.prototype.VPallSkill = function () {
-  // VP-all
-  // Om spelaren har en av varje skill I slutet av spelet, ge 5 poäng.
+Data.prototype.VPallSkill = function (player) {
+
+  let uniques = [];
+  let exists = false;
+  for (let card of player.items) {
+
+    for (let unique of uniques) {
+      card.item == unique.item ? exists = true : exists = false
+      exists ? null : uniques.push(card);
+    }
+    //Om listan är tom.
+    uniques.length == 0 ? uniques.push(card) : null;
+  }
+
+  uniques.length == 5 ? player.points += 5 : null;
 }
 
-Data.prototype.bottleSkill = function () {
+
+Data.prototype.bottleSkill = function (player) { // VART SKA DENNA KALLAS? Bottles placed? Och då kolla om rätt placement är klickad,gäller bara för 1 på work?
+  player.bottles += 1;
+  player.availableBottles += 1;
   // bottle
   // Get another bottle to use same quarter (round?).
+  // Addera avilableBottles och den andra bottles
+
 }
 
 Data.prototype.auctionIncome = function () {
   // auctionIncome
   // Få 1$ när en auktion startas
+  //Lägg till en peng. Prata med Niklas om vart den ska kallas.
 }
 
 
-Data.prototype.workerCard = function () {
+Data.prototype.workerCard = function () { // Vänta på hans skitkod. Men bara att göra som när man drar ett kort. Kanske bara kalla draw card?
   // workerCard
   // Få 1 kort när du lägger bottle i work area
 }
@@ -733,6 +762,7 @@ Data.prototype.workerCard = function () {
 Data.prototype.workerIncome = function () {
   // workerIncome
   // Få 2$ när du lägger bottle i work area.
+
 }
 
 
@@ -740,18 +770,18 @@ Data.prototype.workerIncome = function () {
 Data.prototype.setSecret = function (roomId, playerId, secretCard) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
-      let d = [];
-      for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
-        // since card comes from the client, it is NOT the same object (reference)
-        // so we need to compare properties for determining equality      
-        if (room.players[playerId].hand[i].x === secretCard.x &&
-          room.players[playerId].hand[i].y === secretCard.y) {
-          d = room.players[playerId].hand.splice(i, 1);
-          break;
-        }
+    let d = [];
+    for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
+      // since card comes from the client, it is NOT the same object (reference)
+      // so we need to compare properties for determining equality      
+      if (room.players[playerId].hand[i].x === secretCard.x &&
+        room.players[playerId].hand[i].y === secretCard.y) {
+        d = room.players[playerId].hand.splice(i, 1);
+        break;
       }
+    }
     room.players[playerId].secret.push(...d); //... delar upp arrayen i separata objekt
-    room.players[playerId].chooseSecret=false;
+    room.players[playerId].chooseSecret = false;
     return room.players;
   } else return [];
 }
