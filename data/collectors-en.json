@@ -14,6 +14,27 @@
 	"bottleColor": "  Choose your bottle color: ",
 	"playerHand" : "'s Hand",
 	"otherPlayerInfo": "Other players info: ",
-	"otherCoins" : "'s coins: "
+	"otherCoins" : "'s coins: ",
+	"player": "Player ",
+	"playersBoard": "'s Board",
+	"skillcard" : "Skill Cards: ",
+	"itemcard" : "Item Cards: ",
+	"secretcard" : "Secret Card: ",
+	"incomecard" : "Income Card: ",
+	"coins" : "Coins: ",
+	"turn" : "Who's turn?",
+	"changeturn" : "Press here when you're done.",
+	"round" : "Round: ",
+	"changeround" : "Press here when round  ",
+	"changeround2" : "is over.",
+	"endgame": "Game Ended",
+	"showplayers" : "The players in this room: ",
+	"auctionwinner": "Winner: ",
+	"bid": "Highest bid: ",
+	"placebid": "Place bid",
+	"stop": "Stop!",
+	"auctionsquare" : "Auction Square"
+	
+
 
 	}

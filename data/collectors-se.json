@@ -14,6 +14,26 @@
 	"bottleColor": "Välj färg på flaskan: ",
 	"playerHand" : "'s hand",
 	"otherPlayerInfo" : "Andra spelares info: ",
-	"otherCoins" : "'s pengar: "
+	"otherCoins" : "'s pengar: ",
+	"player": "Spelare ",
+	"playersBoard": "'s spelbräde",
+	"skillcard" : "Skill kort: ",
+	"itemcard" : "Item kort: ",
+	"secretcard" : "Hemligt kort: ",
+	"incomecard" : "Inkomstkort: ",
+	"coins": "Pengar: ",
+	"turn" : "Vems tur?",
+	"changeturn" : "Tryck här när du spelat.",
+	"round" : "Runda: ",
+	"changeround" : "Tryck här när runda ",
+	"changeround2" : "är färdig.",
+	"endgame" : "Spelet är slut",
+	"showplayers" : "Spelarna i det här rummet: ",
+	"auctionwinner": "Vinnare: ",
+	"bid": "Högst bud: ",
+	"placebid": "Lägg bud",
+	"stop": "Stoppa!",
+	"auctionsquare" : "Auction Ruta"
+
 
 }

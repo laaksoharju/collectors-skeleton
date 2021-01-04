@@ -4,7 +4,7 @@
  <div class= "titleAuctionPool" > Auction Pool</div>
 
 <div class = "auctionSquare">
-  Auction Square
+  {{labels.auctionsquare}}
 </div>
 <div class = "cardUpForAuction">
   <CollectorsCard :card="cardUpForAuction"/>
@@ -12,20 +12,20 @@
 
 <div class = "bidSquare" >
   <form>
-  <label for="bidSquare">Place bid:</label>
+  <label for="bidSquare">{{labels.placebid}}:</label>
   <input type="text" id="bidSquare" name="bidSquare">
   </form>
 </div>
 
-<button  id = "bidPlacementButton" @click="startBidding()">Place bid!</button>
+<button  id = "bidPlacementButton" @click="startBidding()">{{labels.placebid}}!</button>
 
-<button  id = "stopAuctionButton" @click="stopAuction()">Stop! </button>
+<button  id = "stopAuctionButton" @click="stopAuction()">{{labels.stop}} </button>
 
 
 
 <div class="winner">
-Winner: {{auctionWinner}}
-Highest bid: {{highestBid}}
+  {{labels.auctionwinner}}{{auctionWinner}}
+  {{labels.bid}}{{highestBid}}
 </div>
 
 
@@ -393,7 +393,7 @@ form {
     font-size: 13px;
   }
   #bidPlacementButton {
-    height: 30px;
+    height: 40px;
     width: 50px;
     font-size: 12px ;
       grid-column: 8;
@@ -440,15 +440,15 @@ form {
       place-self: right;
     }
     .winner{
-      grid-row:2;
-      grid-column:8;
+      grid-row:3;
+      grid-column:7/span 2;
       place-self: top center;
-      font-size: 12px;
+      font-size: 15px;
     }
     #stopAuctionButton{
       border-radius: 9px;
       background-color: #C86262;
-      height: 20px;
+      height: 40px;
       width: 50px;
       grid-row:2;
       grid-column:7;
