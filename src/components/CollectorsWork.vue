@@ -2,18 +2,8 @@
   <div class = "workPool">
     <div class= "titleWorkPool" >Work Pool</div>
     <div class= "workdeck"> </div>
-    <div class = "quarterImage">
-      <div class= "quarter1" v-if="currentRound === 1" >
-      </div>
-      <div class= "quarter2" v-if="currentRound === 2" >
-      </div>
-      <div class= "quarter3" v-if="currentRound === 3" >
-      </div>
-      <div class= "quarter4" v-if="currentRound === 4" >
-      </div>
-    </div>
 
-    <div class="buttons" v-for="(p, workActionId) in placement" :key="workActionId">
+    <div class="buttons" v-for="(p, workActionId) in placement" :key="'Work Action'+ workActionId">
 
       <button id="alt1" v-if="p.playerId===null && workActionId === 0"
       :disabled="cannotAfford(p.cost)"
@@ -45,7 +35,24 @@
 
     </div>
 
-
+    <div class = "quarterImage" v-for="(p, currentRoundID) in placement" :key="currentRoundID">
+      <button class= "quarter1" v-if="p.playerId===null && currentRound === 1 && currentRoundID === 0"
+      :disabled="cannotAfford(p.cost)"
+      @click = "placeQuarterBottle(p)">
+      </button>
+      <button class= "quarter2" v-if="p.playerId===null && currentRound === 2 && currentRoundID === 1"
+      :disabled="cannotAfford(p.cost)"
+      @click = "placeQuarterBottle(p)">
+      </button>
+      <button class= "quarter3" v-if="p.playerId===null && currentRound === 3 && currentRoundID === 2"
+      :disabled="cannotAfford(p.cost)"
+      @click = "placeQuarterBottle(p)">
+      </button>
+      <button class= "quarter4" v-if="p.playerId===null && currentRound === 4 && currentRoundID === 3"
+      :disabled="cannotAfford(p.cost)"
+      @click = "placeQuarterBottle(p)">
+      </button>
+    </div>
 
   </div>
 
@@ -61,6 +68,7 @@ export default {
     player: Object,
     currentRound: Number,
     placement: Array,
+    quarterPlacement: Array,
     skillsOnSale: Array,
     marketValues: Object,
   },
@@ -79,6 +87,11 @@ export default {
     placeBottle: function (p) {
       console.log("nu körs placeBottle i work")
       this.$emit('placeBottleWork', p);
+    },
+
+    placeQuarterBottle: function (p) {
+      console.log("nu körs placeQuarterBottle i work")
+      this.$emit('placeQuarterBottle', p);
     },
 
     highlightAvailableCards: function (cost=100) {
@@ -136,6 +149,8 @@ export default {
   height: 62px;
   background-image: url('/images/quarterTile1.png');
   background-size: cover;
+  border-radius: 5px;
+  border: 2px solid #DDD359;
 }
 .quarter2 {
   grid-column: 2 ;
@@ -144,6 +159,8 @@ export default {
   height: 62px;
   background-image: url('/images/quarterTile2.png');
   background-size: cover;
+  border-radius: 5px;
+  border: 2px solid #DDD359;
 }
 .quarter3 {
   grid-column: 2 ;
@@ -152,6 +169,8 @@ export default {
   height: 62px;
   background-image: url('/images/quarterTile3.png');
   background-size: cover;
+  border-radius: 5px;
+  border: 2px solid #DDD359;
 }
 .quarter4 {
   grid-column: 2 ;
@@ -160,6 +179,8 @@ export default {
   height: 62px;
   background-image: url('/images/quarterTile4.png');
   background-size: cover;
+  border-radius: 5px;
+  border: 2px solid #DDD359;
 }
 .Alt1 {
   width: 120px;

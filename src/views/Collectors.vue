@@ -115,10 +115,12 @@
           :player="players[playerId]"
           :currentRound="currentRound"
           :placement="workPlacement"
+          :quarterPlacement="quarterPlacement"
 
           :marketValues="marketValues"
           @drawCard="drawCard($event)"
           @placeBottleWork="placeBottleWork($event)"
+          @placeQuarterBottle="placeQuarterBottle($event)"
           />
 
        <CollectorsStartAuction v-if="players[playerId]"
@@ -354,6 +356,7 @@ export default {
       auctionPlacement: [],
       marketPlacement: [],
       workPlacement: [],
+      quarterPlacement: [],
       chosenPlacementCost: null,
       chosenPlacementId: null,
       marketValues: { fastaval: 0,
@@ -420,6 +423,7 @@ export default {
         this.marketPlacement = d.placements.marketPlacement;
         this.auctionPlacement = d.placements.auctionPlacement;
         this.workPlacement = d.placements.workPlacement;
+        this.quarterPlacement = d.placements.quarterPlacement;
       }.bind(this));
     this.$store.state.socket.on('collectorsBottlePlaced',
       function(d) {
@@ -428,13 +432,20 @@ export default {
         this.marketPlacement = d.marketPlacement;
         this.auctionPlacement = d.auctionPlacement;
         this.workPlacement = d.workPlacement;
+        this.quarterPlacement = d.quarterPlacement;
       }.bind(this));
 
       this.$store.state.socket.on('collectorsWorkBottlePlaced',
         function(d) {
           this.players= d.players;
           this.workPlacement = d.placements.workPlacement;
-        }.bind(this));
+          }.bind(this));
+
+          this.$store.state.socket.on('collectorsQuarterBottlePlaced',
+            function(d) {
+              this.players= d.players;
+              this.quarterPlacement = d.placements.quarterPlacement;
+              }.bind(this));
 
     this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
     this.$store.state.socket.on('collectorsCardDrawn',
@@ -560,7 +571,7 @@ function(d) {
       this.$store.state.playerId = userName;
     //  this.players[playerId] = userName;
   },*/
-  
+
     chooseColor: function(color, playerBottles){
       this.$store.state.socket.emit('collectorsChooseColor',{
       roomId: this.$route.params.id,
@@ -602,6 +613,19 @@ function(d) {
         }
       );
     },
+
+    placeQuarterBottle: function (p) {
+      this.chosenPlacementCost = p.cost;
+      this.chosenAction = p.action;
+      this.$store.state.socket.emit('collectorsPlaceQuarterBottle', {
+          roomId: this.$route.params.id,
+          playerId: this.playerId,
+          currentRoundID: p.currentRoundID,
+          cost: p.cost,
+        }
+      );
+    },
+
     whichAction: function (card){
       if (this.chosenAction === "skill") {
         this.getSkill(card)

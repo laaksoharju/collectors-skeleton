@@ -77,6 +77,15 @@ function sockets(io, socket, data) {
       );
     });
 
+    socket.on('collectorsPlaceQuarterBottle', function(d) {
+      console.log("inne i  sockets collectorsPlaceQuarterBottle"+d.currentRoundID);
+      data.placeQuarterBottle(d.roomId, d.playerId, d.currentRoundID, d.cost);
+      io.to(d.roomId).emit('collectorsQuarterBottlePlaced',
+        { placements: data.getPlacements(d.roomId),
+         players: data.getPlayers(d.roomId)}
+      );
+    });
+
     socket.on('collectorsGetSkill', function(d) {
       data.getSkill(d.roomId, d.playerId, d.card, d.skill, d.cost)
       io.to(d.roomId).emit('collectorsSkillCaught', {

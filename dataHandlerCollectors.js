@@ -98,6 +98,10 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
                             {cost:-1, playerId: null, workActionId:1},
                             {cost:0, playerId: null, workActionId:2},
                             {cost:0, playerId: null, workActionId:3} ];
+  room.quarterPlacement = [{cost:0, playerId: null, currentRoundID:0},
+                            {cost:-1, playerId: null, currentRoundID:1},
+                            {cost:-2, playerId: null, currentRoundID:2},
+                            {cost:-3, playerId: null, currentRoundID:3} ];
   //FÖRSÖK ATT FÅ SPELARENS FLASKA ATT DYKA UPP EFTER KNAPPTRYCKNING
 
 
@@ -626,33 +630,70 @@ Data.prototype.placeWorkBottle = function (roomId, playerId, workActionId, cost)
       room.players[playerId].money += cost;
     }
 
-
-
     if (workActionId === 2 ){
       this.drawCard(roomId, playerId);
-
       let switchOrder = room.players[playerId].order;
-
       for (let playerId in room.players ){
-
-              console.log('order före ändring',  room.players[playerId].order)
-        room.players[playerId].order = (room.players[playerId].order - (switchOrder - 1) + room.playerCount) % room.playerCount //FEL I EKV
+          console.log('order före ändring',  room.players[playerId].order)
+          room.players[playerId].order = (room.players[playerId].order - (switchOrder - 1) + room.playerCount) % room.playerCount //FEL I EKV
         if (room.players[playerId].order === 0){
           room.players[playerId].order = room.playerCount;
         }
         console.log(playerId, 's order efter ändring',  room.players[playerId].order)
-
       }
-
-  }
-
+    }
     if (workActionId === 3 ){
       this.drawCard(roomId, playerId);
       let c = room.players[playerId].hand.splice(0,1);
       room.players[playerId].secret.push(...c);
     }
+  }
+}
 
+Data.prototype.placeQuarterBottle = function (roomId, playerId, currentRoundID, cost) {
+  console.log("inne i  datahandlers placeQuarterBottle");
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    let activePlacement = room.quarterPlacement;
 
+    if (room.players[playerId].playerBottles > 0){
+      room.players[playerId].playerBottles = room.players[playerId].playerBottles - 1;
+    }
+    for(let i = 0; i < activePlacement.length; i += 1) {
+      console.log("active placement currentround id i data: "+activePlacement[i].currentRoundID, currentRoundID);
+        if( activePlacement[i].currentRoundID === currentRoundID &&
+            activePlacement[i].playerId === null &&
+          activePlacement[i].cost === cost ) {
+          console.log("inne i if :)");
+          activePlacement[i].playerId = playerId;
+          break;
+        }
+    }
+
+    if (currentRoundID === 0 ){
+    room.players[playerId].money += cost;
+    //radera flaska, får ej va med i framtida ronder, gör om de finns tid
+    }
+
+    if (currentRoundID === 1 ){
+      this.drawCard(roomId, playerId);
+      this.drawCard(roomId, playerId);
+      room.players[playerId].money += cost;
+    }
+
+    if (currentRoundID === 2 ){
+      this.drawCard(roomId, playerId);
+      let switchOrder = room.players[playerId].order;
+      for (let playerId in room.players ){
+
+    }
+
+    if (currentRoundID === 3 ){
+      this.drawCard(roomId, playerId);
+      let c = room.players[playerId].hand.splice(0,1);
+      room.players[playerId].secret.push(...c);
+      }
+    }
   }
 }
 
@@ -674,7 +715,8 @@ Data.prototype.getPlacements = function(roomId){
              skillPlacement: room.skillPlacement,
              auctionPlacement: room.auctionPlacement,
              marketPlacement: room.marketPlacement,
-             workPlacement: room.workPlacement }
+             workPlacement: room.workPlacement,
+             quarterPlacement: room.quarterPlacement}
   }
   else return {};
 }
