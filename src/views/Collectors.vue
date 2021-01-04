@@ -5,13 +5,13 @@
           <h1>COLLECTORS</h1>
           <div v-if="winner !== ''">
             <h5 class = "endedGame">
-            THE WINNER IS {{winner}}
+              {{ labels.winner }}  {{winner}}
           </h5>
             <div v-for="(value, key) in players" :key = "key">
               <div v-for="(valuevalue,keykey) in value" :key ="keykey">
                 <div v-if="keykey == 'points'">
                   <h6 class = "playerpoint">
-                   {{key}}'s points: {{valuevalue}}
+                   {{key}} {{labels.endPoints}} {{valuevalue}}
                  </h6>
                 </div>
               </div>
@@ -26,7 +26,7 @@
 
             <!-- Låta spelare välja färg på flaska  -->
           <div class="playerBottleButton" v-if="players[playerId].color === ''">
-          Choose your bottle color
+           {{labels.bottleColor}}
 
           <!-- choosecolor - välja flaskfärg, startmoney - sätter pengarna för spelare vid start  -->
           <button id = "black"
@@ -196,7 +196,7 @@
         </div>
 
       <div class="playerHand">
-        <div class="playerHandTitle"> {{playerId}}'s Hand </div>
+        <div class="playerHandTitle"> {{playerId}} {{labels.playerHand}} </div>
         <!-- visa spelarens kort i handen, förstår inte varför korten blir pyttesmå -->
         <div class="cardslots" v-if="players[playerId]">
           <div v-for="(card, index) in players[playerId].hand" :key="index">
@@ -207,11 +207,11 @@
         <!-- visa hur mycket pengar man har -->
 
           <div class = "otherCoins">
-            Other players info:
+            {{labels.otherPlayerInfo}}
             <div v-for="(value, key) in players" :key = "key">
               <div v-for="(valuevalue,keykey) in value" :key ="keykey">
                 <li v-if="keykey == 'money' && key != playerId ">
-                   {{key}}'s coins: {{valuevalue}}
+                   {{key}} {{labels.otherCoins}} {{valuevalue}}
                 </li>
               </div>
             </div>
@@ -1227,7 +1227,7 @@ h5 {
       grid-column: 11/span 5;
       grid-row: 8/span 4;
       display: grid;
-      grid-template-columns: repeat(1, 450px);
+      grid-template-columns: repeat(1, 400px);
       grid-template-rows: repeat(4,60px);
     }
     .playerHandTitle {

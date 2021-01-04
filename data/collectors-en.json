@@ -8,5 +8,12 @@
 	"setup": "Please choose a setup for the game.",
 	"nextStep": "In the next page you will recieve an invite link to send to the other players.",
 	"gameSetup": "Set up a game for ",
-	"players": " players"
+	"players": " players",
+	"winner": "THE WINNER IS ",
+	"endPoints": "'s points: ",
+	"bottleColor": "  Choose your bottle color: ",
+	"playerHand" : "'s Hand",
+	"otherPlayerInfo": "Other players info: ",
+	"otherCoins" : "'s coins: "
+
 	}

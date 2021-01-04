@@ -8,6 +8,12 @@
 	"setup":"Vänligen välj hur många spelare ni är.",
 	"nextStep": "På nästa sidan kommer du att få en länk att skicka till de andra spelarna.",
 	"gameSetup": "Starta ett spel med ",
-	"players": " spelare"
+	"players": " spelare",
+	"winner" : "VINNAREN ÄR ",
+	"endPoints": "s poäng: ",
+	"bottleColor": "Välj färg på flaskan: ",
+	"playerHand" : "'s hand",
+	"otherPlayerInfo" : "Andra spelares info: ",
+	"otherCoins" : "'s pengar: "
 
 }
