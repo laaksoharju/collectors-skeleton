@@ -65,11 +65,17 @@
             :labels="labels"
             :player="players[playerId]"
             :auctionCards="auctionCards"
+            :upForAuction="upForAuction"
             :marketValues="marketValues"
             :placement="auctionPlacement"
-            :allCardsChosen="allCardsChosen"
+            :highestBid="highestBid"
+            :highestBiddingPlayer="highestBiddingPlayer"
+            :numberOfPasses="numberOfPasses"
             :players="players"
             @selectAction="selectAction($event)"
+            @placeBid="placeBid($event)"
+            @passed="passed($event)"
+            @auctionToHand="auctionToHand($event)"
             @placeBottle="placeBottle('auctionType', 'auction', $event)"
           />
 
@@ -161,6 +167,9 @@ export default {
       publicPath: "localhost:8080/#", //"collectors-groupxx.herokuapp.com/#",
       touchScreen: false,
       nextRound: Boolean,
+      highestBid: 0,
+      highestBiddingPlayer: '',
+      numberOfPasses: 0,
       round: 1,
       myCards: [],
       maxSizes: { x: 0, y: 0 },
@@ -199,6 +208,7 @@ export default {
       itemsOnSale: [],
       skillsOnSale: [],
       auctionCards: [],
+      upForAuction: [],
       playerid: 0,
 
       buyItemProps: {
@@ -387,6 +397,47 @@ export default {
         this.players = d.players;
       }.bind(this)
     );
+
+    //Auction-grejer kommer här
+
+        this.$store.state.socket.on(
+      "collectorsAuctionCardBought",
+      function (d) {
+        console.log(d.playerId, "Started an Auction");
+        this.players = d.players;
+        this.auctionCards = d.auctionCards;
+        this.upForAuction = d.upForAuction;
+      }.bind(this)
+    );
+    this.$store.state.socket.on(
+      "collectorsAuctionSentToHand",
+      function (d) {
+        this.players = d.players;
+        this.auctionCards = d.auctionCards;
+        this.upForAuction = d.upForAuction;
+        this.highestBid = d.highestBid;
+        this.destination = d.destination;
+        this.highestBiddingPlayer = d.highestBiddingPlayer;
+      }.bind(this)
+    );
+    this.$store.state.socket.on(
+      "collectorsPlacedBid",
+      function (d) {
+        console.log(d.playerId, "Placed a bid");
+        this.players = d.players;
+        this.highestBid = d.bid;
+        this.highestBiddingPlayer = d.playerId;
+      }.bind(this)
+    );
+    this.$store.state.socket.on(
+      "collectorsPassedBid",
+      function (d) {
+        console.log(d.playerId, "Passed a bid");
+        this.players = d.players;
+        this.upForAuction = d.upForAuction;
+      }.bind(this)
+    );
+
   },
   methods: {
     selectAll: function (n) {
@@ -395,7 +446,7 @@ export default {
     selectAction: function (card) {
       this.currentAction == "itemType" ? this.buyCard(card) : null;
       this.currentAction == "skillType" ? this.buySkillCard(card) : null;
-      this.currentAction == "auctionType" ? this.startAuction(card) : null; //Funktionen existerar inte än
+      this.currentAction == "auctionType" ? this.buyAuctionCard(card) : null; //Funktionen existerar inte än
       this.currentAction == "marketType" ? this.manageMarketAction(card) : null;
     },
     manageMarketAction: function (card) {
@@ -487,6 +538,44 @@ export default {
           secret: card,
         });
     },
+
+    //Här kommer auction
+    buyAuctionCard: function (card) {
+      this.$store.state.socket.emit("collectorsBuyAuctionCard", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        card: card,
+        cost: this.marketValues[card.market] + this.chosenPlacementCost,
+      });
+    },
+    auctionToHand: function (d) {
+      this.$store.state.socket.emit("collectorsAuctionToHand", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        card: this.upForAuction[0],
+        cost: this.highestBid,
+        destination: d
+      });
+    },
+    placeBid: function (bid) {
+      console.log('collectors.vue ' + bid)
+      if(bid > this.highestBid){
+      this.$store.state.socket.emit("collectorsPlaceBid", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        bid: bid,
+      });
+      this.highestBid = bid;
+      this.highestBiddingPlayer = this.playerId;
+      }
+    },
+    passed: function () {
+      this.$store.state.socket.emit("collectorsPassed", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+      });
+    },
+
   },
 };
 </script>
