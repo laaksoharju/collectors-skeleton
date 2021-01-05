@@ -1,10 +1,10 @@
 <template>
-  <div class="center">
+  <div>
     <div>
       <h1>Collectors</h1>
       <ul>
-        <li v-for="i in 3" :key="i">
-          <a @click="setupCollectors(i+1, 'en')">Set up a game of Collectors for {{i+1}} players</a>.
+        <li v-for="i in 4" :key="i">
+          <a @click="setupCollectors(i, 'en')">Set up a game of Collectors for {{i}} players</a>.
         </li>
       </ul>
       <ul>
@@ -42,4 +42,10 @@ export default {
     height: 100vh;
     padding: 1em;
   }
+
+  canvas{
+  display:block;
+  width:100%;
+  height:100%;
+}
 </style>

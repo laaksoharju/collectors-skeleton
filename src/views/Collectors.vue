@@ -1,17 +1,17 @@
 <template>
   <div>
     <main>
-      {{buyPlacement}} {{chosenPlacementCost}}
-      <CollectorsBuyActions v-if="players[playerId]"
+      Round: {{ round }} Play order: {{ playOrder }} Current player is {{ playOrder[actingPlayer]}} Chosen action {{chosenAction}}
+      <CollectorsBuyItemActions v-if="players[playerId]"
         :labels="labels"
         :player="players[playerId]"
         :itemsOnSale="itemsOnSale" 
         :marketValues="marketValues" 
         :placement="buyPlacement"
-        @buyCard="buyCard($event)"
+        @buyItem="buyItem($event)"
         @placeBottle="placeBottle('buy', $event)"/>
       <div class="buttons">
-        <button @click="drawCard">
+        <button :disabled="playOrder[actingPlayer] !== playerId" @click="drawCard">
           {{ labels.draw }} 
         </button>
       </div>
@@ -25,17 +25,18 @@
       </div>
       Hand
       <div class="cardslots" v-if="players[playerId]">
-        <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="buyCard(card)" :key="index"/>
+        <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="handleAction(card)" :key="index"/>
       </div>
       Items
       <div class="cardslots" v-if="players[playerId]">
         <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
       </div>
+      <CollectorsWorkActions :round="round" :placement="workPlacement" :player="players[playerId]" @placeBottle="placeBottle('work',$event)"/>
     </main>
     {{players}}
     {{marketValues}}
-    <button v-if="players[playerId]" @click="players[playerId].money += 1">
-      fake more money
+    <button v-if="players[playerId]" @click="addMoney">
+      cheat to get more money
     </button>
     <footer>
         <p>
@@ -50,13 +51,15 @@
 /*eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }]*/
 
 import CollectorsCard from '@/components/CollectorsCard.vue'
-import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
+import CollectorsBuyItemActions from '@/components/CollectorsBuyItemActions.vue'
+import CollectorsWorkActions from '@/components/CollectorsWorkActions.vue'
 
 export default {
   name: 'Collectors',
   components: {
     CollectorsCard,
-    CollectorsBuyActions
+    CollectorsBuyItemActions,
+    CollectorsWorkActions
   },
   data: function () {
     return {
@@ -66,20 +69,15 @@ export default {
                   y: 0 },
       labels: {},
       players: {},
-      // playerId: {
-      //   hand: [],
-      //   money: 1,
-      //   points: 0,
-      //   skills: [],
-      //   items: [],
-      //   income: [],
-      //   secret: []
-      // }
+      playOrder: [],
+      round: 0,
+      actingPlayer: null,
       buyPlacement: [],
       skillPlacement: [],
       auctionPlacement: [],
       marketPlacement: [],
-      chosenPlacementCost: null, 
+      workPlacement: [],
+      chosenAction: "",
       marketValues: { fastaval: 0, 
                      movie: 0, 
                      technology: 0, 
@@ -88,15 +86,16 @@ export default {
       itemsOnSale: [],
       skillsOnSale: [],
       auctionCards: [],
-      playerid: 0
+      numberOfActions: 0
     }
   },
   computed: {
-    playerId: function() { return this.$store.state.playerId}
+    playerId: function() { 
+      return this.$store.state.playerId
+    }
   },
   watch: {
-    players: function(newP, oldP) {
-      console.log(newP, oldP)
+    players: function() {
       for (let p in this.players) {
         for(let c = 0; c < this.players[p].hand.length; c += 1) {
           if (typeof this.players[p].hand[c].item !== "undefined")
@@ -117,10 +116,14 @@ export default {
       { roomId: this.$route.params.id, 
         playerId: this.playerId } );
 
+    //this is run also on reload so should update everything about the state of the game
     this.$store.state.socket.on('collectorsInitialize', 
       function(d) {
         this.labels = d.labels;
         this.players = d.players;
+        this.round = d.round;
+        this.playOrder = d.playOrder;
+        this.actingPlayer = d.actingPlayer;
         this.itemsOnSale = d.itemsOnSale;
         this.marketValues = d.marketValues;
         this.skillsOnSale = d.skillsOnSale;
@@ -129,31 +132,62 @@ export default {
         this.skillPlacement = d.placements.skillPlacement;
         this.marketPlacement = d.placements.marketPlacement;
         this.auctionPlacement = d.placements.auctionPlacement;
+        this.workPlacement = d.placements.workPlacement;
+      }.bind(this));
+
+    this.$store.state.socket.on('collectorsUpdatePlayers', 
+      function(players) {
+        this.players = players;
+        if (this.numberOfActions > 0) {
+          for (let i = 0; i < this.players[this.playerId].hand.length; i += 1) {
+            setTimeout(() =>
+            this.$set(this.players[this.playerId].hand[i], "available", true), 500);
+          }
+        }
+        else {
+          this.$store.state.socket.emit('collectorsNextPlayer', {roomId: this.$route.params.id});
+        }
       }.bind(this));
 
     this.$store.state.socket.on('collectorsBottlePlaced', 
       function(d) {
-        this.buyPlacement = d.buyPlacement;
-        this.skillPlacement = d.skillPlacement;
-        this.marketPlacement = d.marketPlacement;
-        this.auctionPlacement = d.auctionPlacement;
+        console.log("chosenAction", this.chosenAction, "numberOfActions", this.numberOfActions)
+        if (this.chosenAction !== "buy") {
+          this.players = d.players;
+        }
+        this.buyPlacement = d.placements.buyPlacement;
+        this.skillPlacement = d.placements.skillPlacement;
+        this.marketPlacement = d.placements.marketPlacement;
+        this.auctionPlacement = d.placements.auctionPlacement;
+        this.workPlacement = d.placements.workPlacement;
+        this.playOrder = d.playOrder;
+        this.actingPlayer = d.actingPlayer;
+        if (this.numberOfActions > 0) {
+          for (let i = 0; i < this.players[this.playerId].hand.length; i += 1) {
+            console.log("highlighting")
+            setTimeout(() =>
+            this.$set(this.players[this.playerId].hand[i], "available", true), 500);
+          }
+        }
+        else {
+          console.log("next player")
+          this.$store.state.socket.emit('collectorsNextPlayer', {roomId: this.$route.params.id});
+        }
       }.bind(this));
 
-    this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
-
-    this.$store.state.socket.on('collectorsCardDrawn', 
+    this.$store.state.socket.on('collectorsActingPlayer', 
       function(d) {
-          //this has been refactored to not single out one player's cards
-          //better to update the state of all cards
-          this.players = d;
+          this.players = d.players;
+          this.actingPlayer = d.actingPlayer;
       }.bind(this)
     );
 
-    this.$store.state.socket.on('collectorsCardBought', 
+    this.$store.state.socket.on('collectorsItemBought', 
       function(d) {
         console.log(d.playerId, "bought a card");
         this.players = d.players;
         this.itemsOnSale = d.itemsOnSale;
+        this.actingPlayer = d.actingPlayer;
       }.bind(this)
     );
   },
@@ -161,13 +195,22 @@ export default {
     selectAll: function (n) {
       n.target.select();
     },
-    placeBottle: function (action, cost) {
-      this.chosenPlacementCost = cost;
+    placeBottle: function (action, id) {
+      if (action === "work" && id <= 3 || action === "market" && id <= 2) {
+        this.numberOfActions = 2;
+      }
+      else if (action === "work" && id <=6) {
+        this.numberOfActions = 0; 
+      }
+      else {
+        this.numberOfActions = 1; 
+      }
+      this.chosenAction = action;
       this.$store.state.socket.emit('collectorsPlaceBottle', { 
           roomId: this.$route.params.id, 
           playerId: this.playerId,
           action: action, 
-          cost: cost, 
+          id: id, 
         }
       );
     },
@@ -178,20 +221,53 @@ export default {
         }
       );
     },
-    buyCard: function (card) {
-      console.log("buyCard", card);
-      this.$store.state.socket.emit('collectorsBuyCard', { 
+    cardForIncome: function (card) {
+      this.$store.state.socket.emit('collectorsCardForIncome', { 
+          roomId: this.$route.params.id, 
+          playerId: this.playerId,
+          card: card
+        }
+      );
+    },
+    buyItem: function (card) {
+      this.$store.state.socket.emit('collectorsBuyItem', { 
           roomId: this.$route.params.id, 
           playerId: this.playerId,
           card: card,
-          cost: this.marketValues[card.market] + this.chosenPlacementCost 
+          cost: this.marketValues[card.market] 
         }
       );
+    },
+    handleAction: function (card) {
+      if (this.numberOfActions > 0) {
+        this.numberOfActions -= 1;
+        if (this.chosenAction === "buy") {
+          this.buyItem(card);
+        }
+        else if (this.chosenAction === "skill") {
+          this.getSkill(card);
+        }
+        else if (this.chosenAction === "auction") {
+          this.makeAuction(card);
+        }
+        else if (this.chosenAction === "market") {
+          this.raiseMarketValue(card);
+        }
+        else if (this.chosenAction === "work") {
+          this.cardForIncome(card);
+        }
+      }
+    },
+    addMoney: function () {
+      this.$store.state.socket.emit('collectorsAddMoney', { 
+          roomId: this.$route.params.id, 
+          playerId: this.playerId
+      });
     }
   },
 }
 </script>
-<style scoped>
+<style> /* letting CSS from here leak into components by removing 'scoped'*/
   header {
     user-select: none;
     position: fixed;
@@ -211,25 +287,37 @@ export default {
   footer a:visited {
     color:ivory;
   }
+
   .cardslots {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 130px);
-    grid-template-rows: repeat(auto-fill, 180px);
+    grid-template-columns: repeat(auto-fill, 10vw);
+    height:14vw; /* height needs to be proportional to width */
   }
+
   .cardslots div {
-    transform: scale(0.5)translate(-50%,-50%);
+    transform: scale(1);
     transition:0.2s;
     transition-timing-function: ease-out;
     z-index: 0;
+    width: 100%;
   }
+
   .cardslots div:hover {
-    transform: scale(1)translate(-25%,0);
+    transform: scale(1.5);
+    transform-origin: center top;
     z-index: 1;
   }
 
   @media screen and (max-width: 800px) {
     main {
-      width:90vw;
+      width:95vw;
+      margin: auto;
+    }
+
+    .cardslots {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 19vw);
+      height: 26.6vw; /* height needs to be proportional to width */
     }
   }
 </style>

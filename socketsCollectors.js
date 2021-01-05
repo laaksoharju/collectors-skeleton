@@ -5,35 +5,60 @@ function sockets(io, socket, data) {
     socket.on('collectorsLoaded', function(d) {
       socket.join(d.roomId);
       if (data.joinGame(d.roomId, d.playerId)) {
-        socket.emit('collectorsInitialize', { 
+        io.to(d.roomId).emit('collectorsInitialize', { 
             labels: data.getUILabels(d.roomId),
             players: data.getPlayers(d.roomId),
             itemsOnSale: data.getItemsOnSale(d.roomId),
             marketValues: data.getMarketValues(d.roomId),
             skillsOnSale: data.getSkillsOnSale(d.roomId),
             auctionCards: data.getAuctionCards(d.roomId),
-            placements: data.getPlacements(d.roomId)
+            placements: data.getPlacements(d.roomId),
+            playOrder: data.getPlayOrder(d.roomId),
+            actingPlayer: data.getActingPlayer(d.roomId),
+            round: data.getRound(d.roomId)
           }
         );
       }
     });
     socket.on('collectorsDrawCard', function(d) {
-      io.to(d.roomId).emit('collectorsCardDrawn', 
+      io.to(d.roomId).emit('collectorsUpdatePlayers', 
         data.drawCard(d.roomId, d.playerId)
       );
     });
-    socket.on('collectorsBuyCard', function(d) {
-      data.buyCard(d.roomId, d.playerId, d.card, d.cost)
-      io.to(d.roomId).emit('collectorsCardBought', { 
+    socket.on('collectorsCardForIncome', function(d) {
+      io.to(d.roomId).emit('collectorsUpdatePlayers', 
+        data.cardForIncome(d.roomId, d.playerId, d.card)
+      );
+    });
+    socket.on('collectorsNextPlayer', function(d) {
+      io.to(d.roomId).emit('collectorsActingPlayer', {
+        players: data.getPlayers(d.roomId),
+        actingPlayer: data.nextPlayer(d.roomId)
+      }
+      );
+    });
+    socket.on('collectorsBuyItem', function(d) {
+      data.buyItem(d.roomId, d.playerId, d.card, d.cost)
+      io.to(d.roomId).emit('collectorsItemBought', { 
           playerId: d.playerId,
           players: data.getPlayers(d.roomId),
-          itemsOnSale: data.getItemsOnSale(d.roomId) 
+          itemsOnSale: data.getItemsOnSale(d.roomId)
         }
       );
     });
     socket.on('collectorsPlaceBottle', function(d) {
-      data.placeBottle(d.roomId, d.playerId, d.action, d.cost);
-      io.to(d.roomId).emit('collectorsBottlePlaced', data.getPlacements(d.roomId)
+      data.placeBottle(d.roomId, d.playerId, d.action, d.id);
+      io.to(d.roomId).emit('collectorsBottlePlaced', {
+        players: data.getPlayers(d.roomId),
+        placements: data.getPlacements(d.roomId),
+        playOrder: data.getPlayOrder(d.roomId),
+        actingPlayer: data.getActingPlayer(d.roomId)
+      }
+      );
+    });
+    socket.on('collectorsAddMoney', function(d) {
+      io.to(d.roomId).emit('collectorsUpdatePlayers', 
+        data.addMoney(d.roomId, d.playerId)
       );
     });
 }
