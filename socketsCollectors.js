@@ -91,5 +91,50 @@ function sockets(io, socket, data) {
     })
   })
 
+
+
+//Här kommer auction :-)
+
+socket.on('collectorsBuyAuctionCard', function(d) {
+  data.buyAuctionCard(d.roomId, d.playerId, d.card, d.cost)
+  io.to(d.roomId).emit('collectorsAuctionCardBought', { 
+      playerId: d.playerId,
+      players: data.getPlayers(d.roomId),
+      auctionCards: data.getAuctionCards(d.roomId), 
+      upForAuction: data.getUpForAuctionCards(d.roomId)
+    }
+  );
+});
+
+socket.on('collectorsAuctionToHand', function(d) {
+  data.auctionToHand(d.roomId, d.playerId, d.card, d.cost, d.destination)
+  io.to(d.roomId).emit('collectorsAuctionSentToHand', { 
+      playerId: d.playerId,
+      players: data.getPlayers(d.roomId),
+      auctionCards: data.getAuctionCards(d.roomId),
+      upForAuction: data.getUpForAuctionCards(d.roomId),
+      marketValues: data.getMarketValues(d.roomId)
+    }
+  );
+});
+socket.on('collectorsPlaceBid', function (d) {
+  data.placeBid(d.roomId, d.playerId, d.bid);
+  io.to(d.roomId).emit('collectorsPlacedBid', { 
+    playerId: d.playerId,
+    players: data.getPlayers(d.roomId),
+    bid: d.bid
+  });
+});
+
+socket.on('collectorsPassed', function (d) {
+  data.passed(d.roomId, d.playerId, d.action);
+  io.to(d.roomId).emit('collectorsPassedBid', {
+    playerId: d.playerId,
+    players: data.getPlayers(d.roomId),
+    upForAuction: data.getUpForAuctionCards(d.roomId)
+  });
+});
+
 }
+
 module.exports = sockets;

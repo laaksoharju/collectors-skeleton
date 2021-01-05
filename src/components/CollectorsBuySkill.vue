@@ -137,7 +137,7 @@ export default {
 .buttons {
   display: grid;
   grid-template-columns: repeat(auto-fill, 50px);
-  margin-right:10px;
+  margin-right: 10px;
 }
 
 .buttons p{
@@ -265,9 +265,8 @@ h1 {
   color: black;
 }
 
-
 @media only screen and (max-width: 1050px) {
-    /* phones */
+  /* phones */
   .buy-cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, 65px);
@@ -282,8 +281,11 @@ h1 {
     transition-timing-function: ease-out;
   }
 
-   .cardslots div {
+  .cardslots div {
     z-index: 0;
+  }
+  .cardslots:hover {
+    z-index: 2;
   }
   .cardslots div:hover {
   transform: scale(1) translate(-25%, 0);

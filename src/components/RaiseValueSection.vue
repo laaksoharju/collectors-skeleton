@@ -98,7 +98,6 @@ export default {
       }
       if (this.player.money - cost >= 0) {
         this.$set(lastSkill, "available", true);
-        console.log("skill har marketrats")
       } else {
         this.$set(lastSkill, "available", false);
       }
@@ -166,7 +165,6 @@ export default {
   color: black;
   font-size: 80%;
   font-weight: bold;
-
 }
 .raise-value-slot {
   background-color: #6d9eebff;
@@ -179,7 +177,6 @@ export default {
   align-items: center;
   margin-left: auto;
   margin-right: auto;
-
 }
 #rvMovie {
   background: url("/images/RAISEVAL-FILM.png");
