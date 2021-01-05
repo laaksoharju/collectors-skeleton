@@ -296,7 +296,7 @@ Data.prototype.getSkillValue= function (roomId, playerId, card, skill){
 }
 
 
-Data.prototype.startAuction = function (roomId, playerId, card, auctionCard, cost) {
+Data.prototype.startAuction = function (roomId, playerId, card, cost) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
         //check if card is among skills on sale
@@ -327,7 +327,7 @@ Data.prototype.startAuction = function (roomId, playerId, card, auctionCard, cos
 Data.prototype.stopAuction = function (roomId, playerId, card) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
-
+  console.log("inne i stop auction")
   let c = room.cardUpForAuction;
   let allPlayersId = Object.keys(room.players);
   for (let i in allPlayersId){
@@ -336,8 +336,9 @@ Data.prototype.stopAuction = function (roomId, playerId, card) {
         return c;
 
       }
-      else return {};
+
   }
+  return {};
   }
 }
 
@@ -850,7 +851,7 @@ Data.prototype.placeQuarterBottle = function (roomId, playerId, currentRound, co
 Data.prototype.getCards = function (roomId, playerId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
-    
+
     let i = room.players.map(d => d.playerId).indexOf(playerId)
     return room.players[i].hand;
   }
