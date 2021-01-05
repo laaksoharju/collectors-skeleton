@@ -1,16 +1,16 @@
 <template>
-
   <div class="center">
-
     <div>
       <h2>hej</h2>
-      <DemoButton/>
-      <MenuButton/>
-    
+      <DemoButton />
+      <MenuButton />
     </div>
     <div id="welcomeMessage">
       <h1>Collectors</h1>
-      <h3>Welcome to the game Collectors where you compete against other players about who's collection is the most valuable. </h3>
+      <h3>
+        Welcome to the game Collectors where you compete against other players
+        about who's collection is the most valuable.
+      </h3>
       <ul>
         <li v-for="i in 3" :key="i">
           <a @click="setupCollectors(i + 1, 'en')"
@@ -27,36 +27,34 @@
       </ul>
       <div class="watchDemo">
         <h2>New to collectors? Watch a demo before playing</h2>
-        <button class="demoButton button">Demo</button>
+        <DemoButton />
       </div>
-      
+
       <h2>Do you know how to play? Start a game</h2>
       <div class="playGame">
         <div>
-          <label for="cars">Players: </label>
+          <label for="players">Players: </label>
           <select name="players" id="players">
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
+            <option value="2" :key="2" @click="console.log(key)">2</option>
+            <option value="3" :key="3" @click="console.log(key)">3</option>
+            <option value="4" :key="4" @click="console.log(key)">4</option>
           </select>
         </div>
-        
-      <div>
-        <label for="cars">Language: </label>
-        <select name="cars" id="cars">
-          <option value="sv">Svenska</option>
-          <option value="en">English</option>
-        </select>
-      </div>
-      
-      <div>
-        <button class="playButton button">Play</button>
-      </div>
-      
+
+        <div>
+          <label for="language">Language: </label>
+          <select name="language" id="language">
+            <option value="sv">Svenska</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+
+        <div>
+          <button class="playButton button" @click="findValues" >Play</button>
+        </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -68,11 +66,17 @@ export default {
   components: {
     DemoButton,
     MenuButton,
+    
   },
   created: function () {
     this.$store.commit("SET_ROOM_ID");
   },
   methods: {
+    // findValues: function (){
+    //   playerCount = document.getElementById(players).value
+    //   lang= document.getElementById(language).value
+    //   this.setupCollectors(playerCount, lang)
+    // }, 
     setupCollectors: function (playerCount, lang = "en") {
       this.$store.commit("SETUP_GAME", {
         roomId: this.$store.state.roomId,
@@ -143,5 +147,4 @@ a:hover {
 .button:hover {
   box-shadow: 6px 6px rgba(0, 0, 0, 0.6);
 }
-
 </style>
