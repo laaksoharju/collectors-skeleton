@@ -64,7 +64,7 @@ export default {
 
 <style scoped>
 .secretSection {
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   top: 0;
@@ -109,7 +109,7 @@ export default {
 }
 
 #buttonArea {
-  margin-top: 7vw;
+  margin-top: 7vh;
   margin-left: 2vw;
   /*grid-column: 1;*/
 }
@@ -117,7 +117,7 @@ export default {
 #textArea {
   /*grid-column: 2;*/
   /*margin-left: 5vw;*/
-  margin-top: 5vw;
+  margin-top: 5vh;
 }
 /*.available-to-choose {
     animation: jiggle 1s ease-in-out;

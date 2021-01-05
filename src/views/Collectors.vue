@@ -612,7 +612,7 @@ main {
   grid-column: 1/4;
 }
 
-/*SECRET SECTION - TA BORT?*/
+/*SECRET SECTION - TA BORT?
 .secretSection {
   width: 100%;
   height: 100%;
@@ -620,7 +620,7 @@ main {
   top: 0;
   left: 0;
   background-color: rgba(0, 0, 0, 0.9);
-}
+}*/
 
 /*TRANSITION - TA BORT???*/
 .slide-enter-active,
