@@ -149,7 +149,6 @@ export default {
         this.$emit("auctionToHand", 'raiseval')
       }
       this.highlightAvailableCards();
-      this.upForAuction = [];
     },
     placeBid: function () {
       this.$emit("placeBid", this.currentBid);
