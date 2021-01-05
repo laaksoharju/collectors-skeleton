@@ -168,11 +168,13 @@
           <div class="incomeCard">
                   {{labels.incomecard}}
           </div>
+          <div class= "income" >
           <div class="chosenIncome" v-for="(card, index) in players[playerId].income" :card="card" :key="'Income'+index">
                 <CollectorsCard
                 :card="card"
                 />
          </div>
+       </div>
 
           <div class="myMoney" v-for="(value, key) in players" :key = "key">
                 <div v-for="(valuevalue,keykey) in value" :key ="keykey">
@@ -455,6 +457,7 @@ export default {
             function(d) {
               this.players= d.players;
               this.quarterPlacement = d.placements.quarterPlacement;
+              this.currentRound= d.currentRound;
               }.bind(this));
 
     this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
@@ -1027,7 +1030,7 @@ h5 {
   font-size: 20px;
 }
 .myMoney {
-  grid-row: 3 ;
+  grid-row: 1 ;
   grid-column: 5/span 2;
   place-self: top;
 }
@@ -1053,11 +1056,18 @@ h5 {
     grid-row:3 ;
     grid-column: 7 /span 2;
   }
-    .chosenIncome {
-      grid-row: 3 ;
-      grid-column: 7;
-      transform: scale(0.2);
-    }
+
+  .chosenIncome {
+    grid-auto-flow: column;
+    display: grid;
+    grid-template-columns: 12vw 12vw 12vw 12vw;
+  }
+
+  .income {
+    grid-row: 3 ;
+    grid-column: 7;
+    transform: scale(0.2);
+  }
 
 
 .itemTitle {

@@ -790,9 +790,12 @@ Data.prototype.placeQuarterBottle = function (roomId, playerId, currentRound, co
     if (currentRound === 0 ){
       this.drawCard(roomId, playerId);
       this.drawCard(roomId, playerId);
-      let c = room.players[playerId].hand.splice(0,2);
+      let c = room.players[playerId].hand.splice(0,1);
       room.players[playerId].income.push(...c);
 
+      let d = room.players[playerId].hand.splice(0,1);
+      room.players[playerId].income.push(...d);
+      console.log("income" + room.players[playerId].income)
     }
 
     if (currentRound === 1 ){

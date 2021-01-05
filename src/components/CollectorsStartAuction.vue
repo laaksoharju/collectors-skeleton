@@ -369,8 +369,8 @@ form {
   .auctionSquare{
     grid-column: 9;
     grid-row: 1;
-    height: 160px;
-    width: 110px;
+    height: 120px;
+    width: 90px;
     border: 5px dotted pink;
     font-style: italic;
     font-size: 50px;
@@ -419,7 +419,6 @@ form {
       display: grid;
       grid-template-columns: 12vw 12vw 12vw 12vw;
       transform: scale(1);
-
     }
 
     #start-auctionID{

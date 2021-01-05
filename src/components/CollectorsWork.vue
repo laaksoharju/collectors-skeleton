@@ -90,7 +90,7 @@ export default {
     },
 
     placeQuarterBottle: function (p) {
-      console.log("nu körs placeQuarterBottle i work"+(this.currentRound-1))
+      console.log("nu körs placeQuarterBottle i work"+(this.currentRound))
       this.$emit('placeQuarterBottle', p);
     },
 
