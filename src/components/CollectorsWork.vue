@@ -1,6 +1,7 @@
 <template>
-  <div class = "workPool">
-    <div class= "titleWorkPool" >Work Pool</div>
+  <div class = "workPool" >
+
+    <div class= "titleWorkPool" >Work Pool   {{quarterPlacement}}</div>
     <div class= "workdeck"> </div>
 
     <div class="buttons" v-for="(p, workActionId) in placement" :key="'Work Action'+ workActionId">

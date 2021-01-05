@@ -204,14 +204,15 @@ function sockets(io, socket, data) {
     });
 
     socket.on('collectorsNewRound', function(d) {
-      data.newRound(d.roomId, d.skillsOnSale,d.itemsOnSale, d.auctionCards)
+      data.newRound(d.roomId)
       io.to(d.roomId).emit('collectorsNewlyRounded',{
+        currentRound: data.getCurrentRound(d.roomId),
         skillsOnSale: data.getSkillsOnSale(d.roomId),
         itemsOnSale: data.getItemsOnSale(d.roomId),
         auctionCards: data.getAuctionCards(d.roomId),
         placements: data.getPlacements(d.roomId),
         marketValues: data.getMarketValues(d.roomId),
-
+        players: data.getPlayers(d.roomId)
       });
     });
 

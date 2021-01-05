@@ -74,6 +74,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.auctionCards = room.deck.splice(0, 4);
   room.cardUpForAuction = {};
   room.auctionWinner = "";
+  room.currentRound = 1;
   room.winner = "";
   room.highestBid = 0;
   room.market = [];
@@ -462,12 +463,21 @@ Data.prototype.getIncome= function(roomId, players){
 }
 }
 
-Data.prototype.newRound = function (roomId, skillsOnSale,itemsOnSale, auctionCards){
+Data.prototype.newRound = function (roomId){
   let room = this.rooms[roomId];
+
   if (typeof room !== 'undefined') {
+      let nextRound = room.currentRound;
+    if (nextRound < 4) {
+      room.currentRound += 1;
+    }
+    if (nextRound === 4) { 
+      let stopGame = 5;
+      return stopGame; //Krash på sista gången som måste fixas!
+    }
+
+
     let playerCounter = room.playerCount+2;
-
-
 
     for (let i = 0; i < room.skillsOnSale.length; i += 1) {
 //sista kortet från skill till market
@@ -475,8 +485,6 @@ Data.prototype.newRound = function (roomId, skillsOnSale,itemsOnSale, auctionCar
             let temp = room.skillsOnSale.splice(i,1);
             room.market.push(temp[0]);
             break;
-
-
     }
   }
 //Fyll kort från item till skill
@@ -620,22 +628,6 @@ Data.prototype.endGame = function (roomId, marketValues){
       }
     }
     }
-}
-
-Data.prototype.changeRound = function (roomId, currentRound) {
-  let room = this.rooms[roomId];
-  let nextRound = currentRound;
-  if (typeof room !== 'undefined') {
-    if (nextRound < 4) {
-      nextRound = currentRound + 1;
-      return nextRound;
-    }
-    if (nextRound === 4) {
-      let stopGame = 5;
-      return stopGame;
-    }
-  }
-  else return 0;
 }
 
 Data.prototype.countRounds = function (roomId, playerId) {};//FORTSÄTT HÄR FÖR QUARTER TILES
@@ -858,6 +850,14 @@ Data.prototype.getWinner = function(roomId){
     return room.winner;
   }
   else return "";
+}
+
+Data.prototype.getCurrentRound = function(roomId){
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    return room.currentRound;
+  }
+  else return null;
 }
 
 Data.prototype.getHighestBid = function(roomId){

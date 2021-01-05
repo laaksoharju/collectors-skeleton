@@ -251,7 +251,7 @@
 
       <div class="roundCounter">
         <h3> {{labels.round}}</h3>
-        <button class="roundButton"  @click= "changeRound(); endGame(currentRound); newRound(currentRound)">
+        <button class="roundButton"  @click= "changeRound()">
           <div v-if="currentRound < 5">
             <h5> {{currentRound}} </h5> <h3> {{labels.changeround}} {{currentRound}} {{labels.changeround2}}</h3>
           </div>
@@ -502,7 +502,12 @@ export default {
           console.log( "Changed round");
           console.log(d.placements);
           this.currentRound = d.currentRound;
-          this.placements = d.placements;
+          this.buyPlacement= d.placements.buyPlacement;
+          this.skillPlacement= d.placements.skillPlacement;
+          this.auctionPlacement= d.placements.auctionPlacement;
+          this.marketPlacement= d.placements.marketPlacement;
+          this.workPlacement= d.placements.workPlacement;
+          this.quarterPlacement= d.placements.quarterPlacement;
       }.bind(this)
     );
 
@@ -516,8 +521,10 @@ export default {
           this.auctionPlacement= d.placements.auctionPlacement;
           this.marketPlacement= d.placements.marketPlacement;
           this.workPlacement= d.placements.workPlacement;
+          this.quarterPlacement= d.placements.quarterPlacement;
           this.marketValues = d.marketValues;
-
+          this.players = d.players;
+          this.currentRound = d.currentRound;
       }.bind(this)
     );
 
@@ -770,23 +777,22 @@ startWinnerCard: function(action){
           }
         );
       },
-    changeRound: function () {
+/*    changeRound: function () {
       this.$store.state.socket.emit('collectorsChangeRound', {
           roomId: this.$route.params.id,
           currentRound: this.currentRound
           }
         );
-    },
-    endGame: function(currentRound){
-      if (currentRound == 4){
-        this.$store.state.socket.emit('collectorsEndGame', {
+    },*/
+    endGame: function(){
+            this.$store.state.socket.emit('collectorsEndGame', {
             roomId: this.$route.params.id,
             marketValues: this.marketValues
             }
           );
-      }
-    },
+        },
 
+/* FIXA PÅ SRVER_SIDAN aneopa genom new round
 fillBottles: function()
 {
   this.$store.state.socket.emit('collectorsFillBottles', {
@@ -803,20 +809,16 @@ getIncome: function()
       players: this.players
 
 });
-},
-    newRound: function(currentRound){
-      if (currentRound != 4){
-      this.fillBottles();
-      this.getIncome();
+},*/
+    changeRound: function(){
+      if (this.currentRound != 4){
 
         this.$store.state.socket.emit('collectorsNewRound', {
             roomId: this.$route.params.id,
-            skillsOnSale: this.skillsOnSale,
-            itemsOnSale: this.itemsOnSale,
-            auctionCards: this.auctionCards
-            }
+              }
           );
       }
+      else this.endGame();
     },
     ruleFunction: function() {
       var placement = document.getElementById("ruleContent");
