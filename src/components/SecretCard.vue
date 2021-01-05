@@ -64,7 +64,7 @@ export default {
 
 <style scoped>
 .secretSection {
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   top: 0;
@@ -109,7 +109,7 @@ export default {
 }
 
 #buttonArea {
-  margin-top: 7vw;
+  margin-top: 7vh;
   margin-left: 2vw;
   /*grid-column: 1;*/
 }
@@ -117,27 +117,34 @@ export default {
 #textArea {
   /*grid-column: 2;*/
   /*margin-left: 5vw;*/
-  margin-top: 5vw;
+  margin-top: 5vh;
 }
-/*.available-to-choose {
-    animation: jiggle 1s ease-in-out;
-    animation-iteration-count:infinite;
-    box-shadow: 0 0 10px yellow;
-  }*/
+@media only screen and (max-width: 1050px) {
+    /* phones */
+  .secretSection {
+    width: 80%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 85px);
+    grid-template-rows: repeat(auto-fill, 117px);
+  }
+  .cardslots {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 85px);
+    grid-template-rows: repeat(auto-fill, 117px);
+    transform: scale(0.5) translate(-50%, -50%);
+    transition: 0.2s;
+    transition-timing-function: ease-out;
 
-/*.cardslots {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 105px);
-  grid-template-rows: repeat(auto-fill, 145px);
+  }
+
+  .cardslots div {
+    z-index: 0;
+  }
+
+  .cardslots div:hover {
+    transform: scale(1) translate(-25%, 0);
+    z-index: 1;
+  }
+
 }
-.cardslots div {
-  transform: scale(0.5) translate(-50%, -50%);
-  transition: 0.2s;
-  transition-timing-function: ease-out;
-  z-index: 0;
-}
-.cardslots div:hover {
-  transform: scale(1) translate(-25%, 0);
-  z-index: 1;
-}*/
 </style>

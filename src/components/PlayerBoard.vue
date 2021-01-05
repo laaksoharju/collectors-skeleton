@@ -352,18 +352,19 @@ export default {
 <style scoped>
 #mainBoard {
   width: 100%;
+  height: 100%;
   display: grid;
   grid-template-columns: auto auto auto;
   text-align: center;
   color: black;
-  border-top: 2px solid black;
+  /*border-top: 2px solid black;
   border-bottom: 2px solid black;
   border-left: 2px solid black;
   margin-top: 2px;
-  margin-bottom: 2px;
+  margin-bottom: 2px;*/
   padding: 10px;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+  /*border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;*/
 }
 #mainBoard h2 {
   font-size: 90%;
