@@ -4,7 +4,7 @@
  <div class= "titleAuctionPool" > Auction Pool</div>
 
 <div class = "auctionSquare">
-  Auction Square
+  {{labels.auctionsquare}}
 </div>
 <div class = "cardUpForAuction">
   <CollectorsCard :card="cardUpForAuction"/>
@@ -12,20 +12,20 @@
 
 <div class = "bidSquare" >
   <form>
-  <label for="bidSquare">Place bid:</label>
+  <label for="bidSquare">{{labels.placebid}}:</label>
   <input type="text" id="bidSquare" name="bidSquare">
   </form>
 </div>
 
-<button  id = "bidPlacementButton" @click="startBidding()">Place bid!</button>
+<button  id = "bidPlacementButton" @click="startBidding()">{{labels.placebid}}!</button>
 
-<button  id = "stopAuctionButton" @click="stopAuction()">Stop! </button>
+<button  id = "stopAuctionButton" @click="stopAuction()">{{labels.stop}} </button>
 
 
 
 <div class="winner">
-Winner: {{auctionWinner}}
-Highest bid: {{highestBid}}
+  {{labels.auctionwinner}}{{auctionWinner}}
+  {{labels.bid}}{{highestBid}}
 </div>
 
 
@@ -66,14 +66,14 @@ Highest bid: {{highestBid}}
 
 
 
-
-  <div class = "start-auction"  v-for="(card, index) in auctionCards" :key="index">
+<div class = "start-auction">
+  <div id = "start-auctionID" v-for="(card, index) in auctionCards" :key="index">
     <CollectorsCard
       :card="card"
       :availableAction="card.available"
       @doAction="startAuction(card)"/>
   </div>
-
+</div>
 
 <div class="auctionButtons" v-for="(value, key) in players" :key = "key">
 
@@ -320,7 +320,7 @@ form {
 @media screen and (max-width: 800px) {
   .auctionPool{
     grid-column: 1/span 7;
-    grid-row: 18/span 1;
+    grid-row: 18/span 4;
     width: auto;
     height: auto;
     background-color: beige;
@@ -369,8 +369,8 @@ form {
   .auctionSquare{
     grid-column: 9;
     grid-row: 1;
-    height: 160px;
-    width: 110px;
+    height: 120px;
+    width: 90px;
     border: 5px dotted pink;
     font-style: italic;
     font-size: 50px;
@@ -393,7 +393,7 @@ form {
     font-size: 13px;
   }
   #bidPlacementButton {
-    height: 30px;
+    height: 40px;
     width: 50px;
     font-size: 12px ;
       grid-column: 8;
@@ -414,9 +414,18 @@ form {
 
     }
     .start-auction{
-      transform: scale(0.25);
-      grid-column: 2;
+      grid-column-start: 1;
+      grid-column-end: 7;
+      display: grid;
+      grid-template-columns: 12vw 12vw 12vw 12vw;
+      transform: scale(1);
     }
+
+    #start-auctionID{
+      transform: scale(0.25);
+      transform-origin: 0 0;
+    }
+
     .start-auction div:hover{
       transform: scale(1.25)translate(-15%,0);
       z-index: 1;
@@ -430,15 +439,15 @@ form {
       place-self: right;
     }
     .winner{
-      grid-row:2;
-      grid-column:8;
+      grid-row:3;
+      grid-column:7/span 2;
       place-self: top center;
-      font-size: 12px;
+      font-size: 15px;
     }
     #stopAuctionButton{
       border-radius: 9px;
       background-color: #C86262;
-      height: 20px;
+      height: 40px;
       width: 50px;
       grid-row:2;
       grid-column:7;

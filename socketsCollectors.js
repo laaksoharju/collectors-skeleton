@@ -79,12 +79,15 @@ function sockets(io, socket, data) {
 
 
     socket.on('collectorsPlaceQuarterBottle', function(d) {
-      console.log("inne i  sockets collectorsPlaceQuarterBottle"+d.currentRoundID);
-      data.placeQuarterBottle(d.roomId, d.playerId, d.currentRoundID, d.cost);
+      console.log("inne i  sockets collectorsPlaceQuarterBottle 1"+d.currentRound);
+      data.placeQuarterBottle(d.roomId, d.playerId, d.currentRound, d.cost);
+      console.log("Socket efter placeQuarterBottle 2");
       io.to(d.roomId).emit('collectorsQuarterBottlePlaced',
         { placements: data.getPlacements(d.roomId),
-         players: data.getPlayers(d.roomId)}
+         players: data.getPlayers(d.roomId),
+       currentRound: d.currentRound}
        );
+            console.log("I sockeet placeQuarterBottle 3");
      });
 
 

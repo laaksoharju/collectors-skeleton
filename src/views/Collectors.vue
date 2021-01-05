@@ -139,45 +139,47 @@
             />
 
        <div v-if="players[playerId]" class="playerBoard">
-         <div class="playerTitle"> Player {{playerId}}'s Board </div>
+         <div class="playerTitle"> {{labels.player}} {{playerId}} {{labels.playersBoard}} </div>
             <div class="skillTitle">
-              Skill Cards:
+              {{labels.skillcard}}
             </div>
-             <div class="chosenSkillCard" v-for="(card, index) in players[playerId].skills" :card="card" :key="index">
+             <div class="chosenSkillCard" v-for="(card, index) in players[playerId].skills" :card="card" :key="'Skill card chosen'+index">
                   <CollectorsCard
                   :card="card"
                   />
                   </div>
             <div class="itemTitle">
-                    Item Cards:
+                  {{labels.itemcard}}
             </div>
-            <div class="chosenItemCard" v-for="(card, index) in players[playerId].items" :card="card" :key="index">
+            <div class="chosenItemCard" v-for="(card, index) in players[playerId].items" :card="card" :key="'Item'+index">
                   <CollectorsCard
                   :card="card"
                   />
            </div>
            <div class="secretTitle">
-                   Secret Card:
+                   {{labels.secretcard}}
            </div>
-           <div class="chosenSecret" v-for="(card, index) in players[playerId].secret" :card="card" :key="index">
+           <div class="chosenSecret" v-for="(card, index) in players[playerId].secret" :card="card" :key="'Secret'+index">
                  <CollectorsCard
                  :card="card"
                  />
           </div>
 
           <div class="incomeCard">
-                  Income Card:
+                  {{labels.incomecard}}
           </div>
-          <div class="chosenIncome" v-for="(card, index) in players[playerId].income" :card="card" :key="index">
+          <div class= "income" >
+          <div class="chosenIncome" v-for="(card, index) in players[playerId].income" :card="card" :key="'Income'+index">
                 <CollectorsCard
                 :card="card"
                 />
          </div>
+       </div>
 
           <div class="myMoney" v-for="(value, key) in players" :key = "key">
                 <div v-for="(valuevalue,keykey) in value" :key ="keykey">
                   <div v-if="keykey == 'money' && key == playerId ">
-                    Coins: {{valuevalue}}
+                    {{labels.coins}} {{valuevalue}}
                   </div>
                 </div>
           </div>
@@ -235,25 +237,25 @@
       </div>
       <!-- Vems tur? Start på ruta för att visa vems tur -->
       <div class="turnCounter">
-        <h3> Who's turn? </h3>
+        <h3> {{labels.turn}} </h3>
         <button class="turnButton"  @click= "changeTurn">  <!--  @click= "changeTurn" -->
           <div v-if="currentPlayer === '' ">
-            <h5>  {{allPlayersId[0]}} </h5> <h3> Press here when you're done.</h3>
+            <h5>  {{allPlayersId[0]}} </h5> <h3> {{labels.changeturn}} </h3>
           </div>
           <div v-else>
-            <h5>   {{currentPlayer}} </h5> <h3> Press here when you're done.</h3>
+            <h5>   {{currentPlayer}} </h5> <h3> {{labels.changeturn}}</h3>
           </div>
         </button>
       </div>
 
       <div class="roundCounter">
-        <h3> Round:  </h3>
+        <h3> {{labels.round}}</h3>
         <button class="roundButton"  @click= "changeRound(); endGame(currentRound); newRound(currentRound)">
           <div v-if="currentRound < 5">
-            <h5> {{currentRound}} </h5> <h3> Press here when round {{currentRound}} is over.</h3>
+            <h5> {{currentRound}} </h5> <h3> {{labels.changeround}} {{currentRound}} {{labels.changeround2}}</h3>
           </div>
           <div v-else >
-            <h5> Game Ended </h5>
+            <h5> {{labels.endgame}} </h5>
           </div>
         </button>
       </div>
@@ -262,7 +264,7 @@
 
       <!-- Ruta för att visa vilka spelare som är i rummet -->
       <div class="showPlayers">
-        The players in this room:
+        {{labels.showplayers}}
         <div v-for="(player,key) in players" :key = "key">
           <div>
             {{key}}
@@ -455,6 +457,7 @@ export default {
             function(d) {
               this.players= d.players;
               this.quarterPlacement = d.placements.quarterPlacement;
+              this.currentRound= d.currentRound;
               }.bind(this));
 
     this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
@@ -641,10 +644,11 @@ function(d) {
     placeQuarterBottle: function (p) {
       this.chosenPlacementCost = p.cost;
       this.chosenAction = p.action;
+      console.log("currentroundid i collectors vue: "+(this.currentRound-1));
       this.$store.state.socket.emit('collectorsPlaceQuarterBottle', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
-          currentRoundID: p.currentRoundID,
+          currentRound: this.currentRound-1,
           cost: p.cost,
         }
       );
@@ -1026,7 +1030,7 @@ h5 {
   font-size: 20px;
 }
 .myMoney {
-  grid-row: 3 ;
+  grid-row: 1 ;
   grid-column: 5/span 2;
   place-self: top;
 }
@@ -1052,11 +1056,18 @@ h5 {
     grid-row:3 ;
     grid-column: 7 /span 2;
   }
-    .chosenIncome {
-      grid-row: 3 ;
-      grid-column: 7;
-      transform: scale(0.2);
-    }
+
+  .chosenIncome {
+    grid-auto-flow: column;
+    display: grid;
+    grid-template-columns: 12vw 12vw 12vw 12vw;
+  }
+
+  .income {
+    grid-row: 3 ;
+    grid-column: 7;
+    transform: scale(0.2);
+  }
 
 
 .itemTitle {
@@ -1321,8 +1332,8 @@ h5 {
     font-size: 20px;
   }
   .myMoney {
-    grid-row: 3 ;
-    grid-column: 7/span 2;
+    grid-row: 1 ;
+    grid-column: 5/span 2;
     place-self: top;
   }
   .skillTitle {
