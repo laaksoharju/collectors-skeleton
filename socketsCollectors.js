@@ -116,7 +116,7 @@ function sockets(io, socket, data) {
 
     socket.on('collectorsStartAuction', function(d){
       console.log(d.cost+"i socket start auction")
-      data.startAuction(d.roomId, d.playerId, d.card, d.auctionCard, d.cost)
+      data.startAuction(d.roomId, d.playerId, d.card, d.cost)
       io.to(d.roomId).emit('collectorsAuctionStarted', {
         playerId: d.playerId,
         players: data.getPlayers(d.roomId),

@@ -134,7 +134,8 @@
             :highestBid="highestBid"
             @startAuction="whichAction($event)"
             @startBidding="startBidding($event)"
-            @stopAuction="stopAuction($event)"
+            @stopAuction="stopAuction()"
+            @startWinnerCard="startWinnerCard($event)"
             @placeBottle="placeBottle('auction', $event)"
             />
 
@@ -551,6 +552,7 @@ export default {
   this.$store.state.socket.on('collectorsAuctionStopped',
   function(d) {
     console.log(d.playerId, "Stopped an auction");
+    console.log(d.auctionWinner, "auction winner");
     this.players = d.players;
     this.cardUpForAuction = d.cardUpForAuction;
     this.auctionWinner = d.auctionWinner;
@@ -710,13 +712,11 @@ function(d) {
       this.getSkillValue(card);
     },
     startAuction: function (card) {
-      console.log()
-      console.log("startAuction", card);
+
       this.$store.state.socket.emit('collectorsStartAuction', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
           card: card,
-          auctionCard: this.auctionCards,
           cost: this.chosenPlacementCost
         }
       );
@@ -754,6 +754,7 @@ function(d) {
     );
 },
 startWinnerCard: function(action){
+  console.log("start winner card collectors!!")
   console.log("start winner card collectors.vue med action "+action)
   this.$store.state.socket.emit('collectorsWinnerCard', {
     roomId: this.$route.params.id,
