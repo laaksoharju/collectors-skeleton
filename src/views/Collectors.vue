@@ -455,9 +455,10 @@ export default {
 
           this.$store.state.socket.on('collectorsQuarterBottlePlaced',
             function(d) {
+              this.quarterPlacement = d.quarterPlacement;
               this.players= d.players;
-              this.quarterPlacement = d.placements.quarterPlacement;
               this.currentRound= d.currentRound;
+              console.log("collectors placement " + d.quarterPlacement);
               }.bind(this));
 
     this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
@@ -498,7 +499,9 @@ export default {
     this.$store.state.socket.on('collectorsChangedRound',
       function(d) {
           console.log( "Changed round");
-          this.currentRound = d;
+          console.log(d.placements);
+          this.currentRound = d.currentRound;
+          this.placements = d.placements;
       }.bind(this)
     );
 
@@ -644,11 +647,11 @@ function(d) {
     placeQuarterBottle: function (p) {
       this.chosenPlacementCost = p.cost;
       this.chosenAction = p.action;
-      console.log("currentroundid i collectors vue: "+(this.currentRound-1));
+      console.log("currentroundid i collectors vue: "+(this.currentRound));
       this.$store.state.socket.emit('collectorsPlaceQuarterBottle', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
-          currentRound: this.currentRound-1,
+          currentRound: this.currentRound,
           cost: p.cost,
         }
       );

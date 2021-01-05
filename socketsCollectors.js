@@ -81,12 +81,16 @@ function sockets(io, socket, data) {
     socket.on('collectorsPlaceQuarterBottle', function(d) {
       console.log("inne i  sockets collectorsPlaceQuarterBottle 1"+d.currentRound);
       data.placeQuarterBottle(d.roomId, d.playerId, d.currentRound, d.cost);
+      console.log("data getplacement" + data.getPlacements(d.roomId).quarterPlacement[0].playerId);
+
       console.log("Socket efter placeQuarterBottle 2");
       io.to(d.roomId).emit('collectorsQuarterBottlePlaced',
-        { placements: data.getPlacements(d.roomId),
+        { quarterPlacement: data.getPlacements(d.roomId).quarterPlacement,
+          placements: data.getPlacements(d.roomId),
          players: data.getPlayers(d.roomId),
-       currentRound: d.currentRound}
+         currentRound: d.currentRound}
        );
+       console.log("socket quaarterplacement. "+ data.getPlacements(d.roomId).quarterPlacement);
             console.log("I sockeet placeQuarterBottle 3");
      });
 
@@ -181,7 +185,9 @@ function sockets(io, socket, data) {
 
     socket.on('collectorsChangeRound', function(d) {
       io.to(d.roomId).emit('collectorsChangedRound',
-      data.changeRound(d.roomId, d.currentRound));
+    {  currentRound: data.changeRound(d.roomId, d.currentRound),
+      placements: data.getPlacements(d.roomId)}
+      );
     });
 
     socket.on('collectorsCountRounds', function(d) {
