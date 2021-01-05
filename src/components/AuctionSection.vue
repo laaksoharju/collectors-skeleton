@@ -256,4 +256,16 @@ export default {
     z-index: 1;
   }
 }
+
+@media only screen and (max-width: 850px) {
+  .buttons {
+    grid-template-columns: repeat(auto-fill, 30px);
+    margin-right: 10px;
+  }
+  .buttons p{
+     font-size: 50%;
+   }
+}
+
+
 </style>

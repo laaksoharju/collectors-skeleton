@@ -22,15 +22,15 @@
             :disabled="buttonDisabled(p.cost)"
             @click="placeBottle(p)"
           >
-            ${{ p.cost }}
+            <p>${{ p.cost }}</p>
           </button>
           <div
             class="clickedButton"
             v-if="p.playerId !== null && typeof players !== 'undefined'"
             :style="{ backgroundColor: players[p.playerId].color }"
           >
-            {{ p.playerId }}
-          </div>
+            <p>{{ p.playerId }}</p>
+        </div>
         </div>
       </div>
     </div>
@@ -140,6 +140,9 @@ export default {
   margin-right:10px;
 }
 
+.buttons p{
+  margin: 0;
+}
 .board-section {
   padding: 10px;
   align-items: center;
@@ -233,13 +236,6 @@ h1 {
   margin-bottom: 15px;
 }
 
-p {
-  color: #666;
-  font-size: 18px;
-  font-weight: 400;
-  margin-bottom: 15px;
-}
-
 .fade-enter-active,
 .fade-leave.active {
   transition: opacity 1.5s;
@@ -292,6 +288,16 @@ p {
   .cardslots div:hover {
   transform: scale(1) translate(-25%, 0);
   z-index: 1;
+}
+
+@media only screen and (max-width: 850px) {
+  .buttons {
+    grid-template-columns: repeat(auto-fill, 30px);
+    margin-right: 10px;
+  }
+  .buttons p{
+     font-size: 70%;
+  }
 }
 }
 </style>
