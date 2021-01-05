@@ -105,14 +105,14 @@ export default {
 .handPlayer {
   /*width: 100%;
   height: 100%;*/
-  border-top: 2px solid black;
+  /*border-top: 2px solid black;
   border-bottom: 2px solid black;
   border-right: 2px solid black;
   margin-top: 2px;
-  margin-bottom: 2px;
+  margin-bottom: 2px;*/
   padding: 10px;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
+  /*border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;*/
 }
 
 div.handPlayer {
@@ -186,11 +186,8 @@ div.handPlayer {
   margin-bottom: 15px;
 }
 
-/*INGEN AV DESSA GÖR ATT KORTET LÄGGER SIG I MITTEN..*/ 
 .theSecretCard {
-  display: flex;
-  justify-content: center;
-  vertical-align: middle;
+  margin: auto;
 }
 
 .background {
