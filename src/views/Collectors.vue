@@ -584,7 +584,7 @@ export default {
 <style scoped>
 .board-section {
   /*width: 100%;*/
-  padding: 10px;
+  padding: 5px;
   align-items: center;
   display: flex;
   flex-direction: row-reverse;
