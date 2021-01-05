@@ -488,31 +488,21 @@ Data.prototype.newRound = function (roomId, skillsOnSale,itemsOnSale, auctionCar
           let temp = room.auctionCards.splice(i,1);
           room.market.push(temp[0]);
           break;
-
-
   }
 }
-
-
 //Item pch auction fylls på
-
       if (room.itemsOnSale.length < playerCounter){
           for (let i = room.itemsOnSale.length; i < room.playerCount+1; i+=1){
             let card = room.deck.pop();
             room.itemsOnSale.push(card);
           }
       }
-
-
-
-      if (room.auctionCards.length < playerCounter){
-          for (let i = room.auctionCards.length; i < room.playerCount+1; i+=1){
+      if (room.auctionCards.length < 4){
+          for (let i = room.auctionCards.length; i < 4; i+=1){
             let card = room.deck.pop();
             room.auctionCards.push(card);
           }
       }
-
-
 //Flaskorna förvonner
         for (let playerId in room.buyPlacement){
         room.buyPlacement[playerId].playerId = null;
