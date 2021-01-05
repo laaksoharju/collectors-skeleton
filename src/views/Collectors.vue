@@ -88,9 +88,6 @@
               <img class="function_button_img" src="images/retrieveBottles.png">
           </button>
         </div>
-        <div>
-          <button id="money" v-if="players[playerId]" @click="fakeMoreMoney()">{{labels.fake}}</button>
-        </div>
         <div class="buttons">
           <button class="function_buttons" @click="drawCard">
             {{ labels.draw }}
@@ -361,11 +358,6 @@ export default {
 
           this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
 
-          this.$store.state.socket.on('collectorsMoneyUpdated',
-          function(d) {
-            this.players = d;
-          }.bind(this));
-
           this.$store.state.socket.on('collectorsCardDrawn',
           function(d) {
             //this has been refactored to not single out one player's cards
@@ -406,13 +398,7 @@ export default {
             this.currentAuctionCard = d.currentAuctionCard;
           }.bind(this));
 
-          this.$store.state.socket.on('collectorsMoneyFaked',
-          function(d) {
-            console.log(d.playerId, "faked money");
-            this.players = d;
-          }.bind(this));
-
-          this.$store.state.socket.on('collectorsPlayerValueRecived',
+          this.$store.state.socket.on('collectorsPlayerValueRecieved',
           function(d) {
             this.players = d;                                         // -------------------------------<<
           }.bind(this));
@@ -508,10 +494,10 @@ methods: {
       if (this.players[Object.keys(this.players)[index]].victoryPoints > highestScore) {
         highestScore = this.players[Object.keys(this.players)[index]].victoryPoints;
         highestScorePlayer1 = Object.keys(this.players)[index];
-        winnerArray.push(highestScore);
-        winnerArray.push(highestScorePlayer1);
       }
     }
+    winnerArray.push(highestScore);
+    winnerArray.push(highestScorePlayer1);
     for (let index in Object.keys(this.players)) {
       console.log(this.players[Object.keys(this.players)[index]].victoryPoints);
       if (this.players[Object.keys(this.players)[index]].victoryPoints === highestScore && Object.keys(this.players)[index] !== highestScorePlayer1) {
@@ -616,13 +602,6 @@ methods: {
     }
   },
 
-  fakeMoreMoney: function () {
-    this.$store.state.socket.emit('collectorsFakeMoreMoney', {
-      roomId: this.$route.params.id,
-      playerId: this.playerId
-    });
-  },
-
   playerTotalValue: function () {
     this.$store.state.socket.emit('collectorsPlayerTotalValue', {
       roomId: this.$route.params.id,                              //---------------------------<<
@@ -706,7 +685,7 @@ methods: {
     else if (this.raiseValueSecondCard == null) {
       this.raiseValueSecondCard = card;
     }
-    else {
+    else if (this.raiseValueSecondCard != card) {
       this.raiseValue(card, this.raiseValueSecondCard);
       this.raiseValueSecondCard = null;
     }

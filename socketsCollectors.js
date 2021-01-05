@@ -146,12 +146,6 @@ function sockets(io, socket, data) {
       );
     });
 
-    socket.on('collectorsFakeMoreMoney', function(d) {
-      io.to(d.roomId).emit('collectorsMoneyFaked',
-      data.fakeMoreMoney(d.roomId, d.playerId)
-      );
-    });
-
     socket.on('collectorsRetrieveBottles', function(d) {
       io.to(d.roomId).emit('collectorsBottlesRetrieved',
       data.retrieveBottles(d.roomId, d.playerId)
@@ -166,7 +160,7 @@ function sockets(io, socket, data) {
 
     socket.on('collectorsPlayerTotalValue', function(d) {
       data.playerTotalValue(d.roomId, d.playerId)
-      io.to(d.roomId).emit('collectorsPlayerValueRecived', {
+      io.to(d.roomId).emit('collectorsPlayerValueRecieved', {
           playerId: d.playerId,
           marketValues: data.getMarketValues(d.roomId),
         }

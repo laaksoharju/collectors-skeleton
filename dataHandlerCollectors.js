@@ -112,7 +112,7 @@ Data.prototype.joinGame = function (roomId, playerId) {
     else if (Object.keys(room.players).length < room.playerCount) {
       console.log("Player", playerId, "joined for the first time");
       room.players[playerId] = { hand: [],
-                                 money: 5,
+                                 money: 2,
                                  bottles: 2, // --------------Bottles to place ----------------
                                  bottleCount: 2, // -------- Number of bottles you own --------
                                  points: 0,
@@ -295,6 +295,11 @@ Data.prototype.addPlayerReady = function(roomId, playerId) {
 Data.prototype.startGame = function(roomId) {
   let room = this.rooms[roomId];
   if (typeof room !== "undefined") {
+    let theMoney = 2
+    for (let index in room.playerIdArray) {
+      room.players[room.playerIdArray[index]].money = theMoney;
+      theMoney += 1;
+    }
     room.activeRound = 1;
   }
 }
@@ -701,15 +706,6 @@ Data.prototype.getPlayerCount = function (roomId) {
     return room.playerCount;
   }
   else return 0;
-}
-
-Data.prototype.fakeMoreMoney = function (roomId, playerId) {
-  let room = this.rooms[roomId];
-  if (typeof room !== 'undefined') {
-    room.players[playerId].money += 1;
-    return room.players;
-  }
-  else return [];
 }
 
 Data.prototype.retrieveBottles = function (roomId, playerId) {
