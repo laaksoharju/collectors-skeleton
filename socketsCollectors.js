@@ -113,6 +113,7 @@ socket.on('collectorsAuctionToHand', function(d) {
       players: data.getPlayers(d.roomId),
       auctionCards: data.getAuctionCards(d.roomId),
       upForAuction: data.getUpForAuctionCards(d.roomId),
+      marketValues: data.getMarketValues(d.roomId)
     }
   );
 });

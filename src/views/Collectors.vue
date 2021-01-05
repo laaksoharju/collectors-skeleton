@@ -415,6 +415,7 @@ export default {
         this.players = d.players;
         this.auctionCards = d.auctionCards;
         this.upForAuction = d.upForAuction;
+        this.marketValues = d.marketValues;
         this.highestBid = d.highestBid;
         this.destination = d.destination;
         this.highestBiddingPlayer = d.highestBiddingPlayer;

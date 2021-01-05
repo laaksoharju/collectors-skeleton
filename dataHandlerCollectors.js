@@ -725,7 +725,7 @@ Data.prototype.passedCheck = function (roomId) {
       numberOfPass += 1;
     }
   }
-  if (numberOfPass == room.playerOrder.length - 2) {
+  if (numberOfPass > 0 && room.playerOrder.length - 1 || room.playerOrder.length -2 || room.playerOrder.length -3) {
     return true;
   }
   else {
@@ -769,17 +769,17 @@ Data.prototype.auctionToHand = function (roomId, playerId, card, cost, destinati
     if (destination == 'items' && this.passedCheck(roomId)){
       room.players[playerId].items.push(card);
       room.players[playerId].money -= cost;
-      room.highestBid = 0;
-      room.highestBiddingPlayer = {};
       room.upForAuction = [];
-
+      room.players[playerId].active = false;
+      room.players[playerId].availableBottles -= 1;
+      if (this.setNextActivePlayer(roomId, playerId)) {
+        room.nextRound = true;
+      }
       }
     
     if (destination == 'skills' && this.passedCheck(roomId)){
       room.players[playerId].skills.push(card);
       room.players[playerId].money -= cost;
-      room.highestBid = 0;
-      room.highestBiddingPlayer = {};
       room.upForAuction = [];
       room.players[playerId].active = false;
       room.players[playerId].availableBottles -= 1;
@@ -790,8 +790,6 @@ Data.prototype.auctionToHand = function (roomId, playerId, card, cost, destinati
     if (destination == 'raiseval' && this.passedCheck(roomId)){
       room.market.push(card);
       room.players[playerId].money -= cost;
-      room.highestBid = 0;
-      room.highestBiddingPlayer = {};
       room.upForAuction = [];
       room.players[playerId].active = false;
       room.players[playerId].availableBottles -= 1;
