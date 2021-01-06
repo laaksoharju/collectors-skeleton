@@ -251,7 +251,7 @@
 
       <div class="roundCounter">
         <h3> {{labels.round}}</h3>
-        <button class="roundButton"  @click= "changeRound()">
+        <button class="roundButton"  @click= "newRound()">
           <div v-if="currentRound < 5">
             <h5> {{currentRound}} </h5> <h3> {{labels.changeround}} {{currentRound}} {{labels.changeround2}}</h3>
           </div>
@@ -454,9 +454,10 @@ export default {
           }.bind(this));
           this.$store.state.socket.on('collectorsQuarterBottlePlaced',
             function(d) {
-              this.quarterPlacement = d.quarterPlacement;
               this.players= d.players;
               this.currentRound= d.currentRound;
+              this.workPlacement= d.placements.workPlacement;
+              this.quarterPlacement= d.placements.quarterPlacement;
               console.log("collectors placement " + d.quarterPlacement);
               }.bind(this));
     this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
@@ -491,19 +492,6 @@ export default {
           this.currentPlayer = d;
       }.bind(this)
     );
-    this.$store.state.socket.on('collectorsChangedRound',
-      function(d) {
-          console.log( "Changed round");
-          console.log(d.placements);
-          this.currentRound = d.currentRound;
-          this.buyPlacement= d.placements.buyPlacement;
-          this.skillPlacement= d.placements.skillPlacement;
-          this.auctionPlacement= d.placements.auctionPlacement;
-          this.marketPlacement= d.placements.marketPlacement;
-          this.workPlacement= d.placements.workPlacement;
-          this.quarterPlacement= d.placements.quarterPlacement;
-      }.bind(this)
-    );
     this.$store.state.socket.on('collectorsNewlyRounded',
       function(d) {
           this.itemsOnSale = d.itemsOnSale;
@@ -518,7 +506,8 @@ export default {
           this.marketValues = d.marketValues;
           this.players = d.players;
           this.currentRound = d.currentRound;
-      }.bind(this)
+          console.log("d rundis"+ d.currentRound,"this runda" +this.currentRound)      
+    }.bind(this)
     );
     this.$store.state.socket.on('collectorsBottlesFilled',
     function(d) {
@@ -758,6 +747,7 @@ startWinnerCard: function(action){
           }
         );
       },
+
 /*    changeRound: function () {
       this.$store.state.socket.emit('collectorsChangeRound', {
           roomId: this.$route.params.id,
@@ -765,6 +755,7 @@ startWinnerCard: function(action){
           }
         );
     },*/
+
     endGame: function(){
             this.$store.state.socket.emit('collectorsEndGame', {
             roomId: this.$route.params.id,
@@ -774,7 +765,7 @@ startWinnerCard: function(action){
 
         },
 
-fillBottles: function()
+/*fillBottles: function()
 {
   this.$store.state.socket.emit('collectorsFillBottles', {
       roomId: this.$route.params.id,
@@ -786,17 +777,17 @@ getIncome: function()
 {
   this.$store.state.socket.emit('collectorsGetIncome', {
       roomId: this.$route.params.id,
-      players: this.players
 });
-},
+},*/
 
 
-    changeRound: function(){
+    newRound: function(){
       if (this.currentRound != 4){
-        this.fillBottles();
-        this.getIncome();
+
         this.$store.state.socket.emit('collectorsNewRound', {
             roomId: this.$route.params.id,
+            players: this.players
+
               }
           );
       }

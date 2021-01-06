@@ -80,15 +80,14 @@ function sockets(io, socket, data) {
 
     socket.on('collectorsPlaceQuarterBottle', function(d) {
       console.log("inne i  sockets collectorsPlaceQuarterBottle 1"+d.currentRound);
-      data.placeQuarterBottle(d.roomId, d.playerId, d.currentRound, d.cost);
+      data.placeQuarterBottle(d.roomId, d.playerId, d.cost);
       console.log("data getplacement" + data.getPlacements(d.roomId).quarterPlacement[0].playerId);
 
       console.log("Socket efter placeQuarterBottle 2");
       io.to(d.roomId).emit('collectorsQuarterBottlePlaced',
-        { quarterPlacement: data.getPlacements(d.roomId).quarterPlacement,
-          placements: data.getPlacements(d.roomId),
+        { placements: data.getPlacements(d.roomId),
          players: data.getPlayers(d.roomId),
-         currentRound: d.currentRound}
+         currentRound: data.getCurrentRound(d.roomId)}
        );
        console.log("socket quaarterplacement. "+ data.getPlacements(d.roomId).quarterPlacement);
             console.log("I sockeet placeQuarterBottle 3");
@@ -183,17 +182,9 @@ function sockets(io, socket, data) {
     });
     // 14/12
 
-    socket.on('collectorsChangeRound', function(d) {
-      io.to(d.roomId).emit('collectorsChangedRound',
-    {  currentRound: data.changeRound(d.roomId, d.currentRound),
-      placements: data.getPlacements(d.roomId)}
-      );
-    });
 
-    socket.on('collectorsCountRounds', function(d) {
-      io.to(d.roomId).emit('collectorsRoundsCounted',
-      data.countRounds(d.roomId, d.currentPlayer));
-    });
+
+
 
     socket.on('collectorsEndGame', function(d) {
       data.endGame(d.roomId, d.marketValues)
@@ -204,7 +195,8 @@ function sockets(io, socket, data) {
     });
 
     socket.on('collectorsNewRound', function(d) {
-      data.newRound(d.roomId)
+      data.newRound(d.roomId, d.players)
+      console.log("runda i getcurrent"+data.getCurrentRound(d.roomId));
       io.to(d.roomId).emit('collectorsNewlyRounded',{
         currentRound: data.getCurrentRound(d.roomId),
         skillsOnSale: data.getSkillsOnSale(d.roomId),
@@ -216,7 +208,7 @@ function sockets(io, socket, data) {
       });
     });
 
-    socket.on('collectorsFillBottles', function(d) {
+  /*  socket.on('collectorsFillBottles', function(d) {
       data.fillBottles(d.roomId, d.players)
       io.to(d.roomId).emit('collectorsBottlesFilled',{
         players: data.getPlayers(d.roomId)
@@ -228,7 +220,7 @@ function sockets(io, socket, data) {
       io.to(d.roomId).emit('collectorsGotIncome',{
         players: data.getPlayers(d.roomId)
       });
-    });
+    });*/
 
 }
 

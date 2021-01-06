@@ -96,9 +96,12 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
+      if(this.player.playerBottles>0){
       this.$emit('placeBottle', p);
       this.highlightAvailableCards(p.cost);
+    }
     },
+
     highlightAvailableCards: function (cost=100) {
       for (let i = 0; i < this.itemsOnSale.length; i += 1) {
         if (this.marketValues[this.itemsOnSale[i].item] <= this.player.money - cost) {

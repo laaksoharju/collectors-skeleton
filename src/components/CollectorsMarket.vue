@@ -71,8 +71,10 @@ export default {
   },
   methods: {
     placeBottle: function (p) {
+      if(this.player.playerBottles>0){
       this.$emit('placeBottle', p);
-      this.highlightAvailableCards();
+      this.highlightAvailableCards(p.cost);
+    }
     },
     cannotAfford: function (cost) {
       let minCost = 100;

@@ -86,12 +86,11 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
-      console.log("nu körs placeBottle i work")
       this.$emit('placeBottleWork', p);
     },
 
     placeQuarterBottle: function (p) {
-      console.log("nu körs placeQuarterBottle i work"+(this.currentRound))
+      console.log("nu körs placeQuarterBottle i work"+this.currentRound)
       this.$emit('placeQuarterBottle', p);
     },
 
