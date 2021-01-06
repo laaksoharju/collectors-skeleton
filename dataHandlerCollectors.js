@@ -95,8 +95,8 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.marketPlacement = [ {cost:0, playerId: null, placementId:0 },
                            {cost:0, playerId: null, placementId:1 },
                            {cost:-2, playerId: null, placementId:2 } ];
-  room.workPlacement = [ {cost:1, playerId: null, workActionId:0},
-                            {cost:-1, playerId: null, workActionId:1},
+  room.workPlacement = [ {cost:-1, playerId: null, workActionId:0},
+                            {cost:1, playerId: null, workActionId:1},
                             {cost:0, playerId: null, workActionId:2},
                             {cost:0, playerId: null, workActionId:3} ];
   room.quarterPlacement = [ {cost:0, playerId: null, currentRoundID:0},
@@ -373,7 +373,7 @@ Data.prototype.startWinnerCard = function(roomId, playerId, cardUpForAuction, ac
 
 }
 
-Data.prototype.startMarket = function (roomId, playerId, card) {
+Data.prototype.startMarket = function (roomId, playerId, card, cost) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
         for (let i = 0; i < room.skillsOnSale.length; i += 1) {
@@ -382,11 +382,13 @@ Data.prototype.startMarket = function (roomId, playerId, card) {
               room.skillsOnSale[i].y === card.y) {
                 let temp = room.skillsOnSale.splice(i,1);
                 room.market.push(temp[0]);
+
                 break;
           //  c = room.skillsOnSale.splice(i,1, {});
 
           }
         }
+          room.players[playerId].money += cost;
       //  room.players[playerId].skills.push(...c);
       }
     }
@@ -565,19 +567,21 @@ Data.prototype.endGame = function (roomId, marketValues){
     let technologyItem = false;
     let figuresItem = false;
 
-
     for (let player in room.players){
 
-
       while (room.players[player].money > 2){
-
-
         room.players[player].money = room.players[player].money - 3;
         room.players[player].points += 1;
       }
+      let itemSecretCards = room.players[player].items;
+      let secretItem = room.players[player].secret;
+      console.log("itemSecretCards"+itemSecretCards.length);
 
+      itemSecretCards.push(...secretItem);
+      room.players[player].secret = {};
+      console.log("itemSecretCards"+itemSecretCards.length);
 
-      for (let index in room.players[player].items){
+      for (let index in itemSecretCards){
         let cardItem = room.players[player].items[index].item;
 
         if (cardItem === "fastaval"){

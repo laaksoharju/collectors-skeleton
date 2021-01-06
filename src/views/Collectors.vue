@@ -709,6 +709,7 @@ function(d) {
           roomId: this.$route.params.id,
           playerId: this.playerId,
           card: card,
+          cost: this.chosenPlacementCost
         //  cardUpForMarket: this.cardUpForMarket,
         }
       );
