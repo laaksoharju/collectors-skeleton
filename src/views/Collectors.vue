@@ -89,9 +89,11 @@
           </button>
         </div>
         <div class="buttons">
-          <button class="function_buttons" @click="drawCard">
-            {{ labels.draw }}
-            <img id="drawCard_button_img" src="images/drawCards.png">
+          <button class="function_buttons">
+            {{ labels.rules }}
+              <a href="/rules_collectors.pdf" target="_blank">
+                <img id="drawCard_button_img" src="images/drawCards.png">
+              </a>
           </button>
         </div>
 
@@ -562,15 +564,6 @@ methods: {
     });
   },
 
-  drawCard: function () {
-    this.$store.state.socket.emit('collectorsDrawCard', {
-      roomId: this.$route.params.id,
-      playerId: this.playerId
-    });
-    // console.log(this.players.[this.playerId].hand);
-    console.log(this.activeRound);
-  },
-
   buyItem: function (card) {
     this.$store.state.socket.emit('collectorsBuyItem', {
       roomId: this.$route.params.id,
@@ -1015,7 +1008,7 @@ footer a:visited {
   position: relative;
 }
 
-.function_buttons {
+.function_buttons  {
   width: 12em;
   margin-bottom: 0.5em;
   padding: 10px 0px 10px 0px;
@@ -1023,7 +1016,7 @@ footer a:visited {
   transition-timing-function: ease-in-out;
 }
 
-.function_buttons:hover{
+.function_buttons:hover,.ready:hover{
   transform: scale(1.05);
   transition: 0.15s;
   transition-timing-function: ease-in-out;
@@ -1035,9 +1028,9 @@ footer a:visited {
 }
 
 .ready {
-  width: 7em;
+  width: 12em;
   margin-bottom: 0.5em;
-  padding: 5px 0px 5px 0px;
+  padding: 10px 0px 10px 0px;
 }
 
 .cardslots {

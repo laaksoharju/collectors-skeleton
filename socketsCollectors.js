@@ -32,12 +32,6 @@ function sockets(io, socket, data) {
       });
     });
 
-    socket.on('collectorsDrawCard', function(d) {
-      io.to(d.roomId).emit('collectorsCardDrawn',
-      data.drawCard(d.roomId, d.playerId)
-      );
-    });
-
     socket.on('collectorsBuyItem', function(d) {
       data.buyItem(d.roomId, d.playerId, d.card, d.cost)
       io.to(d.roomId).emit('collectorsItemBought', {

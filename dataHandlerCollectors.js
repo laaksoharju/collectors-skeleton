@@ -161,17 +161,6 @@ Data.prototype.playerTotalValue = function(roomId, playerId) {
   } else return null;
 }
 
-/* returns players after a new card is drawn */
-Data.prototype.drawCard = function (roomId, playerId) {
-  let room = this.rooms[roomId];
-  if (typeof room !== 'undefined') {
-    let card = room.deck.pop();
-    room.players[playerId].hand.push(card);
-    return room.players;
-  }
-  else return [];
-}
-
 Data.prototype.buyItem = function (roomId, playerId, card, cost) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
