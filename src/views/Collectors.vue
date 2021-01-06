@@ -771,14 +771,9 @@ startWinnerCard: function(action){
             marketValues: this.marketValues
             }
           );
-<<<<<<< HEAD
-      }
-    },
-=======
+
         },
 
-/* FIXA PÅ SRVER_SIDAN aneopa genom new round
->>>>>>> 79853bf8685f0b1b802b4e849e592f4277f8b04f
 fillBottles: function()
 {
   this.$store.state.socket.emit('collectorsFillBottles', {
@@ -786,24 +781,20 @@ fillBottles: function()
       players: this.players
 });
 },
+
 getIncome: function()
 {
   this.$store.state.socket.emit('collectorsGetIncome', {
       roomId: this.$route.params.id,
       players: this.players
 });
-<<<<<<< HEAD
 },
-    newRound: function(currentRound){
-      if (currentRound != 4){
-      this.fillBottles();
-      this.getIncome();
-=======
-},*/
+
+
     changeRound: function(){
       if (this.currentRound != 4){
-
->>>>>>> 79853bf8685f0b1b802b4e849e592f4277f8b04f
+        this.fillBottles();
+        this.getIncome();
         this.$store.state.socket.emit('collectorsNewRound', {
             roomId: this.$route.params.id,
               }
