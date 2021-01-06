@@ -126,7 +126,7 @@ function sockets(io, socket, data) {
     });
 
     socket.on('collectorsStartMarket', function(d){
-      data.startMarket(d.roomId, d.playerId, d.card)
+      data.startMarket(d.roomId, d.playerId, d.card, d.cost)
       io.to(d.roomId).emit('collectorsMarketStarted', {
         playerId: d.playerId,
         players: data.getPlayers(d.roomId),
