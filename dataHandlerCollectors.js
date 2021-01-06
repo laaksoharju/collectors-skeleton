@@ -74,6 +74,7 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.auctionCards = room.deck.splice(0, 4);
   room.cardUpForAuction = {};
   room.auctionWinner = "";
+  room.currentRound = 1;
   room.winner = "";
   room.highestBid = 0;
   room.market = [];
@@ -145,6 +146,7 @@ Data.prototype.joinGame = function (roomId, playerId) {
                                  myMovie:0,
                                  myMusic:0,
                                  myTechnology:0,
+                                 vpAll: false,
                                  order: Object.keys(room.players).length+1,
 
                                };
@@ -282,6 +284,10 @@ Data.prototype.getSkillValue= function (roomId, playerId, card, skill){
         room.players[playerId].myFigures += 1;
       }
 
+      if(card.skill === "VP-all"){
+        room.players[playerId].vpAll = true;
+      }
+
 
 
 
@@ -291,7 +297,7 @@ Data.prototype.getSkillValue= function (roomId, playerId, card, skill){
 }
 
 
-Data.prototype.startAuction = function (roomId, playerId, card, auctionCard, cost) {
+Data.prototype.startAuction = function (roomId, playerId, card, cost) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
         //check if card is among skills on sale
@@ -322,7 +328,7 @@ Data.prototype.startAuction = function (roomId, playerId, card, auctionCard, cos
 Data.prototype.stopAuction = function (roomId, playerId, card) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
-
+  console.log("inne i stop auction")
   let c = room.cardUpForAuction;
   let allPlayersId = Object.keys(room.players);
   for (let i in allPlayersId){
@@ -331,8 +337,9 @@ Data.prototype.stopAuction = function (roomId, playerId, card) {
         return c;
 
       }
-      else return {};
+
   }
+  return {};
   }
 }
 
@@ -456,84 +463,88 @@ Data.prototype.getIncome= function(roomId, players){
 }
 }
 
-Data.prototype.newRound = function (roomId, skillsOnSale,itemsOnSale, auctionCards){
+Data.prototype.newRound = function (roomId){
   let room = this.rooms[roomId];
+
   if (typeof room !== 'undefined') {
+      let nextRound = room.currentRound;
+    if (nextRound < 4) {
+      room.currentRound += 1;
+    }
+    if (nextRound === 4) { 
+      let stopGame = 5;
+      return stopGame; //Krash på sista gången som måste fixas!
+    }
+
+
     let playerCounter = room.playerCount+2;
 
-
-//Kort från item till skill
     for (let i = 0; i < room.skillsOnSale.length; i += 1) {
-
+//sista kortet från skill till market
       if (room.skillsOnSale[i]=room.skillsOnSale[0]) {
             let temp = room.skillsOnSale.splice(i,1);
             room.market.push(temp[0]);
             break;
-
-
     }
   }
-
+//Fyll kort från item till skill
   if (room.skillsOnSale.length < playerCounter){
       for (let i = room.skillsOnSale.length; i < room.playerCount+1; i+=1){
         let card = room.itemsOnSale.pop();
+        console.log("inne  i for loop item till skill"+i);
         room.skillsOnSale.push(card);
-
       }
   }
-
+//sista kortet från auction till market
   for (let i = 0; i < room.auctionCards.length; i += 1) {
-
     if (room.auctionCards[i]=room.auctionCards[0]) {
           let temp = room.auctionCards.splice(i,1);
           room.market.push(temp[0]);
           break;
+        }
   }
-}
-//Item pch auction fylls på
+
+//Item och auction fylls på från högen
       if (room.itemsOnSale.length < playerCounter){
           for (let i = room.itemsOnSale.length; i < room.playerCount+1; i+=1){
             let card = room.deck.pop();
             room.itemsOnSale.push(card);
           }
       }
+
       if (room.auctionCards.length < 4){
           for (let i = room.auctionCards.length; i < 4; i+=1){
             let card = room.deck.pop();
             room.auctionCards.push(card);
           }
       }
-//Flaskorna förvonner
-        for (let playerId in room.buyPlacement){
+//Flaskorna försvinner vid new round
+      for (let playerId in room.buyPlacement){
         room.buyPlacement[playerId].playerId = null;
       }
 
       for (let playerId in room.skillPlacement){
-      room.skillPlacement[playerId].playerId = null;
+        room.skillPlacement[playerId].playerId = null;
       }
 
-    for (let playerId in room.auctionPlacement){
-    room.auctionPlacement[playerId].playerId = null;
+      for (let playerId in room.auctionPlacement){
+        room.auctionPlacement[playerId].playerId = null;
       }
 
       for (let playerId in room.workPlacement){
         room.workPlacement[playerId].playerId = null;
       }
 
-        for (let playerId in room.marketPlacement){
-          room.marketPlacement[playerId].playerId = null;
-          }
-
+      for (let playerId in room.marketPlacement){
+        room.marketPlacement[playerId].playerId = null;
+      }
     }
-
   }
-
 
 
 Data.prototype.endGame = function (roomId, marketValues){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
-    //let allPlayersId = Object.keys(room.players);
     let highestPoint = 0;
 
     let fastaval = marketValues.fastaval;
@@ -541,6 +552,13 @@ Data.prototype.endGame = function (roomId, marketValues){
     let technology = marketValues.technology;
     let figures = marketValues.figures;
     let music = marketValues.music;
+
+    let fastavalItem = false;
+    let musicItem = false;
+    let movieItem = false;
+    let technologyItem = false;
+    let figuresItem = false;
+
 
     for (let player in room.players){
 
@@ -557,83 +575,62 @@ Data.prototype.endGame = function (roomId, marketValues){
         let cardItem = room.players[player].items[index].item;
 
         if (cardItem === "fastaval"){
+          fastavalItem = true;
           if((fastaval >0) || (room.players[player].myFastaval >0)){
           room.players[player].points += fastaval;
           room.players[player].points += room.players[player].myFastaval;
+
           }
-
         }
-
         if (cardItem === "movie"){
+          musicItem = true;
+
           if((movie >0) || (room.players[player].myMovie >0)){
           room.players[player].points += movie;
           room.players[player].points += room.players[player].myMovie;
           }
-
         }
-
         if (cardItem === "technology"){
+          technologyItem = true;
           if((movie >0) || (room.players[player].myTechnology >0)){
           room.players[player].points += technology;
           room.players[player].points += room.players[player].myTechnology;
           }
-
         }
-
         if (cardItem === "figures"){
+          figuresItem = true;
           if((figures >0) || (room.players[player].myFigures >0)){
           room.players[player].points += figures;
           room.players[player].points += room.players[player].myFigures;
           }
-
         }
-
         if (cardItem === "music"){
+          musicItem = true;
           if((music >0) || (room.players[player].myMusic >0)){
-          room.players[player].points += music;
+          room.players[player].points += music; //Vp one category
           room.players[player].points += room.players[player].myMusic;
           }
-
         }
+
       }
+      /*if (room.players[player].vpAll===true){
+        console.log("loop1"+room.players[player].vpAll)
+        if ((musicItem ===true)&& (movieItem===true) && (technologyItem===true) && (figuresItem===true) && (fastavalItem===true)){
+
+          room.players[player].points += 5;
+          console.log("loop"+room.players[player].vpAll)
+        }
+      }*/
 
       if (room.players[player].points > highestPoint){
         highestPoint = room.players[player].points;
-
         room.winner = player;
-
-
       }
     }
-
-
-
     }
-
-
-
-}
-
-Data.prototype.changeRound = function (roomId, currentRound) {
-  let room = this.rooms[roomId];
-  let nextRound = currentRound;
-  if (typeof room !== 'undefined') {
-    if (nextRound < 4) {
-      nextRound = currentRound + 1;
-      return nextRound;
-    }
-    if (nextRound === 4) {
-      let stopGame = 5;
-      return stopGame;
-    }
-
-  }
-  else return 0;
 }
 
 Data.prototype.countRounds = function (roomId, playerId) {};//FORTSÄTT HÄR FÖR QUARTER TILES
-
-
 /* moves card from itemsOnSale to a player's hand */
 Data.prototype.buyCard = function (roomId, playerId, card, cost) {
   let room = this.rooms[roomId];
@@ -682,8 +679,6 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost, placement
     else if (action === "market") {
       activePlacement = room.marketPlacement;
     }
-
-
     if (room.players[playerId].playerBottles > 0){
       room.players[playerId].playerBottles = room.players[playerId].playerBottles - 1;
     }
@@ -700,11 +695,10 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost, placement
 }
 
 Data.prototype.placeWorkBottle = function (roomId, playerId, workActionId, cost) {
-  console.log("inne i  datahandlers placeWorkBottle");
+
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     let activePlacement = room.workPlacement;
-
     if (room.players[playerId].playerBottles > 0){
       room.players[playerId].playerBottles = room.players[playerId].playerBottles - 1;
     }
@@ -716,48 +710,35 @@ Data.prototype.placeWorkBottle = function (roomId, playerId, workActionId, cost)
           break;
         }
     }
-
     if (room.players[playerId].workerIncomeCounter > 0){
       room.players[playerId].money += room.players[playerId].workerIncomeCounter;
     }
-
     if (room.players[playerId].workerCardCounter > 0){
       for (let i=0; i < room.players[playerId].workerCardCounter; i+=1){
         this.drawCard(roomId, playerId);
       }
     }
-
     if (workActionId === 0 ){
     room.players[playerId].money += cost;
     //radera flaska, får ej va med i framtida ronder, gör om de finns tid
     }
-
     if (workActionId === 1 ){
       this.drawCard(roomId, playerId);
       this.drawCard(roomId, playerId);
       room.players[playerId].money += cost;
     }
-
-
-
     if (workActionId === 2 ){
       this.drawCard(roomId, playerId);
-
       let switchOrder = room.players[playerId].order;
-
       for (let playerId in room.players ){
-
-              console.log('order före ändring',  room.players[playerId].order)
-        room.players[playerId].order = (room.players[playerId].order - (switchOrder - 1) + room.playerCount) % room.playerCount //FEL I EKV
-        if (room.players[playerId].order === 0){
+      console.log('order före ändring',  room.players[playerId].order)
+      room.players[playerId].order = (room.players[playerId].order - (switchOrder - 1) + room.playerCount) % room.playerCount //FEL I EKV
+      if (room.players[playerId].order === 0){
           room.players[playerId].order = room.playerCount;
-        }
-        console.log(playerId, 's order efter ändring',  room.players[playerId].order)
-
       }
-
+      console.log(playerId, 's order efter ändring',  room.players[playerId].order)
+      }
   }
-
     if (workActionId === 3 ){
       this.drawCard(roomId, playerId);
       let c = room.players[playerId].hand.splice(0,1);
@@ -766,43 +747,35 @@ Data.prototype.placeWorkBottle = function (roomId, playerId, workActionId, cost)
   }
 }
 Data.prototype.placeQuarterBottle = function (roomId, playerId, currentRound, cost) {
-  console.log("inne i  datahandlers placeQuarterBottle");
+  console.log("inne i  datahandlers ");
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
     let activePlacement = room.quarterPlacement;
-
     if (room.players[playerId].playerBottles > 0){
       room.players[playerId].playerBottles = room.players[playerId].playerBottles - 1;
     }
     for(let i = 0; i < activePlacement.length; i += 1) {
       console.log("active placement currentround id i data: "+activePlacement[i].currentRoundID, currentRound);
       console.log("activePlacement[i].cost === cost i data: "+activePlacement[i].cost, cost);
-        if( activePlacement[i].currentRoundID === currentRound &&
+        if( activePlacement[i].currentRoundID === (currentRound-1) &&
             activePlacement[i].playerId === null
             //&& activePlacement[i].cost === cost
         ) {
           console.log("inne i if :)");
           activePlacement[i].playerId = playerId;
+          console.log(activePlacement[i].playerId + "dataaaaaaaaa");
           break;
         }
     }
-
-    if (currentRound === 0 ){
-      this.drawCard(roomId, playerId);
-      this.drawCard(roomId, playerId);
-      let c = room.players[playerId].hand.splice(0,2);
-      room.players[playerId].income.push(...c);
-
-    }
-
     if (currentRound === 1 ){
       this.drawCard(roomId, playerId);
       this.drawCard(roomId, playerId);
-      let c = room.players[playerId].hand.splice(0,2);
+      let c = room.players[playerId].hand.splice(0,1);
       room.players[playerId].income.push(...c);
-      room.players[playerId].money += activePlacement[i].cost;
+      let d = room.players[playerId].hand.splice(0,1);
+      room.players[playerId].income.push(...d);
+      console.log("income" + room.players[playerId].income)
     }
-
     if (currentRound === 2 ){
       this.drawCard(roomId, playerId);
       this.drawCard(roomId, playerId);
@@ -810,19 +783,23 @@ Data.prototype.placeQuarterBottle = function (roomId, playerId, currentRound, co
       room.players[playerId].income.push(...c);
       room.players[playerId].money += activePlacement[i].cost;
     }
-
     if (currentRound === 3 ){
+      this.drawCard(roomId, playerId);
+      this.drawCard(roomId, playerId);
+      let c = room.players[playerId].hand.splice(0,2);
+      room.players[playerId].income.push(...c);
       room.players[playerId].money += activePlacement[i].cost;
-
+    }
+    if (currentRound === 4 ){
+      room.players[playerId].money += activePlacement[i].cost;
       }
     }
   }
-
 /* returns the hand of the player */
 Data.prototype.getCards = function (roomId, playerId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
-    console.log("INNE I GETCARDS")
+
     let i = room.players.map(d => d.playerId).indexOf(playerId)
     return room.players[i].hand;
   }
@@ -836,7 +813,8 @@ Data.prototype.getPlacements = function(roomId){
              skillPlacement: room.skillPlacement,
              auctionPlacement: room.auctionPlacement,
              marketPlacement: room.marketPlacement,
-             workPlacement: room.workPlacement }
+             workPlacement: room.workPlacement,
+             quarterPlacement: room.quarterPlacement}
   }
   else return {};
 }
@@ -874,6 +852,14 @@ Data.prototype.getWinner = function(roomId){
   else return "";
 }
 
+Data.prototype.getCurrentRound = function(roomId){
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    return room.currentRound;
+  }
+  else return null;
+}
+
 Data.prototype.getHighestBid = function(roomId){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
@@ -899,9 +885,6 @@ Data.prototype.getMarketValues = function(roomId){
   else return [];
 }
 
-
-
-
 Data.prototype.getSkillsOnSale = function(roomId){
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
@@ -909,8 +892,6 @@ Data.prototype.getSkillsOnSale = function(roomId){
   }
   else return [];
 }
-
-
 
 Data.prototype.getMarket = function(roomId){
   let room = this.rooms[roomId];

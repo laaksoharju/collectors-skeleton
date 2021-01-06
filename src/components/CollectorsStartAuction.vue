@@ -75,12 +75,11 @@
   </div>
 </div>
 
-<div class="auctionButtons" v-for="(value, key) in players" :key = "key">
+<div class="auctionButtons" >
 
-
-  <button class = "auctionSkill" v-if="auctionWinner === key" @click="startWinnerCard('skill')"> PLACE AS SKILL </button>
-  <button class = "auctionMarket" v-if="auctionWinner === key" @click="startWinnerCard('market')"> PLACE IN MARKET </button>
-  <button class = "auctionItem" v-if="auctionWinner === key" @click="startWinnerCard('item')"> PLACE AS ITEM </button>
+  <button class = "auctionSkill" v-if="auctionWinner !== ''" @click="startWinnerCard('skill')"> PLACE AS SKILL </button>
+  <button class = "auctionMarket" v-if="auctionWinner !== ''" @click="startWinnerCard('market')"> PLACE IN MARKET </button>
+  <button class = "auctionItem" v-if="auctionWinner !== ''" @click="startWinnerCard('item')"> PLACE AS ITEM </button>
 
 </div>
 </div>
@@ -124,8 +123,8 @@ export default {
   },
 //Stop auction - här skickas det kort som är upp to auction vidare
   stopAuction: function (){
-    console.log(this.cardUpForAuction, "stopAuction i CollectorsStartAuction");
-     this.$emit('stopAuction', this.cardUpForAuction);
+    console.log("stopAuction i CollectorsStartAuction");
+     this.$emit('stopAuction');
   },
   cannotAfford: function (cost) {
     let minCost = 100;
@@ -369,8 +368,8 @@ form {
   .auctionSquare{
     grid-column: 9;
     grid-row: 1;
-    height: 160px;
-    width: 110px;
+    height: 120px;
+    width: 90px;
     border: 5px dotted pink;
     font-style: italic;
     font-size: 50px;
@@ -419,7 +418,6 @@ form {
       display: grid;
       grid-template-columns: 12vw 12vw 12vw 12vw;
       transform: scale(1);
-
     }
 
     #start-auctionID{

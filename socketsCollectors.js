@@ -79,12 +79,19 @@ function sockets(io, socket, data) {
 
 
     socket.on('collectorsPlaceQuarterBottle', function(d) {
-      console.log("inne i  sockets collectorsPlaceQuarterBottle"+d.currentRound);
+      console.log("inne i  sockets collectorsPlaceQuarterBottle 1"+d.currentRound);
       data.placeQuarterBottle(d.roomId, d.playerId, d.currentRound, d.cost);
+      console.log("data getplacement" + data.getPlacements(d.roomId).quarterPlacement[0].playerId);
+
+      console.log("Socket efter placeQuarterBottle 2");
       io.to(d.roomId).emit('collectorsQuarterBottlePlaced',
-        { placements: data.getPlacements(d.roomId),
-         players: data.getPlayers(d.roomId)}
+        { quarterPlacement: data.getPlacements(d.roomId).quarterPlacement,
+          placements: data.getPlacements(d.roomId),
+         players: data.getPlayers(d.roomId),
+         currentRound: d.currentRound}
        );
+       console.log("socket quaarterplacement. "+ data.getPlacements(d.roomId).quarterPlacement);
+            console.log("I sockeet placeQuarterBottle 3");
      });
 
 
@@ -109,7 +116,7 @@ function sockets(io, socket, data) {
 
     socket.on('collectorsStartAuction', function(d){
       console.log(d.cost+"i socket start auction")
-      data.startAuction(d.roomId, d.playerId, d.card, d.auctionCard, d.cost)
+      data.startAuction(d.roomId, d.playerId, d.card, d.cost)
       io.to(d.roomId).emit('collectorsAuctionStarted', {
         playerId: d.playerId,
         players: data.getPlayers(d.roomId),
@@ -178,7 +185,9 @@ function sockets(io, socket, data) {
 
     socket.on('collectorsChangeRound', function(d) {
       io.to(d.roomId).emit('collectorsChangedRound',
-      data.changeRound(d.roomId, d.currentRound));
+    {  currentRound: data.changeRound(d.roomId, d.currentRound),
+      placements: data.getPlacements(d.roomId)}
+      );
     });
 
     socket.on('collectorsCountRounds', function(d) {
@@ -195,14 +204,15 @@ function sockets(io, socket, data) {
     });
 
     socket.on('collectorsNewRound', function(d) {
-      data.newRound(d.roomId, d.skillsOnSale,d.itemsOnSale, d.auctionCards)
+      data.newRound(d.roomId)
       io.to(d.roomId).emit('collectorsNewlyRounded',{
+        currentRound: data.getCurrentRound(d.roomId),
         skillsOnSale: data.getSkillsOnSale(d.roomId),
         itemsOnSale: data.getItemsOnSale(d.roomId),
         auctionCards: data.getAuctionCards(d.roomId),
         placements: data.getPlacements(d.roomId),
         marketValues: data.getMarketValues(d.roomId),
-
+        players: data.getPlayers(d.roomId)
       });
     });
 

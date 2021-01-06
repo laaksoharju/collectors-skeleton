@@ -134,7 +134,8 @@
             :highestBid="highestBid"
             @startAuction="whichAction($event)"
             @startBidding="startBidding($event)"
-            @stopAuction="stopAuction($event)"
+            @stopAuction="stopAuction()"
+            @startWinnerCard="startWinnerCard($event)"
             @placeBottle="placeBottle('auction', $event)"
             />
 
@@ -168,11 +169,13 @@
           <div class="incomeCard">
                   {{labels.incomecard}}
           </div>
+          <div class= "income" >
           <div class="chosenIncome" v-for="(card, index) in players[playerId].income" :card="card" :key="'Income'+index">
                 <CollectorsCard
                 :card="card"
                 />
          </div>
+       </div>
 
           <div class="myMoney" v-for="(value, key) in players" :key = "key">
                 <div v-for="(valuevalue,keykey) in value" :key ="keykey">
@@ -248,7 +251,7 @@
 
       <div class="roundCounter">
         <h3> {{labels.round}}</h3>
-        <button class="roundButton"  @click= "changeRound(); endGame(currentRound); newRound(currentRound)">
+        <button class="roundButton"  @click= "changeRound()">
           <div v-if="currentRound < 5">
             <h5> {{currentRound}} </h5> <h3> {{labels.changeround}} {{currentRound}} {{labels.changeround2}}</h3>
           </div>
@@ -451,8 +454,10 @@ export default {
           }.bind(this));
           this.$store.state.socket.on('collectorsQuarterBottlePlaced',
             function(d) {
+              this.quarterPlacement = d.quarterPlacement;
               this.players= d.players;
-              this.quarterPlacement = d.placements.quarterPlacement;
+              this.currentRound= d.currentRound;
+              console.log("collectors placement " + d.quarterPlacement);
               }.bind(this));
     this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
     this.$store.state.socket.on('collectorsCardDrawn',
@@ -489,7 +494,14 @@ export default {
     this.$store.state.socket.on('collectorsChangedRound',
       function(d) {
           console.log( "Changed round");
-          this.currentRound = d;
+          console.log(d.placements);
+          this.currentRound = d.currentRound;
+          this.buyPlacement= d.placements.buyPlacement;
+          this.skillPlacement= d.placements.skillPlacement;
+          this.auctionPlacement= d.placements.auctionPlacement;
+          this.marketPlacement= d.placements.marketPlacement;
+          this.workPlacement= d.placements.workPlacement;
+          this.quarterPlacement= d.placements.quarterPlacement;
       }.bind(this)
     );
     this.$store.state.socket.on('collectorsNewlyRounded',
@@ -502,7 +514,10 @@ export default {
           this.auctionPlacement= d.placements.auctionPlacement;
           this.marketPlacement= d.placements.marketPlacement;
           this.workPlacement= d.placements.workPlacement;
+          this.quarterPlacement= d.placements.quarterPlacement;
           this.marketValues = d.marketValues;
+          this.players = d.players;
+          this.currentRound = d.currentRound;
       }.bind(this)
     );
     this.$store.state.socket.on('collectorsBottlesFilled',
@@ -533,6 +548,7 @@ export default {
   this.$store.state.socket.on('collectorsAuctionStopped',
   function(d) {
     console.log(d.playerId, "Stopped an auction");
+    console.log(d.auctionWinner, "auction winner");
     this.players = d.players;
     this.cardUpForAuction = d.cardUpForAuction;
     this.auctionWinner = d.auctionWinner;
@@ -626,11 +642,11 @@ function(d) {
     placeQuarterBottle: function (p) {
       this.chosenPlacementCost = p.cost;
       this.chosenAction = p.action;
-      console.log("currentroundid i collectors vue: "+(this.currentRound-1));
+      console.log("currentroundid i collectors vue: "+(this.currentRound));
       this.$store.state.socket.emit('collectorsPlaceQuarterBottle', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
-          currentRound: this.currentRound-1,
+          currentRound: this.currentRound,
           cost: p.cost,
         }
       );
@@ -684,13 +700,11 @@ function(d) {
       this.getSkillValue(card);
     },
     startAuction: function (card) {
-      console.log()
-      console.log("startAuction", card);
+
       this.$store.state.socket.emit('collectorsStartAuction', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
           card: card,
-          auctionCard: this.auctionCards,
           cost: this.chosenPlacementCost
         }
       );
@@ -728,6 +742,7 @@ function(d) {
     );
 },
 startWinnerCard: function(action){
+  console.log("start winner card collectors!!")
   console.log("start winner card collectors.vue med action "+action)
   this.$store.state.socket.emit('collectorsWinnerCard', {
     roomId: this.$route.params.id,
@@ -743,22 +758,27 @@ startWinnerCard: function(action){
           }
         );
       },
-    changeRound: function () {
+/*    changeRound: function () {
       this.$store.state.socket.emit('collectorsChangeRound', {
           roomId: this.$route.params.id,
           currentRound: this.currentRound
           }
         );
-    },
-    endGame: function(currentRound){
-      if (currentRound == 4){
-        this.$store.state.socket.emit('collectorsEndGame', {
+    },*/
+    endGame: function(){
+            this.$store.state.socket.emit('collectorsEndGame', {
             roomId: this.$route.params.id,
             marketValues: this.marketValues
             }
           );
+<<<<<<< HEAD
       }
     },
+=======
+        },
+
+/* FIXA PÅ SRVER_SIDAN aneopa genom new round
+>>>>>>> 79853bf8685f0b1b802b4e849e592f4277f8b04f
 fillBottles: function()
 {
   this.$store.state.socket.emit('collectorsFillBottles', {
@@ -772,19 +792,24 @@ getIncome: function()
       roomId: this.$route.params.id,
       players: this.players
 });
+<<<<<<< HEAD
 },
     newRound: function(currentRound){
       if (currentRound != 4){
       this.fillBottles();
       this.getIncome();
+=======
+},*/
+    changeRound: function(){
+      if (this.currentRound != 4){
+
+>>>>>>> 79853bf8685f0b1b802b4e849e592f4277f8b04f
         this.$store.state.socket.emit('collectorsNewRound', {
             roomId: this.$route.params.id,
-            skillsOnSale: this.skillsOnSale,
-            itemsOnSale: this.itemsOnSale,
-            auctionCards: this.auctionCards
-            }
+              }
           );
       }
+      else this.endGame();
     },
     ruleFunction: function() {
       var placement = document.getElementById("ruleContent");
@@ -997,7 +1022,7 @@ h5 {
   font-size: 20px;
 }
 .myMoney {
-  grid-row: 3 ;
+  grid-row: 1 ;
   grid-column: 5/span 2;
   place-self: top;
 }
@@ -1022,11 +1047,28 @@ h5 {
     grid-row:3 ;
     grid-column: 7 /span 2;
   }
+<<<<<<< HEAD
     .chosenIncome {
       grid-row: 3 ;
       grid-column: 7;
       transform: scale(0.2);
     }
+=======
+
+  .chosenIncome {
+    grid-auto-flow: column;
+    display: grid;
+    grid-template-columns: 12vw 12vw 12vw 12vw;
+  }
+
+  .income {
+    grid-row: 3 ;
+    grid-column: 7;
+    transform: scale(0.2);
+  }
+
+
+>>>>>>> 79853bf8685f0b1b802b4e849e592f4277f8b04f
 .itemTitle {
   grid-row:2;
   place-self: end;

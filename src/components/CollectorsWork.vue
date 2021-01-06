@@ -1,6 +1,7 @@
 <template>
-  <div class = "workPool">
-    <div class= "titleWorkPool" >Work Pool</div>
+  <div class = "workPool" >
+
+    <div class= "titleWorkPool" >Work Pool   {{quarterPlacement}}</div>
     <div class= "workdeck"> </div>
 
     <div class="buttons" v-for="(p, workActionId) in placement" :key="'Work Action'+ workActionId">
@@ -35,22 +36,22 @@
 
     </div>
 
-    <div class = "quarterImage" v-for="(p, currentRoundID) in placement" :key="currentRoundID">
-      <button class= "quarter1" v-if="p.playerId===null && currentRound === 1 && currentRoundID === 0"
-      :disabled="cannotAfford(p.cost)"
-      @click = "placeQuarterBottle(p)">
+    <div class = "quarterImage" >
+      <button class= "quarter1" v-if="quarterPlacement[0].playerId===null && currentRound === 1"
+      :disabled="cannotAfford(quarterPlacement[0].cost)"
+      @click = "placeQuarterBottle(quarterPlacement[0])">
       </button>
-      <button class= "quarter2" v-if="p.playerId===null && currentRound === 2 && currentRoundID === 1"
-      :disabled="cannotAfford(p.cost)"
-      @click = "placeQuarterBottle(p)">
+      <button class= "quarter2" v-if="quarterPlacement[1].playerId===null && currentRound === 2"
+      :disabled="cannotAfford(quarterPlacement[1].cost)"
+      @click = "placeQuarterBottle(quarterPlacement[1])">
       </button>
-      <button class= "quarter3" v-if="p.playerId===null && currentRound === 3 && currentRoundID === 2"
-      :disabled="cannotAfford(p.cost)"
-      @click = "placeQuarterBottle(p)">
+      <button class= "quarter3" v-if="quarterPlacement[2].playerId===null && currentRound === 3"
+      :disabled="cannotAfford(quarterPlacement[2].cost)"
+      @click = "placeQuarterBottle(quarterPlacement[2])">
       </button>
-      <button class= "quarter4" v-if="p.playerId===null && currentRound === 4 && currentRoundID === 3"
-      :disabled="cannotAfford(p.cost)"
-      @click = "placeQuarterBottle(p)">
+      <button class= "quarter4" v-if="quarterPlacement[3].playerId===null && currentRound === 4"
+      :disabled="cannotAfford(quarterPlacement[3].cost)"
+      @click = "placeQuarterBottle(quarterPlacement[3])">
       </button>
     </div>
 
@@ -90,7 +91,7 @@ export default {
     },
 
     placeQuarterBottle: function (p) {
-      console.log("nu körs placeQuarterBottle i work"+(this.currentRound-1))
+      console.log("nu körs placeQuarterBottle i work"+(this.currentRound))
       this.$emit('placeQuarterBottle', p);
     },
 
