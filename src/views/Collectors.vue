@@ -144,18 +144,22 @@
             <div class="skillTitle">
               {{labels.skillcard}}
             </div>
+            <div class="skillCard">
              <div class="chosenSkillCard" v-for="(card, index) in players[playerId].skills" :card="card" :key="'Skill card chosen'+index">
                   <CollectorsCard
                   :card="card"
                   />
                   </div>
+            </div>
             <div class="itemTitle">
                   {{labels.itemcard}}
             </div>
+            <div class="itemCard">
             <div class="chosenItemCard" v-for="(card, index) in players[playerId].items" :card="card" :key="'Item'+index">
                   <CollectorsCard
                   :card="card"
                   />
+           </div>
            </div>
            <div class="secretTitle">
                    {{labels.secretcard}}
@@ -1018,9 +1022,23 @@ h5 {
   place-self: end;
 }
   .chosenSkillCard {
-    grid-row: 3;
     transform: scale(0.2);
+    transform-origin: 0 5%;
   }
+
+  .skillCard {
+    grid-column-start: 2;
+    grid-column-end: 4;
+    grid-row: 3;
+    display: grid;
+    grid-template-columns: 1vw 1vw 1vw 1vw 1vw 1vw 1vw 1vw 1vw 1vw 1vw 1vw;;
+  }
+
+  .chosenSkillCard div:hover{
+   transform: scale(2)translate(-25%,0);
+   z-index: 1;
+ }
+
 .secretTitle{
   grid-row:1 ;
   grid-column: 7 /span 2;
@@ -1036,9 +1054,8 @@ h5 {
     grid-column: 7 /span 2;
   }
 
-
   .chosenIncome {
-    transform: scale(0.25);
+    transform: scale(0.2);
     transform-origin: 0 0;
   }
 
@@ -1056,14 +1073,6 @@ h5 {
     z-index: 1;
   }
 
-.itemTitle {
-  grid-row:2;
-  place-self: end;
-}
-  .chosenItemCard {
-    grid-row: 2;
-    transform: scale(0.2);
-  }
   .playerHand {
     grid-column: 11/span 5;
     grid-row: 8/span 4;
@@ -1190,10 +1199,23 @@ h5 {
     z-index: 1;
   }
   .itemCard{
+    grid-column-start: 2;
+    grid-column-end: 4;
     grid-row: 2;
-    transform: scale(0.25);
+    display: grid;
+    grid-template-columns: 2vw 2vw 2vw 2vw 2vw 2vw 2vw 2vw 2vw 2vw 2vw 2vw;
   }
-  .itemCard div:hover{
+
+  .itemTitle {
+    grid-row:2;
+    place-self: end;
+  }
+    .chosenItemCard {
+      transform: scale(0.2);
+      transform-origin: 0 0;
+    }
+
+   .chosenItemCard div:hover{
     transform: scale(2)translate(-25%,0);
     z-index: 1;
   }
@@ -1339,8 +1361,8 @@ h5 {
     place-self: end;
   }
     .chosenItemCard {
-      grid-row: 2;
       transform: scale(0.2);
+      transform-origin: 0 0;
     }
     .playerHand {
       grid-column: 6/span 5;
@@ -1483,12 +1505,11 @@ h5 {
       z-index: 1;
     }
     .itemCard{
+      grid-column-start: 2;
+      grid-column-end: 4;
       grid-row: 2;
-      transform: scale(0.25);
-    }
-    .itemCard div:hover{
-      transform: scale(2)translate(-25%,0);
-      z-index: 1;
+      display: grid;
+      grid-template-columns: 2vw 2vw 2vw 2vw 2vw 2vw 2vw 2vw 2vw 2vw 2vw 2vw;
     }
   }
 </style>
