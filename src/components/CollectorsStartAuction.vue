@@ -138,8 +138,10 @@ export default {
     return this.marketValues[card.market];
   },
   placeBottle: function (p) {
+    if(this.player.playerBottles>0){
     this.$emit('placeBottle', p);
     this.highlightAvailableCards(p.cost);
+  }
   },
    highlightAvailableCards: function (cost=100){
       for (let i = 0; i < this.auctionCards.length; i += 1) {
