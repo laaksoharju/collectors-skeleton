@@ -471,7 +471,7 @@ Data.prototype.newRound = function (roomId){
     if (nextRound < 4) {
       room.currentRound += 1;
     }
-    if (nextRound === 4) { 
+    if (nextRound === 4) {
       let stopGame = 5;
       return stopGame; //Krash på sista gången som måste fixas!
     }
@@ -766,7 +766,7 @@ Data.prototype.placeQuarterBottle = function (roomId, playerId, currentRound, co
           console.log(activePlacement[i].playerId + "dataaaaaaaaa");
           break;
         }
-    }
+}
     if (currentRound === 1 ){
       this.drawCard(roomId, playerId);
       this.drawCard(roomId, playerId);
@@ -781,20 +781,21 @@ Data.prototype.placeQuarterBottle = function (roomId, playerId, currentRound, co
       this.drawCard(roomId, playerId);
       let c = room.players[playerId].hand.splice(0,2);
       room.players[playerId].income.push(...c);
-      room.players[playerId].money += activePlacement[i].cost;
+      room.players[playerId].money += 1;
     }
     if (currentRound === 3 ){
       this.drawCard(roomId, playerId);
       this.drawCard(roomId, playerId);
       let c = room.players[playerId].hand.splice(0,2);
       room.players[playerId].income.push(...c);
-      room.players[playerId].money += activePlacement[i].cost;
+      room.players[playerId].money += 2;
     }
     if (currentRound === 4 ){
-      room.players[playerId].money += activePlacement[i].cost;
+      room.players[playerId].money += 3;
       }
     }
   }
+
 /* returns the hand of the player */
 Data.prototype.getCards = function (roomId, playerId) {
   let room = this.rooms[roomId];
