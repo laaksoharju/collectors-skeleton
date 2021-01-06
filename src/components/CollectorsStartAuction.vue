@@ -368,8 +368,8 @@ form {
   .auctionSquare{
     grid-column: 9;
     grid-row: 1;
-    height: 120px;
-    width: 90px;
+    height: 150px;
+    width: 110px;
     border: 5px dotted pink;
     font-style: italic;
     font-size: 50px;
@@ -407,7 +407,7 @@ form {
     border: 2px solid lightpink;
   }
     .cardUpForAuction {
-    transform: scale(0.40);
+    transform: scale(0.35);
     grid-column: 9;
     grid-row: 1;
 
