@@ -252,6 +252,7 @@
       <div class="roundCounter">
         <h3> {{labels.round}}</h3>
         <button class="roundButton"  @click= "newRound()">
+
           <div v-if="currentRound < 5">
             <h5> {{currentRound}} </h5> <h3> {{labels.changeround}} {{currentRound}} {{labels.changeround2}}</h3>
           </div>
@@ -792,6 +793,10 @@ getIncome: function()
           );
       }
       else this.endGame();
+      if (this.currentRound === 4){
+        this.currentRound = 5;
+      }
+
     },
     ruleFunction: function() {
       var placement = document.getElementById("ruleContent");

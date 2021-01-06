@@ -110,6 +110,15 @@ export default {
         else {
           this.$set(this.itemsOnSale[i], "available", false);
         }
+      
+      }
+      for (let i = 0; i < this.player.hand.length; i += 1) {
+        if (this.marketValues[this.player.hand[i].item] <= this.player.money - cost) {
+          this.$set(this.player.hand[i], "available", true);
+        }
+        else {
+          this.$set(this.player.hand[i], "available", false);
+        }
         this.chosenPlacementCost = cost;
       }
     },

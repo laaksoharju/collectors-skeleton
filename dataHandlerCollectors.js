@@ -467,11 +467,6 @@ Data.prototype.newRound = function (roomId, players){
 
     }
 
-    if (nextRound === 4) {
-      let stopGame = 5;
-      return stopGame; //Krash på sista gången som måste fixas!
-    }
-
     console.log("efter endsgame if"+room.currentRound);
 
     let playerCounter = room.playerCount+2;
