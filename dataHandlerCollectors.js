@@ -421,8 +421,18 @@ Data.prototype.changeTurn = function (roomId, playerId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
 
+        let noBottles = true; //Ingen har flaskor kvar utgår vi ifrån
+        for (let playerId in room.players){
+          if (room.players[playerId].playerBottles !== 0){
+          noBottles = false;
+          }
+          console.log(noBottles);
+        }
+
+
     let allPlayersId = Object.keys(room.players);
     let nextPlayer = allPlayersId[0];
+
     for (let i in allPlayersId) {
 
      if (playerId === allPlayersId[i]){
@@ -430,6 +440,10 @@ Data.prototype.changeTurn = function (roomId, playerId) {
         nextPlayer = allPlayersId[newIndex]; //kanske +1 tänk MATTE
         break;
       }
+    }
+    if (noBottles === true) {
+      console.log("Innan newround i data");
+      this.newRound(roomId, room.players);
     }
     return nextPlayer;
   }
@@ -545,6 +559,7 @@ Data.prototype.newRound = function (roomId, players){
       }
     }
   }
+  console.log("SLut på newround");
 }
 
 
