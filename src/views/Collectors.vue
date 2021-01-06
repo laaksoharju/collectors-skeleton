@@ -236,6 +236,11 @@
                 <li v-if="keykey == 'money' && key != playerId ">
                    {{key}} {{labels.otherCoins}} {{valuevalue}}
                 </li>
+
+                <li v-if="keykey == 'playerBottles' && key != playerId ">
+                   {{key}} {{labels.otherBottles}} {{valuevalue}}
+                </li>
+
               </div>
             </div>
           </div>
