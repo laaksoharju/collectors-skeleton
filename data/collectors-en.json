@@ -15,6 +15,7 @@
 	"playerHand" : "'s Hand",
 	"otherPlayerInfo": "Other players info: ",
 	"otherCoins" : "'s coins: ",
+	"otherBottles" : "'s amount of bottles: ",
 	"player": "Player ",
 	"playersBoard": "'s Board",
 	"skillcard" : "Skill Cards: ",
