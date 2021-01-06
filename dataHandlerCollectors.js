@@ -299,6 +299,13 @@ Data.prototype.startGame = function(roomId) {
     for (let index in room.playerIdArray) {
       room.players[room.playerIdArray[index]].money = theMoney;
       theMoney += 1;
+
+      let card1 = room.deck.pop();
+      let card2 = room.deck.pop();
+      let card3 = room.deck.pop();
+      room.players[room.playerIdArray[index]].hand.push(card1);
+      room.players[room.playerIdArray[index]].hand.push(card2);
+      room.players[room.playerIdArray[index]].hand.push(card3);
     }
     room.activeRound = 1;
   }

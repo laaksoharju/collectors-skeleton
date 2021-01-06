@@ -110,9 +110,13 @@
         @placeBottleWork="placeBottleWork('doWork', $event)"/>
       </div>
 
-      <div id="HandDiv" class="cardslots" v-if="players[playerId]">
-        <h2>Hand</h2>
-        <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="handleAction(card)" :key="index"/>
+      <div id="HandDiv"  v-if="players[playerId]">
+        <div id="HandDivHeader">
+          <h1 style="text-align: center">  <img id="drawCard_button_img" src="images/drawCards.png" style="  zoom: 0.6; -moz-transform: scale(0.8);" >Hand</h1>
+        </div>
+        <div id="CardsOnHand" class="cardslots">
+          <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="handleAction(card)" :key="index"/>
+        </div>
       </div>
 
       <div id="PlayerBoardDiv">
@@ -1054,6 +1058,13 @@ footer a:visited {
   z-index: 1;
 }
 
+#CardsOnHand.cardslots {
+  zoom: 0.8;
+  -moz-transform: scale(0.8);
+  grid-template-columns: repeat(auto-fill, 40px);
+  grid-template-rows: repeat(auto-fill, 180px);
+}
+
 .playercards {
   display: grid;
   grid-template-columns: repeat(auto-fill, 30px);
@@ -1072,30 +1083,51 @@ footer a:visited {
   z-index: 1;
 }
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: 1600px) {
   main {
-    zoom: 0.7;
-    -moz-transform: scale(0.7);
+    zoom: 0.8;
+    -moz-transform: scale(0.8);
   }
 }
 
-@media screen and (max-width: 980px) {
+@media screen and (max-width: 1300px) {
   main {
     zoom: 0.6;
     -moz-transform: scale(0.6);
   }
 }
 
-@media screen and (max-width: 850px) {
+@media screen and (max-width: 1000px) {
   main {
     zoom: 0.5;
     -moz-transform: scale(0.5);
   }
 }
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 850px) {
   main {
     zoom: 0.4;
     -moz-transform: scale(0.4);
+  }
+}
+
+@media screen and (max-width: 650px) {
+  main {
+    zoom: 0.3;
+    -moz-transform: scale(0.3);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  main {
+    zoom: 0.2;
+    -moz-transform: scale(0.2);
+  }
+}
+
+@media screen and (max-width: 325px) {
+  main {
+    zoom: 0.1;
+    -moz-transform: scale(0.1);
   }
 }
 

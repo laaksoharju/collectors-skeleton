@@ -176,11 +176,11 @@ export default {
   color: black;
 }
 
-@media screen and (max-width: 1700px) {
+/* @media screen and (max-width: 1700px) {
 #WorkButtons {
     zoom: 0.8;
     -moz-transform: scale(0.9);
   }
-}
+} */
 
 </style>
