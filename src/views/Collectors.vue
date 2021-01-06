@@ -447,13 +447,11 @@ export default {
         this.workPlacement = d.workPlacement;
         this.quarterPlacement = d.quarterPlacement;
       }.bind(this));
-
       this.$store.state.socket.on('collectorsWorkBottlePlaced',
         function(d) {
           this.players= d.players;
           this.workPlacement = d.placements.workPlacement;
           }.bind(this));
-
           this.$store.state.socket.on('collectorsQuarterBottlePlaced',
             function(d) {
               this.quarterPlacement = d.quarterPlacement;
@@ -461,7 +459,6 @@ export default {
               this.currentRound= d.currentRound;
               console.log("collectors placement " + d.quarterPlacement);
               }.bind(this));
-
     this.$store.state.socket.on('collectorsPointsUpdated', (d) => this.points = d );
     this.$store.state.socket.on('collectorsCardDrawn',
       function(d) {
@@ -477,12 +474,9 @@ export default {
         this.itemsOnSale = d.itemsOnSale;
       }.bind(this)
     );
-
       this.$store.state.socket.on('collectorsSkillValueCaught',
         function(d) {
-
           this.players = d.players;
-
         }.bind(this)
       );
     this.$store.state.socket.on('collectorsSkillCaught',
@@ -510,7 +504,6 @@ export default {
           this.quarterPlacement= d.placements.quarterPlacement;
       }.bind(this)
     );
-
     this.$store.state.socket.on('collectorsNewlyRounded',
       function(d) {
           this.itemsOnSale = d.itemsOnSale;
@@ -527,20 +520,16 @@ export default {
           this.currentRound = d.currentRound;
       }.bind(this)
     );
-
     this.$store.state.socket.on('collectorsBottlesFilled',
     function(d) {
         this.players = d.players
     }.bind(this)
   );
-
   this.$store.state.socket.on('collectorsGotIncome',
   function(d) {
       this.players = d.players
   }.bind(this)
 );
-
-
     this.$store.state.socket.on('collectorsEndedGame',
       function(d) {
           this.winner = d.winner;
@@ -610,7 +599,6 @@ function(d) {
       this.$store.state.playerId = userName;
     //  this.players[playerId] = userName;
   },*/
-
     chooseColor: function(color, playerBottles){
       this.$store.state.socket.emit('collectorsChooseColor',{
       roomId: this.$route.params.id,
@@ -628,7 +616,6 @@ function(d) {
       );
     },
     placeBottle: function (action, p) {
-
       this.chosenPlacementId = p.placementId;
       this.chosenPlacementCost = p.cost;
       this.chosenAction = action;
@@ -652,7 +639,6 @@ function(d) {
         }
       );
     },
-
     placeQuarterBottle: function (p) {
       this.chosenPlacementCost = p.cost;
       this.chosenAction = p.action;
@@ -665,7 +651,6 @@ function(d) {
         }
       );
     },
-
     whichAction: function (card){
       if (this.chosenAction === "skill") {
         this.getSkill(card)
@@ -688,7 +673,6 @@ function(d) {
         }
       );
     },
-
     drawCard: function () {
       this.$store.state.socket.emit('collectorsDrawCard', {
           roomId: this.$route.params.id,
@@ -704,7 +688,6 @@ function(d) {
         }
       );
     },
-
     getSkill: function (card) {
       this.$store.state.socket.emit('collectorsGetSkill', {
           roomId: this.$route.params.id,
@@ -712,9 +695,7 @@ function(d) {
           card: card,
           skill: this.skillsOnSale,
           cost: this.chosenPlacementCost
-
         }
-
       );
       this.getSkillValue(card);
     },
@@ -790,15 +771,14 @@ startWinnerCard: function(action){
             marketValues: this.marketValues
             }
           );
+
         },
 
-/* FIXA PÅ SRVER_SIDAN aneopa genom new round
 fillBottles: function()
 {
   this.$store.state.socket.emit('collectorsFillBottles', {
       roomId: this.$route.params.id,
       players: this.players
-
 });
 },
 
@@ -807,12 +787,14 @@ getIncome: function()
   this.$store.state.socket.emit('collectorsGetIncome', {
       roomId: this.$route.params.id,
       players: this.players
-
 });
-},*/
+},
+
+
     changeRound: function(){
       if (this.currentRound != 4){
-
+        this.fillBottles();
+        this.getIncome();
         this.$store.state.socket.emit('collectorsNewRound', {
             roomId: this.$route.params.id,
               }
@@ -938,23 +920,19 @@ h5 {
 	background: $black;
 	border: 2px solid $black;
   }
-
   .playerBottleButton {
     grid-row: 1;
     grid-column: 1 / span 5;
     }
-
   .playerBottleButton div:hover{
     transform: scale(1.5)translate(0,0);
     z-index: 1;
   }
-
   .labelLink {
     grid-column: 5 / span 3;
     grid-row: 1;
     place-self:end;
   }
-
   #linkSquare {
     height: 10px;
     place-self: end left;
@@ -963,7 +941,6 @@ h5 {
     background-color: #76B0B7;
     color: white;
   }
-
   .blackBottle{
     width:32px;
     height:32px;
@@ -1057,12 +1034,18 @@ h5 {
     grid-column: 7;
     transform: scale(0.2);
   }
-
   .incomeCard{
     grid-row:2 ;
     place-self: end;
     grid-column: 7 /span 2;
   }
+<<<<<<< HEAD
+    .chosenIncome {
+      grid-row: 3 ;
+      grid-column: 7;
+      transform: scale(0.2);
+    }
+=======
 
   .chosenIncome {
     transform: scale(0.25);
@@ -1083,6 +1066,7 @@ h5 {
     z-index: 1;
   }
 
+>>>>>>> 79853bf8685f0b1b802b4e849e592f4277f8b04f
 .itemTitle {
   grid-row:2;
   place-self: end;
@@ -1130,7 +1114,6 @@ h5 {
 #userName {
   background-color: #76B0B7;
 }
-
   #userNameButton {
     grid-column: 1;
     grid-row: 1;
@@ -1225,9 +1208,7 @@ h5 {
     transform: scale(2)translate(-25%,0);
     z-index: 1;
   }
-
   /*MOBIL VERISION*/
-
   @media screen and (max-width: 800px) {
     main {
       width:90vw;
@@ -1260,7 +1241,6 @@ h5 {
       padding-left: 5px;
       padding-right: 5px;
       grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-
     }
 .board {
   display: grid;
@@ -1272,7 +1252,6 @@ h5 {
   border: 2px solid $black;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 }
-
     .blackBottle{
       width:32px;
       height:32px;
@@ -1366,7 +1345,6 @@ h5 {
       grid-column: 7;
       transform: scale(0.2);
     }
-
   .itemTitle {
     grid-row:2;
     place-self: end;
@@ -1414,13 +1392,11 @@ h5 {
   #userName {
     background-color: #76B0B7;
   }
-
   .labelLink {
     grid-column: 5 / span 2;
     grid-row: 1;
     place-self:end;
     }
-
   #linkSquare {
     height: 10px;
     place-self: end left;
@@ -1431,7 +1407,6 @@ h5 {
     color: white;
     font-size: 11px;
   }
-
     #userNameButton {
       grid-column: 1;
       grid-row: 1;
