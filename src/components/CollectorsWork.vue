@@ -1,11 +1,9 @@
 <template>
   <div class = "workPool" >
-
     <div class= "titleWorkPool" >Work Pool</div>
     <div class= "workdeck"> </div>
 
     <div class="buttons" v-for="(p, workActionId) in placement" :key="'Work Action'+ workActionId">
-
       <button id="alt1" v-if="p.playerId===null && workActionId === 0"
       :disabled="cannotAfford(p.cost)"
       @click = "placeBottle(p)">
@@ -33,7 +31,6 @@
           <div class = "Alt4">
           </div>
         </button>
-
     </div>
 
     <div class = "quarterImage" >
@@ -41,25 +38,26 @@
       :disabled="cannotAfford(quarterPlacement[0].cost)"
       @click = "placeQuarterBottle(quarterPlacement[0])">
       </button>
+
       <button class= "quarter2" v-if="quarterPlacement[1].playerId===null && currentRound === 2"
       :disabled="cannotAfford(quarterPlacement[1].cost)"
       @click = "placeQuarterBottle(quarterPlacement[1])">
       </button>
+
       <button class= "quarter3" v-if="quarterPlacement[2].playerId===null && currentRound === 3"
       :disabled="cannotAfford(quarterPlacement[2].cost)"
       @click = "placeQuarterBottle(quarterPlacement[2])">
       </button>
+
       <button class= "quarter4" v-if="quarterPlacement[3].playerId===null && currentRound === 4"
       :disabled="cannotAfford(quarterPlacement[3].cost)"
       @click = "placeQuarterBottle(quarterPlacement[3])">
       </button>
     </div>
-
   </div>
-
 </template>
-
 <script>
+
 export default {
   name: 'CollectorsWork',
   components: {
@@ -88,12 +86,10 @@ export default {
     placeBottle: function (p) {
       this.$emit('placeBottleWork', p);
     },
-
     placeQuarterBottle: function (p) {
       console.log("nu körs placeQuarterBottle i work"+this.currentRound)
       this.$emit('placeQuarterBottle', p);
     },
-
     highlightAvailableCards: function (cost=100) {
       for (let i = 0; i < this.skillsOnSale.length; i += 1) {
         if (this.marketValues[this.skillsOnSale[i].item] <= this.player.money - cost) {
@@ -108,9 +104,9 @@ export default {
     drawCard: function (card) {
       if (card.available) {
         this.$emit('drawCard', card);
-      }
+     }
     }
-    }
+   }
   }
 </script>
 
@@ -126,7 +122,6 @@ export default {
   grid-auto-flow: column;
   background-color: #f5f2cc;
   color: black;
-  /*border: 3px solid #4C7B80;*/
   border-top: 2px solid #4C7B80;
 }
 .titleWorkPool {
@@ -135,8 +130,6 @@ export default {
   text-shadow: 2px 2px 4px yellow;
   font-size: 20px;
   grid-column: 2;
-}
-.buttons{
 }
 .quarterImage {
   grid-column: 3;
@@ -237,7 +230,6 @@ export default {
 .work-Card {
   grid-row: 2;
   transform: scale(0.25);
-/*  place-self:center; förstör!! */
 }
 .work-Card div:hover{
   transform: scale(1.5)translate(-25%,0);
@@ -251,125 +243,13 @@ export default {
     width: auto;
     height: auto;
     display:grid;
-    /*grid-template-columns: repeat(3, 149px);*/
     grid-template-rows: repeat(4,55px);
     grid-auto-flow: column;
     background-color: #f5f2cc;
     color: black;
-    /*border: 3px solid #4C7B80;*/
     border-right: 2px solid #4C7B80;
     border-top: 2px solid #4C7B80;
-
     grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
-
   }
-  .titleWorkPool {
-    font-style: italic;
-    font-size: 50px;
-    text-shadow: 2px 2px 4px yellow;
-    font-size: 20px;
-    grid-column: 2;
-  }
-  .buttons{
-  }
-  .quarterImage {
-    grid-column: 3;
-    grid-row: 2;
-  }
-  .quarter1 {
-    grid-column: 2 ;
-    grid-row: 1;
-    width: 140px;
-    height: 62px;
-    background-image: url('/images/quarterTile1.png');
-    background-size: cover;
-  }
-  .quarter2 {
-    grid-column: 2 ;
-    grid-row: 1;
-    width: 140px;
-    height: 62px;
-    background-image: url('/images/quarterTile2.png');
-    background-size: cover;
-  }
-  .quarter3 {
-    grid-column: 2 ;
-    grid-row: 1;
-    width: 140px;
-    height: 62px;
-    background-image: url('/images/quarterTile3.png');
-    background-size: cover;
-  }
-  .quarter4 {
-    grid-column: 2 ;
-    grid-row: 1;
-    width: 140px;
-    height: 62px;
-    background-image: url('/images/quarterTile4.png');
-    background-size: cover;
-  }
-  .Alt1 {
-    width: 120px;
-    height: 45px;
-    background-image: url('/images/WorkPoolAlt1.jpg');
-    background-size: cover;
-  }
-  #alt1 {
-    background-color: #f5f2cc;
-    border-radius: 5px;
-    border: 2px solid #DDD359;
-  }
-  .Alt2 {
-    width: 120px;
-    height: 45px;
-    background-image: url('/images/WorkPoolAlt2.jpg');
-    background-size: cover;
-  }
-  #alt2 {
-    background-color: #f5f2cc;
-    border-radius: 5px;
-    border: 2px solid #DDD359;
-  }
-  .Alt3 {
-    width: 120px;
-    height: 45px;
-    background-image: url('/images/WorkPoolAlt3.jpg');
-    background-size: cover;
-  }
-  #alt3 {
-    background-color: #f5f2cc;
-    border-radius: 5px;
-    border: 2px solid #DDD359;
-  }
-  .Alt4 {
-    width: 120px;
-    height: 45px;
-    background-image: url('/images/WorkPoolAlt4.jpg');
-    background-size: cover;
-  }
-  #alt4 {
-    background-color: #f5f2cc;
-    border-radius: 5px;
-    border: 2px solid #DDD359;
-  }
-  .workdeck{
-    grid-column: 2;
-    grid-row: 3;
-    background-image: url('/images/BackOfCard.PNG');
-    background-size: cover;
-    width: 67.5px;
-    height: 95.5px;
-  }
-  .work-Card {
-    grid-row: 2;
-    transform: scale(0.25);
-  /*  place-self:center; förstör!! */
-  }
-  .work-Card div:hover{
-    transform: scale(1.5)translate(-25%,0);
-    z-index: 1;
-  }
-
 }
-
 </style>
