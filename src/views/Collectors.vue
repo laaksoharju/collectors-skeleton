@@ -506,7 +506,7 @@ export default {
           this.marketValues = d.marketValues;
           this.players = d.players;
           this.currentRound = d.currentRound;
-          console.log("d rundis"+ d.currentRound,"this runda" +this.currentRound)      
+          console.log("d rundis"+ d.currentRound,"this runda" +this.currentRound)
     }.bind(this)
     );
     this.$store.state.socket.on('collectorsBottlesFilled',
@@ -1030,13 +1030,7 @@ h5 {
     place-self: end;
     grid-column: 7 /span 2;
   }
-<<<<<<< HEAD
-    .chosenIncome {
-      grid-row: 3 ;
-      grid-column: 7;
-      transform: scale(0.2);
-    }
-=======
+
 
   .chosenIncome {
     transform: scale(0.25);
@@ -1057,7 +1051,6 @@ h5 {
     z-index: 1;
   }
 
->>>>>>> 79853bf8685f0b1b802b4e849e592f4277f8b04f
 .itemTitle {
   grid-row:2;
   place-self: end;
