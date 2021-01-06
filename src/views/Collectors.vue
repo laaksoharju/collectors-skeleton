@@ -1059,22 +1059,29 @@ h5 {
   }
 
   .incomeCard{
-    grid-row:3 ;
+    grid-row:2 ;
+    place-self: end;
     grid-column: 7 /span 2;
   }
 
   .chosenIncome {
-    grid-auto-flow: column;
-    display: grid;
-    grid-template-columns: 12vw 12vw 12vw 12vw;
+    transform: scale(0.25);
+    transform-origin: 0 0;
   }
 
   .income {
-    grid-row: 3 ;
-    grid-column: 7;
-    transform: scale(0.2);
+    grid-column-start: 7;
+    grid-column-end: 8;
+    grid-row: 3;
+    display: grid;
+    grid-template-columns: 1vw 1vw 1vw 1vw 1vw 1vw 1vw 1vw;
+  /*  transform: scale(1);*/
   }
 
+  .chosenIncome div:hover{
+    transform: scale(1.5)translate(0%, 100%);
+    z-index: 1;
+  }
 
 .itemTitle {
   grid-row:2;
