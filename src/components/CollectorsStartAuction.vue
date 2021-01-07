@@ -2,9 +2,12 @@
 <div class = "auctionPool">
   <div class= "titleAuctionPool" > Auction Pool</div>
 
-  <div class = "auctionSquare">
-    {{labels.auctionsquare}}
+  <div class = "auctionSquareText">
+        {{labels.auctionsquare}}
   </div>
+  <div class = "auctionSquare">
+  </div>
+  
   <div class = "cardUpForAuction">  <!-- kortet som läggs i auction square-->
     <CollectorsCard :card="cardUpForAuction"/>
   </div>
