@@ -7,5 +7,20 @@
 	"incomeGain1" : "Du kommer att få ",
 	"incomeGain2" : "$ från dina inkomstkort!",
 	"remainingPlacements": "Antal placeringar kvar att välja: ",
-	"round": "Runda: "
+	"round": "Runda: ",
+	"turn1": "Det är ",
+	"turn2": "s runda!",
+	"myPlayer": "Jag är: ",
+	"skill": "Öka färdigheter",
+	"skillText": "Ta ett kort från sektionen 'Öka färdigheter' eller från din hand. Kortet kommer ge dig den färdigheten som symbolen visar under hela spelet. För info om färdigheten kan du trycka på 'i':et under symbolen för samma färdighet på din spelplan.",
+	"item": "Köp objekt",
+	"itemText": "Välj ett av korten från Föremål eller från din hand. Kategorin (röda symbolen) av det valda kortet kommer att öka på din spelplan om du köper det. Utöver kostnaden betalar du även €1 för varje siffra det står under denna symbol under Öka värde. Du kan äga hur många föremål som helst.",
+	"raiseval": "Öka värde",
+	"raisevalText": "",
+	"auction": "Auktion",
+	"auctionText": "",
+	"work": "Arbeta",
+	"workText": ""
+														
+	
 }

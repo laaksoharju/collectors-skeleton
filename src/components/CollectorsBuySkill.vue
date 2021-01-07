@@ -57,16 +57,16 @@ export default {
     players: Object,
   },
 
-  data: function () {
-    return {
-      gainSkillProps: {
-        value: "Gain Skills",
+  computed: {
+    gainSkillProps: function () {
+      return {
+        value: this.labels.skill,
         text:
-          "Take one of the cards from the skill pool or from your hand and tuck it under your player board from the left. This card will grant you skills for the rest of the game as detailed in the Special skills section below",
-        title: "Gain Skills",
+          this.labels.skillText,
+        title: this.labels.skill,
         classes: "button green",
-      },
-    };
+      };
+    },
   },
   methods: {
     buttonDisabled: function (cost) {
@@ -137,7 +137,7 @@ export default {
 .buttons {
   display: grid;
   grid-template-columns: repeat(auto-fill, 50px);
-  margin-right:10px;
+  margin-right: 10px;
 }
 
 .board-section {
@@ -269,9 +269,8 @@ p {
   color: black;
 }
 
-
 @media only screen and (max-width: 1050px) {
-    /* phones */
+  /* phones */
   .buy-cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, 65px);
@@ -286,12 +285,12 @@ p {
     transition-timing-function: ease-out;
   }
 
-   .cardslots div {
+  .cardslots div {
     z-index: 0;
   }
   .cardslots div:hover {
-  transform: scale(1) translate(-25%, 0);
-  z-index: 1;
-}
+    transform: scale(1) translate(-25%, 0);
+    z-index: 1;
+  }
 }
 </style>

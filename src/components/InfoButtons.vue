@@ -212,12 +212,13 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 99;
-
   width: 100%;
   max-width: 400px;
   background-color: #fff;
   padding: 25px;
   border-radius: 8px;
+  overflow: scroll;
+  max-height: 50vh;
 }
 
 h1 {

@@ -52,16 +52,17 @@ export default {
     placement: Array,
     players: Object,
   },
-  data: function () {
-    return {
-      raiseValueProps: {
-        value: "Raise Value",
+  
+  computed: {
+    raiseValueProps: function () {
+      return {
+        value: this.labels.raiseval,
         text:
-          "When executing this action, you must place cards in the market pool equal to the number of seals on your action space (one or two cards). You may place cards from your hand, from the card in the lowest position in the skill pool, or from the lowest card in the auction pool. When you place a card in the market pool, you tuck the cards under the icon on the game board that matches the icon on the bottom left of the card",
-        title: "Raise Value",
+          this.labels.raisevalText,
+        title: this.labels.raiseval,
         classes: "button blue",
-      },
-    };
+      };
+    },
   },
   methods: {
     buttonDisabled: function (cost) {
