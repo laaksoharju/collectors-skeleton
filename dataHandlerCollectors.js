@@ -381,8 +381,17 @@ Data.prototype.changeTurn = function (roomId, playerId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
 
+      /*  let noBottles = true; //Ingen har flaskor kvar utgår vi ifrån
+        for (let playerId in room.players){
+          if (room.players[playerId].playerBottles !== 0){
+          noBottles = false;
+          }
+          console.log(noBottles);
+        }*/
+
     let allPlayersId = Object.keys(room.players);
     let nextPlayer = allPlayersId[0];
+
     for (let i in allPlayersId) {
 
      if (playerId === allPlayersId[i]){
@@ -391,6 +400,11 @@ Data.prototype.changeTurn = function (roomId, playerId) {
         break;
       }
     }
+  /*  if (noBottles === true) {
+      console.log("Innan newround i data");
+      this.newRound(roomId, room.players);
+    }*/
+
     return nextPlayer;
   }
   else return "";
@@ -400,15 +414,11 @@ Data.prototype.newRound = function (roomId, players){
   let room = this.rooms[roomId];
 
   if (typeof room !== 'undefined') {
-      let nextRound = room.currentRound;
-      console.log("nextround"+nextRound);
 
-    if (nextRound < 4) {
+    if (room.currentRound < 4) {
       console.log("current"+room.currentRound);
       room.currentRound += 1;
       console.log("current"+room.currentRound);
-
-
     }
 
     console.log("efter endsgame if"+room.currentRound);
@@ -480,12 +490,14 @@ Data.prototype.newRound = function (roomId, players){
 
     for (let player in room.players){
 
-      for (let i =0; room.players[player].income.length; i+=1){
+      for (let i =0; i < room.players[player].income.length; i+=1){
         room.players[player].money += 1;
-        room.players[player].income.splice(i, 1);
+    //    room.players[player].income.splice(i, 1);
+
       }
     }
   }
+  console.log("SLut på newround");
 }
 
 
