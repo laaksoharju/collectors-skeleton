@@ -82,13 +82,24 @@
         </div>
 
         <div class="second-column">
-          <WorkArea
+          <!-- <WorkArea
             v-if="players[playerId]"
             :color="players[playerId].color"
             :labels="labels"
             :player="players[playerId]"
             :placement="buyPlacement"
             @circleClicked="circleClicked($event)"
+            id="work_area"
+          />-->
+          <WorkArea
+            v-if="players[playerId]"
+            :color="players[playerId].color"
+            :labels="labels"
+            :round="round" 
+            :placement="workPlacement" 
+            :player="players[playerId]" 
+            :players="players" 
+            @placeBottle="placeBottle('workType', 'work',$event)"
             id="work_area"
           />
 
@@ -201,6 +212,7 @@ export default {
       skillPlacement: [],
       auctionPlacement: [],
       marketPlacement: [],
+      workPlacement: [],
       chosenPlacementCost: null,
       currentAction: String,
       allCardsChosen: true,
@@ -264,7 +276,7 @@ export default {
     },
   },
   watch: {
-    players: function (newP, oldP) {
+   /* players: function (newP, oldP) {
       console.log(newP, oldP);
       for (let p in this.players) {
         for (let c = 0; c < this.players[p].hand.length; c += 1) {
@@ -281,7 +293,7 @@ export default {
             this.$set(this.auctionCards[c], "available", false);
         }
       }
-    },
+    },*/
     nextRound: function () {
       if (this.nextRound) {
         if (this.round < 4) {
@@ -318,16 +330,19 @@ export default {
         this.skillPlacement = d.placements.skillPlacement;
         this.marketPlacement = d.placements.marketPlacement;
         this.auctionPlacement = d.placements.auctionPlacement;
+        this.workPlacement = d.placements.workPlacement;
       }.bind(this)
     );
 
     this.$store.state.socket.on(
       "collectorsBottlePlaced",
       function (d) {
-        this.buyPlacement = d.buyPlacement;
-        this.skillPlacement = d.skillPlacement;
-        this.marketPlacement = d.marketPlacement;
-        this.auctionPlacement = d.auctionPlacement;
+        this.buyPlacement = d.placements.buyPlacement;
+        this.skillPlacement = d.placements.skillPlacement;
+        this.marketPlacement = d.placements.marketPlacement;
+        this.auctionPlacement = d.placements.auctionPlacement;
+        this.workPlacement = d.placements.workPlacement;
+        /*this.players = d.players;*/
       }.bind(this)
     );
 
@@ -358,6 +373,7 @@ export default {
         this.skillPlacement = d.placement.skillPlacement;
         this.marketPlacement = d.placement.marketPlacement;
         this.auctionPlacement = d.placement.auctionPlacement;
+        this.workPlacement = d.placement.workPlacement;
         this.round = d.round;
       }.bind(this)
     );
@@ -404,6 +420,14 @@ export default {
         this.players = d.players;
       }.bind(this)
     );
+
+    this.$store.state.socket.on(
+      "cardsForIncome",
+      function (d) {
+        this.players = d.players;
+      }.bind(this)
+    );
+
 
     //Auction-grejer kommer här
 
@@ -455,7 +479,8 @@ export default {
       this.currentAction == "itemType" ? this.buyCard(card) : null;
       this.currentAction == "skillType" ? this.buySkillCard(card) : null;
       this.currentAction == "auctionType" ? this.buyAuctionCard(card) : null; //Funktionen existerar inte än
-      this.currentAction == "marketType" ? this.manageMarketAction(card) : null;
+      this.currentAction == "marketType" ? this.manageMarketAction(card) : null; 
+      this.currentAction == "workType" ? this.getCardToIncome(card) : null;
     },
     manageMarketAction: function (card) {
       this.selectedCards.push(card);
@@ -477,7 +502,8 @@ export default {
       p.chooseTwoCards
         ? (this.allCardsChosen = false)
         : (this.allCardsChosen = true);
-
+      console.log("p.id i placeBottle"+ p.id);
+      console.log(p);
       this.chosenPlacementCost = p.cost;
       this.$store.state.socket.emit("collectorsPlaceBottle", {
         roomId: this.$route.params.id,
@@ -503,6 +529,38 @@ export default {
         cards: this.selectedCards,
         cost: this.chosenPlacementCost,
       });
+    },
+
+    getCardToIncome: function (card) {
+      console.log("Detta skickas alltså till server: ");
+      console.log(this.selectedCards);
+
+      this.selectedCards.push(card);
+
+      if (this.allCardsChosen) {
+         this.$store.state.socket.emit("getCardToIncome", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        cards: this.selectedCards,
+        cost: this.chosenPlacementCost,
+      });
+
+        this.selectedCards.splice(0, 1);
+      } else if (this.selectedCards.length == 2) {
+        this.allCardsChosen = true;
+
+         this.$store.state.socket.emit("getCardToIncome", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        cards: this.selectedCards,
+        cost: this.chosenPlacementCost,
+      });
+        
+        this.selectedCards.splice(0, 2);
+      } else {
+        console.log("Please choose another card: ");
+      }
+      
     },
 
     buyCard: function (card) {
