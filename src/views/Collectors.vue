@@ -96,14 +96,16 @@
 
         <div class="third-column"> 
           <div id="game-info">
-            <h1>I am player {{ playerId }}</h1>
+            <h1>{{ labels.myPlayer }} {{ playerId }}</h1>
             <h1>{{ labels.round }} {{ round }}</h1>
+            
             <div
               v-for="(player, index) in players"
               :key="index"
               :player="player"
             >
-              <h1 v-if="player.active">It's {{ index }}'s turn!</h1>
+              <h1 v-if="player.active">{{labels.turn1}}{{ index }}{{labels.turn2}}</h1>
+              
           </div>
 
            {{labels.invite}}
@@ -113,6 +115,8 @@
             @click="selectAll"
             readonly="readonly"
           />
+         
+          <MenuButton />
           <button @click="drawCard"> {{labels.draw}} </button>
 
         </div>
@@ -148,6 +152,7 @@ import AuctionSection from "@/components/AuctionSection.vue";
 import BottlesPlayerboard from "@/components/BottlesPlayerboard.vue";
 import Hand from "@/components/Hand.vue";
 import SecretCard from "@/components/SecretCard.vue";
+import MenuButton from "@/components/MenuButton.vue";
 
 export default {
   name: "Collectors",
@@ -162,6 +167,7 @@ export default {
     BottlesPlayerboard,
     Hand,
     SecretCard,
+    MenuButton,
   },
   data: function () {
     return {

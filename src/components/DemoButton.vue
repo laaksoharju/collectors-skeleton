@@ -391,14 +391,16 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 99;
-
   width: 100vw;
   max-width: 700px;
   /* min-height: 200px; */
   background-color: #fff;
   padding: 25px;
   border-radius: 8px;
+  overflow: scroll;
+  max-height: 100vh;
 }
+
 
 .demoContent {
   min-height: 500px;

@@ -1,17 +1,17 @@
 <template>
   <div class="center">
-    <div>
+    <!-- <div>
       <h2>hej</h2>
       <DemoButton />
       <MenuButton />
-    </div>
+    </div> -->
     <div id="welcomeMessage">
       <h1>Collectors</h1>
       <h3>
         Welcome to the game Collectors where you compete against other players
         about who's collection is the most valuable.
       </h3>
-      <ul>
+      <!-- <ul>
         <li v-for="i in 3" :key="i">
           <a @click="setupCollectors(i + 1, 'en')"
             >Set up a game of Collectors for {{ i + 1 }} players</a
@@ -24,7 +24,7 @@
             >Spela Collectors med {{ i + 1 }} spelare</a
           >.
         </li>
-      </ul>
+      </ul> -->
       <div class="watchDemo">
         <h2>New to collectors? Watch a demo before playing</h2>
         <DemoButton />
@@ -34,23 +34,23 @@
       <div class="playGame">
         <div>
           <label for="players">Players: </label>
-          <select name="players" id="players">
-            <option value="2" :key="2" @click="console.log(key)">2</option>
-            <option value="3" :key="3" @click="console.log(key)">3</option>
-            <option value="4" :key="4" @click="console.log(key)">4</option>
+          <select v-model="playerCount" id="players">
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
           </select>
         </div>
 
         <div>
           <label for="language">Language: </label>
-          <select name="language" id="language">
-            <option value="sv">Svenska</option>
+          <select v-model="languageSelect" id="language">
+            <option value="se">Svenska</option>
             <option value="en">English</option>
           </select>
         </div>
 
         <div>
-          <button class="playButton button" @click="findValues" >Play</button>
+          <button class="playButton button" @click="findValues">Play</button>
         </div>
       </div>
     </div>
@@ -59,24 +59,29 @@
 
 <script>
 import DemoButton from "../components/DemoButton.vue";
-import MenuButton from "../components/MenuButton.vue";
+// import MenuButton from "../components/MenuButton.vue";
 
 export default {
   name: "Home",
   components: {
     DemoButton,
-    MenuButton,
-    
+    // MenuButton,
   },
+
+    data: function () {
+    return {
+      playerCount: 2,
+      languageSelect: "en",
+    }
+    },
+
   created: function () {
     this.$store.commit("SET_ROOM_ID");
   },
   methods: {
-    // findValues: function (){
-    //   playerCount = document.getElementById(players).value
-    //   lang= document.getElementById(language).value
-    //   this.setupCollectors(playerCount, lang)
-    // }, 
+    findValues: function () {
+      this.setupCollectors(this.playerCount, this.languageSelect);
+    },
     setupCollectors: function (playerCount, lang = "en") {
       this.$store.commit("SETUP_GAME", {
         roomId: this.$store.state.roomId,

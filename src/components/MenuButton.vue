@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button class="button" @click="showModal = true">M</button>
+    <button class="button" @click="showModal = true">MENU</button>
     <transition name="fade" appear>
       <div
         class="modal-overlay"
@@ -12,7 +12,7 @@
     <transition name="slide" appear>
       <div class="modal" v-if="showModal">
         <h1>Menu</h1>
-
+       
         <div class="buttonContainer">
           <button class="mbutton">Invite a friend to this game</button>
           <button class="mbutton">Demo</button>
