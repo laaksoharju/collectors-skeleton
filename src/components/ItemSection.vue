@@ -50,16 +50,16 @@ export default {
     players: Object,
   },
 
-  data: function () {
-    return {
-      buyItemProps: {
-        value: "Buy Items",
+  computed: {
+    buyItemProps: function () {
+      return {
+        value: this.labels.item,
         text:
-          "Pick one card from the item pool or from your hand. Tuck the chosen card under your player board from above to show that this card represents an item you have bought. In addition to the cost in the action space, you must pay $1 per card in the Market pool that has the same symbol as the item you just bought. There is no upper limit in the number of items you may own.",
-        title: "Buy Items",
+          this.labels.itemText,
+        title: this.labels.item,
         classes: "button red",
-      },
-    };
+      };
+    },
   },
 
   methods: {

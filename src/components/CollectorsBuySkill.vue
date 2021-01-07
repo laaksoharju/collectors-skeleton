@@ -57,16 +57,16 @@ export default {
     players: Object,
   },
 
-  data: function () {
-    return {
-      gainSkillProps: {
-        value: "Gain Skills",
+  computed: {
+    gainSkillProps: function () {
+      return {
+        value: this.labels.skill,
         text:
-          "Take one of the cards from the skill pool or from your hand and tuck it under your player board from the left. This card will grant you skills for the rest of the game as detailed in the Special skills section below",
-        title: "Gain Skills",
+          this.labels.skillText,
+        title: this.labels.skill,
         classes: "button green",
-      },
-    };
+      };
+    },
   },
   methods: {
     buttonDisabled: function (cost) {

@@ -673,6 +673,8 @@ Data.prototype.getMarketValues = function (roomId) {
   } else return [];
 }
 
+
+
 Data.prototype.getSkillsOnSale = function (roomId) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
@@ -770,27 +772,30 @@ Data.prototype.auctionToHand = function (roomId, playerId, card, cost, destinati
       room.players[playerId].items.push(card);
       room.players[playerId].money -= cost;
       room.upForAuction = [];
+      room.highestBiddingPlayer = '';
+      room.highestBid = 0;
+      for (let i = 1; i < room.playerOrder.length; i++) {
+        if (room.players[room.playerOrder[i]].passed) {
+          room.players[room.playerOrder[i]].passed = false;
+        }
       room.players[playerId].active = false;
       room.players[playerId].availableBottles -= 1;
       if (this.setNextActivePlayer(roomId, playerId)) {
         room.nextRound = true;
       }
       }
+    }
     
     if (destination == 'skills' && this.passedCheck(roomId)){
       room.players[playerId].skills.push(card);
       room.players[playerId].money -= cost;
       room.upForAuction = [];
-      room.players[playerId].active = false;
-      room.players[playerId].availableBottles -= 1;
-      if (this.setNextActivePlayer(roomId, playerId)) {
-        room.nextRound = true;
-      }
-    }
-    if (destination == 'raiseval' && this.passedCheck(roomId)){
-      room.market.push(card);
-      room.players[playerId].money -= cost;
-      room.upForAuction = [];
+      room.highestBiddingPlayer = '';
+      room.highestBid = 0;
+      for (let i = 1; i < room.playerOrder.length; i++) {
+        if (room.players[room.playerOrder[i]].passed) {
+          room.players[room.playerOrder[i]].passed = false;
+        }
       room.players[playerId].active = false;
       room.players[playerId].availableBottles -= 1;
       if (this.setNextActivePlayer(roomId, playerId)) {
@@ -798,6 +803,24 @@ Data.prototype.auctionToHand = function (roomId, playerId, card, cost, destinati
       }
     }
   }
+    if (destination == 'raiseval' && this.passedCheck(roomId)){
+      room.market.push(card);
+      room.players[playerId].money -= cost;
+      room.upForAuction = [];
+      room.highestBiddingPlayer = '';
+      room.highestBid = 0;
+      for (let i = 1; i < room.playerOrder.length; i++) {
+        if (room.players[room.playerOrder[i]].passed) {
+          room.players[room.playerOrder[i]].passed = false;
+        }
+      room.players[playerId].active = false;
+      room.players[playerId].availableBottles -= 1;
+      if (this.setNextActivePlayer(roomId, playerId)) {
+        room.nextRound = true;
+      }
+    }
+  }
+}
 }
 
 Data.prototype.placeBid = function (roomId, playerId, bid) {
