@@ -160,15 +160,7 @@ export default {
         this.workPlacement = d.placements.workPlacement;
         this.playOrder = d.playOrder;
         this.actingPlayer = d.actingPlayer;
-        if (this.numberOfActions > 0) {
-          for (let i = 0; i < this.players[this.playerId].hand.length; i += 1) {
-            console.log("highlighting")
-            setTimeout(() =>
-            this.$set(this.players[this.playerId].hand[i], "available", true), 500);
-          }
-        }
-        else {
-          console.log("next player")
+        if (this.numberOfActions === 0) {
           this.$store.state.socket.emit('collectorsNextPlayer', {roomId: this.$route.params.id});
         }
       }.bind(this));
