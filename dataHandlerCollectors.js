@@ -737,32 +737,42 @@ Data.prototype.VPallSkill = function (player) {
   uniques.length == 5 ? player.points += 5 : null;
 }
 
-
+// Work
 Data.prototype.bottleSkill = function (player) { // VART SKA DENNA KALLAS? Bottles placed? Och då kolla om rätt placement är klickad,gäller bara för 1 på work?
   player.bottles += 1;
   player.availableBottles += 1;
   // bottle
   // Get another bottle to use same quarter (round?).
-  // Addera avilableBottles och den andra bottles
 
 }
 
-Data.prototype.auctionIncome = function () {
+Data.prototype.auctionIncome = function (player) {
   // auctionIncome
   // Få 1$ när en auktion startas
-  //Lägg till en peng. Prata med Niklas om vart den ska kallas.
+
+  for (let card of player.skills){
+    card.skill == 'auctionIncome' ? player.money += 2 : null;
+  }
 }
 
 
-Data.prototype.workerCard = function () { // Vänta på hans skitkod. Men bara att göra som när man drar ett kort. Kanske bara kalla draw card?
-  // workerCard
+Data.prototype.workerCard = function (room, player) {
   // Få 1 kort när du lägger bottle i work area
+
+  for (let card of player.skills){
+    if(card == 'workerCard'){
+      let card = room.deck.pop();
+      room.players[playerId].hand.push(card);
+    }
+  }
 }
 
-Data.prototype.workerIncome = function () {
-  // workerIncome
-  // Få 2$ när du lägger bottle i work area.
+Data.prototype.workerIncome = function (player) {
 
+  // Få 2$ när du lägger bottle i work area.
+  for (let card of player.skills){
+    card.skill == 'workerIncome' ? player.money += 2 : null;
+  }
 }
 
 

@@ -225,7 +225,7 @@ export default {
       publicPath: "localhost:8080/#", //"collectors-groupxx.herokuapp.com/#",
       touchScreen: false,
       nextRound: Boolean,
-      gameFinished: true,
+      gameFinished: false,
       round: 1,
       myCards: [],
       maxSizes: { x: 0, y: 0 },
@@ -332,7 +332,7 @@ export default {
     },
     nextRound: function () {
       if (this.nextRound) {
-        if (this.round < 2) {
+        if (this.round < 4) {
           this.startNextRound();
         } else {
           this.countPoints();
