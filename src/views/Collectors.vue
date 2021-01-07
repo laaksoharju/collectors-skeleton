@@ -96,10 +96,12 @@ export default {
   },
   watch: {
     players: function() {
-      for (let p in this.players) {
-        for(let c = 0; c < this.players[p].hand.length; c += 1) {
-          if (typeof this.players[p].hand[c].item !== "undefined")
-          this.$set(this.players[p].hand[c], "available", false);
+      for (let card of this.players[this.playerId].hand) {
+        if (this.numberOfActions > 0) {
+          this.$set(card, "available", true);
+        }
+        else {
+          this.$set(card, "available", false);
         }
       }
     }
@@ -138,15 +140,11 @@ export default {
     this.$store.state.socket.on('collectorsUpdatePlayers', 
       function(players) {
         this.players = players;
-        if (this.numberOfActions > 0) {
-          for (let i = 0; i < this.players[this.playerId].hand.length; i += 1) {
-            setTimeout(() =>
-            this.$set(this.players[this.playerId].hand[i], "available", true), 500);
+        this.$nextTick(function() { 
+          if (this.numberOfActions === 0) {
+            this.$store.state.socket.emit('collectorsNextPlayer', {roomId: this.$route.params.id});
           }
-        }
-        else {
-          this.$store.state.socket.emit('collectorsNextPlayer', {roomId: this.$route.params.id});
-        }
+        })
       }.bind(this));
 
     this.$store.state.socket.on('collectorsBottlePlaced', 
