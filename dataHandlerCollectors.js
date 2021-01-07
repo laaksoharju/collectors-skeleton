@@ -432,7 +432,10 @@ Data.prototype.changeTurn = function (roomId, playerId) {
         }*/
 
     let allPlayersId = Object.keys(room.players);
+
+
     let nextPlayer = allPlayersId[0];
+    
 
     for (let i in allPlayersId) {
 

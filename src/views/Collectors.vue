@@ -18,11 +18,6 @@
             </div>
           </div>
 
-    <!--      <label for="Name">Username</label><br>
-          <input type="text" id="userName" placeholder="Username">
-          <button id="userNameButton" type='submit' @click="changeUserName()" >
-            Change Name
-          </button>-->
 
           <div class="board">
             <!-- Låta spelare välja färg på flaska  -->
@@ -91,32 +86,12 @@
           @startMarket="startMarket($event)"
           />
 
-<!-- HAR INTE VÅGAT RADERA WORK ÄN HELT MEN FINNS SOM COMPONENT NU
-       <div class = "workPool">
-         <div class= "titleWorkPool" >Work Pool</div>
-         <div class = "quarterImage">
-           <div class= "quarter1" v-if="currentRound === 1" >
-          </div>
-           <div class= "quarter2" v-if="currentRound === 2" >
-           </div>
-           <div class= "quarter3" v-if="currentRound === 3" >
-           </div>
-           <div class= "quarter4" v-if="currentRound === 4" >
-           </div>
-         </div>
-         <div class = "Alt1"></div>
-         <div class = "Alt2"></div>
-         <div class = "Alt3"></div>
-         <div class = "Alt4"></div>
-       </div>
--->
        <CollectorsWork v-if="players[playerId]"
           :labels="labels"
           :player="players[playerId]"
           :currentRound="currentRound"
           :placement="workPlacement"
           :quarterPlacement="quarterPlacement"
-
           :marketValues="marketValues"
           @drawCard="drawCard($event)"
           @placeBottleWork="placeBottleWork($event)"
@@ -139,11 +114,13 @@
             @placeBottle="placeBottle('auction', $event)"
             />
 
+<!-- Spelarens egna playerbord  -->
        <div v-if="players[playerId]" class="playerBoard">
          <div class="playerTitle"> {{labels.player}} {{playerId}} {{labels.playersBoard}} </div>
             <div class="skillTitle">
               {{labels.skillcard}}
             </div>
+
             <div class="skillCard">
              <div class="chosenSkillCard" v-for="(card, index) in players[playerId].skills" :card="card" :key="'Skill card chosen'+index">
                   <CollectorsCard
@@ -151,35 +128,40 @@
                   />
                   </div>
             </div>
+
             <div class="itemTitle">
                   {{labels.itemcard}}
             </div>
+
             <div class="itemCard">
             <div class="chosenItemCard" v-for="(card, index) in players[playerId].items" :card="card" :key="'Item'+index">
                   <CollectorsCard
                   :card="card"
                   />
-           </div>
-           </div>
-           <div class="secretTitle">
+            </div>
+            </div>
+
+            <div class="secretTitle">
                    {{labels.secretcard}}
-           </div>
-           <div class="chosenSecret" v-for="(card, index) in players[playerId].secret" :card="card" :key="'Secret'+index">
+            </div>
+
+            <div class="chosenSecret" v-for="(card, index) in players[playerId].secret" :card="card" :key="'Secret'+index">
                  <CollectorsCard
                  :card="card"
                  />
-          </div>
+           </div>
 
-          <div class="incomeCard">
+           <div class="incomeCard">
                   {{labels.incomecard}}
+           </div>
+
+           <div class= "income" >
+             <div class="chosenIncome" v-for="(card, index) in players[playerId].income" :card="card" :key="'Income'+index">
+                  <CollectorsCard
+                  :card="card"
+                  />
+              </div>
           </div>
-          <div class= "income" >
-          <div class="chosenIncome" v-for="(card, index) in players[playerId].income" :card="card" :key="'Income'+index">
-                <CollectorsCard
-                :card="card"
-                />
-         </div>
-       </div>
 
           <div class="myMoney" v-for="(value, key) in players" :key = "key">
                 <div v-for="(valuevalue,keykey) in value" :key ="keykey">
@@ -188,13 +170,13 @@
                   </div>
                 </div>
           </div>
+
              <!-- Visa spelarens färg och iterera fram rätt antal energybottles på playerboard -->
            <div >
                 <div v-if="('black' === players[playerId].color)">
                     <div class="playerBottles" v-for="index in players[playerId].playerBottles" :key="index">
                         <div class="blackBottle"> </div>
                    </div>
-
                </div>
 
                <div v-if="('blue' === players[playerId].color)">
@@ -217,6 +199,7 @@
         </div>
 
         </div>
+<!-- Slut på Spelarens egna playerbord  -->
 
         <div class ="yourTurn" v-for="(value, playerId) in players" :key = "playerId">
             <div v-if="currentPlayer===playerId">
@@ -224,9 +207,9 @@
             </div>
         </div>
 
+<!-- visa spelarens kort i handen,  -->
       <div class="playerHand">
         <div class="playerHandTitle"> {{playerId}} {{labels.playerHand}} </div>
-        <!-- visa spelarens kort i handen, förstår inte varför korten blir pyttesmå -->
         <div class="cardslots" v-if="players[playerId]">
           <div v-for="(card, index) in players[playerId].hand" :key="index">
             <CollectorsCard  :card="card" :availableAction="card.available" @doAction="buyCard(card)" />
@@ -251,7 +234,10 @@
             </div>
           </div>
       </div>
-      <!-- Vems tur? Start på ruta för att visa vems tur -->
+<!-- Slut på spelarens kort i handen,  -->
+
+
+<!-- Vems tur? Start på ruta för att visa vems tur -->
       <div class="turnCounter">
         <h3> {{labels.turn}} </h3>
         <button class="turnButton"  @click= "changeTurn">  <!--  @click= "changeTurn" -->
@@ -267,7 +253,6 @@
       <div class="roundCounter">
         <h3> {{labels.round}}</h3>
         <button class="roundButton"  @click= "newRound()">
-
           <div v-if="currentRound < 5">
             <h5> {{currentRound}} </h5> <h3> {{labels.changeround}} {{currentRound}} {{labels.changeround2}}</h3>
           </div>
@@ -278,8 +263,7 @@
       </div>
 
 
-
-      <!-- Ruta för att visa vilka spelare som är i rummet -->
+<!-- Ruta för att visa vilka spelare som är i rummet -->
       <div class="showPlayers">
         {{labels.showplayers}}
         <div v-for="(player,key) in players" :key = "key">
@@ -289,6 +273,8 @@
         </div>
       </div>
      </div>
+
+
     </div>
 
     <button title="Rules!" type="button" id="rulesButton" class="rulesButton" v-on:click="ruleFunction">
@@ -297,53 +283,18 @@
     <div id="ruleContent">
     </div>
     <div> <img id="myImage" src="/images/backgroundblue.png" height="50" > </div>
-
-     <!-- FRÅN DRAWCARD SOM VI FICK FRÅN BÖRJAN, KOPPLAT TILL PLAYERID
-     <div class="itemCard" v-if="players[playerId]">
-       <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
-     </div> -->
-
-<!--
-  Här : {{allPlayersId}}
-    {{buyPlacement}} {{chosenPlacementCost}}
--->
-<!--
-      <CollectorsBuyActions v-if="players[playerId]"
-        :labels="labels"
-        :player="players[playerId]"
-        :itemsOnSale="itemsOnSale"
-        :marketValues="marketValues"
-        :placement="buyPlacement"
-        @buyCard="buyCard($event)"
-        @placeBottle="placeBottle('buy', $event)"
-        />
--->
 </main>
-  <!--  {{players}}
-    {{marketValues}}
-    <button v-if="players[playerId]" @click="players[playerId].money += 1">
-      fake more money
-    </button> -->
     <footer>
       <footer>
         <hr>
       &copy; COLLECTORS 2021<br>
     </footer>
-
-
-
-      <!--  <p>
-          {{ labels.invite }}
-          <input type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
-        </p> -->
     </footer>
 </div>
 </template>
 
 <script>
-/*eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }]*/
 import CollectorsCard from '@/components/CollectorsCard.vue'
-//import CollectorsBuyActions from '@/components/CollectorsBuyActions.vue'
 import CollectorsGetSkills from '@/components/CollectorsGetSkills.vue'
 import CollectorsStartAuction from '@/components/CollectorsStartAuction.vue'
 import CollectorsBuyItem from '@/components/CollectorsBuyItem.vue'
@@ -353,7 +304,6 @@ export default {
   name: 'Collectors',
   components: {
     CollectorsCard,
-  //  CollectorsBuyActions,
     CollectorsGetSkills,
     CollectorsStartAuction,
     CollectorsBuyItem,
@@ -370,16 +320,7 @@ export default {
       labels: {},
       players: {},
       currentPlayer: "",
-      currentRound: 1, //lagt till 14/12
-      // playerId: {
-      //   hand: [],
-      //   money: 1,
-      //   points: 0,
-      //   skills: [],
-      //   items: [],
-      //   income: [],
-      //   secret: []
-      // }
+      currentRound: 1,
       buyPlacement: [],
       skillPlacement: [],
       auctionPlacement: [],
@@ -395,7 +336,6 @@ export default {
                      music: 0 },
       itemsOnSale: [],
       skillsOnSale: [],
-    //  workDeck: [],
       auctionCards: [],
       market:[],
       cardUpForAuction: {},
@@ -404,19 +344,15 @@ export default {
       chosenAction: "",
       highestBid: 0,
       rules: ""
-      //randomNumber: ""
     }
   },
   computed: {
     playerId: function() { return this.$store.state.playerId},
     allPlayersId: function() {
       return Object.keys(this.players); //få nyckeln till players - playerId
-    }/*,
-    numbOfPlayers: function () {
-      let counter = (Object.keys(this.players)).length;
-      return counter
-    }*/
+    }
   },
+
   watch: {
     players: function(newP, oldP) {
       console.log(newP, oldP)
@@ -428,16 +364,19 @@ export default {
       }
     }
   },
+
   created: function () {
     this.$store.commit('SET_PLAYER_ID', this.$route.query.id)
-    //TODO! Fix this ugly hack
-    //background: https://github.com/quasarframework/quasar/issues/5672
     const newRoute = this.$route.params.id + "?id=" + this.playerId;
     if (this.$route.params.id + "?id=" + this.$route.query.id !== newRoute)
       this.$router.push(newRoute);
+
+
+//Tar emot från socket!
     this.$store.state.socket.emit('collectorsLoaded',
       { roomId: this.$route.params.id,
         playerId: this.$store.state.playerId } );
+
     this.$store.state.socket.on('collectorsInitialize',
       function(d) {
         this.labels = d.labels;
@@ -445,7 +384,6 @@ export default {
         this.itemsOnSale = d.itemsOnSale;
         this.marketValues = d.marketValues;
         this.skillsOnSale = d.skillsOnSale;
-      //  this.workDeck = d.workDeck;
         this.auctionCards = d.auctionCards;
         this.buyPlacement = d.placements.buyPlacement;
         this.skillPlacement = d.placements.skillPlacement;
@@ -454,6 +392,8 @@ export default {
         this.workPlacement = d.placements.workPlacement;
         this.quarterPlacement = d.placements.quarterPlacement;
       }.bind(this));
+
+
     this.$store.state.socket.on('collectorsBottlePlaced',
       function(d) {
         this.buyPlacement = d.buyPlacement;
@@ -463,12 +403,14 @@ export default {
         this.workPlacement = d.workPlacement;
         this.quarterPlacement = d.quarterPlacement;
       }.bind(this));
-      this.$store.state.socket.on('collectorsWorkBottlePlaced',
+
+    this.$store.state.socket.on('collectorsWorkBottlePlaced',
         function(d) {
           this.players= d.players;
           this.workPlacement = d.placements.workPlacement;
           }.bind(this));
-          this.$store.state.socket.on('collectorsQuarterBottlePlaced',
+
+    this.$store.state.socket.on('collectorsQuarterBottlePlaced',
             function(d) {
               this.players= d.players;
               this.currentRound= d.currentRound;
@@ -484,31 +426,34 @@ export default {
           this.players = d;
       }.bind(this)
     );
+
     this.$store.state.socket.on('collectorsCardBought',
       function(d) {
-        console.log(d.playerId, "bought a card");
         this.players = d.players;
         this.itemsOnSale = d.itemsOnSale;
       }.bind(this)
     );
-      this.$store.state.socket.on('collectorsSkillValueCaught',
+
+    this.$store.state.socket.on('collectorsSkillValueCaught',
         function(d) {
           this.players = d.players;
         }.bind(this)
       );
+
     this.$store.state.socket.on('collectorsSkillCaught',
       function(d) {
-        console.log(d.playerId, "Got a skill");
         this.players = d.players;
         this.skillsOnSale = d.skillsOnSale;
       }.bind(this)
     );
+
     this.$store.state.socket.on('collectorsChangedTurn',
       function(d) {
           this.currentPlayer = d.currentPlayer,
           this.currentRound = d.currentRound;
       }.bind(this)
     );
+
     this.$store.state.socket.on('collectorsNewlyRounded',
       function(d) {
           this.itemsOnSale = d.itemsOnSale;
@@ -523,19 +468,21 @@ export default {
           this.marketValues = d.marketValues;
           this.players = d.players;
           this.currentRound = d.currentRound;
-          console.log("d rundis"+ d.currentRound,"this runda" +this.currentRound)
     }.bind(this)
     );
+
     this.$store.state.socket.on('collectorsBottlesFilled',
     function(d) {
         this.players = d.players
     }.bind(this)
   );
-  this.$store.state.socket.on('collectorsGotIncome',
-  function(d) {
+
+    this.$store.state.socket.on('collectorsGotIncome',
+    function(d) {
       this.players = d.players
-  }.bind(this)
-);
+    }.bind(this)
+  );
+
     this.$store.state.socket.on('collectorsEndedGame',
       function(d) {
           this.winner = d.winner;
@@ -543,6 +490,7 @@ export default {
           console.log("ended game socket collectors.vue" + d.winner)
       }.bind(this)
     );
+
     this.$store.state.socket.on('collectorsAuctionStarted',
     function(d) {
       console.log(d.playerId, "Started an auction");
@@ -551,60 +499,58 @@ export default {
       this.cardUpForAuction = d.cardUpForAuction;
     }.bind(this)
   );
-  this.$store.state.socket.on('collectorsAuctionStopped',
+    this.$store.state.socket.on('collectorsAuctionStopped',
+    function(d) {
+      this.players = d.players;
+      this.cardUpForAuction = d.cardUpForAuction;
+      this.auctionWinner = d.auctionWinner;
+    }.bind(this)
+  );
+
+    this.$store.state.socket.on('collectorsMarketStarted',
+    function(d) {
+      this.players = d.players;
+      this.skillsOnSale = d.skillsOnSale;
+      this.market = d.market;
+      this.marketValues = d.marketValues;  //lagt till marketValues
+    }.bind(this)
+  );
+
+    this.$store.state.socket.on('collectorsBiddingStarted',
+    function(d) {
+      this.players = d.players;
+      this.highestBid = d.highestBid;
+    }.bind(this)
+  );
+
+    this.$store.state.socket.on('collectorsColorChosen',
+    function(d) {
+      this.players = d.players;
+    }.bind(this)
+  );
+
+    this.$store.state.socket.on('collectorsMoneyStarted',
+    function(d) {
+      this.players = d.players;
+    }.bind(this)
+  );
+
+  this.$store.state.socket.on('collectorsWinnerCardStarted',
   function(d) {
-    console.log(d.playerId, "Stopped an auction");
-    console.log(d.auctionWinner, "auction winner");
     this.players = d.players;
-    this.cardUpForAuction = d.cardUpForAuction;
     this.auctionWinner = d.auctionWinner;
+    this.cardUpForAuction = d.cardUpForAuction;
+    this.marketValues = d.marketValues;
   }.bind(this)
-);
-  this.$store.state.socket.on('collectorsMarketStarted',
-  function(d) {
-    console.log(d.playerId, "Started market");
-    this.players = d.players;
-    this.skillsOnSale = d.skillsOnSale;
-    this.market = d.market;
-    this.marketValues = d.marketValues;  //lagt till marketValues
-  }.bind(this)
-);
-  this.$store.state.socket.on('collectorsBiddingStarted',
-  function(d) {
-    this.players = d.players;
-    this.highestBid = d.highestBid;
-  }.bind(this)
-);
-this.$store.state.socket.on('collectorsColorChosen',
-function(d) {
-  this.players = d.players;
-  console.log(d.playerId, "choosed a ", d.players[d.playerId].color," color bottle");
-}.bind(this)
-);
-this.$store.state.socket.on('collectorsMoneyStarted',
-function(d) {
-  this.players = d.players;
-}.bind(this)
-);
-this.$store.state.socket.on('collectorsWinnerCardStarted',
-function(d) {
-  this.players = d.players;
-  this.auctionWinner = d.auctionWinner;
-  this.cardUpForAuction = d.cardUpForAuction;
-  this.marketValues = d.marketValues;
-}.bind(this)
-);
+  );
 },
+
+//Skickar till socket
   methods: {
     selectAll: function (n) {
       n.target.select();
     },
-/*    changeUserName: function() {
-     var userName = document.getElementById('userName').value;
-      //var name = playerId();
-      this.$store.state.playerId = userName;
-    //  this.players[playerId] = userName;
-  },*/
+
     chooseColor: function(color, playerBottles){
       this.$store.state.socket.emit('collectorsChooseColor',{
       roomId: this.$route.params.id,
@@ -614,6 +560,7 @@ function(d) {
       }
       );
     },
+
     startMoney: function(){
       this.$store.state.socket.emit('collectorsStartMoney',{
       roomId: this.$route.params.id,
@@ -621,6 +568,7 @@ function(d) {
       }
       );
     },
+
     placeBottle: function (action, p) {
       this.chosenPlacementId = p.placementId;
       this.chosenPlacementCost = p.cost;
@@ -633,7 +581,9 @@ function(d) {
           placementId: p.placementId,
         }
       );
+      /*this.changeTurn();*/
     },
+
     placeBottleWork: function (p) {
       this.chosenPlacementCost = p.cost;
       this.chosenAction = p.action;
@@ -645,6 +595,7 @@ function(d) {
         }
       );
     },
+
     placeQuarterBottle: function (p) {
       this.chosenPlacementCost = p.cost;
       this.chosenAction = p.action;
@@ -657,6 +608,7 @@ function(d) {
         }
       );
     },
+
     whichAction: function (card){
       if (this.chosenAction === "skill") {
         this.getSkill(card)
@@ -667,9 +619,8 @@ function(d) {
       if (this.chosenAction === "auction") {
         this.startAuction(card)
       }
-    //  if (this.chosenAction === "work" ) {
-    //  }
     },
+
     buyCard: function (card) {
       this.$store.state.socket.emit('collectorsBuyCard', {
           roomId: this.$route.params.id,
@@ -679,6 +630,7 @@ function(d) {
         }
       );
     },
+
     drawCard: function () {
       this.$store.state.socket.emit('collectorsDrawCard', {
           roomId: this.$route.params.id,
@@ -686,6 +638,7 @@ function(d) {
         }
       );
     },
+
     getSkillValue: function (card) {
       this.$store.state.socket.emit('collectorsGetSkillValue', {
           roomId: this.$route.params.id,
@@ -694,6 +647,7 @@ function(d) {
         }
       );
     },
+
     getSkill: function (card) {
       this.$store.state.socket.emit('collectorsGetSkill', {
           roomId: this.$route.params.id,
@@ -703,10 +657,11 @@ function(d) {
           cost: this.chosenPlacementCost
         }
       );
+
       this.getSkillValue(card);
     },
-    startAuction: function (card) {
 
+    startAuction: function (card) {
       this.$store.state.socket.emit('collectorsStartAuction', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
@@ -715,23 +670,18 @@ function(d) {
         }
       );
     },
+
     startMarket: function (card) {
-      console.log("startMarket", card);
       this.$store.state.socket.emit('collectorsStartMarket', {
           roomId: this.$route.params.id,
           playerId: this.playerId,
           card: card,
           cost: this.chosenPlacementCost
-        //  cardUpForMarket: this.cardUpForMarket,
         }
       );
     },
+
       startBidding: function () {
-        console.log("Starting Bidding");
-        console.log("this.players.bids" +this.players.bids);
-        console.log("this.players[this.playerId]" +this.players[this.playerId]);
-        console.log("this.playerId]" +this.playerId);
-        console.log("this.players[this.playerId].bids" +this.players[this.playerId].bids);
         this.$store.state.socket.emit('collectorsStartBidding', {
             roomId: this.$route.params.id,
             playerId: this.playerId,
@@ -739,8 +689,8 @@ function(d) {
               }
         );
   },
+
   stopAuction: function () {
-    console.log("Starting stop auction", this.cardUpForAuction);
     this.$store.state.socket.emit('collectorsStopAuction', {
         roomId: this.$route.params.id,
         playerId: this.playerId,
@@ -748,9 +698,8 @@ function(d) {
           }
     );
 },
+
 startWinnerCard: function(action){
-  console.log("start winner card collectors!!")
-  console.log("start winner card collectors.vue med action "+action)
   this.$store.state.socket.emit('collectorsWinnerCard', {
     roomId: this.$route.params.id,
     playerId: this.playerId,
@@ -761,18 +710,19 @@ startWinnerCard: function(action){
     changeTurn: function () {
 
       let noBottles = true; //Ingen har flaskor kvar utgår vi ifrån
+       console.log("innan 4"+noBottles);
+         for (let playerId in this.players){
+           console.log("i for loppe n"+noBottles);
 
-        for (let playerId in this.players){
-          if (this.players[playerId].playerBottles !== 0){
-          noBottles = false;
-          break;
-          }
-          console.log(noBottles);
-        }
-
-          if (noBottles === true) {
-           this.newRound();
+           if (this.players[playerId].playerBottles !== 0){
+           noBottles = false;
+           break;
+           }
          }
+
+           if (noBottles === true) {
+            this.newRound();
+          }
 
       this.$store.state.socket.emit('collectorsChangeTurn', {
           roomId: this.$route.params.id,
@@ -781,13 +731,6 @@ startWinnerCard: function(action){
         );
       },
 
-/*    changeRound: function () {
-      this.$store.state.socket.emit('collectorsChangeRound', {
-          roomId: this.$route.params.id,
-          currentRound: this.currentRound
-          }
-        );
-    },*/
 
     endGame: function(){
             this.$store.state.socket.emit('collectorsEndGame', {
@@ -795,24 +738,7 @@ startWinnerCard: function(action){
             marketValues: this.marketValues
             }
           );
-
         },
-
-/*fillBottles: function()
-{
-  this.$store.state.socket.emit('collectorsFillBottles', {
-      roomId: this.$route.params.id,
-      players: this.players
-});
-},
-
-getIncome: function()
-{
-  this.$store.state.socket.emit('collectorsGetIncome', {
-      roomId: this.$route.params.id,
-});
-},*/
-
 
     newRound: function(){
       if (this.currentRound < 4){
@@ -829,6 +755,7 @@ getIncome: function()
       }
 
     },
+
     ruleFunction: function() {
       var placement = document.getElementById("ruleContent");
       var rules1=
@@ -891,20 +818,6 @@ getIncome: function()
       text.appendChild(output7); text.appendChild(linebreak6);
       placement.appendChild(text);
     }
-    /* försöker skapa random nummer för att slumpa vem som börjar
-    randomNumber: function(){
-      let countPlayers = (allPlayersId()).length;
-      return Math.floor(Math.random() * (countPlayers - 1 + 1)) + 1;
-    } */
-/* den här funktionen tror jag ej används:
-        countRounds: function () {
-          console.log("TEST RÄKNA RUNDOR");
-          this.$store.state.socket.emit('collectorsCountRounds', {
-              roomId: this.$route.params.id,
-              currentPlayer: this.currentPlayer
-              }
-            );
-          }*/
   }
 }
 </script>
