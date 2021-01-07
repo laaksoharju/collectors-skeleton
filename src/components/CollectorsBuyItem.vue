@@ -1,13 +1,8 @@
 <template>
-
   <div class = "itemPool">
     <div class= "titleItemPool" > Item Pool</div>
 
-<!--Ser till att alt hamnar i en rad, med en tom column innan -->
-<div></div>
-
    <div class="buttons" v-for="(p, placementId) in placement" :key="'Item Button'+placementId">
-
      <button id="oneCoinButton"
        v-if="p.playerId===null && p.cost===1 && p.placementId === 0"
        :disabled="cannotAfford(p.cost)"
@@ -47,28 +42,17 @@
        <div class = "ItemBottleCoinThree">
        </div>
     </button>
-
-     <div v-if="p.playerId !== null">
-       {{p.playerId}}
-
-     </div>
    </div>
-
-<!--Ser till att alt hamnar i en rad, med en tom column innan -->
-<div></div>
 
      <div class="itemCard" v-for="(card, index) in itemsOnSale" :key="'Item Card'+index">
        <CollectorsCard
          :card="card"
          :availableAction="card.available"
          @doAction="buyCard(card)"/>
-   <!--    {{ cardCost(card) }} -->
      </div>
-
-
   </div>
-</template>
 
+</template>
 <script>
 import CollectorsCard from '@/components/CollectorsCard.vue'
 export default {
@@ -101,7 +85,6 @@ export default {
       this.highlightAvailableCards(p.cost);
     }
     },
-
     highlightAvailableCards: function (cost=100) {
       for (let i = 0; i < this.itemsOnSale.length; i += 1) {
         if (this.marketValues[this.itemsOnSale[i].item] <= this.player.money - cost) {
@@ -110,7 +93,6 @@ export default {
         else {
           this.$set(this.itemsOnSale[i], "available", false);
         }
-      
       }
       for (let i = 0; i < this.player.hand.length; i += 1) {
         if (this.marketValues[this.player.hand[i].item] <= this.player.money - cost) {
@@ -127,9 +109,9 @@ export default {
         this.$emit('buyCard', card);
         this.highlightAvailableCards();
       }
+     }
     }
-    }
-  }
+   }
 </script>
 
 <style scoped>
@@ -145,8 +127,6 @@ export default {
   grid-row: 2/span 4;
   width: auto;
   height: auto;
-/*  grid-template-columns: repeat(100, 12px);
-  grid-template-rows: repeat(100,150px);*/
   background-color: #f0d9cc ;
   color: black;
   display: grid;
@@ -171,7 +151,6 @@ export default {
 .itemCard {
   grid-row: 2;
   transform: scale(0.25);
-/*  place-self:center; förstör!! */
 }
 .itemCard div:hover{
   transform: scale(1.5)translate(-25%,0);
@@ -212,11 +191,10 @@ export default {
 }
 
 @media screen and (max-width: 800px) {
-  .titleItemPool {
+.titleItemPool {
     grid-column: 6;
     grid-row: 3;
     place-self: end;
-
     font-style: italic;
     font-size: 50px;
     text-shadow: 2px 2px 4px red;
@@ -227,74 +205,22 @@ export default {
     grid-row: 5/span 4;
     width: auto;
     height: auto;
-  /*  grid-template-columns: repeat(100, 12px);
-    grid-template-rows: repeat(100,150px);*/
+    grid-template-rows: repeat(100,150px);
     background-color: #f0d9cc ;
     color: black;
     display: grid;
-  /*  grid-template-columns: repeat(6, 50px);*/
     grid-template-rows: repeat(3,50px);
     grid-column-gap: 15px;
     grid-auto-flow: row;
-  /*  padding-left: 10px;*/
     padding-top: 10px;
     padding-bottom: 10px;
     border-top: 2px solid #4C7B80;
     border-right: 2px solid #4C7B80;
-
     grid-template-columns: repeat(auto-fit, minmax(-100px, 1fr));
-
-  }
-  .buttons{
-    grid-row: 1;
-    place-self: stretch;
-    background-color: #f0d9cc;
-  }
-  .buttons div:hover {
-    transform: scale(1.5)translate(0,0);
-    z-index: 1;
-  }
+}
   .itemCard {
     grid-row: 2;
     transform: scale(0.25);
-  /*  place-self:center; förstör!! */
-  }
-  .itemCard div:hover{
-    transform: scale(1.5)translate(-25%,0);
-    z-index: 1;
-  }
-  .ItemBottleCoinOne{
-    width:50px;
-    height:50px;
-    background-image:  url('/images/item-bottle-coin-one.png');
-    background-size: cover;
-  }
-  #oneCoinButton {
-    background-color: #f9dcce;
-    border-radius: 5px;
-    border: 2px solid #E3A688;
-  }
-  #twoCoinButton {
-    background-color: #f9dcce;
-    border-radius: 5px;
-    border: 2px solid #E3A688;
-  }
-  #threeCoinButton {
-    background-color: #f9dcce;
-    border-radius: 5px;
-    border: 2px solid #E3A688;
-  }
-  .ItemBottleCoinTwo{
-    width:50px;
-    height:50px;
-    background-image:  url('/images/item-bottle-coin-two.png');
-    background-size: cover;
-  }
-  .ItemBottleCoinThree{
-    width:50px;
-    height:50px;
-    background-image:  url('/images/item-bottle-coin-three.png');
-    background-size: cover;
   }
 }
 </style>

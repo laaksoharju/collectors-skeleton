@@ -774,7 +774,7 @@ startWinnerCard: function(action){
       "(the green ish area). There are different skills available in Collectors " +
       "and these are explained on the player board. "];
       var rules4 = ["WORK POOL. In the Work area you perform actions to increase your income, " +
-      "recycle bottles, draw cards and become the first player. You use this " +
+      "recycle bottles and draw cards. You use this " +
       "area by placing bottles in the action space, depending on which place "+
       "you choose you get and have to do different things. For example if you "+
       "put your bottle on the second space you get to draw two cards from the " +
