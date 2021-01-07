@@ -1,9 +1,6 @@
 <template>
   <div>
     <main>
-
-      <!-- SecretCard och BottlesPlayerboard är popup -->
-    
       <div v-if="players[playerId] && players[playerId].chooseSecret">
         <SecretCard
           v-if="players[playerId]"
@@ -21,7 +18,6 @@
           @getBottleIncome="getBottleIncome($event)"
         />
       </div>
-
 
       <div class="layout_wrapper">
         <div class="first-column">
@@ -78,7 +74,6 @@
             @auctionToHand="auctionToHand($event)"
             @placeBottle="placeBottle('auctionType', 'auction', $event)"
           />
-
         </div>
 
         <div class="second-column">
@@ -91,37 +86,36 @@
             @circleClicked="circleClicked($event)"
             id="work_area"
           />
-
         </div>
 
-        <div class="third-column"> 
+        <div class="third-column">
           <div id="game-info">
             <h1>{{ labels.myPlayer }} {{ playerId }}</h1>
             <h1>{{ labels.round }} {{ round }}</h1>
-            
+
             <div
               v-for="(player, index) in players"
               :key="index"
               :player="player"
             >
-              <h1 v-if="player.active">{{labels.turn1}}{{ index }}{{labels.turn2}}</h1>
-              
+              <h1 v-if="player.active">
+                {{ labels.turn1 }}{{ index }}{{ labels.turn2 }}
+              </h1>
+            </div>
+
+            {{ labels.invite }}
+            <input
+              type="text"
+              :value="publicPath + $route.path"
+              @click="selectAll"
+              readonly="readonly"
+            />
+
+            <MenuButton />
+
+            <!-- DRAW CARD -->
+            <!-- <button @click="drawCard"> {{labels.draw}} </button> -->
           </div>
-
-           {{labels.invite}}
-          <input
-            type="text"
-            :value="publicPath + $route.path"
-            @click="selectAll"
-            readonly="readonly"
-          />
-         
-          <MenuButton />
-
-          <!-- DRAW CARD -->
-          <!-- <button @click="drawCard"> {{labels.draw}} </button> -->
-
-        </div>
 
           <OtherPlayerboards :Players="players" :playerId="playerId" />
         </div>
@@ -137,7 +131,13 @@
           />
         </div>
       </div>
-  </main>
+      <Scoreboard
+        v-if="gameFinished"
+        :players="players"
+        :currentPlayer="players[playerId]"
+        @resetGame="resetGame($event)"
+      />
+    </main>
   </div>
 </template>
 
@@ -154,6 +154,7 @@ import AuctionSection from "@/components/AuctionSection.vue";
 import BottlesPlayerboard from "@/components/BottlesPlayerboard.vue";
 import Hand from "@/components/Hand.vue";
 import SecretCard from "@/components/SecretCard.vue";
+import Scoreboard from "@/components/Scoreboard.vue";
 import MenuButton from "@/components/MenuButton.vue";
 
 export default {
@@ -169,6 +170,7 @@ export default {
     BottlesPlayerboard,
     Hand,
     SecretCard,
+    Scoreboard,
     MenuButton,
   },
   data: function () {
@@ -176,8 +178,9 @@ export default {
       publicPath: "localhost:8080/#", //"collectors-groupxx.herokuapp.com/#",
       touchScreen: false,
       nextRound: Boolean,
+      gameFinished: false,
       highestBid: 0,
-      highestBiddingPlayer: '',
+      highestBiddingPlayer: "",
       numberOfPasses: 0,
       round: 1,
       myCards: [],
@@ -290,6 +293,7 @@ export default {
           this.startNextRound();
         } else {
           this.countPoints();
+          this.gameFinished = true;
         }
       }
     },
@@ -409,7 +413,7 @@ export default {
 
     //Auction-grejer kommer här
 
-        this.$store.state.socket.on(
+    this.$store.state.socket.on(
       "collectorsAuctionCardBought",
       function (d) {
         console.log(d.playerId, "Started an Auction");
@@ -447,11 +451,13 @@ export default {
         this.upForAuction = d.upForAuction;
       }.bind(this)
     );
-
   },
   methods: {
     selectAll: function (n) {
       n.target.select();
+    },
+    resetGame: function () {
+      this.gameFinished = false;
     },
     selectAction: function (card) {
       this.currentAction == "itemType" ? this.buyCard(card) : null;
@@ -470,8 +476,6 @@ export default {
 
         this.buyRaiseValue();
         this.selectedCards.splice(0, 2);
-      } else {
-        console.log("Please choose another card: ");
       }
     },
     placeBottle: function (type, action, p) {
@@ -542,11 +546,11 @@ export default {
       });
     },
     setSecret: function (card) {
-        this.$store.state.socket.emit("collectorsSetSecret", {
-          roomId: this.$route.params.id,
-          playerId: this.playerId,
-          secret: card,
-        });
+      this.$store.state.socket.emit("collectorsSetSecret", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        secret: card,
+      });
     },
 
     //Här kommer auction
@@ -564,19 +568,19 @@ export default {
         playerId: this.playerId,
         card: this.upForAuction[0],
         cost: this.highestBid,
-        destination: d
+        destination: d,
       });
     },
     placeBid: function (bid) {
-      console.log('collectors.vue ' + bid)
-      if(bid > this.highestBid){
-      this.$store.state.socket.emit("collectorsPlaceBid", {
-        roomId: this.$route.params.id,
-        playerId: this.playerId,
-        bid: bid,
-      });
-      this.highestBid = bid;
-      this.highestBiddingPlayer = this.playerId;
+      console.log("collectors.vue " + bid);
+      if (bid > this.highestBid) {
+        this.$store.state.socket.emit("collectorsPlaceBid", {
+          roomId: this.$route.params.id,
+          playerId: this.playerId,
+          bid: bid,
+        });
+        this.highestBid = bid;
+        this.highestBiddingPlayer = this.playerId;
       }
     },
     passed: function () {
@@ -585,7 +589,6 @@ export default {
         playerId: this.playerId,
       });
     },
-
   },
 };
 </script>
@@ -628,7 +631,7 @@ main {
   grid-row: 1/2;
 }
 
-.third-column{
+.third-column {
   grid-column: 3/4;
   grid-row: 1/3;
 }
@@ -637,7 +640,7 @@ main {
   grid-row: 1;
   margin-left: 1vw;
 }
-#game-info h1{
+#game-info h1 {
   font-size: 80%;
 }
 
@@ -653,7 +656,6 @@ main {
   grid-column: 1/4;
   margin-top: 10px;
   border-bottom: 2px solid black;
-
 }
 
 /*SECRET SECTION - TA BORT?
@@ -821,7 +823,7 @@ p {
   .layout_wrapper {
     display: grid;
     grid-template-columns: 70% 30%;
-    grid-template-rows: 1fr auto ;
+    grid-template-rows: 1fr auto;
     margin: 10px;
   }
 
@@ -839,7 +841,7 @@ p {
     grid-column: 1/3;
   }
   #hand_playerboard {
-  grid-column: 1/3;
+    grid-column: 1/3;
   }
 }
 </style>
