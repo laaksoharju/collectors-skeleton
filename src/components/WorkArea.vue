@@ -187,7 +187,7 @@ export default {
     
 <style scoped>
 #workArea {
-  background-color: #f5f2cc; /* #ffe599ff;*/
+  background-color: #f5f2cc;
   border: 1px solid #e9de4b;
   display: flex;
   align-items: center;
@@ -201,7 +201,7 @@ export default {
   width: 90%;
   height: 70px;
   color: black;
-  background-color: #f5f2cc; /* #ffe599ff;*/
+  background-color: #f5f2cc; 
   border: 3px solid grey;
   border-radius: 10px;
   display: grid;
@@ -210,6 +210,7 @@ export default {
 
 .info {
     margin-top: 5px;
+    text-align: center;
 }
 
 .buttonTest {
@@ -223,17 +224,8 @@ export default {
   margin-top: 25px;
 }
 
-/*#workAreaText {
-  color: black;
-  /*font-size: 30px;*/
-/*font-weight: bold;
-  text-align: center;
-}*/
-
 .firstArea {
   border: 3px dotted grey;
-  /*display: grid;
-        grid-template-columns: 1fr 1fr;*/
 }
 
 .firstArea p {
@@ -270,6 +262,7 @@ export default {
   grid-column: 1;
   margin-top: 20px;
   margin-left: 5px;
+  text-align: center;
 }
 
 .first {
@@ -292,19 +285,17 @@ export default {
 #getCard {
   background: url("/images/getCardInWorkArea.PNG");
   background-size: 3vw 3vw;
-  /*background-size: 40px 45px;*/
   background-repeat: no-repeat;
 }
 
 #recycledCard {
   background: url("/images/bottleRecycled.PNG");
   background-size: 2.5vw 3vw;
-  /*background-size: 38px 55px;*/
   background-repeat: no-repeat;
 }
 
 #upsideDown {
-    background: url("/images/baksida.png");
+  background: url("/images/baksida.png");
   background-size: 2.5vw 3vw;
   background-repeat: no-repeat;
 }

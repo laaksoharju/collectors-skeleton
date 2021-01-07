@@ -39,8 +39,15 @@
           <p>{{ countItems[4] }}</p>
         </div>
       </div>
-        <div class="button firstColumn">
+        <div class="skillsBottlesSection">
+          <div class="button">
+        <!--<div class="button firstColumn">-->
           <InfoButtons :modalProps="mySkillsProps" />
+        </div>
+        <div class="bottles">
+          <p>Bottles: {{player.bottles}}</p>
+          <p>Available bottles: {{player.availableBottles}}</p>
+          </div>
         </div>
       <div id="skillSection">
         <div id="skillGrid">
@@ -409,9 +416,19 @@ export default {
   grid-column: 3/4;
 
 }
-.firstColumn{
+
+.bottles {
+  font-size: 80%;
+}
+
+.skillsBottlesSection {
   grid-column: 1/2;
 }
+
+/*.firstColumn{
+  grid-column: 1/2;
+}*/
+
 .dot {
   width: 3vw;
   height: 3vw;
@@ -497,4 +514,11 @@ export default {
   margin-top: 100%;
   margin-left: 100%;
 }
+
+@media only screen and (max-width: 1050px) {
+  #mainBoard p {
+  font-size: 70%;
+}
+}
+
 </style>
