@@ -108,6 +108,11 @@ body {
   font-weight: 700;
   box-shadow: 3px 3px rgba(0, 0, 0, 0.4);
   transition: 0.3s ease-out;
+  margin: auto;
+  text-align: center;
+  /*text-align: center;
+  margin: auto;
+  display: flex;*/
 }
 
 .smallButton {
@@ -124,6 +129,7 @@ body {
   font-weight: 700;
   box-shadow: 2px 2px rgba(0, 0, 0, 0.4);
   transition: 0.2s ease-out;
+  text-align: center;
 }
 
 .smallButton:hover {
@@ -226,6 +232,7 @@ h1 {
   font-size: 32px;
   font-weight: 900;
   margin-bottom: 15px;
+  text-align: center;
 }
 
 p {
@@ -233,6 +240,7 @@ p {
   font-size: 18px;
   font-weight: 400;
   margin-bottom: 15px;
+  text-align: center;
 }
 
 .fade-enter-active,

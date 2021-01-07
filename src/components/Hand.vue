@@ -62,12 +62,14 @@ export default {
     allCardsChosen: Boolean,
   },
 
+  /*Du kan använda kort(en) i handen till flera olika saker. I Buy Item kan du välja på antingen ett kort i item pool eller från handen. I Get Skill kan du använda ett av korten i handen eller ett från skill pool. Detta kort kommer att ge dig skills för resten av spelet. I Raise Value, välj kort i market pool som är lika med XX i ditt eget action space, antingen ett eller två kort. Du kan använda kort från din hand, från skill pool eller auction pool.*/ 
+
   data: function () {
     return {
       clicked: false,
       handProps: {
         value: "Hand",
-        text: "You can use your card(s)",
+        text: "You can use your card(s) for different things. In Buy Item you can pick one card from the item pool or from your hand. In Get Skill you can take one of the cards from the skill pool or from your hand. This card will grant you skills for the rest of the game. When executing Raise Value, you must pick cards in the market pool equal to the number of seals on your action space (one or two cards). You may place cards from your hand, from the card in the lowest position in the skill pool, or from the lowest card in the auction pool.",
         title: "Hand",
         classes: `${this.player.color} button`,
       } 
@@ -104,8 +106,6 @@ export default {
 <style scoped>
 .handPlayer {
   height: 100%;
-  /*width: 100%; */
-
   border-top: 2px solid black;
   border-bottom: 2px solid black;
   border-right: 2px solid black;
@@ -129,9 +129,6 @@ export default {
   margin-top: 10px;
   margin-left: 5px;
   margin-right: 5px;
-  overflow-x: scroll;
-
-
 }
 .handSlot div {
   transform: scale(0.5) translate(-50%, -50%);
@@ -144,7 +141,7 @@ export default {
   margin-top: 5px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  white-space: normal;
+  /*white-space: normal;*/
 }
 
 #infoButton {
@@ -154,6 +151,7 @@ export default {
 .clickable {
   grid-column: 2;
   margin-right: 0.5vw;
+  /*width: 50%;*/
 }
 
 .buttonSecret:hover {
