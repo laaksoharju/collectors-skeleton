@@ -117,7 +117,9 @@
           />
          
           <MenuButton />
-          <button @click="drawCard"> {{labels.draw}} </button>
+
+          <!-- DRAW CARD -->
+          <!-- <button @click="drawCard"> {{labels.draw}} </button> -->
 
         </div>
 

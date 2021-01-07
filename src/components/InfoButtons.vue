@@ -159,6 +159,9 @@ body {
     rgba(216, 27, 96, 1) 33.1%,
     rgba(237, 107, 154, 1) 74.9%
   );
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .yellow {
   background-image: radial-gradient(
