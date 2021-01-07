@@ -432,10 +432,8 @@ Data.prototype.changeTurn = function (roomId, playerId) {
         }*/
 
     let allPlayersId = Object.keys(room.players);
-
-
     let nextPlayer = allPlayersId[0];
-    
+
 
     for (let i in allPlayersId) {
 
@@ -485,6 +483,13 @@ Data.prototype.newRound = function (roomId, players){
     console.log("efter endsgame if"+room.currentRound);
 
     let playerCounter = room.playerCount+2;
+
+    if (room.itemsOnSale.length < playerCounter){
+        for (let i = room.itemsOnSale.length; i < room.playerCount+1; i+=1){
+          let card = room.deck.pop();
+          room.itemsOnSale.push(card);
+        }
+    }
 
     for (let i = 0; i < room.skillsOnSale.length; i += 1) {
 //sista kortet från skill till market
