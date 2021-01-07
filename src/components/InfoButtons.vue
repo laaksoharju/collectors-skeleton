@@ -108,6 +108,11 @@ body {
   font-weight: 700;
   box-shadow: 3px 3px rgba(0, 0, 0, 0.4);
   transition: 0.3s ease-out;
+  margin: auto;
+  text-align: center;
+  /*text-align: center;
+  margin: auto;
+  display: flex;*/
 }
 
 .smallButton {
@@ -124,6 +129,7 @@ body {
   font-weight: 700;
   box-shadow: 2px 2px rgba(0, 0, 0, 0.4);
   transition: 0.2s ease-out;
+  text-align: center;
 }
 
 .smallButton:hover {
@@ -153,6 +159,9 @@ body {
     rgba(216, 27, 96, 1) 33.1%,
     rgba(237, 107, 154, 1) 74.9%
   );
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .yellow {
   background-image: radial-gradient(
@@ -212,12 +221,13 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 99;
-
   width: 100%;
   max-width: 400px;
   background-color: #fff;
   padding: 25px;
   border-radius: 8px;
+  overflow: scroll;
+  max-height: 50vh;
 }
 
 h1 {
@@ -225,6 +235,7 @@ h1 {
   font-size: 32px;
   font-weight: 900;
   margin-bottom: 15px;
+  text-align: center;
 }
 
 p {
@@ -232,6 +243,7 @@ p {
   font-size: 18px;
   font-weight: 400;
   margin-bottom: 15px;
+  text-align: center;
 }
 
 .fade-enter-active,
@@ -254,4 +266,24 @@ p {
 .slide-leave-to {
   transform: translateY(-50%) translateX(100vw);
 }
+
+
+@media only screen and (max-width: 1050px) {
+.button{
+  padding: 5px 7px;
+  font-size: 80%;
+}
+.smallButton {
+  padding: 3px 5px;
+  font-size: 70%;
+}
+
+}
+
+@media only screen and (max-width: 850px) {
+  .button{
+    font-size: 50%;
+  }
+}
+
 </style>

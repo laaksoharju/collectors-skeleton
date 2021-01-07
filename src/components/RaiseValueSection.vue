@@ -21,14 +21,14 @@
           :disabled="buttonDisabled(p.cost)"
           @click="placeBottle(p)"
         >
-          ${{ p.cost }}<span v-if="p.specialAction"> (2 cards)</span>
+          <p>${{ p.cost }}</p><span v-if="p.specialAction"> (2 cards)</span>
         </button>
         <div
           class="clickedButton"
           v-if="p.playerId !== null && typeof players !== 'undefined'"
           :style="{ backgroundColor: players[p.playerId].color }"
         >
-          {{ p.playerId }}
+          <p>{{ p.playerId }}</p>
         </div>
       </div>
     </div>
@@ -52,16 +52,17 @@ export default {
     placement: Array,
     players: Object,
   },
-  data: function () {
-    return {
-      raiseValueProps: {
-        value: "Raise Value",
+  
+  computed: {
+    raiseValueProps: function () {
+      return {
+        value: this.labels.raiseval,
         text:
-          "When executing this action, you must place cards in the market pool equal to the number of seals on your action space (one or two cards). You may place cards from your hand, from the card in the lowest position in the skill pool, or from the lowest card in the auction pool. When you place a card in the market pool, you tuck the cards under the icon on the game board that matches the icon on the bottom left of the card",
-        title: "Raise Value",
+          this.labels.raisevalText,
+        title: this.labels.raiseval,
         classes: "button blue",
-      },
-    };
+      };
+    },
   },
   methods: {
     buttonDisabled: function (cost) {
@@ -98,7 +99,6 @@ export default {
       }
       if (this.player.money - cost >= 0) {
         this.$set(lastSkill, "available", true);
-        console.log("skill har marketrats")
       } else {
         this.$set(lastSkill, "available", false);
       }
@@ -132,20 +132,21 @@ export default {
 <style scoped>
 #RaiseValueSection {
   background-color: #b4a7d6ff;
+  border-radius: 10px;
+  margin: 2px;
 }
-.buy-cards {
-  width: 80%;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
-  grid-template-rows: repeat(auto-fill, 180px);
-}
-.button-section {
+
+/*.button-section {
   width: 20%;
-}
+}*/
 
 .buttons {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
+  grid-template-columns: repeat(auto-fill, 50px);
+}
+
+.buttons p {
+  margin: 0;
 }
 
 .clickedButton {
@@ -158,17 +159,18 @@ export default {
 
 .raise-value-slot-container {
   width: 80%;
+  height: fit-content;
   display: grid;
-  grid-template-rows: 1.5fr 1fr;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   text-align: center;
   color: black;
+  font-size: 80%;
   font-weight: bold;
 }
 .raise-value-slot {
   background-color: #6d9eebff;
-  width: 4vw;
-  height: 4vw;
+  width: 3vw;
+  height: 3vw;
   border-radius: 50%;
   border: 1px solid #19181850;
   display: flex;
@@ -179,22 +181,32 @@ export default {
 }
 #rvMovie {
   background: url("/images/RAISEVAL-FILM.png");
-  background-size: 4vw 4vw;
+  background-size: 3vw 3vw;
 }
 #rvFigures {
   background: url("/images/RAISEVAL-ROBOT.png");
-  background-size: 4vw 4vw;
+  background-size: 3vw 3vw;
 }
 #rvTechnology {
   background: url("/images/RAISEVAL-IT.png");
-  background-size: 4vw 4vw;
+  background-size: 3vw 3vw;
 }
 #rvMusic {
   background: url("/images/RAISEVAL-MUSIC.png");
-  background-size: 4vw 4vw;
+  background-size: 3vw 3vw;
 }
 #rvFastaval {
   background: url("/images/RAISEVAL-PINGVIN.png");
-  background-size: 4vw 4vw;
+  background-size: 3vw 3vw;
+
+}
+@media only screen and (max-width: 850px) {
+  .buttons {
+    grid-template-columns: repeat(auto-fill, 30px);
+    margin-right: 10px;
+  }
+  .buttons p{
+     font-size: 70%;
+  }
 }
 </style>

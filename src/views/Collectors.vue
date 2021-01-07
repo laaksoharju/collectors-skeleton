@@ -1,8 +1,8 @@
 <template>
   <div>
     <main>
+    
       <div v-if="players[playerId] && players[playerId].chooseSecret">
-        <!--<div class="secret">-->
         <SecretCard
           v-if="players[playerId]"
           :player="players[playerId]"
@@ -19,8 +19,10 @@
           @getBottleIncome="getBottleIncome($event)"
         />
       </div>
+
+
       <div class="layout_wrapper">
-        <div id="game-board">
+        <div class="first-column">
           <ItemSection
             v-if="players[playerId]"
             :labels="labels"
@@ -61,29 +63,23 @@
             :labels="labels"
             :player="players[playerId]"
             :auctionCards="auctionCards"
+            :upForAuction="upForAuction"
             :marketValues="marketValues"
             :placement="auctionPlacement"
-            :allCardsChosen="allCardsChosen"
+            :highestBid="highestBid"
+            :highestBiddingPlayer="highestBiddingPlayer"
+            :numberOfPasses="numberOfPasses"
             :players="players"
             @selectAction="selectAction($event)"
+            @placeBid="placeBid($event)"
+            @passed="passed($event)"
+            @auctionToHand="auctionToHand($event)"
             @placeBottle="placeBottle('auctionType', 'auction', $event)"
           />
 
-          <!-- glöm ej ändra från buy på de ovan-->
         </div>
-        <div class="second-column">
-          <div id="game-info">
-            <h1>I am player {{ playerId }}</h1>
-            <h1>{{ labels.round }} {{ round }}</h1>
-            <div
-              v-for="(player, index) in players"
-              :key="index"
-              :player="player"
-            >
-              <h1 v-if="player.active">It's {{ index }}'s turn!</h1>
-            </div>
-          </div>
 
+        <div class="second-column">
           <WorkArea
             v-if="players[playerId]"
             :color="players[playerId].color"
@@ -93,7 +89,41 @@
             @circleClicked="circleClicked($event)"
             id="work_area"
           />
+
         </div>
+
+        <div class="third-column"> 
+          <div id="game-info">
+            <h1>{{ labels.myPlayer }} {{ playerId }}</h1>
+            <h1>{{ labels.round }} {{ round }}</h1>
+            
+            <div
+              v-for="(player, index) in players"
+              :key="index"
+              :player="player"
+            >
+              <h1 v-if="player.active">{{labels.turn1}}{{ index }}{{labels.turn2}}</h1>
+              
+          </div>
+
+           {{labels.invite}}
+          <input
+            type="text"
+            :value="publicPath + $route.path"
+            @click="selectAll"
+            readonly="readonly"
+          />
+         
+          <MenuButton />
+
+          <!-- DRAW CARD -->
+          <!-- <button @click="drawCard"> {{labels.draw}} </button> -->
+
+        </div>
+
+          <OtherPlayerboards :Players="players" :playerId="playerId" />
+        </div>
+
         <div id="hand_playerboard">
           <PlayerBoard v-if="players[playerId]" :player="players[playerId]" />
 
@@ -104,94 +134,14 @@
             @selectAction="selectAction($event)"
           />
         </div>
-        <div id="other_players">
-          <OtherPlayerboards :Players="players" :playerId="playerId" />
-        </div>
       </div>
-
-      <!--  {{ buyPlacement }} {{ chosenPlacementCost }}-->
-
-      <div class="buttons">
-        <button @click="drawCard">
-          {{ labels.draw }}
-        </button>
-      </div>
-      <div class="my-cards">
-        <CollectorsCard
-          v-for="(card, index) in myCards"
-          :card="card"
-          :key="index"
-        />
-      </div>
-
-      Skills
-      <div class="cardslots">
-        <CollectorsCard
-          v-for="(card, index) in skillsOnSale"
-          :card="card"
-          :key="index"
-        />
-      </div>
-      Auction
-      <div class="cardslots">
-        <CollectorsCard
-          v-for="(card, index) in auctionCards"
-          :card="card"
-          :key="index"
-        />
-      </div>
-
-      <div class="playerboard">
-        Items-on-hand
-        <div class="cardslots" v-if="players[playerId]">
-          <CollectorsCard
-            v-for="(card, index) in players[playerId].items"
-            :card="card"
-            :key="index"
-          />
-        </div>
-        <div>
-          Skills-on-hand
-          <div class="cardslots" v-if="players[playerId]">
-            <CollectorsCard
-              v-for="(card, index) in players[playerId].skills"
-              :card="card"
-              :key="index"
-            />
-          </div>
-        </div>
-      </div>
-
-      <Scoreboard
-        v-if="gameFinished"
-        :players="players"
-        :currentPlayer="players[playerId]"
-        @resetGame="resetGame($event)"
-      />
-    </main>
-    {{ players }}
-    <!-- <h1>MARKET VALUES: </h1>{{ marketValues }} -->
-    <button v-if="players[playerId]" @click="players[playerId].money += 1">
-      fake more money
-    </button>
-    <footer>
-      <p>
-        {{ labels.invite }}
-        <input
-          type="text"
-          :value="publicPath + $route.path"
-          @click="selectAll"
-          readonly="readonly"
-        />
-      </p>
-    </footer>
+  </main>
   </div>
 </template>
 
 <script>
 /*eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }]*/
 
-import CollectorsCard from "@/components/CollectorsCard.vue";
 import OtherPlayerboards from "@/components/OtherPlayerboards.vue";
 import CollectorsBuySkill from "@/components/CollectorsBuySkill.vue";
 import WorkArea from "@/components/WorkArea.vue";
@@ -203,11 +153,11 @@ import BottlesPlayerboard from "@/components/BottlesPlayerboard.vue";
 import Hand from "@/components/Hand.vue";
 import SecretCard from "@/components/SecretCard.vue";
 import Scoreboard from "@/components/Scoreboard.vue";
+import MenuButton from "@/components/MenuButton.vue";
 
 export default {
   name: "Collectors",
   components: {
-    CollectorsCard,
     CollectorsBuySkill,
     WorkArea,
     ItemSection,
@@ -219,6 +169,7 @@ export default {
     Hand,
     SecretCard,
     Scoreboard,
+    MenuButton,
   },
   data: function () {
     return {
@@ -226,6 +177,9 @@ export default {
       touchScreen: false,
       nextRound: Boolean,
       gameFinished: false,
+      highestBid: 0,
+      highestBiddingPlayer: '',
+      numberOfPasses: 0,
       round: 1,
       myCards: [],
       maxSizes: { x: 0, y: 0 },
@@ -264,6 +218,7 @@ export default {
       itemsOnSale: [],
       skillsOnSale: [],
       auctionCards: [],
+      upForAuction: [],
       playerid: 0,
 
       buyItemProps: {
@@ -453,6 +408,48 @@ export default {
         this.players = d.players;
       }.bind(this)
     );
+
+    //Auction-grejer kommer här
+
+        this.$store.state.socket.on(
+      "collectorsAuctionCardBought",
+      function (d) {
+        console.log(d.playerId, "Started an Auction");
+        this.players = d.players;
+        this.auctionCards = d.auctionCards;
+        this.upForAuction = d.upForAuction;
+      }.bind(this)
+    );
+    this.$store.state.socket.on(
+      "collectorsAuctionSentToHand",
+      function (d) {
+        this.players = d.players;
+        this.auctionCards = d.auctionCards;
+        this.upForAuction = d.upForAuction;
+        this.marketValues = d.marketValues;
+        this.highestBid = d.highestBid;
+        this.destination = d.destination;
+        this.highestBiddingPlayer = d.highestBiddingPlayer;
+      }.bind(this)
+    );
+    this.$store.state.socket.on(
+      "collectorsPlacedBid",
+      function (d) {
+        console.log(d.playerId, "Placed a bid");
+        this.players = d.players;
+        this.highestBid = d.bid;
+        this.highestBiddingPlayer = d.playerId;
+      }.bind(this)
+    );
+    this.$store.state.socket.on(
+      "collectorsPassedBid",
+      function (d) {
+        console.log(d.playerId, "Passed a bid");
+        this.players = d.players;
+        this.upForAuction = d.upForAuction;
+      }.bind(this)
+    );
+
   },
   methods: {
     selectAll: function (n) {
@@ -464,7 +461,7 @@ export default {
     selectAction: function (card) {
       this.currentAction == "itemType" ? this.buyCard(card) : null;
       this.currentAction == "skillType" ? this.buySkillCard(card) : null;
-      this.currentAction == "auctionType" ? this.startAuction(card) : null; //Funktionen existerar inte än
+      this.currentAction == "auctionType" ? this.buyAuctionCard(card) : null; //Funktionen existerar inte än
       this.currentAction == "marketType" ? this.manageMarketAction(card) : null;
     },
     manageMarketAction: function (card) {
@@ -554,14 +551,52 @@ export default {
         secret: card,
       });
     },
+
+    //Här kommer auction
+    buyAuctionCard: function (card) {
+      this.$store.state.socket.emit("collectorsBuyAuctionCard", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        card: card,
+        cost: this.marketValues[card.market] + this.chosenPlacementCost,
+      });
+    },
+    auctionToHand: function (d) {
+      this.$store.state.socket.emit("collectorsAuctionToHand", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        card: this.upForAuction[0],
+        cost: this.highestBid,
+        destination: d
+      });
+    },
+    placeBid: function (bid) {
+      console.log('collectors.vue ' + bid)
+      if(bid > this.highestBid){
+      this.$store.state.socket.emit("collectorsPlaceBid", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        bid: bid,
+      });
+      this.highestBid = bid;
+      this.highestBiddingPlayer = this.playerId;
+      }
+    },
+    passed: function () {
+      this.$store.state.socket.emit("collectorsPassed", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+      });
+    },
+
   },
 };
 </script>
 
 <style scoped>
 .board-section {
-  width: 100%;
-  padding: 10px;
+  /*width: 100%;*/
+  padding: 5px;
   align-items: center;
   display: flex;
   flex-direction: row-reverse;
@@ -580,44 +615,51 @@ main {
 
 .layout_wrapper {
   display: grid;
-  grid-template-columns: 60% 40%;
-  grid-template-rows: auto 1fr;
+  grid-template-columns: 60% 25% 15%;
+  grid-template-rows: auto;
   overflow: hidden;
+  margin: 10px;
 }
 
-#game-board {
+.first-column {
   overflow: hidden;
-  grid-row: 1;
+  grid-row: 1/2;
 }
 
 .second-column {
-  grid-column: 2;
-  grid-template-rows: 20% 80%;
-  height: 100%;
+  grid-column: 2/3;
+  grid-row: 1/2;
+}
+
+.third-column{
+  grid-column: 3/4;
+  grid-row: 1/3;
 }
 
 #game-info {
   grid-row: 1;
   margin-left: 1vw;
 }
-
-#work_area {
-  grid-row: 2;
+#game-info h1{
+  font-size: 80%;
 }
+
+/*#work_area {
+  grid-row: 2;
+}*/
 
 #hand_playerboard {
+  width: 100%;
+  height: 80%;
   display: grid;
   grid-template-columns: 60% 40%;
-  grid-row: 2;
-  height: 60vh;
+  grid-column: 1/4;
+  margin-top: 10px;
+  border-bottom: 2px solid black;
+
 }
 
-#other_players {
-  grid-column: 2;
-  grid-row: 2;
-}
-
-/*SECRET SECTION - TA BORT?*/
+/*SECRET SECTION - TA BORT?
 .secretSection {
   width: 100%;
   height: 100%;
@@ -625,7 +667,7 @@ main {
   top: 0;
   left: 0;
   background-color: rgba(0, 0, 0, 0.9);
-}
+}*/
 
 /*TRANSITION - TA BORT???*/
 .slide-enter-active,
@@ -778,9 +820,29 @@ p {
   transform: translateY(-50%) translateX(100vw);
 }
 
-@media screen and (max-width: 800px) {
-  main {
-    width: 90vw;
+@media screen and (max-width: 825px) {
+  .layout_wrapper {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    grid-template-rows: 1fr auto ;
+    margin: 10px;
+  }
+
+  .first-column {
+    grid-row: 2/3;
+  }
+
+  .second-column {
+    grid-column: 2/3;
+    grid-row: 2/3;
+  }
+
+  .third-column {
+    grid-row: 1/2;
+    grid-column: 1/3;
+  }
+  #hand_playerboard {
+  grid-column: 1/3;
   }
 }
 </style>

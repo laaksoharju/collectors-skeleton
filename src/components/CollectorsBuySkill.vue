@@ -22,15 +22,15 @@
             :disabled="buttonDisabled(p.cost)"
             @click="placeBottle(p)"
           >
-            ${{ p.cost }}
+            <p>${{ p.cost }}</p>
           </button>
           <div
             class="clickedButton"
             v-if="p.playerId !== null && typeof players !== 'undefined'"
             :style="{ backgroundColor: players[p.playerId].color }"
           >
-            {{ p.playerId }}
-          </div>
+            <p>{{ p.playerId }}</p>
+        </div>
         </div>
       </div>
     </div>
@@ -57,16 +57,16 @@ export default {
     players: Object,
   },
 
-  data: function () {
-    return {
-      gainSkillProps: {
-        value: "Gain Skills",
+  computed: {
+    gainSkillProps: function () {
+      return {
+        value: this.labels.skill,
         text:
-          "Take one of the cards from the skill pool or from your hand and tuck it under your player board from the left. This card will grant you skills for the rest of the game as detailed in the Special skills section below",
-        title: "Gain Skills",
+          this.labels.skillText,
+        title: this.labels.skill,
         classes: "button green",
-      },
-    };
+      };
+    },
   },
   methods: {
     buttonDisabled: function (cost) {
@@ -127,25 +127,30 @@ export default {
 .buy-cards {
   width: 80%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 105px);
-  grid-template-rows: repeat(auto-fill, 145px);
+  grid-template-columns: repeat(auto-fill, 85px);
+  grid-template-rows: repeat(auto-fill, 117px);
 }
-.button-section {
+/*.button-section {
   width: 20%;
-}
+}*/
 
 .buttons {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
+  grid-template-columns: repeat(auto-fill, 50px);
+  margin-right: 10px;
 }
 
+.buttons p{
+  margin: 0;
+}
 .board-section {
-  width: 100%;
   padding: 10px;
   align-items: center;
   display: flex;
   flex-direction: row-reverse;
   border: 1px solid #19181850;
+  border-radius: 10px;
+  margin: 2px;
 }
 
 #skill-section {
@@ -231,13 +236,6 @@ h1 {
   margin-bottom: 15px;
 }
 
-p {
-  color: #666;
-  font-size: 18px;
-  font-weight: 400;
-  margin-bottom: 15px;
-}
-
 .fade-enter-active,
 .fade-leave.active {
   transition: opacity 1.5s;
@@ -265,5 +263,43 @@ p {
   text-align: center;
   align-items: flex-start;
   color: black;
+}
+
+@media only screen and (max-width: 1050px) {
+  /* phones */
+  .buy-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 65px);
+    grid-template-rows: repeat(auto-fill, 90px);
+  }
+  .cardslots {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 65px);
+    grid-template-rows: repeat(auto-fill, 90px);
+    transform: scale(0.75) translate(-25%, -25%);
+    transition: 0.2s;
+    transition-timing-function: ease-out;
+  }
+
+  .cardslots div {
+    z-index: 0;
+  }
+  .cardslots:hover {
+    z-index: 2;
+  }
+  .cardslots div:hover {
+  transform: scale(1) translate(-25%, 0);
+  z-index: 1;
+}
+
+@media only screen and (max-width: 850px) {
+  .buttons {
+    grid-template-columns: repeat(auto-fill, 30px);
+    margin-right: 10px;
+  }
+  .buttons p{
+     font-size: 70%;
+  }
+}
 }
 </style>

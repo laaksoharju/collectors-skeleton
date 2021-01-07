@@ -19,11 +19,11 @@
           :disabled="buttonDisabled(p.cost)"
           @click="placeBottle(p)"
         >
-          ${{ p.cost }}
+          <p>${{ p.cost }}</p>
         </button>
         <div class="clickedButton" v-if="p.playerId !== null && typeof players !== 'undefined'" :style="{backgroundColor: players[p.playerId].color}">
           
-            {{ p.playerId }}
+            <p>{{ p.playerId }}</p>
           
         </div>
       </div>
@@ -50,16 +50,16 @@ export default {
     players: Object,
   },
 
-  data: function () {
-    return {
-      buyItemProps: {
-        value: "Buy Items",
+  computed: {
+    buyItemProps: function () {
+      return {
+        value: this.labels.item,
         text:
-          "Pick one card from the item pool or from your hand. Tuck the chosen card under your player board from above to show that this card represents an item you have bought. In addition to the cost in the action space, you must pay $1 per card in the Market pool that has the same symbol as the item you just bought. There is no upper limit in the number of items you may own.",
-        title: "Buy Items",
+          this.labels.itemText,
+        title: this.labels.item,
         classes: "button red",
-      },
-    };
+      };
+    },
   },
 
   methods: {
@@ -126,16 +126,18 @@ export default {
 .buy-cards {
   width: 80%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 105px);
-  grid-template-rows: repeat(auto-fill, 145px);
-}
-.button-section {
-  width: 20%;
+  grid-template-columns: repeat(auto-fill, 85px);
+  grid-template-rows: repeat(auto-fill, 117px);
 }
 
 .buttons {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 130px);
+  grid-template-columns: repeat(auto-fill, 50px);
+  margin-right: 10px;
+}
+
+.buttons p {
+  margin: 0;
 }
 
 .clickedButton {
@@ -147,12 +149,13 @@ export default {
 }
 
 .board-section {
-  width: 50%;
   padding: 10px;
   align-items: center;
   display: flex;
   flex-direction: row-reverse;
   border: 1px solid #19181850;
+  border-radius: 10px;
+  margin: 2px;
 }
 
 #item-section {
@@ -161,9 +164,10 @@ export default {
 
 .cardslots {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 105px);
-  grid-template-rows: repeat(auto-fill, 145px);
+  grid-template-columns: repeat(auto-fill, 85px);
+  grid-template-rows: repeat(auto-fill, 117px);
 }
+
 .cardslots div {
   transform: scale(0.5) translate(-50%, -50%);
   transition: 0.2s;
@@ -174,4 +178,48 @@ export default {
   transform: scale(1) translate(-25%, 0);
   z-index: 1;
 }
+
+
+/*@media only screen and (min-width: 768px) {
+
+}*/
+
+@media only screen and (max-width: 1050px) {
+    /* phones */
+  .buy-cards {
+    width: 80%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 65px);
+    grid-template-rows: repeat(auto-fill, 90px);
+  }
+  .cardslots {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 65px);
+    grid-template-rows: repeat(auto-fill, 90px);
+    transform: scale(0.75) translate(-25%, -25%);
+    transition: 0.2s;
+    transition-timing-function: ease-out;
+  }
+
+  .cardslots div {
+    z-index: 0;
+  }
+
+  .cardslots div:hover {
+    transform: scale(1) translate(-25%, 0);
+    z-index: 1;
+  }
+}
+
+@media only screen and (max-width: 850px) {
+  .buttons {
+    grid-template-columns: repeat(auto-fill, 30px);
+    margin-right: 10px;
+  }
+  
+   .buttons p{
+     font-size: 70%;
+   }
+}
+
 </style>

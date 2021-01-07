@@ -1,17 +1,17 @@
 <template>
-
   <div class="center">
-
-    <div>
+    <!-- <div>
       <h2>hej</h2>
-      <DemoButton/>
-      <MenuButton/>
-    
-    </div>
+      <DemoButton />
+      <MenuButton />
+    </div> -->
     <div id="welcomeMessage">
       <h1>Collectors</h1>
-      <h3>Welcome to the game Collectors where you compete against other players about who's collection is the most valuable. </h3>
-      <ul>
+      <h3>
+        Welcome to the game Collectors where you compete against other players
+        about who's collection is the most valuable.
+      </h3>
+      <!-- <ul>
         <li v-for="i in 3" :key="i">
           <a @click="setupCollectors(i + 1, 'en')"
             >Set up a game of Collectors for {{ i + 1 }} players</a
@@ -24,55 +24,64 @@
             >Spela Collectors med {{ i + 1 }} spelare</a
           >.
         </li>
-      </ul>
+      </ul> -->
       <div class="watchDemo">
         <h2>New to collectors? Watch a demo before playing</h2>
-        <button class="demoButton button">Demo</button>
+        <DemoButton />
       </div>
-      
+
       <h2>Do you know how to play? Start a game</h2>
       <div class="playGame">
         <div>
-          <label for="cars">Players: </label>
-          <select name="players" id="players">
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
+          <label for="players">Players: </label>
+          <select v-model="playerCount" id="players">
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
           </select>
         </div>
-        
-      <div>
-        <label for="cars">Language: </label>
-        <select name="cars" id="cars">
-          <option value="sv">Svenska</option>
-          <option value="en">English</option>
-        </select>
-      </div>
-      
-      <div>
-        <button class="playButton button">Play</button>
-      </div>
-      
+
+        <div>
+          <label for="language">Language: </label>
+          <select v-model="languageSelect" id="language">
+            <option value="se">Svenska</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+
+        <div>
+          <button class="playButton button" @click="findValues">Play</button>
+        </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
 import DemoButton from "../components/DemoButton.vue";
-import MenuButton from "../components/MenuButton.vue";
+// import MenuButton from "../components/MenuButton.vue";
 
 export default {
   name: "Home",
   components: {
     DemoButton,
-    MenuButton,
+    // MenuButton,
   },
+
+    data: function () {
+    return {
+      playerCount: 2,
+      languageSelect: "en",
+    }
+    },
+
   created: function () {
     this.$store.commit("SET_ROOM_ID");
   },
   methods: {
+    findValues: function () {
+      this.setupCollectors(this.playerCount, this.languageSelect);
+    },
     setupCollectors: function (playerCount, lang = "en") {
       this.$store.commit("SETUP_GAME", {
         roomId: this.$store.state.roomId,
@@ -143,5 +152,4 @@ a:hover {
 .button:hover {
   box-shadow: 6px 6px rgba(0, 0, 0, 0.6);
 }
-
 </style>

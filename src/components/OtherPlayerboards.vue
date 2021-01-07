@@ -55,11 +55,7 @@ export default {
 };
 </script>
 <style scoped>
-    #AllOtherPlayerboards{
-      display:flex;
-      justify-content: flex-end;
-      flex-direction: row;
-    }
+
 
     .otherPlayerBoard {
     margin: 5px;
@@ -84,33 +80,21 @@ export default {
     }
 
     .showPlayerBoard {
-      /*height: 600px;
-      width: 1000px;*/
       height: 30vw; /*30vw;*/
-      width: 40vw; /*40vw;*/
-      border-bottom: 1px solid black;
+      width: 70vw; /*40vw;*/
+      border-bottom: solid black;
+
     }
 
-    /*.showPlayerBoard {
-      transform: translate(200px,150px)
+
+    @media screen and (max-width: 825px) {
+      h2 {
+        font-size: 70%;
+      }
+      #AllOtherPlayerboards{
+        display:flex;
+        justify-content: flex-end;
+        flex-direction: row;
+      }
     }
-    /*Syntaxen för transition
-    .element {
-          transition: property duration ease delay}*/ 
-    /*.expand-transition {
-      transition: opacity 300ms ease-in-out 1s;
-      
-      overflow: hidden;
-    }*/
-
-
-    /*.slide-leave-actve {
-      
-    }*/
-
-
-
-   /* .clickOnOtherPlayer {
-      overflow: hidden;
-    }*/
 </style>

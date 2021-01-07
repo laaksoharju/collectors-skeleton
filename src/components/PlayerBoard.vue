@@ -1,11 +1,10 @@
 <template>
   <div id="PlayerBoard">
-    <div id="mainBoard" :style="{ backgroundColor: player.color }">
-      <div id="itemSection">
-        <!-- <h2>Items</h2> -->
-        <div class="button">
+    <div id="mainBoard" :style="{ backgroundColor: player.color }">  
+       <div class="button firstCoulum">
           <InfoButtons :modalProps="myItemsProps" />
         </div>
+      <div id="itemSection">
         <div id="itemGrid">
           <!--countItems = [fastaval, movie, technology, figures, music]-->
           <div class="dot fastaval">
@@ -40,13 +39,17 @@
           <p>{{ countItems[4] }}</p>
         </div>
       </div>
-
-      <div id="skillSection">
-        <!-- <h2>Skills</h2> -->
-        <div class="button">
+        <div class="skillsBottlesSection">
+          <div class="button">
+        <!--<div class="button firstColumn">-->
           <InfoButtons :modalProps="mySkillsProps" />
         </div>
-
+        <div class="bottles">
+          <p>Bottles: {{player.bottles}}</p>
+          <p>Available bottles: {{player.availableBottles}}</p>
+          </div>
+        </div>
+      <div id="skillSection">
         <div id="skillGrid">
           <!--countSkills = [bottle, workerIncome, workerCard, auctionIncome, VP-all,
                 VP-fastaval, VP-movie, VP-technology, VP-figures, VP-music]-->
@@ -75,11 +78,6 @@
               <InfoButtons :modalProps="skill5Props" />
             </div>
           </div>
-          <p>{{ countSkills[0] }}</p>
-          <p>{{ countSkills[1] }}</p>
-          <p>{{ countSkills[2] }}</p>
-          <p>{{ countSkills[3] }}</p>
-          <p>{{ countSkills[4] }}</p>
           <div class="dot VP-fastavalSkill">
               <div class="smallButton">
               <InfoButtons :modalProps="skill6Props" />
@@ -105,6 +103,11 @@
               <InfoButtons :modalProps="skill10Props" />
             </div>
           </div>
+          <p>{{ countSkills[0] }}</p>
+          <p>{{ countSkills[1] }}</p>
+          <p>{{ countSkills[2] }}</p>
+          <p>{{ countSkills[3] }}</p>
+          <p>{{ countSkills[4] }}</p>
           <p>{{ countSkills[5] }}</p>
           <p>{{ countSkills[6] }}</p>
           <p>{{ countSkills[7] }}</p>
@@ -112,10 +115,7 @@
           <p>{{ countSkills[9] }}</p>
         </div>
       </div>
-
-      <div id="infoSection">
         <div id="incomeSection">
-          <!-- <h2>Income</h2> -->
           <div class="button">
             <InfoButtons :modalProps="myIncomeProps" />
           </div>
@@ -124,8 +124,8 @@
             <p>&#36;{{ countIncome }}</p>
           </div>
         </div>
+
         <div id="moneySection">
-          <!-- <h2>Money</h2> -->
           <div class="button">
             <InfoButtons :modalProps="myMoneyProps" />
           </div>
@@ -133,17 +133,6 @@
             <p>&#36;{{ player.money }}</p>
           </div>
         </div>
-        <!--
-        <div id="secretSection">
-          <div id="secretCard">
-            <h2>Secret card</h2>
-            <div class="button">
-              <InfoButtons :modalProps="mySecretCardProps" />
-            </div>
-            <div>{{ player.secret }}</div>
-          </div>
-        </div>-->
-      </div>
     </div>
   </div>
 </template>
@@ -371,17 +360,18 @@ export default {
 #mainBoard {
   width: 100%;
   height: 100%;
-  
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  grid-template-rows: 1fr 1.5fr;
-  grid-gap: 10px;
+  grid-template-columns: auto auto auto;
   text-align: center;
   color: black;
-  border: 1px solid black;
-  /*margin: 5px;*/
-  /*padding: 10px;*/
-  /*border-radius: 3px;*/
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+  border-left: 2px solid black;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  padding: 10px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
 }
 #mainBoard h2 {
   font-size: 90%;
@@ -392,31 +382,53 @@ export default {
 }
 #itemSection {
   grid-row: 1/2;
-  grid-column: 1/2;
+  grid-column: 2/3;
 }
 #skillSection {
   grid-row: 2/3;
-  grid-column: 1/2;
-}
-#infoSection {
-  grid-row: 1/3;
   grid-column: 2/3;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
 }
-#secretSection {
-  grid-column: 1/2;
-  grid-row: 3/4;
-}
+/* #infoSection {
+  grid-row: 1/3;
+  grid-column: 3/4;
+  /*display: grid;
+  grid-template-columns: fit-content;
+  grid-template-rows: fit-content fit-content fit-content;
+}*/
+
 #itemGrid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }
 #skillGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-gap: 2px;
 }
+
+#incomeSection {
+  grid-row: 1/2;
+  grid-column: 3/4;
+}
+
+#moneySection {
+  grid-row: 2/3;
+  grid-column: 3/4;
+
+}
+
+.bottles {
+  font-size: 80%;
+}
+
+.skillsBottlesSection {
+  grid-column: 1/2;
+}
+
+/*.firstColumn{
+  grid-column: 1/2;
+}*/
+
 .dot {
   width: 3vw;
   height: 3vw;
@@ -427,11 +439,10 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
-.income,
-.money {
+.income, .money {
   background-color: #ffe599ff;
-  height: 5vw;
-  width: 5vw;
+  height: 3vw;
+  width: 3vw;
 }
 
 .music {
@@ -497,11 +508,17 @@ export default {
 
 .button {
   margin: 5px;
-  margin-bottom: 10px;
 }
 
 .smallButton {
   margin-top: 100%;
   margin-left: 100%;
 }
+
+@media only screen and (max-width: 1050px) {
+  #mainBoard p {
+  font-size: 70%;
+}
+}
+
 </style>

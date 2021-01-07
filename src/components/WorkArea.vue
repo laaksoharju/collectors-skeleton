@@ -187,35 +187,34 @@ export default {
     
 <style scoped>
 #workArea {
-  /*background-color: rgb(235, 235, 109);*/
-  background-color: #f5f2cc; /* #ffe599ff;*/
-  width: 100%;
+  background-color: #f5f2cc;
   border: 1px solid #e9de4b;
   display: flex;
   align-items: center;
   flex-direction: column;
+  border-radius: 10px;
+  margin: 2px;
 }
 
 .rectangular {
   margin: 7px;
-  height: 70px;
   width: 90%;
+  height: 70px;
   color: black;
-  background-color: #f5f2cc; /* #ffe599ff;*/
+  background-color: #f5f2cc; 
   border: 3px solid grey;
-  /*display: flex;
-            justify-content: space-around;*/
+  border-radius: 10px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }
 
 .info {
     margin-top: 5px;
+    text-align: center;
 }
 
 .buttonTest {
   color: black;
-  /*grid-column: 1;*/
   grid-column: 2;
   width: 100%;
   height: 20%;
@@ -225,17 +224,8 @@ export default {
   margin-top: 25px;
 }
 
-/*#workAreaText {
-  color: black;
-  /*font-size: 30px;*/
-/*font-weight: bold;
-  text-align: center;
-}*/
-
 .firstArea {
   border: 3px dotted grey;
-  /*display: grid;
-        grid-template-columns: 1fr 1fr;*/
 }
 
 .firstArea p {
@@ -272,6 +262,7 @@ export default {
   grid-column: 1;
   margin-top: 20px;
   margin-left: 5px;
+  text-align: center;
 }
 
 .first {
@@ -294,19 +285,17 @@ export default {
 #getCard {
   background: url("/images/getCardInWorkArea.PNG");
   background-size: 3vw 3vw;
-  /*background-size: 40px 45px;*/
   background-repeat: no-repeat;
 }
 
 #recycledCard {
   background: url("/images/bottleRecycled.PNG");
   background-size: 2.5vw 3vw;
-  /*background-size: 38px 55px;*/
   background-repeat: no-repeat;
 }
 
 #upsideDown {
-    background: url("/images/baksida.png");
+  background: url("/images/baksida.png");
   background-size: 2.5vw 3vw;
   background-repeat: no-repeat;
 }
