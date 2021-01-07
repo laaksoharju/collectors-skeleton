@@ -209,4 +209,18 @@ width: 500px;
   height: 50px;
   width: 250px;
 }
+/*MOBIL VERISION*/
+@media screen and (max-width: 800px) {
+  main {
+    width:90vw;
+  }
+  #ruleContent {
+    margin: 50px 100px 50px 10S0px;
+    padding: 10px 10px;
+    font-size: 20px;
+    font-style: oblique;
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(0px, 1fr) );
+  }
+}
 </style>

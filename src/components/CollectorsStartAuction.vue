@@ -188,17 +188,29 @@ font-size: 20px;
   background-size: cover;
 }
 
+.auctionSquareText {
+  grid-column: 1 / span 2;
+  grid-row: 7;
+  place-self: end left;
+  font-style: italic;
+  color: #eb6579;
+  text-shadow: 2px 2px 4px white;
+  font-size: 16px;
+}
+
 .auctionSquare{
   grid-column: 1;
-  grid-row: 7;
-  height: 180px;
-  width: 130px;
+  grid-row: 8;
+  height: 120px;
+  width: 90px;
   border: 5px dotted pink;
   font-style: italic;
   font-size: 50px;
   text-shadow: 2px 2px 4px pink;
   font-size: 14px;
+  transform-origin: 0 50px;
   }
+
   .bidSquare {
     grid-column: 1;
     grid-row: 10;
@@ -225,17 +237,24 @@ form {
     border-radius: 12px;
     border: 2px solid #BD5467;
   }
+
 #bidPlacementButton:hover {
   background-color: #BD5467;
   border: 2px solid lightpink;
 }
   .cardUpForAuction {
-  transform: scale(0.45);
+  transform: scale(0.30);
   grid-column: 1;
-  grid-row: 7;
-  height: 70px;
-  width: 50px;
+  grid-row: 8;
+  height: 30px;
+  width: 35px;
   }
+
+  .cardUpForAuction div:hover{
+    transform: scale(1.30)translate(0,0);
+    z-index: 1;
+  }
+
   .start-auction{
     transform: scale(0.25);
     grid-column: 2;

@@ -499,7 +499,8 @@ export default {
     );
     this.$store.state.socket.on('collectorsChangedTurn',
       function(d) {
-          this.currentPlayer = d;
+          this.currentPlayer = d.currentPlayer,
+          this.currentRound = d.currentRound;
       }.bind(this)
     );
     this.$store.state.socket.on('collectorsNewlyRounded',
@@ -752,6 +753,21 @@ startWinnerCard: function(action){
   });
 },
     changeTurn: function () {
+
+      let noBottles = true; //Ingen har flaskor kvar utgår vi ifrån
+
+        for (let playerId in this.players){
+          if (this.players[playerId].playerBottles !== 0){
+          noBottles = false;
+          break;
+          }
+          console.log(noBottles);
+        }
+
+          if (noBottles === true) {
+           this.newRound();
+         }
+
       this.$store.state.socket.emit('collectorsChangeTurn', {
           roomId: this.$route.params.id,
           currentPlayer: this.currentPlayer
@@ -793,12 +809,11 @@ getIncome: function()
 
 
     newRound: function(){
-      if (this.currentRound != 4){
+      if (this.currentRound < 4){
 
         this.$store.state.socket.emit('collectorsNewRound', {
             roomId: this.$route.params.id,
             players: this.players
-
               }
           );
       }
