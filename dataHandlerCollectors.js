@@ -92,8 +92,8 @@ Data.prototype.createRoom = function(roomId, playerCount, lang="en") {
   room.marketPlacement = [ {cost:0, playerId: null, placementId:0 },
                            {cost:0, playerId: null, placementId:1 },
                            {cost:-2, playerId: null, placementId:2 } ];
-  room.workPlacement = [ {cost:-1, playerId: null, workActionId:0},
-                            {cost:1, playerId: null, workActionId:1},
+  room.workPlacement = [ {cost:1, playerId: null, workActionId:0},
+                            {cost:-1, playerId: null, workActionId:1},
                             {cost:0, playerId: null, workActionId:2},
                             {cost:0, playerId: null, workActionId:3} ];
   room.quarterPlacement = [ {cost:0, playerId: null, currentRoundID:0},
