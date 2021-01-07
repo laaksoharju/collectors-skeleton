@@ -65,11 +65,17 @@
             :labels="labels"
             :player="players[playerId]"
             :auctionCards="auctionCards"
+            :upForAuction="upForAuction"
             :marketValues="marketValues"
             :placement="auctionPlacement"
-            :allCardsChosen="allCardsChosen"
+            :highestBid="highestBid"
+            :highestBiddingPlayer="highestBiddingPlayer"
+            :numberOfPasses="numberOfPasses"
             :players="players"
             @selectAction="selectAction($event)"
+            @placeBid="placeBid($event)"
+            @passed="passed($event)"
+            @auctionToHand="auctionToHand($event)"
             @placeBottle="placeBottle('auctionType', 'auction', $event)"
           />
 
@@ -111,6 +117,7 @@
           />
          
           <MenuButton />
+          <button @click="drawCard"> {{labels.draw}} </button>
 
         </div>
 
@@ -167,6 +174,9 @@ export default {
       publicPath: "localhost:8080/#", //"collectors-groupxx.herokuapp.com/#",
       touchScreen: false,
       nextRound: Boolean,
+      highestBid: 0,
+      highestBiddingPlayer: '',
+      numberOfPasses: 0,
       round: 1,
       myCards: [],
       maxSizes: { x: 0, y: 0 },
@@ -205,6 +215,7 @@ export default {
       itemsOnSale: [],
       skillsOnSale: [],
       auctionCards: [],
+      upForAuction: [],
       playerid: 0,
 
       buyItemProps: {
@@ -393,6 +404,48 @@ export default {
         this.players = d.players;
       }.bind(this)
     );
+
+    //Auction-grejer kommer här
+
+        this.$store.state.socket.on(
+      "collectorsAuctionCardBought",
+      function (d) {
+        console.log(d.playerId, "Started an Auction");
+        this.players = d.players;
+        this.auctionCards = d.auctionCards;
+        this.upForAuction = d.upForAuction;
+      }.bind(this)
+    );
+    this.$store.state.socket.on(
+      "collectorsAuctionSentToHand",
+      function (d) {
+        this.players = d.players;
+        this.auctionCards = d.auctionCards;
+        this.upForAuction = d.upForAuction;
+        this.marketValues = d.marketValues;
+        this.highestBid = d.highestBid;
+        this.destination = d.destination;
+        this.highestBiddingPlayer = d.highestBiddingPlayer;
+      }.bind(this)
+    );
+    this.$store.state.socket.on(
+      "collectorsPlacedBid",
+      function (d) {
+        console.log(d.playerId, "Placed a bid");
+        this.players = d.players;
+        this.highestBid = d.bid;
+        this.highestBiddingPlayer = d.playerId;
+      }.bind(this)
+    );
+    this.$store.state.socket.on(
+      "collectorsPassedBid",
+      function (d) {
+        console.log(d.playerId, "Passed a bid");
+        this.players = d.players;
+        this.upForAuction = d.upForAuction;
+      }.bind(this)
+    );
+
   },
   methods: {
     selectAll: function (n) {
@@ -401,7 +454,7 @@ export default {
     selectAction: function (card) {
       this.currentAction == "itemType" ? this.buyCard(card) : null;
       this.currentAction == "skillType" ? this.buySkillCard(card) : null;
-      this.currentAction == "auctionType" ? this.startAuction(card) : null; //Funktionen existerar inte än
+      this.currentAction == "auctionType" ? this.buyAuctionCard(card) : null; //Funktionen existerar inte än
       this.currentAction == "marketType" ? this.manageMarketAction(card) : null;
     },
     manageMarketAction: function (card) {
@@ -493,6 +546,44 @@ export default {
           secret: card,
         });
     },
+
+    //Här kommer auction
+    buyAuctionCard: function (card) {
+      this.$store.state.socket.emit("collectorsBuyAuctionCard", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        card: card,
+        cost: this.marketValues[card.market] + this.chosenPlacementCost,
+      });
+    },
+    auctionToHand: function (d) {
+      this.$store.state.socket.emit("collectorsAuctionToHand", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        card: this.upForAuction[0],
+        cost: this.highestBid,
+        destination: d
+      });
+    },
+    placeBid: function (bid) {
+      console.log('collectors.vue ' + bid)
+      if(bid > this.highestBid){
+      this.$store.state.socket.emit("collectorsPlaceBid", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        bid: bid,
+      });
+      this.highestBid = bid;
+      this.highestBiddingPlayer = this.playerId;
+      }
+    },
+    passed: function () {
+      this.$store.state.socket.emit("collectorsPassed", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+      });
+    },
+
   },
 };
 </script>
@@ -500,7 +591,7 @@ export default {
 <style scoped>
 .board-section {
   /*width: 100%;*/
-  padding: 10px;
+  padding: 5px;
   align-items: center;
   display: flex;
   flex-direction: row-reverse;
@@ -520,7 +611,7 @@ main {
 .layout_wrapper {
   display: grid;
   grid-template-columns: 60% 25% 15%;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto;
   overflow: hidden;
   margin: 10px;
 }
@@ -553,11 +644,14 @@ main {
 }*/
 
 #hand_playerboard {
-  height: 60vh;
+  width: 100%;
+  height: 80%;
   display: grid;
   grid-template-columns: 60% 40%;
   grid-column: 1/4;
-  margin-top: 30px;
+  margin-top: 10px;
+  border-bottom: 2px solid black;
+
 }
 
 /*SECRET SECTION - TA BORT?
@@ -726,12 +820,10 @@ p {
     display: grid;
     grid-template-columns: 70% 30%;
     grid-template-rows: 1fr auto ;
-    overflow: hidden;
     margin: 10px;
   }
 
   .first-column {
-    overflow: hidden;
     grid-row: 2/3;
   }
 
@@ -743,6 +835,9 @@ p {
   .third-column {
     grid-row: 1/2;
     grid-column: 1/3;
+  }
+  #hand_playerboard {
+  grid-column: 1/3;
   }
 }
 </style>
