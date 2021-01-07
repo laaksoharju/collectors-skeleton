@@ -167,8 +167,11 @@ function sockets(io, socket, data) {
     });
 
     socket.on('collectorsChangeTurn', function(d) {
-      io.to(d.roomId).emit('collectorsChangedTurn',
-      data.changeTurn(d.roomId, d.currentPlayer));
+      io.to(d.roomId).emit('collectorsChangedTurn',{
+        currentPlayer: data.changeTurn(d.roomId, d.currentPlayer),
+        currentRound: data.getCurrentRound(d.roomId)
+      }
+    )
     });
 
     socket.on('collectorsEndGame', function(d) {
