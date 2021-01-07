@@ -314,7 +314,7 @@ export default {
       labels: {},
       players: {},
       currentPlayer: "",
-      currentRound: null,
+      currentRound: 1,
       buyPlacement: [],
       skillPlacement: [],
       auctionPlacement: [],
