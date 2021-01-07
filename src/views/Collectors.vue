@@ -201,6 +201,12 @@
         </div>
 <!-- Slut på Spelarens egna playerbord  -->
 
+        <div class ="yourTurn" v-for="(value, playerId) in players" :key = "playerId">
+            <div v-if="currentPlayer===playerId">
+              {{labels.turn}} {{currentPlayer}} {{labels.yourturn}}
+            </div>
+        </div>
+
 <!-- visa spelarens kort i handen,  -->
       <div class="playerHand">
         <div class="playerHandTitle"> {{playerId}} {{labels.playerHand}} </div>
@@ -1007,6 +1013,12 @@ h5 {
     z-index: 1;
   }
 
+  .yourTurn {
+    grid-row: 1;
+    grid-column: 11/span 3;
+    place-self: end;
+  }
+
   .playerHand {
     grid-column: 11/span 5;
     grid-row: 8/span 4;
@@ -1244,6 +1256,11 @@ h5 {
   .playerBottles {
     grid-row: 1;
     grid-column: 4;
+  }
+  .yourTurn {
+    grid-row: 1;
+    grid-column: 1/span 2;
+    place-self: end;
   }
     .playerBoard {
       grid-column: 1/span 5;

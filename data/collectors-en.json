@@ -24,6 +24,7 @@
 	"incomecard" : "Income Card: ",
 	"coins" : "Coins: ",
 	"turn" : "Who's turn?",
+	"yourturn": "'s turn!",
 	"changeturn" : "Press here when you're done.",
 	"round" : "Round: ",
 	"changeround" : "Press here when round  ",
