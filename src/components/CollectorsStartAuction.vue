@@ -1,88 +1,74 @@
 <template>
-
 <div class = "auctionPool">
- <div class= "titleAuctionPool" > Auction Pool</div>
+  <div class= "titleAuctionPool" > Auction Pool</div>
 
-<div class="auctionSquareText"> {{labels.auctionsquare}}</div>
-<div class = "auctionSquare">
+  <div class = "auctionSquare">
+    {{labels.auctionsquare}}
+  </div>
+  <div class = "cardUpForAuction">  <!-- kortet som läggs i auction square-->
+    <CollectorsCard :card="cardUpForAuction"/>
+  </div>
 
-</div>
-<div class = "cardUpForAuction">
-  <CollectorsCard :card="cardUpForAuction"/>
-</div>
+  <div class = "bidSquare" >
+    <form>
+      <label for="bidSquare">{{labels.placebid}}:</label>
+      <input type="text" id="bidSquare" name="bidSquare">
+    </form>
+  </div>
 
-<div class = "bidSquare" >
-  <form>
-  <label for="bidSquare">{{labels.placebid}}:</label>
-  <input type="text" id="bidSquare" name="bidSquare">
-  </form>
-</div>
+  <button  id = "bidPlacementButton" @click="startBidding()">{{labels.placebid}}!</button>
+  <button  id = "stopAuctionButton" @click="stopAuction()">{{labels.stop}} </button>
 
-<button  id = "bidPlacementButton" @click="startBidding()">{{labels.placebid}}!</button>
-
-<button  id = "stopAuctionButton" @click="stopAuction()">{{labels.stop}} </button>
-
-
-
-<div class="winner">
-  {{labels.auctionwinner}}{{auctionWinner}}
-  {{labels.bid}}{{highestBid}}
-</div>
-
-
-
-
- <!--<div class="buttons" v-for="(p, index) in placement" :key="index"> -->
-<div class="buttons" v-for="(p, index) in placement" :key="'Auction Button'+index">
-
-   <button id="buttonNollSecond" v-if="p.playerId===null && p.cost===0 && p.placementId=== 0"
-   :disabled="cannotAfford(p.cost)"
-   @click="placeBottle(p)">
-     <div class = "EnergyBottleCoinWhiteNoll second">
-     </div>
+  <div class="winner">
+    {{labels.auctionwinner}}{{auctionWinner}}
+    {{labels.bid}}{{highestBid}}
+  </div>
+  <!--knapparna för flaskor, auction button + index läggs till i v-for för att ta bort duplicate keys error-->
+  <div class="buttons" v-for="(p, index) in placement" :key="'Auction Button'+index">
+    <button id="buttonNollSecond" v-if="p.playerId===null && p.cost===0 && p.placementId=== 0"
+        :disabled="cannotAfford(p.cost)"
+        @click="placeBottle(p)">
+        <div class = "EnergyBottleCoinWhiteNoll second">
+        </div>
    </button>
 
    <button id="buttonNollFirst" v-if="p.playerId===null && p.cost===0 && p.placementId=== 1 "
-   :disabled="cannotAfford(p.cost)"
-   @click="placeBottle(p)">
-     <div class = "EnergyBottleCoinWhiteNoll second">
-     </div>
+        :disabled="cannotAfford(p.cost)"
+        @click="placeBottle(p)">
+        <div class = "EnergyBottleCoinWhiteNoll second">
+        </div>
    </button>
 
    <button id="buttonOne" v-if="p.playerId===null && p.cost===-1"
-   :disabled="cannotAfford(p.cost)"
-   @click="placeBottle(p)">
-     <div class = "EnergyBottleCoinWhiteOne">
-     </div>
+        :disabled="cannotAfford(p.cost)"
+        @click="placeBottle(p)">
+        <div class = "EnergyBottleCoinWhiteOne">
+        </div>
    </button>
 
    <button id="buttonTwo" v-if="p.playerId===null && p.cost===-2"
-   :disabled="cannotAfford(p.cost)"
-   @click="placeBottle(p)">
-     <div class = "EnergyBottleCoinWhiteTwo">
-     </div>
+        :disabled="cannotAfford(p.cost)"
+        @click="placeBottle(p)">
+        <div class = "EnergyBottleCoinWhiteTwo">
+        </div>
    </button>
  </div>
-
-
-
-
-<div class = "start-auction">
-  <div id = "start-auctionID" v-for="(card, index) in auctionCards" :key="index">
-    <CollectorsCard
+ <!-- här skapas korten som finns i auction pool-->
+ <div class = "start-auction">
+   <div id = "start-auctionID" v-for="(card, index) in auctionCards" :key="index">
+     <CollectorsCard
       :card="card"
       :availableAction="card.available"
       @doAction="startAuction(card)"/>
   </div>
 </div>
+  <!--knapparna som dyker upp då auction avslutas-->
+  <div class="auctionButtons" >
+    <button class = "auctionSkill" v-if="auctionWinner !== ''" @click="startWinnerCard('skill')"> PLACE AS SKILL </button>
+    <button class = "auctionMarket" v-if="auctionWinner !== ''" @click="startWinnerCard('market')"> PLACE IN MARKET </button>
+    <button class = "auctionItem" v-if="auctionWinner !== ''" @click="startWinnerCard('item')"> PLACE AS ITEM </button>
+  </div>
 
-<div class="auctionButtons" >
-
-  <button class = "auctionSkill" v-if="auctionWinner !== ''" @click="startWinnerCard('skill')"> PLACE AS SKILL </button>
-  <button class = "auctionMarket" v-if="auctionWinner !== ''" @click="startWinnerCard('market')"> PLACE IN MARKET </button>
-  <button class = "auctionItem" v-if="auctionWinner !== ''" @click="startWinnerCard('item')"> PLACE AS ITEM </button>
-
-</div>
 </div>
 </template>
 
@@ -113,18 +99,15 @@ export default {
         }
       },
   startWinnerCard: function(action){
-    console.log('started winner card with action'+action);
     this.$emit('startWinnerCard', action);
   },
   startBidding: function (){
      var bid = Number(document.getElementById("bidSquare").value);
      this.player.bids = bid;
-     console.log(this.player, "started bidding");
      this.$emit('startBidding', this.player.bids);
   },
 //Stop auction - här skickas det kort som är upp to auction vidare
   stopAuction: function (){
-    console.log("stopAuction i CollectorsStartAuction");
      this.$emit('stopAuction');
   },
   cannotAfford: function (cost) {
@@ -132,15 +115,17 @@ export default {
     for(let key in this.marketValues) {
       if (cost + this.marketValues[key] < minCost)
         minCost = cost + this.marketValues[key]
-    }
+      }
     return (this.player.money < minCost);
   },
   cardCost: function (card) {
     return this.marketValues[card.market];
   },
   placeBottle: function (p) {
+    if(this.player.playerBottles>0){
     this.$emit('placeBottle', p);
     this.highlightAvailableCards(p.cost);
+  }
   },
    highlightAvailableCards: function (cost=100){
       for (let i = 0; i < this.auctionCards.length; i += 1) {
@@ -275,8 +260,6 @@ form {
   .start-auction{
     transform: scale(0.25);
     grid-column: 2;
-  /*  grid-template-columns: repeat(auto-fill, 1px);
-    grid-template-rows: repeat(auto-fill, 70px);*/
   }
   .start-auction div:hover{
     transform: scale(1.25)translate(-15%,0);
@@ -336,6 +319,7 @@ form {
     transform: scale(1.5)translate(0,0);
     z-index: 1;
   }
+
 @media screen and (max-width: 800px) {
   .auctionPool{
     grid-column: 1/span 7;
@@ -345,14 +329,11 @@ form {
     background-color: beige;
     color: black;
     display: grid;
-  /*  grid-template-columns: repeat(10, 62.9px);*/
+    grid-template-columns: repeat(auto-fit, minmax(-90px, 1fr));
     grid-template-rows: repeat(3,60px);
     grid-row-gap: 10px;
     grid-auto-flow: row;
     border: 2px solid #4C7B80;
-
-    grid-template-columns: repeat(auto-fit, minmax(-90px, 1fr));
-
   }
   .titleAuctionPool{
   grid-column: 1 /span 2;
@@ -372,18 +353,6 @@ form {
     grid-column: 1;
     grid-row: 5;
   }
-  .EnergyBottleCoinWhiteTwo{
-    width:45px;
-    height:45px;
-    background-image:  url('/images/Coin-white-2.png');
-    background-size: cover;
-  }
-  .EnergyBottleCoinWhiteOne{
-    width:45px;
-    height:45px;
-    background-image:  url('/images/Coin-white-1.png');
-    background-size: cover;
-  }
 
   .auctionSquare{
     grid-column: 9;
@@ -401,16 +370,7 @@ form {
       grid-row: 1;
       margin-top: 20%;
     }
-  #bidSquare {
-    width: 40px;
-    height: 20px;
-    grid-column: 2;
-  }
-  form {
-    grid-column: 1;
-    grid-row: 8;
-    font-size: 13px;
-  }
+
   #bidPlacementButton {
     height: 40px;
     width: 50px;
@@ -422,10 +382,7 @@ form {
       border-radius: 12px;
       border: 2px solid #BD5467;
     }
-  #bidPlacementButton:hover {
-    background-color: #BD5467;
-    border: 2px solid lightpink;
-  }
+
     .cardUpForAuction {
     transform: scale(0.35);
     grid-column: 9;
@@ -449,12 +406,10 @@ form {
       transform: scale(1.25)translate(-15%,0);
       z-index: 1;
     }
-    .buttons{
-      border-radius: 9px;
-    }
+
     .auctionButtons{
-      grid-column: 4;
-      grid-row: 3;
+      grid-column: 10;
+      grid-row: 1;
       place-self: right;
     }
     .winner{
@@ -472,36 +427,6 @@ form {
       grid-column:7;
       place-self: start;
       border: 2px solid #A22626;
-    }
-    #stopAuctionButton:hover {
-      background-color: #A22626;
-      border: 2px solid #C86262;
-    }
-    #buttonNollSecond {
-      background-color: white;
-      border-radius: 5px;
-      border: 2px solid #D4D4B8;
-    }
-
-    #buttonNollFirst {
-      background-color: white;
-      border-radius: 5px;
-      border: 2px solid #D4D4B8;
-    }
-
-    #buttonOne {
-      background-color: white;
-      border-radius: 5px;
-      border: 2px solid #D4D4B8;
-    }
-    #buttonTwo {
-      background-color: white;
-      border-radius: 5px;
-      border: 2px solid #D4D4B8;
-    }
-    .buttons div:hover {
-      transform: scale(1.5)translate(0,0);
-      z-index: 1;
     }
 }
 
