@@ -1,7 +1,6 @@
 <template>
-  <div class = "skillPool">
-  <div class= "titleSkillPool" >Skill Pool</div>
-
+<div class = "skillPool">
+<div class= "titleSkillPool" >Skill Pool</div>
 
 <div class="buttons" v-for="(p, placementId) in placement" :key="placementId">
 
@@ -41,16 +40,11 @@
     </div>
   </button>
 
-
 <div v-if="p.playerId !== null">
   {{p.playerId}}
 </div>
 
 </div>
-
-
-
-
 
       <div class = "get-skill" >
         <div v-for="(card, index) in skillsOnSale" :key="index">
@@ -103,7 +97,7 @@ export default {
       this.highlightAvailableCards(p.cost);
     }
     },
-    
+
     highlightAvailableCards: function (cost=100) {
       for (let i = 0; i < this.skillsOnSale.length; i += 1) {
         if (this.marketValues[this.skillsOnSale[i].item] <= this.player.money - cost) {
@@ -163,8 +157,6 @@ export default {
   transform: scale(1.25)translate(15%,0);
   z-index: 1;
 }
-.buttons{
-}
 #noCoinButton {
   background-color: #dfeccc;
   border-radius: 5px;
@@ -181,13 +173,7 @@ export default {
 }
 
 @media screen and (max-width: 800px) {
-  .titleSkillPool {
-    grid-column: 1 / span 2;
-    font-style: italic;
-    font-size: 50px;
-    text-shadow: 2px 2px 4px green;
-    font-size: 20px;
-  }
+
   .skillPool{
     grid-column: 1 / span 2;
     grid-row: 5/span 13 ;
@@ -197,51 +183,12 @@ export default {
     color: black;
     padding-left: 10px;
     display: grid;
-    /*grid-template-columns: repeat(3, 50px);*/
     grid-template-rows: repeat(6,50px);
     grid-row-gap: 25px;
     grid-column-gap: 10px;
     grid-auto-flow: column;
     border: 2px solid #4C7B80;
-
     grid-template-columns: repeat(auto-fit, minmax(-10px, 1fr));
-
-    }
-  .EnergyBottles{
-    width:50px;
-    height:50px;
-    background-image:  url('/images/Gain-skill-bottle.png');
-    background-size: cover;
-  }
-  .EnergyBottlesCoin{
-    width:50px;
-    height:50px;
-    background-image:  url('/images/Gain-skill-bottle-coin.png');
-    background-size: cover;
-  }
-  .get-skill{
-    transform: scale(0.25);
-    grid-row: 2;
-  }
-  .get-skill div:hover{
-    transform: scale(1.25)translate(15%,0);
-    z-index: 1;
-  }
-  .buttons{
-  }
-  #noCoinButton {
-    background-color: #dfeccc;
-    border-radius: 5px;
-    border: 2px solid #A3B77F;
-  }
-  #coinButton {
-    background-color: #dfeccc;
-    border-radius: 5px;
-    border: 2px solid #A3B77F;
-  }
-  .buttons div:hover {
-    transform: scale(1.5)translate(0,0);
-    z-index: 1;
   }
 }
 </style>

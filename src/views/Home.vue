@@ -114,7 +114,7 @@ export default {
       "area that are equal to the number of seals on your action space. "+
       "You may place cards from your hand, from the card in the lowest position " +
       "in the skill pool or from the lowest card in the auction pool. "];
-      var rules7 = ["The cards used in Collectors have multiple functions, " +
+      var rules7 = ["<<HERE WE ADD VIDEOS EXPLAINING HOW THE GAME IS DONE.>> The cards used in Collectors have multiple functions, " +
       "see the picture below for an explanation:"]
       let pic = ['/images/kort.png'];
       document.getElementById("myImage").src = pic[0];
@@ -208,5 +208,19 @@ width: 500px;
   color:white;
   height: 50px;
   width: 250px;
+}
+/*MOBIL VERISION*/
+@media screen and (max-width: 800px) {
+  main {
+    width:90vw;
+  }
+  #ruleContent {
+    margin: 50px 100px 50px 10S0px;
+    padding: 10px 10px;
+    font-size: 20px;
+    font-style: oblique;
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(0px, 1fr) );
+  }
 }
 </style>

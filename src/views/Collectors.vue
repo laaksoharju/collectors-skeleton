@@ -443,7 +443,8 @@ export default {
 
     this.$store.state.socket.on('collectorsChangedTurn',
       function(d) {
-          this.currentPlayer = d;
+          this.currentPlayer = d.currentPlayer,
+          this.currentRound = d.currentRound;
       }.bind(this)
     );
 
@@ -574,6 +575,7 @@ export default {
           placementId: p.placementId,
         }
       );
+      /*this.changeTurn();*/
     },
 
     placeBottleWork: function (p) {
@@ -700,6 +702,22 @@ startWinnerCard: function(action){
   });
 },
     changeTurn: function () {
+
+      let noBottles = true; //Ingen har flaskor kvar utgår vi ifrån
+       console.log("innan 4"+noBottles);
+         for (let playerId in this.players){
+           console.log("i for loppe n"+noBottles);
+
+           if (this.players[playerId].playerBottles !== 0){
+           noBottles = false;
+           break;
+           }
+         }
+
+           if (noBottles === true) {
+            this.newRound();
+          }
+
       this.$store.state.socket.emit('collectorsChangeTurn', {
           roomId: this.$route.params.id,
           currentPlayer: this.currentPlayer
@@ -717,7 +735,8 @@ startWinnerCard: function(action){
         },
 
     newRound: function(){
-      if (this.currentRound != 4){
+      if (this.currentRound < 4){
+
         this.$store.state.socket.emit('collectorsNewRound', {
             roomId: this.$route.params.id,
             players: this.players
@@ -767,7 +786,7 @@ startWinnerCard: function(action){
       "area that are equal to the number of seals on your action space. "+
       "You may place cards from your hand, from the card in the lowest position " +
       "in the skill pool or from the lowest card in the auction pool. "];
-      var rules7 = ["The cards used in Collectors have multiple functions, " +
+      var rules7 = ["<<HERE WE ADD VIDEOS EXPLAINING HOW THE GAME IS DONE.>> The cards used in Collectors have multiple functions, " +
       "see the picture below for an explanation:"]
       let pic = ['/images/kort.png'];
       document.getElementById("myImage").src = pic[0];
