@@ -326,19 +326,29 @@ Data.prototype.countPoints = function (roomId) {
       for (let j = 0; j < player.items.length; j++) {
         if (player.items[j].item === "fastaval") {
           player.points += this.getMarketValues(roomId).fastaval;
+          this.VPfastavalSkill(player);
         } else if (player.items[j].item === "movie") {
           player.points += this.getMarketValues(roomId).movie;
+          this.VPmovieSkill(player);
         } else if (player.items[j].item === "technology") {
           player.points += this.getMarketValues(roomId).technology;
+          this.VPtechnologySkill(player);
         } else if (player.items[j].item === "figures") {
           player.points += this.getMarketValues(roomId).figures;
+          this.VPfiguresSkill(player);
         } else if (player.items[j].item === "music") {
           player.points += this.getMarketValues(roomId).music;
+          this.VPmusicSkill(player);
         }
       }
       //poäng för pengar
       let moneyToPoints = Math.floor(player.money / 3);
       player.points += moneyToPoints;
+
+      //kollar om spelaren har VP-all skillen
+      for (let skill of player.skills) {
+        skill.skill == 'VP-all' ? this.VPallSkill(player) : null
+      }
     }
   }
 }
@@ -557,7 +567,7 @@ Data.prototype.buyRaiseValue = function (roomId, playerId, cards, cost) {
         }
       }
     }
-    room.market.push(c[0]);
+    c ? room.market.push(c[0]) : null;
     d ? room.market.push(d[0]) : null;
 
     room.players[playerId].money -= cost;
@@ -817,6 +827,93 @@ Data.prototype.getAuctionCards = function (roomId) {
   } else return [];
 }
 
+Data.prototype.VPfiguresSkill = function (player) { // Måste testas.
+  for (let card of player.skills) {
+    card.skills == 'VP-figures' ? player.points += 1 : null;
+  }
+}
+
+Data.prototype.VPmusicSkill = function (player) {
+  for (let card of player.skills) {
+    card.skills == 'VP-music' ? player.points += 1 : null;
+  }
+}
+
+Data.prototype.VPfastavalSkill = function (player) {
+  for (let card of player.skills) {
+    card.skills == 'VP-fastaval' ? player.points += 1 : null;
+  }
+}
+
+Data.prototype.VPmovieSkill = function (player) {
+  for (let card of player.skills) {
+    card.skills == 'VP-movie' ? player.points += 1 : null;
+  }
+}
+
+Data.prototype.VPtechnologySkill = function (player) {
+  for (let card of player.skills) {
+    card.skills == 'VP-technology' ? player.points += 1 : null;
+  }
+}
+
+Data.prototype.VPallSkill = function (player) {
+
+  let uniques = [];
+  let exists = false;
+  for (let card of player.items) {
+
+    for (let unique of uniques) {
+      card.item == unique.item ? exists = true : exists = false
+      exists ? null : uniques.push(card);
+    }
+    //Om listan är tom.
+    uniques.length == 0 ? uniques.push(card) : null;
+  }
+
+  uniques.length == 5 ? player.points += 5 : null;
+}
+
+// Work
+Data.prototype.bottleSkill = function (player) { // kolla om rätt placement är klickad,gäller bara för 1 på work?
+  player.bottles += 1;
+  player.availableBottles += 1;
+  // bottle
+  // Get another bottle to use same quarter.
+
+}
+
+Data.prototype.auctionIncome = function (player) {
+  // auctionIncome
+  // Få 1$ när en auktion startas
+
+  for (let card of player.skills) {
+    card.skill == 'auctionIncome' ? player.money += 2 : null;
+  }
+}
+
+// Work
+Data.prototype.workerCard = function (room) {
+  // Få 1 kort när du lägger bottle i work area
+
+  for (let card of room.players[playerId].skills) {
+    if (card == 'workerCard') {
+      let card = room.deck.pop();
+      room.players[playerId].hand.push(card);
+    }
+  }
+}
+// Work
+Data.prototype.workerIncome = function (player) {
+
+  // Få 2$ när du lägger bottle i work area.
+  for (let card of player.skills) {
+    card.skill == 'workerIncome' ? player.money += 2 : null;
+  }
+}
+
+
+
 Data.prototype.setSecret = function (roomId, playerId, secretCard) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
@@ -843,8 +940,9 @@ Data.prototype.auctionOver = function (roomId) {
   if (this.passedCheck(roomId)) {
     this.auctionToHand(roomId, room.highestBiddingPlayer, room.upForAuction[0], room.highestBid)
     return true;
+  } else {
+    return false;
   }
-  else { return false; }
 }
 
 Data.prototype.passedCheck = function (roomId) {
@@ -857,8 +955,7 @@ Data.prototype.passedCheck = function (roomId) {
   }
   if (numberOfPass > 0 && room.playerOrder.length - 1 || room.playerOrder.length - 2 || room.playerOrder.length - 3) {
     return true;
-  }
-  else {
+  } else {
     return false;
   }
 }
@@ -890,6 +987,7 @@ Data.prototype.buyAuctionCard = function (roomId, playerId, card, cost) {
     }
     room.upForAuction.push(...d);
     room.players[playerId].money -= cost;
+    this.auctionIncome(players[playerId]);
   }
 }
 
