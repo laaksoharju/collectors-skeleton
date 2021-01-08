@@ -60,7 +60,7 @@ export default {
   /*animation: jiggle 1s ease-in-out;
   animation-iteration-count: infinite;*/
 
-  box-shadow: 0 0 80px blue;
+    box-shadow: 0 0 6vh 4vh white;
 }
 
 @keyframes jiggle {
