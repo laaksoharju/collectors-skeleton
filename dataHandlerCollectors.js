@@ -624,6 +624,9 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost, id) {
     if (action === "work") {
       console.log(id);
       cost = this.handleWorkActions(room, playerId, id);
+      console.log("cost for work " + cost)
+      room.players[playerId].money -= cost;
+     
     }
     else {
       let activePlacement = [];
@@ -639,16 +642,19 @@ Data.prototype.placeBottle = function (roomId, playerId, action, cost, id) {
       else if (action === "market") {
         activePlacement = room.marketPlacement;
       }
+
+
       for (let i = 0; i < activePlacement.length; i += 1) {
         if (activePlacement[i].id === id &&
           activePlacement[i].playerId === null) {
           cost = activePlacement[i].cost;
+          console.log("cost sista loopen " + cost)
           activePlacement[i].playerId = playerId;
           break;
         }
       }
     }
-    room.players[playerId].money -= cost;
+    
   }
 }
 
