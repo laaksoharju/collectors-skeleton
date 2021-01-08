@@ -235,7 +235,7 @@
           <div
             v-if="players.hasOwnProperty(playerId)"
             class="current-player"
-            v-bind:style="{ 'background-color': players[playerId].color }"
+            v-bind:style="{ 'background-color': playerColors[players[playerId].color]}"
           >
             <div class="player-details">
               <div class="player-name">
@@ -499,7 +499,7 @@
             v-for="otherPlayerId in getOtherPlayerIds()"
             v-bind:key="otherPlayerId"
             v-bind:style="{
-              'background-color': players[otherPlayerId].color,
+              'background-color': playerColors[players[otherPlayerId].color],
             }"
           >
             <div class="player-details">
@@ -951,6 +951,12 @@ export default {
         blue: "images/blue_bottle.png",
         brown: "images/brown_bottle.png",
         grey: "images/grey_bottle.png",
+      },
+      playerColors: {
+        violet: '#e19de1', 
+        blue: "#baf7f1",
+        brown: "#dac0a4",
+        grey: "#bdbfc1",
       },
       playeritem: {
         movie: 0,
