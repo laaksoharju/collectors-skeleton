@@ -848,6 +848,15 @@
 
 
 
+      <div v-if="this.showFinalScore" class="final_score">
+        <p>The winner is {{this.winnerId}} </p>
+
+
+
+      </div>
+
+
+
 
 
 
@@ -898,6 +907,9 @@ export default {
       //   income: [],
       //   secret: []
       // }
+
+      showFinalScore: false,
+      winnerId: null,
       showSendLinkPopUp: false,
       startNextRound: null,
       buyPlacement: [],
@@ -1159,6 +1171,21 @@ export default {
       "nextRound",
       function (d) {
         this.round = d.round;
+      }.bind(this)
+    );
+
+    this.$store.state.socket.on(
+      "collectorsFinalScore",
+      function (d) {
+        this.showFinalScore = true;
+
+        console.log('collectorsFinalScore');
+        console.log(this.showFinalScore);
+        console.log(d);
+
+        console.log(d.winnerId);
+        this.winnerId = d.winnerId;
+        console.log(this.winnerId);
       }.bind(this)
     );
 
@@ -2433,5 +2460,29 @@ p {
     z-index: 30;
 
     background: white;
+  }
+
+  .final_score {
+    position: relative;
+    height: 60vh;
+    width: 19vw;
+    top: 50vh;
+    left: 50vw;
+    padding: 3vh;
+    line-height: 5vh;
+
+
+    border: solid black;
+    border-radius: 1vh;
+
+
+    text-align: center;
+    font-weight: bold;
+
+    z-index: 5;
+
+    background: white;
+    color: black;
+
   }
 </style>

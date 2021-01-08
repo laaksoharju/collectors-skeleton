@@ -1195,7 +1195,7 @@ Data.prototype.calcPlayersTurns = function(roomId) {
               }
 
               player.points += itemsValue;
-              
+
 
               console.log('Item: ' + player.items[i].item + ' Value:' + itemsValue);
               }
@@ -1216,7 +1216,7 @@ Data.prototype.calcPlayersTurns = function(roomId) {
                   console.log('total points for ' + playerId + ' : ' + player.points);
 
               //compare players points with previous players an decide winner
-              if (player.points > room.highestPoints){
+              if (player.points >= room.highestPoints){
                 room.highestPoints = player.points;
                 player.winner = true;
                 room.winnerId = playerId
@@ -1235,6 +1235,11 @@ Data.prototype.calcPlayersTurns = function(roomId) {
     let room = this.rooms[id];
     return room.startNextRound;
   };
+
+  Data.prototype.getWinner = function (roomId) {
+    let room = this.rooms[roomId];
+    return room.winnerId;
+  }
 
 
 
