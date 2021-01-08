@@ -21,7 +21,7 @@
           :disabled="buttonDisabled(p.cost)"
           @click="placeBottle(p)"
         >
-          <p>${{ p.cost }}</p><span v-if="p.specialAction"> (2 cards)</span>
+          <p>${{ p.cost }}</p><span v-if="p.chooseTwoCards"> (select two)</span>
         </button>
         <div
           class="clickedButton"
