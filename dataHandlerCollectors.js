@@ -974,7 +974,7 @@ Data.prototype.buyAuctionCard = function (roomId, playerId, card, cost) {
     }
     room.upForAuction.push(...d);
     room.players[playerId].money -= cost;
-    this.auctionIncome(players[playerId]);
+    this.auctionIncome(room.players[playerId]);
   }
 }
 

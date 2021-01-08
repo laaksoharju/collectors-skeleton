@@ -333,7 +333,7 @@ export default {
   text-align: center;
 }
 
-button {
+.button {
   display: grid;
   grid-column: 2;
   /*grid-template-columns: repeat(auto-fill, 20px);*/
@@ -348,10 +348,13 @@ button {
   border: 1px solid rgb(118, 118, 118);
   border-radius: 2px;
   text-align: center;
+
   color: black;
   width: 50px;
   height: 20px;
   margin: auto;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .clickedButton p {
