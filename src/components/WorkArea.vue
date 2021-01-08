@@ -160,7 +160,7 @@
         <button
         class = "button"
           v-if="placement[7] && placement[7].playerId === null"
-          :disabled="buttonDisabled(placement[7])"
+          :disabled="buttonDisabled(placement[7]) || player.hand.length <1"
           @click="placeBottle(placement[7])"
         >
           $0</button

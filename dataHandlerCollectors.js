@@ -160,9 +160,9 @@ Data.prototype.createRoom = function (roomId, playerCount, lang = "en") {
   }
   ];
   room.workPlacement = [{ cost: 0, playerId: null, id: 0, chooseTwoCards: true },
-  { cost: -1, playerId: null, id: 1, chooseTwoCard: true },
+  { cost: -1, playerId: null, id: 1, chooseTwoCards: true },
   { cost: -2, playerId: null, id: 2, chooseTwoCards: true },
-  { cost: -3, playerId: null, id: 3, chooseTwoCards: true },
+  { cost: -3, playerId: null, id: 3},
   { cost: -1, playerId: null, id: 4 },
   { cost: 1, playerId: null, id: 5 },
   { cost: 0, playerId: null, id: 6 },
@@ -209,7 +209,7 @@ Data.prototype.joinGame = function (roomId, playerId) {
         active: this.setActivePlayer(roomId),
         dispBottles: false,
         chooseSecret: true, //ska vara true
-        firstPlayer: false, //sätta den som går in först som true eller den som köper den i work
+        firstPlayer: this.setActivePlayer(roomId)
       };
       return true;
     }
@@ -274,8 +274,10 @@ Data.prototype.startNextRound = function (roomId, playerId) {
     for (let i = 0; i < room.playerOrder.length; i++) {
       room.players[room.playerOrder[i]].availableBottles = room.players[room.playerOrder[i]].bottles;
       room.players[room.playerOrder[i]].money = room.players[room.playerOrder[i]].money + room.players[room.playerOrder[i]].income.length;
+      if(room.players[room.playerOrder[i]].firstPlayer){
+        room.players[room.playerOrder[i]].active = true;
+      }
     }
-    room.players[room.playerOrder[0]].active = true; //första spelaren blir aktiv igen, ändra t den som har token
     room.nextRound = false;
     room.readyForNextRound = new Set(); //nollställer set
   }
@@ -324,19 +326,20 @@ Data.prototype.countPoints = function (roomId) {
       player.items.push(secret);
       //Poäng för varje item utifrån marketvalue!!
       for (let j = 0; j < player.items.length; j++) {
-        if (player.items[j].item === "fastaval") {
+        let item = player.items[j].item;
+        if (item && player.items[j].item === "fastaval") {
           player.points += this.getMarketValues(roomId).fastaval;
           this.VPfastavalSkill(player);
-        } else if (player.items[j].item === "movie") {
+        } else if ( item && player.items[j].item === "movie") {
           player.points += this.getMarketValues(roomId).movie;
           this.VPmovieSkill(player);
-        } else if (player.items[j].item === "technology") {
+        } else if (item && player.items[j].item === "technology") {
           player.points += this.getMarketValues(roomId).technology;
           this.VPtechnologySkill(player);
-        } else if (player.items[j].item === "figures") {
+        } else if (item && player.items[j].item === "figures") {
           player.points += this.getMarketValues(roomId).figures;
           this.VPfiguresSkill(player);
-        } else if (player.items[j].item === "music") {
+        } else if (item && player.items[j].item === "music") {
           player.points += this.getMarketValues(roomId).music;
           this.VPmusicSkill(player);
         }
@@ -665,10 +668,11 @@ Data.prototype.workAction = function(roomId, placement, playerId){
   else if (placement.id === 6) {
     let card = room.deck.pop();
     player.hand.push(card);
-    for (let i in room.playOrder) {
-      if (room.playOrder[i] === playerId) {
-        room.playOrderNextRound.unshift(...room.playOrderNextRound.splice(i, 1));
-        break;
+    for(let i=0; i< room.playerOrder.length; i++){
+      if(room.players[room.playerOrder[i]] == room.players[playerId]){
+        player.firstPlayer = true;
+      }else{
+        room.players[room.playerOrder[i]].firstPlayer = false;
       }
     }
   }
