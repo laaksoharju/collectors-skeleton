@@ -30,8 +30,8 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures
 */
 Data.prototype.initializeTable = function (table) {
   csv({
-      checkType: true
-    })
+    checkType: true
+  })
     .fromFile("./data/" + table + ".csv")
     .then((jsonObj) => {
       this.data[table] = jsonObj;
@@ -71,92 +71,104 @@ Data.prototype.createRoom = function (roomId, playerCount, lang = "en") {
   room.highestBiddingPlayer = {};
   room.highestBid = 0;
   room.buyPlacement = [{
-      cost: 1,
-      playerId: null
-    },
-    {
-      id: 1,
-      cost: 1,
-      playerId: null
-    },
-    {
-      id: 2,
-      cost: 2,
-      playerId: null
-    },
-    {
-      id: 3,
-      cost: 2,
-      playerId: null
-    },
-    {
-      id: 4,
-      cost: 3,
-      playerId: null
-    }
+    cost: 1,
+    playerId: null
+  },
+  {
+    id: 1,
+    cost: 1,
+    playerId: null
+  },
+  {
+    id: 2,
+    cost: 2,
+    playerId: null
+  },
+  {
+    id: 3,
+    cost: 2,
+    playerId: null
+  },
+  {
+    id: 4,
+    cost: 3,
+    playerId: null
+  }
   ];
   room.skillPlacement = [{
-      cost: 0,
-      playerId: null
-    },
-    {
-      id: 5,
-      cost: 0,
-      playerId: null
-    },
-    {
-      id: 6,
-      cost: 0,
-      playerId: null
-    },
-    {
-      id: 7,
-      cost: 1,
-      playerId: null
-    },
-    {
-      id: 8,
-      cost: 1,
-      playerId: null
-    }
+    cost: 0,
+    playerId: null
+  },
+  {
+    id: 5,
+    cost: 0,
+    playerId: null
+  },
+  {
+    id: 6,
+    cost: 0,
+    playerId: null
+  },
+  {
+    id: 7,
+    cost: 1,
+    playerId: null
+  },
+  {
+    id: 8,
+    cost: 1,
+    playerId: null
+  }
   ];
   room.auctionPlacement = [{
-      id: 1,
-      cost: -2,
-      playerId: null
-    },
-    {
-      id: 2,
-      cost: -1,
-      playerId: null
-    },
-    {
-      id: 3,
-      cost: 0,
-      playerId: null
-    },
-    {
-      id: 4,
-      cost: 0,
-      playerId: null
-    }
+    id: 1,
+    cost: -2,
+    playerId: null
+  },
+  {
+    id: 2,
+    cost: -1,
+    playerId: null
+  },
+  {
+    id: 3,
+    cost: 0,
+    playerId: null
+  },
+  {
+    id: 4,
+    cost: 0,
+    playerId: null
+  }
   ];
   room.marketPlacement = [{
-      id: 1,
-      cost: 0,
-      playerId: null,
-      chooseTwoCards: true
-    },
-    {
-      id: 2,
-      cost: 2,
-      playerId: null
-    },
-    {
-      id: 3,
-      cost: 0,
-      playerId: null
-    }
+    id: 1,
+    cost: 0,
+    playerId: null,
+    chooseTwoCards: true
+  },
+  {
+    id: 2,
+    cost: 2,
+    playerId: null,
+    chooseTwoCards: true,
+  },
+  {
+    id: 3,
+    cost: 0,
+    playerId: null
+  }
+  ];
+  room.workPlacement = [{ cost: 0, playerId: null, id: 0, chooseTwoCards: true },
+  { cost: -1, playerId: null, id: 1, chooseTwoCard: true },
+  { cost: -2, playerId: null, id: 2, chooseTwoCards: true },
+  { cost: -3, playerId: null, id: 3, chooseTwoCards: true },
+  { cost: -1, playerId: null, id: 4 },
+  { cost: 1, playerId: null, id: 5 },
+  { cost: 0, playerId: null, id: 6 },
+  { cost: 0, playerId: null, id: 7 }
+
+
   ];
   this.rooms[roomId] = room;
 
@@ -197,6 +209,7 @@ Data.prototype.joinGame = function (roomId, playerId) {
         active: this.setActivePlayer(roomId),
         dispBottles: false,
         chooseSecret: true, //ska vara true
+        firstPlayer: false, //sätta den som går in först som true eller den som köper den i work
       };
       return true;
     }
@@ -281,6 +294,10 @@ Data.prototype.resetPlacements = function (roomId) {
   }
   for (let i = 0; i < room.marketPlacement.length; i += 1) {
     room.marketPlacement[i].playerId = null
+  }
+  /*lägger in här som de andra.*/
+  for (let i = 0; i < room.workPlacement.length; i += 1) {
+    room.workPlacement[i].playerId = null
   }
 }
 Data.prototype.setActivePlayer = function (roomId) {
@@ -604,30 +621,146 @@ Data.prototype.buySkillCard = function (roomId, playerId, card, cost) {
 Data.prototype.placeBottle = function (roomId, playerId, action, cost, id) {
   let room = this.rooms[roomId];
   if (typeof room !== 'undefined') {
-    let activePlacement = [];
-    if (action === "buy") {
-      activePlacement = room.buyPlacement;
-    } else if (action === "skill") {
-      activePlacement = room.skillPlacement;
-    } else if (action === "auction") {
-      activePlacement = room.auctionPlacement;
-    } else if (action === "market") {
-      activePlacement = room.marketPlacement;
+    let cost = 0;
+    if (action === "work") {
+      console.log(id);
+      cost = this.handleWorkActions(room, playerId, id);
+      console.log("cost for work " + cost)
+      room.players[playerId].money -= cost;
+     
     }
-    for (let i = 0; i < activePlacement.length; i += 1) {
-      if (activePlacement[i].id === id &&
-        activePlacement[i].playerId === null) {
-        activePlacement[i].playerId = playerId;
+    else {
+      let activePlacement = [];
+      if (action === "buy") {
+        activePlacement = room.buyPlacement;
+      }
+      else if (action === "skill") {
+        activePlacement = room.skillPlacement;
+      }
+      else if (action === "auction") {
+        activePlacement = room.auctionPlacement;
+      }
+      else if (action === "market") {
+        activePlacement = room.marketPlacement;
+      }
+
+
+      for (let i = 0; i < activePlacement.length; i += 1) {
+        if (activePlacement[i].id === id &&
+          activePlacement[i].playerId === null) {
+          cost = activePlacement[i].cost;
+          console.log("cost sista loopen " + cost)
+          activePlacement[i].playerId = playerId;
+          break;
+        }
+      }
+    }
+    
+  }
+}
+
+/*NYTT*/
+Data.prototype.handleWorkActions = function (room, playerId, id) {
+  let player = room.players[playerId];
+  console.log(id)
+  console.log("In i handleWorkAction");
+  if (id <= 2) {
+    // note: player should discard two cards to move to income
+    /*player.income+=2;*/
+    /*room.players[playerId].income += 2;
+    console.log("in i id mindre än 2")*/
+    /*workCard: true;*/
+  }
+  else if (id <= 4) {
+    player.bottles -= 1;
+  }
+  else if (id === 5) {
+    let cards = room.deck.splice(0, 2);
+    player.hand.push(...cards);
+  }
+  else if (id === 6) {
+    let card = room.deck.pop();
+    player.hand.push(card);
+    for (let i in room.playOrder) {
+      if (room.playOrder[i] === playerId) {
+        room.playOrderNextRound.unshift(...room.playOrderNextRound.splice(i, 1));
         break;
       }
     }
   }
+  else if (id === 7) {
+    let card = room.deck.pop();
+    player.hand.push(card);
+    // note: player should also discard a card to move to income
+  }
+  for (let wp of room.workPlacement) {
+    if (wp.id === id) {
+      wp.playerId = playerId;
+      return wp.cost;
+    }
+  }
+  return 0;
 }
+
+Data.prototype.cardsForIncome = function (roomId, playerId, cards) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    for (let card of cards) {
+      for (let i = 0; i < room.players[playerId].hand.length; i += 1) {
+        // since card comes from the client, it is NOT the same object (reference)
+        // so we need to compare properties for determining equality      
+        if (room.players[playerId].hand[i].x === card.x &&
+          room.players[playerId].hand[i].y === card.y) {
+          room.players[playerId].hand.splice(i, 1);
+          room.players[playerId].income += 1;
+          break;
+        }
+      }
+    }
+    return room.players;
+  }
+  return {};
+}
+
+Data.prototype.returnBottle = function (roomId, playerId, slot) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    room.players[playerId].bottleSlots.push(slot);
+    return room.players[playerId].bottleSlots;
+  }
+  return [];
+}
+
+/*MICKES: Data.prototype.getPlayOrder = function (roomId) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    return room.playOrder;
+  }
+  return [];
+}*/
+
+Data.prototype.addMoney = function (roomId, playerId) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    room.players[playerId].money += 1;
+    return room.players;
+  }
+  return {};
+}
+
 
 Data.prototype.getNextRound = function (roomId) {
   let room = this.rooms[roomId];
   return room.nextRound;
 }
+
+/*MICKES: Data.prototype.getActingPlayer = function (roomId) {
+  let room = this.rooms[roomId];
+  if (typeof room !== 'undefined') {
+    return room.actingPlayer;
+  }
+  return null;
+}*/
 
 /*Data.prototype.getDispBottles = function(roomId){
   let room= this.rooms[roomId];
@@ -650,7 +783,8 @@ Data.prototype.getPlacements = function (roomId) {
       buyPlacement: room.buyPlacement,
       skillPlacement: room.skillPlacement,
       auctionPlacement: room.auctionPlacement,
-      marketPlacement: room.marketPlacement
+      marketPlacement: room.marketPlacement,
+      workPlacement: room.workPlacement
     }
   } else return {};
 }
