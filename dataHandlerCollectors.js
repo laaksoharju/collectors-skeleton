@@ -734,6 +734,7 @@ Data.prototype.buyCard = function(
 
       const count = 0;
       Object.keys(this.rooms).forEach((room) => {
+        this.rooms[room].deckAuction=[]
         this.rooms[room].deckAuction.push(...c);
         Object.keys(this.rooms[room].players).forEach((player) => {
           this.rooms[room].players[player].start_auction = start_auction;
