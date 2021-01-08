@@ -183,7 +183,7 @@ Data.prototype.joinGame = function (roomId, playerId) {
       room.playerOrder[Object.keys(room.players).length] = playerId;
       room.players[playerId] = {
         hand: room.deck.splice(0, 3),
-        money: 1,
+        money: Object.keys(room.players).length +1,
         points: 0,
         skills: [],
         items: [],
