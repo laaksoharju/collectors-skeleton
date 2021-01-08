@@ -849,7 +849,8 @@
 
 
       <div v-if="this.showFinalScore" class="final_score">
-        <p>The winner is {{this.winnerId}} </p>
+        <h2>The winner is {{this.winnerId}} </h2>
+        <img src="/images/gold-medal-with-ribbon-psd-53059.jpg" WIDTH="349vh">
 
 
 
@@ -1000,6 +1001,8 @@ export default {
 
       auctionStartedAudio: new Audio(
         "/sounds/PM_FN_Events_LvlUps_PowerUps_26.mp3"),
+
+      winnerSound: new Audio("/sounds/zapsplat_human_children_x5_under_10_english_cheer_44945.mp3")
     };
   },
   computed: {
@@ -1177,15 +1180,15 @@ export default {
     this.$store.state.socket.on(
       "collectorsFinalScore",
       function (d) {
+
         this.showFinalScore = true;
 
-        console.log('collectorsFinalScore');
-        console.log(this.showFinalScore);
-        console.log(d);
+        this.winnerId = d;
 
-        console.log(d.winnerId);
-        this.winnerId = d.winnerId;
-        console.log(this.winnerId);
+        this.winnerSound.play();
+
+
+
       }.bind(this)
     );
 
@@ -2465,9 +2468,9 @@ p {
   .final_score {
     position: relative;
     height: 60vh;
-    width: 19vw;
-    top: 50vh;
-    left: 50vw;
+    width: 60vh;
+    top: -90vh;
+    left: 35vw;
     padding: 3vh;
     line-height: 5vh;
 
@@ -2480,7 +2483,7 @@ p {
     font-weight: bold;
 
     z-index: 5;
-
+    box-shadow: 0 0 100vh 30vh #ffd51a;
     background: white;
     color: black;
 

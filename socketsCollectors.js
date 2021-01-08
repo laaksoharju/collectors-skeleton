@@ -111,6 +111,8 @@ function sockets(io, socket, data) {
     console.log("endGame socket");
     data.endGame(roomId);
 
+    console.log('datahandler getwinnerid: '+ data.getWinner(roomId));
+
     io.to(roomId).emit('collectorsFinalScore',
       data.getWinner(roomId));
   });
