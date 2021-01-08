@@ -281,7 +281,6 @@ export default {
 .sendToBtn{
   width: 25%;
   height: 75%;
-  display:list-item;
   appearance: none;
   outline: none;
   border: none;
@@ -442,6 +441,39 @@ export default {
 
 
 @media only screen and (max-width: 1050px) {
+  .cardslotsUpForAuction {
+    display: inline;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 65px);
+    grid-template-rows: repeat(auto-fill, 90px);
+    transform: scale(0.5) translate(435%, -25%);
+    transition: 0.2s;
+    transition-timing-function: ease-out;
+  }
+
+  .auctionBtnsSection{
+    transform: scale(0.5);
+    transition: 0.2s;
+    transition-timing-function: ease-out;
+
+  }
+
+  #currentHighestBid{
+    transform: scale(0.5);
+    transition: 0.2s;
+    transition-timing-function: ease-out;
+
+  }
+
+  #sendToSection{    
+    transform: scale(0.5);
+    transition: 0.2s;
+    transition-timing-function: ease-out;
+
+  }
+  
     /* phones */
   .buy-cards {
     width: 80%;
@@ -456,8 +488,8 @@ export default {
     transform: scale(0.75) translate(-25%, -25%);
     transition: 0.2s;
     transition-timing-function: ease-out;
-
   }
+  
   .upForAuctionWrap {
     size: 80%;
   }
