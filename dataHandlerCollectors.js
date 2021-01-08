@@ -149,7 +149,7 @@ Data.prototype.createRoom = function (roomId, playerCount, lang = "en") {
     },
     {
       id: 2,
-      cost: -2,
+      cost: 2,
       playerId: null
     },
     {
@@ -183,7 +183,7 @@ Data.prototype.joinGame = function (roomId, playerId) {
       room.playerOrder[Object.keys(room.players).length] = playerId;
       room.players[playerId] = {
         hand: room.deck.splice(0, 3),
-        money: Object.keys(room.players).length +1,
+        money: Object.keys(room.players).length + 1,
         points: 0,
         skills: [],
         items: [],
@@ -589,6 +589,7 @@ Data.prototype.buySkillCard = function (roomId, playerId, card, cost) {
       }
     }
     room.players[playerId].skills.push(...d);
+    this.bottleSkill(room.players[playerId], d[0]);
     room.players[playerId].money -= cost;
     room.players[playerId].active = false;
     room.players[playerId].availableBottles -= 1;
@@ -701,31 +702,31 @@ Data.prototype.getAuctionCards = function (roomId) {
 
 Data.prototype.VPfiguresSkill = function (player) { // Måste testas.
   for (let card of player.skills) {
-    card.skills == 'VP-figures' ? player.points += 1 : null;
+    card.skill == 'VP-figures' ? player.points += 1 : null;
   }
 }
 
 Data.prototype.VPmusicSkill = function (player) {
   for (let card of player.skills) {
-    card.skills == 'VP-music' ? player.points += 1 : null;
+    card.skill == 'VP-music' ? player.points += 1 : null;
   }
 }
 
 Data.prototype.VPfastavalSkill = function (player) {
   for (let card of player.skills) {
-    card.skills == 'VP-fastaval' ? player.points += 1 : null;
+    card.skill == 'VP-fastaval' ? player.points += 1 : null;
   }
 }
 
 Data.prototype.VPmovieSkill = function (player) {
   for (let card of player.skills) {
-    card.skills == 'VP-movie' ? player.points += 1 : null;
+    card.skill == 'VP-movie' ? player.points += 1 : null;
   }
 }
 
 Data.prototype.VPtechnologySkill = function (player) {
   for (let card of player.skills) {
-    card.skills == 'VP-technology' ? player.points += 1 : null;
+    card.skill == 'VP-technology' ? player.points += 1 : null;
   }
 }
 
@@ -746,13 +747,15 @@ Data.prototype.VPallSkill = function (player) {
   uniques.length == 5 ? player.points += 5 : null;
 }
 
-// Work
-Data.prototype.bottleSkill = function (player) { // kolla om rätt placement är klickad,gäller bara för 1 på work?
-  player.bottles += 1;
-  player.availableBottles += 1;
-  // bottle
+Data.prototype.bottleSkill = function (player, card) {
   // Get another bottle to use same quarter.
-
+  console.log(card);
+  console.log(card.skill)
+  if (card.skill == 'bottle') {
+    console.log("INNE wo")
+    player.bottles += 1;
+    player.availableBottles += 1;
+  }
 }
 
 Data.prototype.auctionIncome = function (player) {
