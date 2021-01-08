@@ -1,48 +1,53 @@
 <template>
   <div>
-    <main>
+    <main v-if="players[playerId]">
       Round: {{ round }} Play order: {{ playOrder }} Current player is {{ playOrder[actingPlayer]}} Chosen action {{chosenAction}}
-      <CollectorsBuyItemActions v-if="players[playerId]"
+
+      <CollectorsBuyItemActions
         :labels="labels"
         :player="players[playerId]"
         :itemsOnSale="itemsOnSale" 
         :marketValues="marketValues" 
         :placement="buyPlacement"
-        @buyItem="buyItem($event)"
+        @buyItem="handleAction($event)"
         @placeBottle="placeBottle('buy', $event)"/>
+      
+      <CollectorsGainSkillActions
+        :labels="labels"
+        :player="players[playerId]"
+        :skillsOnSale="skillsOnSale"
+        :placement="skillPlacement"
+        @gainSkill="handleAction($event)"
+        @placeBottle="placeBottle('skill', $event)"/>
+
+      <h1>auction</h1>
+      <div class="cardslots">
+        <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
+      </div>
+      
+      <CollectorsWorkActions :round="round" :placement="workPlacement" :player="players[playerId]" @placeBottle="placeBottle('work',$event)"/>
+
+      <CollectorsPlayerboard :player="players[playerId]" @handleAction="handleAction($event)"/>
+    </main>
+    <footer>
+      <p>
+        {{ labels.invite }}
+        <input type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
+      </p>
+      <p>
+        {{players}}
+      </p>
+      <p>
+        {{marketValues}}
+      </p>
       <div class="buttons">
+        <button v-if="players[playerId]" @click="addMoney">
+          cheat to get more money
+        </button>
         <button :disabled="playOrder[actingPlayer] !== playerId" @click="drawCard">
           {{ labels.draw }} 
         </button>
       </div>
-      Skills
-      <div class="cardslots">
-        <CollectorsCard v-for="(card, index) in skillsOnSale" :card="card" :key="index"/>
-      </div>
-      Auction
-      <div class="cardslots">
-        <CollectorsCard v-for="(card, index) in auctionCards" :card="card" :key="index"/>
-      </div>
-      Hand
-      <div class="cardslots" v-if="players[playerId]">
-        <CollectorsCard v-for="(card, index) in players[playerId].hand" :card="card" :availableAction="card.available" @doAction="handleAction(card)" :key="index"/>
-      </div>
-      Items
-      <div class="cardslots" v-if="players[playerId]">
-        <CollectorsCard v-for="(card, index) in players[playerId].items" :card="card" :key="index"/>
-      </div>
-      <CollectorsWorkActions :round="round" :placement="workPlacement" :player="players[playerId]" @placeBottle="placeBottle('work',$event)"/>
-    </main>
-    {{players}}
-    {{marketValues}}
-    <button v-if="players[playerId]" @click="addMoney">
-      cheat to get more money
-    </button>
-    <footer>
-        <p>
-          {{ labels.invite }}
-          <input type="text" :value="publicPath + $route.path" @click="selectAll" readonly="readonly">
-        </p>
     </footer>
   </div>
 </template>
@@ -52,14 +57,18 @@
 
 import CollectorsCard from '@/components/CollectorsCard.vue'
 import CollectorsBuyItemActions from '@/components/CollectorsBuyItemActions.vue'
+import CollectorsGainSkillActions from '@/components/CollectorsGainSkillActions.vue'
 import CollectorsWorkActions from '@/components/CollectorsWorkActions.vue'
+import CollectorsPlayerboard from '@/components/CollectorsPlayerboard.vue'
 
 export default {
   name: 'Collectors',
   components: {
     CollectorsCard,
     CollectorsBuyItemActions,
-    CollectorsWorkActions
+    CollectorsGainSkillActions,
+    CollectorsWorkActions,
+    CollectorsPlayerboard
   },
   data: function () {
     return {
@@ -149,19 +158,23 @@ export default {
 
     this.$store.state.socket.on('collectorsBottlePlaced', 
       function(d) {
-        console.log("chosenAction", this.chosenAction, "numberOfActions", this.numberOfActions)
-        if (this.chosenAction !== "buy") {
-          this.players = d.players;
+        if (d.ok) {
+          if (this.chosenAction !== "buy") {
+            this.players = d.players;
+          }
+          this.buyPlacement = d.placements.buyPlacement;
+          this.skillPlacement = d.placements.skillPlacement;
+          this.marketPlacement = d.placements.marketPlacement;
+          this.auctionPlacement = d.placements.auctionPlacement;
+          this.workPlacement = d.placements.workPlacement;
+          this.playOrder = d.playOrder;
+          this.actingPlayer = d.actingPlayer;
+          if (this.numberOfActions === 0) {
+            this.$store.state.socket.emit('collectorsNextPlayer', {roomId: this.$route.params.id});
+          }
         }
-        this.buyPlacement = d.placements.buyPlacement;
-        this.skillPlacement = d.placements.skillPlacement;
-        this.marketPlacement = d.placements.marketPlacement;
-        this.auctionPlacement = d.placements.auctionPlacement;
-        this.workPlacement = d.placements.workPlacement;
-        this.playOrder = d.playOrder;
-        this.actingPlayer = d.actingPlayer;
-        if (this.numberOfActions === 0) {
-          this.$store.state.socket.emit('collectorsNextPlayer', {roomId: this.$route.params.id});
+        else {
+          this.numberOfActions = 0;
         }
       }.bind(this));
 
@@ -177,6 +190,15 @@ export default {
         console.log(d.playerId, "bought a card");
         this.players = d.players;
         this.itemsOnSale = d.itemsOnSale;
+        this.actingPlayer = d.actingPlayer;
+      }.bind(this)
+    );
+
+    this.$store.state.socket.on('collectorsSkillGained', 
+      function(d) {
+        console.log(d.playerId, "gained a skill");
+        this.players = d.players;
+        this.skillsOnSale = d.skillsOnSale;
         this.actingPlayer = d.actingPlayer;
       }.bind(this)
     );
@@ -219,6 +241,14 @@ export default {
         }
       );
     },
+    gainSkill: function (card) {
+      this.$store.state.socket.emit('collectorsGainSkill', { 
+          roomId: this.$route.params.id, 
+          playerId: this.playerId,
+          card: card,
+        }
+      );
+    },
     buyItem: function (card) {
       this.$store.state.socket.emit('collectorsBuyItem', { 
           roomId: this.$route.params.id, 
@@ -235,7 +265,7 @@ export default {
           this.buyItem(card);
         }
         else if (this.chosenAction === "skill") {
-          this.getSkill(card);
+          this.gainSkill(card);
         }
         else if (this.chosenAction === "auction") {
           this.makeAuction(card);

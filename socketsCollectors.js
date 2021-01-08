@@ -37,25 +37,46 @@ function sockets(io, socket, data) {
       }
       );
     });
+    socket.on('collectorsGainSkill', function(d) {
+      data.gainSkill(d.roomId, d.playerId, d.card)
+      io.to(d.roomId).emit('collectorsSkillGained', { 
+          playerId: d.playerId,
+          players: data.getPlayers(d.roomId),
+          skillsOnSale: data.getSkillsOnSale(d.roomId),
+          actingPlayer: data.getActingPlayer(d.roomId)
+        }
+      );
+    });
     socket.on('collectorsBuyItem', function(d) {
       data.buyItem(d.roomId, d.playerId, d.card, d.cost)
       io.to(d.roomId).emit('collectorsItemBought', { 
           playerId: d.playerId,
           players: data.getPlayers(d.roomId),
-          itemsOnSale: data.getItemsOnSale(d.roomId)
+          itemsOnSale: data.getItemsOnSale(d.roomId),
+          actingPlayer: data.getActingPlayer(d.roomId)
         }
       );
     });
     socket.on('collectorsPlaceBottle', function(d) {
-      data.placeBottle(d.roomId, d.playerId, d.action, d.id);
+      let ok = data.placeBottle(d.roomId, d.playerId, d.action, d.id);
       io.to(d.roomId).emit('collectorsBottlePlaced', {
         players: data.getPlayers(d.roomId),
         placements: data.getPlacements(d.roomId),
         playOrder: data.getPlayOrder(d.roomId),
-        actingPlayer: data.getActingPlayer(d.roomId)
+        actingPlayer: data.getActingPlayer(d.roomId),
+        ok: ok
       }
       );
     });
+
+    socket.on('collectorsAdjustBottle', function(d) {
+      data.placeBottle(d.roomId, d.playerId, d.oldPos, d.newPos);
+      io.to(d.roomId).emit('collectorsBottlePlaced', {
+        players: data.getPlayers(d.roomId),
+      }
+      );
+    });
+
     socket.on('collectorsAddMoney', function(d) {
       io.to(d.roomId).emit('collectorsUpdatePlayers', 
         data.addMoney(d.roomId, d.playerId)

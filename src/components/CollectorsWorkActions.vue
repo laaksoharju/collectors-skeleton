@@ -1,5 +1,6 @@
 <template>
     <div>
+      <h1>work</h1>
       <button :disabled="player.hand.length <2" v-if="round==1 && placement[0].playerId===null" @click="placeBottle(0)">
         Put two cards from hand as future income
       </button>
