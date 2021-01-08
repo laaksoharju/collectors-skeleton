@@ -7,7 +7,12 @@
         <div class="modal">
               <h1>{{labels.income}}</h1>
               <p> {{labels.incomeGain1}}{{player.income.length}}{{labels.incomeGain2}}</p>
-              <p>{{labels.remainingPlacements}}{{this.bottlesToPlace}}</p>
+              <div v-if="this.bottlesToPlace<= 3"> 
+                <p>{{labels.remainingPlacements}}{{this.bottlesToPlace}}</p>
+              </div>
+              <div v-if="this.bottlesToPlace > 3"> 
+                <p>{{labels.remainingPlacements}} 3 </p>
+              </div>
                 <div class = "slotGrid">
                   <button :disabled="this.bottleIncome.gainOneCoin || this.bottlesToPlace <= 0"
                       @click="gainOneCoin()"> +$1 </button>
@@ -58,7 +63,7 @@ export default {
   },
   watch:{
     bottlesToPlace: function() {
-      if(this.bottlesToPlace == 0){
+      if(this.bottlesToPlace == 0 || (this.bottleIncome.gainCard && this.bottleIncome.gainOneCoin && this.bottleIncome.gainTwoCoins) ){
         console.log(this.bottleIncome)
         this.$emit("getBottleIncome", this.bottleIncome)
       }

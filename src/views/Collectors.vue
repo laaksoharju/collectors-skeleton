@@ -77,15 +77,6 @@
         </div>
 
         <div class="second-column">
-          <!-- <WorkArea
-            v-if="players[playerId]"
-            :color="players[playerId].color"
-            :labels="labels"
-            :player="players[playerId]"
-            :placement="buyPlacement"
-            @circleClicked="circleClicked($event)"
-            id="work_area"
-          />-->
           <WorkArea
             v-if="players[playerId]"
             :color="players[playerId].color"
@@ -95,6 +86,7 @@
             :player="players[playerId]" 
             :players="players" 
             @placeBottle="placeBottle('workType', 'work',$event)"
+            @workAction="workAction($event)"
             id="work_area"
           />
         </div>
@@ -434,6 +426,12 @@ export default {
       }.bind(this)
     );
 
+    this.$store.state.socket.on(
+      "workActionDone",
+      function (d) {
+        this.players = d.players;
+      }.bind(this)
+    );
 
     //Auction-grejer kommer här
 
@@ -490,6 +488,14 @@ export default {
       this.currentAction == "marketType" ? this.manageMarketAction(card) : null; 
       this.currentAction == "workType" ? this.getCardToIncome(card) : null;
     },
+
+    workAction: function(p){
+      this.$store.state.socket.emit("workAction", {
+        roomId: this.$route.params.id,
+        playerId: this.playerId,
+        placement: p
+      });
+    },
     manageMarketAction: function (card) {
       this.selectedCards.push(card);
 
@@ -538,9 +544,6 @@ export default {
     },
 
     getCardToIncome: function (card) {
-      console.log("Detta skickas alltså till server: ");
-      console.log(this.selectedCards);
-
       this.selectedCards.push(card);
 
       if (this.allCardsChosen) {
