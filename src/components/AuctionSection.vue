@@ -95,6 +95,7 @@ export default {
     placement: Array,
     highestBid: Number,
     highestBiddingPlayer: String,
+    players: Object,
   },
   data: function () {
     return {
@@ -130,7 +131,7 @@ export default {
       return this.marketValues[card.market];
     },
     placeBottle: function (p) {
-      this.$emit("placeBottle", p.cost);
+      this.$emit("placeBottle", p);
       this.highlightAvailableCards(p.cost);
     },
     highlightAvailableCards: function (cost = 100) {
