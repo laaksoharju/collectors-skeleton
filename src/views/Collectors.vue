@@ -48,19 +48,43 @@
             @buyCard="buyCard('win_auction', $event)"
           />
         </section>
+
+
         <section
           v-if="!this.players[this.playerId].start_auction"
           id="players_auction"
           style="background: white height:90px width:60px"
         >
-          <label>Players auction</label>
+          <div class = "auctionPopUp">
+          <label class = "auctionHeading">Auction</label><br>
+          <label>Card on auction:</label><br>
+          <label style = "font-size: 2vh">Market value X</label><br>
+          <label>Other players bids:</label><br>
           <div
-            v-for="(val, key) in getallPlayersAuction()"
-            :key="key"
+            v-for="(val, key) in getOtherPlayersAuction()"
+            :key="'Auction other players' + key"
             class="player_1_auction"
-            style="background: white"
+
           >
             <label>{{ val.id }}</label>
+
+            <input style="margin-left: 1.5vh"
+              id="playerNameInputField"
+              type="text"
+              v-bind:value="val.auction_amount"
+              v-on:keyup="updatePlayerAuction($event, val.id)"
+            />
+
+
+          </div>
+          <label>Place your bids:</label>
+          <div
+            v-for="(val, key) in getThisPlayersAuction()"
+            :key="'Auction this player' + key"
+            class="player_1_auction"
+
+          >
+
 
             <input
               id="playerNameInputField"
@@ -68,17 +92,46 @@
               v-bind:value="val.auction_amount"
               v-on:keyup="updatePlayerAuction($event, val.id)"
             />
+
+
+          </div>
+
+
           </div>
         </section>
-        <div
-          v-if="!this.players[this.playerId].start_auction"
-          class="auction_announce"
-        >
-          <button @click="announce_click()" id="auction_announce">
-            click here
-          </button>
+
+        <div class="upperRightButtons" >
+
+          <div>
+            <button class="send_link" @click="sendLinkPopUp()">Zoom Link</button>
+          </div>
+
+          <div v-if="this.round<4">
+              <button class="end_game" @click="endGame()">Final Score</button>
+          </div>
+
+          <div v-if="this.round==4 && !this.startNextRound">
+              <button class="end_game" @click="endGame()">Final Score</button>
+          </div>
+
+          <div v-else-if="this.round == 4 && this.startNextRound" >
+            <button class="end_game_alert" @click="endGame()">Final Score</button>
+          </div>
+
+          <div v-if="this.round<4 && !this.startNextRound">
+            <button  class="next_round" @click="nextRound()">Next round</button>
+          </div>
+
+          <div v-else-if="this.round<4 && this.startNextRound">
+            <button class="next_round_alert" @click="nextRound()">Next round</button>
+          </div>
+
         </div>
+
+
         <div class="activeplayer">
+
+
           <div>
             <img
               :class="[
@@ -91,7 +144,20 @@
               }"
             />
           </div>
+
+
         </div>
+
+        <div v-if="this.showSendLinkPopUp" class="sendLinkPopUp">
+          <p>Zoom link for players:</p>
+          Paste zoom link:
+          <input type="text" id="zoomLink"><br>
+          <input type="submit" value="Paste" @click="this.secretCardButton.play()">
+          <button style="margin: 0.5vh" @click="closeLinkPopUp()">Close</button>
+
+
+        </div>
+
 
         <div class="game main-board">
           <section class="item_bottle">
@@ -130,7 +196,7 @@
           </section>
 
           <section class="work_bottle">
-            <button class="end_game" @click="endGame()">End Game</button>
+
             <Bottles
               v-if="players[playerId]"
               :labels="labels"
@@ -140,14 +206,17 @@
               :placement="workPlacement"
               @placeBottle="placeBottle('work', $event)"
             />
+
+
             <div
               v-if="round > 0 && round < 4"
               class="quarter-tiles"
               :style="{
                 backgroundImage: 'url(/images/quarter_tiles/' + round + '.png)',
               }"
-              @click="nextRound()"
+
             ></div>
+
           </section>
           <section class="auction_bottle">
             <Bottles
@@ -204,11 +273,11 @@
 
               <div>
                 <button
-                  class="chose-secret-card"
+                  class="choose-secret-card"
                   v-if="this.players[this.playerId].choseSecretCard"
                   @click="choseSecretCard()"
                 >
-                  Click to chose secret card
+                  Click to choose secret card
                 </button>
               </div>
             </div>
@@ -240,7 +309,7 @@
             >
               <img
                 v-for="index in players[playerId].bottles"
-                :key="index"
+                :key="'player-bottles' + index"
                 :src="playerBottle[players[playerId].color]"
                 alt="index"
               />
@@ -453,7 +522,7 @@
                 <img
                   src="/images/backOfCard.png"
                   alt="Players number of cards"
-                />x{{ players[otherPlayerId].hand.length + 1 }}
+                />x{{ players[otherPlayerId].hand.length }}
               </div>
             </div>
             <div
@@ -466,7 +535,7 @@
             >
               <img
                 v-for="index in players[otherPlayerId].bottles"
-                :key="index"
+                :key="'other-player-bottles' + index"
                 :src="playerBottle[players[otherPlayerId].color]"
                 alt="index"
               />
@@ -474,7 +543,7 @@
             <div class="player-items-skills">
               <div
                 v-for="(card, index) in players[otherPlayerId].items"
-                :key="index"
+                :key="'other-player-items' + index"
                 class="player-items"
               >
                 <div v-if="card.item === 'movie'" class="player-items-1">
@@ -530,7 +599,7 @@
 
               <div
                 v-for="(card, index) in players[otherPlayerId].skills"
-                :key="index"
+                :key="'player-skills' + index"
                 class="player-skills"
               >
                 <div v-if="card.skill === 'bottle'" class="player-skills-1">
@@ -759,15 +828,36 @@
       <!-- {{ players }} -->
       <!-- {{ marketValues }} -->
       <br /><br />
-      <p>
-        {{ labels.invite }}
+
+      <div class = "invite" v-if="this.showInviteBox">
+
+        {{labels.invite }} <br>
+
         <input
           type="text"
           :value="publicPath + $route.path"
           @click="selectAll"
           readonly="readonly"
-        />
-      </p>
+        /> <br>
+
+          <button @click="closeInvite()"> Close </button>
+
+
+
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
       <!-- <p>{{ marketValues }}</p> -->
       <!-- <button v-if="players[playerId]" @click="players[playerId].money += 1">
         fake more money
@@ -808,6 +898,8 @@ export default {
       //   income: [],
       //   secret: []
       // }
+      showSendLinkPopUp: false,
+      startNextRound: null,
       buyPlacement: [],
       skillPlacement: [],
       auctionPlacement: [],
@@ -875,6 +967,8 @@ export default {
 
       round: 0,
 
+      showInviteBox: true,
+
       //sounds
       audioBottlePlaced: new Audio(
         "/sounds/zapsplat_household_aerosol_can_lid_down_on_wood_surface_001.mp3"
@@ -891,6 +985,9 @@ export default {
       secretCardButton: new Audio(
         "/sounds/zapsplat_household_alarm_clock_button_press_12967.mp3"
       ),
+
+      auctionStartedAudio: new Audio(
+        "/sounds/PM_FN_Events_LvlUps_PowerUps_26.mp3"),
     };
   },
   computed: {
@@ -941,6 +1038,8 @@ export default {
         this.currentPlayerId = d.currentPlayerId;
         this.round = d.round;
         this.playerState = d.playerState;
+        this.startNextRound = d.startNextRound
+        console.log("initialize startNextround: " + d.startNextRound);
         if (this.playerState.action !== "") {
           this.handlePlayerState();
         }
@@ -965,6 +1064,7 @@ export default {
         this.round = d.round;
         this.deckAuction = d.deckAuction;
         this.currentPlayerId = d.currentPlayerId;
+        this.startNextRound = d.startNextRound;
 
         /*this.start_auction = d.start_auction;*/
       }.bind(this)
@@ -1000,6 +1100,9 @@ export default {
         this.workPlacement = d.workPlacement;
         this.players = d.players;
         this.currentPlayerId = d.currentPlayerId;
+        console.log('collectorsBottlePlaced startNextRound: ' + d.startNextRound)
+        this.startNextRound = d.startNextRound;
+
       }.bind(this)
     );
 
@@ -1062,7 +1165,14 @@ export default {
     this.$store.state.socket.on(
       "collectorsCardBought",
       function (d) {
-        this.cardMoved.play();
+
+        if( d.action == "auction"){
+          this.auctionStartedAudio.play();
+          console.log("auction started");
+        } else {
+          this.cardMoved.play();
+        }
+
         console.log(d.playerId, "bought a card");
         this.players = d.players;
         this.itemsOnSale = d.itemsOnSale;
@@ -1072,10 +1182,14 @@ export default {
         this.marketValues = d.marketValues;
         this.deckCardAvailable = false;
 
+
+
         if (this.cardClicked >= this.clickCardTimes) {
           this.handCardAvailable = false;
           this.cardClicked = 0;
           this.clickCardTimes = 0;
+
+          this.startNextRound = d.startNextRound;
         }
 
         /*if (this.players[this.playerId].choseSecretCard){
@@ -1087,6 +1201,9 @@ export default {
     );
   },
   methods: {
+
+
+
     endGame: function () {
       this.secretCardButton.play();
 
@@ -1095,8 +1212,11 @@ export default {
     },
 
     choseSecretCard: function () {
+
       this.secretCardButton.play();
       this.handCardAvailable = true;
+      this.players[this.playerId].choseSecretCard = false;
+
       /*this.players[this.playerId].choseSecretCard = false;*/
     },
 
@@ -1140,6 +1260,8 @@ export default {
       }
     },
     nextRound: function () {
+      this.secretCardButton.play();
+
       alert("Are you sure you want to go to next round?");
       this.$store.state.socket.emit("nextRound", {
         roomId: this.$route.params.id,
@@ -1159,16 +1281,58 @@ export default {
       var allPlayers = [];
 
       for (var id of Object.keys(this.players)) {
-        var obj = {};
-        obj.id = id;
-        obj.auction_amount = this.players[id].auction_amount;
-        console.log(obj.id, obj.auction_amount);
 
-        allPlayers.push(obj);
+          var obj = {};
+          obj.id = id;
+          obj.auction_amount = this.players[id].auction_amount;
+          console.log(obj.id, obj.auction_amount);
+
+          allPlayers.push(obj);
+
       }
 
       return allPlayers;
     },
+
+    getOtherPlayersAuction: function () {
+      var allPlayers = [];
+
+      for (var id of Object.keys(this.players)) {
+
+              if (id !== this.playerId) {
+              var obj = {};
+              obj.id = id;
+              obj.auction_amount = this.players[id].auction_amount;
+              console.log(obj.id, obj.auction_amount);
+
+              allPlayers.push(obj);
+              }
+            }
+
+          return allPlayers;
+      },
+
+      getThisPlayersAuction: function () {
+        var allPlayers = [];
+
+        for (var id of Object.keys(this.players)) {
+              if (id === this.playerId) {
+
+                var obj = {};
+                obj.id = id;
+                obj.auction_amount = this.players[id].auction_amount;
+                console.log(obj.id, obj.auction_amount);
+
+                allPlayers.push(obj);
+
+
+              }
+        }
+
+      return allPlayers;
+    },
+
+
     updatePlayerAuction: function (e, val) {
       if (e.keyCode === 13) {
         if (val === this.$store.state.playerId && e.target.value !== "") {
@@ -1195,7 +1359,7 @@ export default {
           for (var i in this.players[this.playerId].skills) {
             if (this.players[this.playerId].skills[i].skill === "workerCard") {
               this.recieveExtraCard += 1;
-              console.log("placebottle workerCard");
+
             }
           }
         }
@@ -1328,11 +1492,39 @@ export default {
       return count;
     },
     announce_click: function () {
+      this.secretCardButton.play();
       var btn = document.getElementById("auction_announce");
       btn.style.display = "none";
-      this.secretCardButton.play();
+
     },
+
+    closeInvite: function (){
+      this.secretCardButton.play();
+      this.showInviteBox = false;
+
+
+    },
+
+    sendLinkPopUp: function () {
+
+      this.secretCardButton.play();
+
+      this.showSendLinkPopUp = true;
+
+
+    },
+
+    closeLinkPopUp: function () {
+
+      this.secretCardButton.play();
+
+        this.showSendLinkPopUp = false;
+
+
+    },
+
   },
+
 };
 </script>
 <style scoped>
@@ -1378,10 +1570,35 @@ footer a:visited {
 }
 
 .end_game {
-  height: 10vh;
+  position: relative;
+  height: 7vh;
   width: 10vw;
+  background-color: white;
+  border-radius: 1vh;
+  margin: 0.5vh;
+
+  font-weight: bold;
   z-index: 5;
+  float: right;
+
 }
+
+.end_game_alert {
+  position: relative;
+  height: 7vh;
+  width: 10vw;
+  background-color: white;
+  border-radius: 1vh;
+
+  font-weight: bold;
+
+
+  box-shadow: 0 0 5vh 3vh white;
+  animation: blink normal 2s infinite;
+  float: right;
+  margin: 0.5vh;
+}
+
 .playerboard {
   position: absolute;
   top: 40px;
@@ -1426,6 +1643,8 @@ footer a:visited {
   transform: scale(0.6) translate(-50%, -50%);
   z-index: 5;
 }
+
+
 
 .market-cards {
   display: grid;
@@ -1520,11 +1739,13 @@ footer a:visited {
   grid-column: 3/4;
   grid-row: 1/2;
   grid-gap: 40px;
+
 }
 ::v-deep .do_auction .buy-cards .cardslots.\30 {
   position: absolute;
   grid-column: 1/2;
   grid-row: 2/3;
+
 }
 ::v-deep .do_auction .buy-cards .cardslots.\31 {
   position: absolute;
@@ -1698,7 +1919,8 @@ footer a:visited {
   grid-template-rows: 10% 50% 20% 20%;
   background-color: #fff;
   height: 40vh;
-  border-style: dashed;
+  border-style: solid;
+  border-radius: 0.5vh;
   color: black;
 }
 
@@ -1707,11 +1929,15 @@ footer a:visited {
   grid-row: 1;
   display: grid;
   grid-template-columns: 40% 30% 30%;
+  margin-left: 0.5vh;
+  margin-top: 0.5vh;
 }
 
 .player-name {
   grid-column: 1;
   grid-row: 1;
+  margin-left: 0.5vh;
+
 }
 
 .player-coins {
@@ -1749,9 +1975,13 @@ footer a:visited {
   grid-column: 1;
   grid-row: 2;
   border-style: dashed;
-  color: red;
+  color: black;
   display: grid;
+  border-radius: 1vh;
+  border-width: 0.3vh;
   grid-template-columns: 15% 85%;
+  margin-left: 0.5vh;
+  margin-top: 1vh;
 }
 
 .player-bottles {
@@ -1761,6 +1991,8 @@ footer a:visited {
   background-size: contain;
   background-repeat: no-repeat;
   grid-template-columns: 12% 15%;
+  margin-left: 0.5vh;
+  margin-top: 1vh;
   /* gap: 7px; */
 }
 
@@ -1770,6 +2002,7 @@ footer a:visited {
 
 .current-player .player-bottles img:hover {
   outline: 3px solid black;
+  margin-top: 1vh;
 }
 
 .other-players .player-bottles {
@@ -1779,6 +2012,8 @@ footer a:visited {
   background-size: contain;
   background-repeat: no-repeat;
   grid-template-columns: 12% 15%;
+  margin-top: 1vh;
+
 }
 
 .player-items-skills {
@@ -1909,7 +2144,7 @@ footer a:visited {
 }
 .do_deckAuction >>> .buy-cards .cardslots {
   position: relative;
-  z-index: 10;
+  z-index: 100;
   top: -143vh;
   left: 37.2vw;
   transform: scale(0.7) translate(-50%, -50%);
@@ -1929,6 +2164,35 @@ footer a:visited {
   display: grid;
   grid-template-columns: repeat(4, 4rem);
 }
+
+.auctionPopUp {
+  position: relative;
+  /*height: 60vh;*/
+  width: 19vw;
+  top: 28vh;
+  left: -25vw;
+
+  padding: 3vh;
+  line-height: 4.5vh;
+
+  border: solid black;
+  border-radius: 1vh;
+  box-shadow: 0 0 50vh 10vh black;
+
+  text-align: center;
+  font-weight: bold;
+
+  z-index: 10;
+
+  background: white;
+}
+
+.auctionHeading{
+  font-size: 7vh;
+
+  color: black;
+}
+
 .player_1_auction {
 }
 .player_1_auction label {
@@ -1936,6 +2200,8 @@ footer a:visited {
   vertical-align: middle;
   padding: 0.2rem;
   width: 3vw;
+
+
 }
 
 .player_1_auction input {
@@ -1944,6 +2210,10 @@ footer a:visited {
 
   width: 20px;
   font-size: 1em;
+
+  /*color: LimeGreen;*/
+  color: red;
+
 }
 
 /* .other-players .player-skills-1 img {
@@ -1960,6 +2230,9 @@ footer a:visited {
   background-color: #fff;
   height: 16vh;
   color: black;
+  border: solid black;
+  border-top: 0;
+  border-radius: 0.5vh;
 }
 
 p {
@@ -1984,7 +2257,7 @@ p {
   height: 2.5em;
   background-size: 100% 100%;
   border-radius: 5px;
-  cursor: pointer;
+
   /* border:none; */
 }
 
@@ -2035,9 +2308,7 @@ p {
   position: absolute;
 }
 
-.quarter-tiles:hover {
-  outline: 2px dashed black;
-}
+
 #auction_announce {
   position: relative;
   top: -70rem;
@@ -2049,14 +2320,118 @@ p {
   z-index: 20;
 }
 
-.chose-secret-card {
+.choose-secret-card {
   position: relative;
   left: 0.5vw;
   top: -4.5vh;
-  border: 0.4vh dashed red;
+  border: 0.4vh dashed white;
   height: 18vh;
   width: 6vw;
   border-radius: 0.5vh;
   background-color: Transparent;
+  color: white;
+  box-shadow: 0 0 5vh 3vh white;
+  animation: blink normal 2s infinite;
+  z-index: 10;
 }
+
+.invite {
+  color: black;
+  position: relative;
+  z-index: 10;
+  padding: 3vh;
+  line-height: 5vh;
+  background-color: white;
+  width: 20vw;
+  border: 0.4vh solid;
+  border-radius: 1vh;
+  text-align: center;
+  top: -60vh;
+  left: 150vh;
+  font-weight: bold;
+
+}
+
+
+  .next_round {
+    position: relative;
+    font-weight: bold;
+    height: 7vh;
+    width: 8vw;
+    background-color: white;
+    border-radius: 1vh;
+    margin: 0.5vh;
+
+    z-index: 5;
+
+    float: right;
+
+
+
+  }
+
+  .next_round_alert {
+
+    position: relative;
+    font-weight: bold;
+    height: 7vh;
+    width: 8vw;
+    background-color: white;
+    border-radius: 1vh;
+    margin: 0.5vh;
+
+    box-shadow: 0 0 5vh 3vh white;
+    animation: blink normal 2s infinite;
+
+    z-index: 5;
+
+    float: right;
+
+  }
+
+  .send_link {
+
+    position: relative;
+    font-weight: bold;
+    height: 7vh;
+    width: 10vw;
+    background-color: white;
+    border-radius: 1vh;
+    margin: 0.5vh;
+
+
+    z-index: 5;
+    float: right;
+
+
+
+  }
+
+  .upperRightButtons {
+    position: relative;
+    top: -236vh;
+    left: 22vw;
+  }
+
+  .sendLinkPopUp {
+    position: relative;
+    /*height: 60vh;*/
+    width: 19vw;
+    top: -230vh;
+    left: 70vw;
+    padding: 3vh;
+    line-height: 5vh;
+
+
+    border: solid black;
+    border-radius: 1vh;
+
+
+    text-align: center;
+    font-weight: bold;
+
+    z-index: 30;
+
+    background: white;
+  }
 </style>

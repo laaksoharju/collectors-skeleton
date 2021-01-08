@@ -72,7 +72,8 @@ Data.prototype.createRoom = function(roomId, playerCount, lang = "en") {
   room.auctionCards = room.deck.splice(0, 4);
   room.market = [];
   room.deckAuction = [];
- 
+  room.startNextRound = false;
+
   room.buyPlacement = [
     {
       cost: 1,
@@ -604,6 +605,9 @@ Data.prototype.nextRound = function(roomId) {
           console.log('next round: ' + key + ' ' +   room.players[key].playersTurn);
     }
 
+    //set startNextRound to false
+    room.startNextRound = false;
+
 
     return true;
   } else {
@@ -641,7 +645,7 @@ Data.prototype.buyCard = function(
   playerId,
   card,
   cost,
-  action,  
+  action,
   start_auction,
   deckCardAvailable,
   p
@@ -837,6 +841,25 @@ Data.prototype.buyCard = function(
     room.players[playerId].clickedOnBottle = false;
   room.players[playerId].playerState.saleItems = [];
   room.players[playerId].playerState.action = "";
+
+  //check if next round should be alerted
+      var playersWithoutBottles = 0;
+      for (var id in room.players) {
+            console.log('inside for buycard datahandler')
+        if (
+          room.players[id].bottles === 0
+        ) {
+          playersWithoutBottles += 1;
+          console.log(playersWithoutBottles);
+        }
+
+      }
+
+      if (playersWithoutBottles === room.playerCount) {
+        room.startNextRound = true;
+      }
+
+
   };
 
 Data.prototype.bottleClicked = function (roomId, playerId, saleItems, action, clickedOnBottle, cost)
@@ -858,7 +881,7 @@ Data.prototype.placeBottle = function(roomId, playerId, action, p) {
   let room = this.rooms[roomId];
   console.log( room.players[playerId].money);
 
-//remove one bottle for a player 
+//remove one bottle for a player
   room.players[playerId].bottles -= 1;
 
       //calculate money left after placement
@@ -866,7 +889,7 @@ Data.prototype.placeBottle = function(roomId, playerId, action, p) {
       console.log( room.players[playerId].money);
 
 
-      //skill workerIncome 
+      //skill workerIncome
       if (action === "work") {
         if (room.players[playerId].skills.length > 0) {
           for (var i in room.players[playerId].skills) {
@@ -875,9 +898,33 @@ Data.prototype.placeBottle = function(roomId, playerId, action, p) {
             ) {
               room.players[playerId].money += 2;
             }
-            
+
           }
         }
+
+        //check if next round alert should go of
+        console.log('***************p.cashforcard datahandler placebottle: ' + p.cashForCard);
+        if (p.cashForCard == 0) {
+          console.log('inside if place bottle datahandler')
+
+          var playersWithoutBottles = 0;
+          for (var id in room.players) {
+                console.log('inside for buycard datahandler')
+            if (
+              room.players[id].bottles === 0
+            ) {
+              playersWithoutBottles += 1;
+              console.log(playersWithoutBottles);
+            }
+
+          }
+
+          if (playersWithoutBottles === room.playerCount) {
+            room.startNextRound = true;
+          }
+          }
+
+
       }
 
     console.log('room.players[playerId].skills: ' + room.players[playerId].skills);
@@ -955,6 +1002,7 @@ Data.prototype.getPlacements = function(roomId) {
       workPlacement: room.workPlacement,
       players: room.players,
       currentPlayerId: room.currentPlayerId,
+      startNextRound: room.startNextRound,
     };
   } else return {};
 };
@@ -1118,6 +1166,7 @@ Data.prototype.calcPlayersTurns = function(roomId) {
 
             console.log('Player points before starting: ' + player.points);
             //calculate and add points from items and check if player has one of every item
+
             for (var i in player.items){
               if (player.items[i].item === 'fastaval'){
 
@@ -1144,7 +1193,10 @@ Data.prototype.calcPlayersTurns = function(roomId) {
                   var hasMusic = true;
 
               }
+
               player.points += itemsValue;
+              
+
               console.log('Item: ' + player.items[i].item + ' Value:' + itemsValue);
               }
 
@@ -1176,6 +1228,12 @@ Data.prototype.calcPlayersTurns = function(roomId) {
 
 
 
+  };
+
+
+  Data.prototype.getStartNextRound = function(id) {
+    let room = this.rooms[id];
+    return room.startNextRound;
   };
 
 

@@ -19,6 +19,7 @@ function sockets(io, socket, data) {
         decKAuction: data.getDeckauctionCard(d.roomId),
         playerState: data.getPlayerState(d.roomId, d.playerId),
         currentPlayerId: data.getCurrentPlayerId(d.roomId),
+        startNextRound: data.getStartNextRound(d.roomId),
 
       });
     }
@@ -49,7 +50,8 @@ function sockets(io, socket, data) {
         placements: data.getPlacements(d.roomId),
         round: data.getRound(d.roomId),
         currentPlayerId: data.getCurrentPlayerId(d.roomId),
-        
+        startNextRound: data.getStartNextRound(d.roomId),
+
       });
     }
   });
@@ -75,7 +77,7 @@ function sockets(io, socket, data) {
       d.start_auction,
       d.deckCardAvailable,
       d.p,
-     
+
 
 
 
@@ -88,7 +90,8 @@ function sockets(io, socket, data) {
       auctionCards: data.getAuctionCards(d.roomId),
       deckAuction: data.getDeckauctionCard(d.roomId),
       marketValues: data.getMarketValues(d.roomId),
-
+      action: d.action,
+      startNextRound: data.getStartNextRound(d.roomId),
     });
   });
   socket.on("collectorsPlaceBottle", function(d) {
