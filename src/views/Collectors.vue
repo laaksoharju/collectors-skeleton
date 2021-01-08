@@ -668,7 +668,7 @@ main {
 
 .layout_wrapper {
   display: grid;
-  grid-template-columns: 60% 25% 15%;
+  grid-template-columns: 60% 20% 20%;
   grid-template-rows: auto;
   overflow: hidden;
   margin: 10px;

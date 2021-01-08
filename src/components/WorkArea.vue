@@ -10,6 +10,7 @@
         </div>
         <!--<button class="buttonTest" @click="circleClicked" />-->
         <button
+          class = "button"
           :disabled="player.hand.length < 2 || buttonDisabled(placement[0])"
           v-if="round == 1 && placement[0].playerId === null"
           @click="placeBottle(placement[0])"
@@ -24,13 +25,14 @@
         <!--Får 0dollar-->
         <div class="first" id="upsideDown"></div>
         <div class="second" id="upsideDown"></div>
-        <p>ROUND 1</p>
+        <!--<p>ROUND 1</p>-->
       </div>
       <div v-if="round == 2" class="rectangular firstArea">
         <div class="infoB">
           <InfoButtons :modalProps="work7Props" />
         </div>
         <button
+          class = "button"
           :disabled="player.hand.length < 2 || buttonDisabled(placement[1])"
           v-if="round == 2 && placement[1].playerId === null"
           @click="placeBottle(placement[1])"
@@ -45,13 +47,15 @@
         <!--Får 1 dollar-->
         <div class="first" id="upsideDown"></div>
         <div class="second" id="upsideDown"></div>
-        <p>ROUND 2</p>
+        <!--<p>ROUND 2</p>-->
       </div>
       <div v-if="round == 3" class="rectangular firstArea">
         <div class="infoB">
           <InfoButtons :modalProps="work6Props" />
         </div>
-        <button :disabled="player.hand.length <2 || buttonDisabled(placement[2])" 
+        <button 
+        class = "button"
+        :disabled="player.hand.length <2 || buttonDisabled(placement[2])" 
         v-if="round==3 && placement[2].playerId===null" @click="placeBottle(placement[2])">
         $-2
       </button>
@@ -63,13 +67,14 @@
         <!--Får 2 dollar-->
         <div class="first" id="upsideDown"></div>
         <div class="second" id="upsideDown"></div>
-        <p>ROUND 3</p>
+        <!--<p>ROUND 3</p>-->
       </div>
       <div v-if="round == 4" class="rectangular firstArea">
         <div class="infoB">
           <InfoButtons :modalProps="work5Props" />
         </div>
         <button 
+        class = "button"
         :disabled="player.hand.length <2 || buttonDisabled(placement[3])" 
         v-if="round==4 && placement[3].playerId===null" 
         @click="placeBottle(placement[3])">
@@ -82,18 +87,20 @@
         </div>
         <!--FÅR 3dollar-->
         <div class="first" id="recycledCard"></div>
-        <p>ROUND 4</p>
+        <!--<p>ROUND 4</p>-->
       </div>
       <div class="rectangular secondArea">
         <div class="infoB">
           <InfoButtons :modalProps="work4Props" />
         </div>
-        <button 
+        <button
+        class = "button" 
+        v-if="placement[4] && placement[4].playerId === null"
         @click="placeBottle(placement[4])"
         :disabled="buttonDisabled(placement[4])"
         >
-        $-1</button
-        ><!--Trash one bottle-->
+        $-1</button>
+        <!--Trash one bottle-->
         <div class="clickedButton" v-if="placement[4].playerId !== null && typeof players !== 'undefined'" :style="{backgroundColor: players[placement[4].playerId].color}">
           
             <p>{{ placement[4].playerId }}</p>
@@ -106,6 +113,7 @@
           <InfoButtons :modalProps="work3Props" />
         </div>
         <button
+        class = "button"
           v-if="placement[5] && placement[5].playerId === null"
           @click="placeBottle(placement[5])"
           :disabled="cannotAfford(1) || buttonDisabled(placement[5])"
@@ -127,6 +135,7 @@
           <InfoButtons :modalProps="work2Props" />
         </div>
         <button
+        class = "button"
           v-if="placement[6] && placement[6].playerId === null"
           :disabled="buttonDisabled(placement[6])"
           @click="placeBottle(placement[6])"
@@ -149,6 +158,7 @@
           <InfoButtons :modalProps="work1Props" />
         </div>
         <button
+        class = "button"
           v-if="placement[7] && placement[7].playerId === null"
           :disabled="buttonDisabled(placement[7])"
           @click="placeBottle(placement[7])"
@@ -195,13 +205,13 @@ export default {
     color: String /*KOMMER TAS BORT efter circle clicked*/,
     player: Object,
     placement: Array,
-    round: Number,
+    round: String,
     players: Object,
   },
 
   data: function () {
     return {
-      /*round: 1, SKA TAS BORT*/
+      /*round: 2,*/ /*SKA TAS BORT*/
       clicked: false /*SKA TAS BORT */,
       workProps: {
         value: "Work",
@@ -341,7 +351,7 @@ export default {
   border: 3px solid grey;
   border-radius: 10px;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
 .info {
@@ -352,25 +362,30 @@ export default {
 button {
   display: grid;
   grid-column: 2;
-  grid-template-columns: repeat(auto-fill, 20px);
+  /*grid-template-columns: repeat(auto-fill, 20px);*/
+  width: 50px;
   height: 20px;
   margin: 10px;
   /*grid-template-columns: repeat(auto-fill, 40px);*/
+  margin: auto;
 }
 
 .clickedButton {
   border: 1px solid rgb(118, 118, 118);
   border-radius: 2px;
   text-align: center;
-  align-items: flex-start;
   color: black;
-  width: 70%;
-  height: 25%;
+  width: 50px;
+  height: 20px;
   margin: auto;
 }
 
+.clickedButton p {
+  margin-bottom: 50%;
+}
+
 /*BUTTONTREST SKA BORT*/
-.buttonTest {
+/*.buttonTest {
   color: black;
   grid-column: 2;
   width: 100%;
@@ -379,13 +394,13 @@ button {
   font-size: 50px;
   border: 1px solid black;
   margin-top: 25px;
-}
+}*/
 
 .firstArea {
   border: 3px dotted grey;
 }
 
-.firstArea p {
+/*.firstArea p {
   color: black;
   font-size: 60%;
   font-weight: bold;
@@ -393,7 +408,7 @@ button {
   grid-column: 5;
   margin-top: 10px;
   margin-right: 10px;
-}
+}*/
 
 /*HÖR TILL CIRCKELN SOM LIGGER LÄNGST NER I HTML-KODEN, HAR KVAR SÅLÄNGE MEN KAN SEN TAS BORT*/
 /*.workArea_circle {
@@ -456,4 +471,23 @@ button {
   background-size: 2.5vw 3vw;
   background-repeat: no-repeat;
 }
+
+@media only screen and (max-width: 850px) {
+  .button {
+    width: 30px;
+  }
+  
+   .button p {
+     font-size: 70%;
+   }
+
+   .clickedButton {
+    width: 30px;
+  }
+  
+   .clickedButton p {
+     font-size: 70%;
+   }
+}
+
 </style>
