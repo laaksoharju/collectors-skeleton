@@ -1,11 +1,15 @@
-function sockets(io, socket, data) {
-  socket.on("setupCollectors", function(d) {
+function sockets(io, socket, data)
+{
+  socket.on("setupCollectors", function (d)
+  {
     data.createRoom(d.roomId, d.playerCount, d.lang);
   });
-  socket.on("collectorsLoaded", function(d) {
+  socket.on("collectorsLoaded", function (d)
+  {
 
     socket.join(d.roomId);
-    if (data.joinGame(d.roomId, d.playerId)) {
+    if (data.joinGame(d.roomId, d.playerId))
+    {
       socket.emit("collectorsInitialize", {
         labels: data.getUILabels(d.roomId),
         players: data.getPlayers(d.roomId),
@@ -20,26 +24,39 @@ function sockets(io, socket, data) {
         playerState: data.getPlayerState(d.roomId, d.playerId),
         currentPlayerId: data.getCurrentPlayerId(d.roomId),
         startNextRound: data.getStartNextRound(d.roomId),
-
+        zoomLink: data.getZoomLink(d.roomId),
       });
     }
   });
-  socket.on("updatePlayerName", function(d) {
+  socket.on("updatePlayerName", function (d)
+  {
     io.to(d.roomId).emit(
       "updatePlayerName",
       data.updatePlayerName(d.roomId, d.playerId, d.playerName)
     );
   });
 
-  socket.on("updatePlayerAuction", function(d) {
+  socket.on("updateZoomLink", function (d)
+  {
+    io.to(d.roomId).emit(
+      "updateZoomLink",
+      data.setZoomLink(d.roomId, d.zoomLink)
+    );
+  });
+
+  socket.on("updatePlayerAuction", function (d)
+  {
     // console.log("insockets" + d.auction_amount)
     io.to(d.roomId).emit(
       "updatePlayerName",
       data.updatePlayerAuction(d.roomId, d.playerId, d.auction_amount)
     );
   });
-  socket.on("nextRound", function(d) {
-    if (data.nextRound(d.roomId)) {
+
+  socket.on("nextRound", function (d)
+  {
+    if (data.nextRound(d.roomId))
+    {
       io.to(d.roomId).emit("updateQuarter", {
         players: data.getPlayers(d.roomId),
         itemsOnSale: data.getItemsOnSale(d.roomId),
@@ -56,16 +73,19 @@ function sockets(io, socket, data) {
     }
   });
 
-  socket.on("notifyPlayers", function(d) {
+  socket.on("notifyPlayers", function (d)
+  {
     io.to(d.roomId).emit("notifyPlayers", data.getPlayers(d.roomId));
   });
-  socket.on("collectorsDrawCard", function(d) {
+  socket.on("collectorsDrawCard", function (d)
+  {
     io.to(d.roomId).emit(
       "collectorsCardDrawn",
       data.drawCard(d.roomId, d.playerId)
     );
   });
-  socket.on("collectorsBuyCard", function(d) {
+  socket.on("collectorsBuyCard", function (d)
+  {
     console.log("sockets collectorBuyCard type of d.p: " + typeof d.p);
 
     data.buyCard(
@@ -94,9 +114,10 @@ function sockets(io, socket, data) {
       startNextRound: data.getStartNextRound(d.roomId),
     });
   });
-  socket.on("collectorsPlaceBottle", function(d) {
+  socket.on("collectorsPlaceBottle", function (d)
+  {
     console.log("sockets placeBottle");
-    data.placeBottle(d.roomId, d.playerId, d.action, d.p );
+    data.placeBottle(d.roomId, d.playerId, d.action, d.p);
 
     console.log("sockets placeBottle after data.placeBottle");
     io.to(d.roomId).emit(
@@ -107,7 +128,8 @@ function sockets(io, socket, data) {
 
 
 
-  socket.on("endGame", function(roomId) {
+  socket.on("endGame", function (roomId)
+  {
     console.log("endGame socket");
     data.endGame(roomId);
 
