@@ -911,11 +911,8 @@
       <br /><br />
 
       <div v-if="this.showFinalScore" class="final_score">
-        <h2>The winner is {{this.winnerId}} </h2>
-        <img src="/images/gold-medal-with-ribbon-psd-53059.jpg" WIDTH="349vh">
-
-
-
+        <h2>The winner is {{ this.winnerId }}</h2>
+        <img src="/images/gold-medal-with-ribbon-psd-53059.jpg" WIDTH="349vh" />
       </div>
 
       <!-- <p>{{ marketValues }}</p> -->
@@ -1057,9 +1054,12 @@ export default {
       ),
 
       auctionStartedAudio: new Audio(
-        "/sounds/PM_FN_Events_LvlUps_PowerUps_26.mp3"),
+        "/sounds/PM_FN_Events_LvlUps_PowerUps_26.mp3"
+      ),
 
-      winnerSound: new Audio("/sounds/zapsplat_human_children_x5_under_10_english_cheer_44945.mp3")
+      winnerSound: new Audio(
+        "/sounds/zapsplat_human_children_x5_under_10_english_cheer_44945.mp3"
+      ),
     };
   },
   computed: {
@@ -1251,9 +1251,6 @@ export default {
         this.winnerId = d;
 
         this.winnerSound.play();
-
-
-
       }.bind(this)
     );
 
@@ -1517,8 +1514,9 @@ export default {
         let max_val = this.getmax();
 
         if (
-          (max_val.id === this.playerId || max_val.auction_amount >= 1) &&
-          this.playerId.money > max_val.auction_amount
+          max_val.id === this.playerId &&
+          max_val.auction_amount >= 1 &&
+          this.players[this.playerId].money >= max_val.auction_amount
         ) {
           this.players[this.playerId].start_auction = true;
           this.players[this.playerId].deckCardAvailable = false;
@@ -1816,6 +1814,7 @@ footer a:visited {
   grid-column: 3/4;
   grid-row: 1/2;
   grid-gap: 40px;
+  z-index: 20;
 }
 ::v-deep .do_auction .buy-cards .cardslots.\30 {
   position: absolute;
@@ -2544,14 +2543,14 @@ p {
   background: white;
 } */
 
-  .final_score {
-    position: relative;
-    height: 60vh;
-    width: 60vh;
-    top: -90vh;
-    left: 35vw;
-    padding: 3vh;
-    line-height: 5vh;
+.final_score {
+  position: relative;
+  height: 60vh;
+  width: 60vh;
+  top: -90vh;
+  left: 35vw;
+  padding: 3vh;
+  line-height: 5vh;
 
   border: solid black;
   border-radius: 1vh;
@@ -2559,10 +2558,9 @@ p {
   text-align: center;
   font-weight: bold;
 
-    z-index: 5;
-    box-shadow: 0 0 100vh 30vh #ffd51a;
-    background: white;
-    color: black;
-
-  }
+  z-index: 5;
+  box-shadow: 0 0 100vh 30vh #ffd51a;
+  background: white;
+  color: black;
+}
 </style>
