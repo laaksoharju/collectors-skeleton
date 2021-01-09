@@ -29,24 +29,41 @@
           </div>
 
           <ul class="lang_setup" v-if="lang_type === 'English'">
-            <label>Setup game and ready to play</label>
-            <br />
-            <button v-for="i in 3" :key="i">
-              <a @click="setupCollectors(i + 1, 'en')"
-                >with {{ i + 1 }} players</a
-              >.</button
+            <label style="margin-left: 3.5rem"
+              >Setup game and ready to play</label
+            >
+
+            <button
+              style="
+                width: 20rem;
+                height: 2rem;
+                margin: 0.1rem;
+                border-radius: 0.5rem;
+              "
+              @click="setupCollectors(i + 1, 'en')"
+              v-for="i in 3"
+              :key="i"
+            >
+              with {{ i + 1 }} players</button
             ><br />
           </ul>
 
           <ul class="lang_setup" v-if="lang_type === 'Svenska'">
-            <label>Inställningsspel och redo att spela</label
-            ><br />
-            <button v-for="i in 3" :key="i">
-              <a
-                style="width: 10rem; heigth: 1rem"
-                @click="setupCollectors(i + 1, 'se')"
-                >med {{ i + 1 }} spelare</a
-              >.
+            <label style="margin-left: 3.5rem"
+              >Inställningsspel och redo att spela</label
+            >
+            <button
+              style="
+                width: 20rem;
+                height: 2rem;
+                margin: 0.1rem;
+                border-radius: 0.5rem;
+              "
+              @click="setupCollectors(i + 1, 'se')"
+              v-for="i in 3"
+              :key="i"
+            >
+              med {{ i + 1 }} spelare.
             </button>
           </ul>
         </div>
@@ -106,6 +123,7 @@ export default {
     return {
       lang_type: "English",
       show_rules: false,
+      audioBottlePlaced: new Audio("/sounds/PM_Blurry.mp3"),
     };
   },
   created: function () {
@@ -113,6 +131,7 @@ export default {
   },
   methods: {
     setupCollectors: function (playerCount, lang = "en") {
+      this.audioBottlePlaced.play();
       this.$store.commit("SETUP_GAME", {
         roomId: this.$store.state.roomId,
         playerCount: playerCount,
@@ -141,6 +160,8 @@ export default {
   );
 }
 .lang_setup {
+  position: relative;
+  left: 2rem;
   display: grid;
   grid-template-rows: repeat(4, 1fr);
 }
