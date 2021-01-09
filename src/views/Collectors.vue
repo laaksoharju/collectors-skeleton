@@ -899,7 +899,11 @@
       <br /><br />
 
       <div v-if="this.showFinalScore" class="final_score">
-        <p>The winner is {{ this.winnerId }}</p>
+        <h2>The winner is {{this.winnerId}} </h2>
+        <img src="/images/gold-medal-with-ribbon-psd-53059.jpg" WIDTH="349vh">
+
+
+
       </div>
 
       <!-- <p>{{ marketValues }}</p> -->
@@ -1040,8 +1044,9 @@ export default {
       ),
 
       auctionStartedAudio: new Audio(
-        "/sounds/PM_FN_Events_LvlUps_PowerUps_26.mp3"
-      ),
+        "/sounds/PM_FN_Events_LvlUps_PowerUps_26.mp3"),
+
+      winnerSound: new Audio("/sounds/zapsplat_human_children_x5_under_10_english_cheer_44945.mp3")
     };
   },
   computed: {
@@ -1222,13 +1227,12 @@ export default {
       function (d) {
         this.showFinalScore = true;
 
-        console.log("collectorsFinalScore");
-        console.log(this.showFinalScore);
-        console.log(d);
+        this.winnerId = d;
 
-        console.log(d.winnerId);
-        this.winnerId = d.winnerId;
-        console.log(this.winnerId);
+        this.winnerSound.play();
+
+
+
       }.bind(this)
     );
 
@@ -1617,7 +1621,6 @@ footer a:visited {
   position: relative;
   height: 7vh;
   width: 10vw;
-  left: 4rem;
   background-color: white;
   border-radius: 1vh;
   margin: 0.5vh;
@@ -1633,7 +1636,6 @@ footer a:visited {
   width: 10vw;
   background-color: white;
   border-radius: 1vh;
-  left: 4rem;
 
   font-weight: bold;
 
@@ -2406,6 +2408,21 @@ p {
   z-index: 20;
 }
 
+.choose-secret-card {
+  position: relative;
+  left: 0.5vw;
+  top: -4.5vh;
+  border: 0.4vh dashed white;
+  height: 18vh;
+  width: 6vw;
+  border-radius: 0.5vh;
+  background-color: Transparent;
+  color: white;
+  box-shadow: 0 0 5vh 3vh white;
+  animation: blink normal 2s infinite;
+  z-index: 10;
+}
+
 .invite {
   color: black;
   position: relative;
@@ -2500,14 +2517,14 @@ p {
   background: white;
 }
 
-.final_score {
-  position: relative;
-  height: 60vh;
-  width: 19vw;
-  top: 50vh;
-  left: 52vw;
-  padding: 3vh;
-  line-height: 5vh;
+  .final_score {
+    position: relative;
+    height: 60vh;
+    width: 60vh;
+    top: -90vh;
+    left: 35vw;
+    padding: 3vh;
+    line-height: 5vh;
 
   border: solid black;
   border-radius: 1vh;
@@ -2515,9 +2532,10 @@ p {
   text-align: center;
   font-weight: bold;
 
-  z-index: 5;
+    z-index: 5;
+    box-shadow: 0 0 100vh 30vh #ffd51a;
+    background: white;
+    color: black;
 
-  background: white;
-  color: black;
-}
+  }
 </style>
