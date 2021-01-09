@@ -1710,7 +1710,7 @@ footer a:visited {
   height: 10rem;
   width: 30rem;
   left: -25.5vw;
-  top: -35vh;
+  top: -38vh;
 
   display: grid;
   grid-template-columns: repeat(3, 10rem);
@@ -1921,7 +1921,7 @@ footer a:visited {
 .auction_bottle >>> .buttons {
   top: 2vh;
   left: 1vw;
-  width: 20rem;
+  width: 4rem;
   display: grid;
   grid-template-rows: repeat(5, 2.5rem);
   grid-gap: 0.5em;
@@ -1978,7 +1978,7 @@ footer a:visited {
   position: absolute;
   display: grid;
   grid-gap: 5px;
-  grid-template-columns: 55% 45%;
+  grid-template-columns: 50% 50%;
   background: rgb(92, 160, 170);
   background: linear-gradient(
     0deg,
