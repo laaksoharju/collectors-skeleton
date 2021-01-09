@@ -1483,7 +1483,10 @@ export default {
       if (action === "win_auction") {
         let max_val = this.getmax();
 
-        if (max_val.id === this.playerId || max_val.auction_amount > 0) {
+        if (
+          (max_val.id === this.playerId || max_val.auction_amount >= 1) &&
+          this.playerId.money > max_val.auction_amount
+        ) {
           this.players[this.playerId].start_auction = true;
           this.players[this.playerId].deckCardAvailable = false;
           this.$store.state.socket.emit("collectorsBuyCard", {
@@ -1499,7 +1502,7 @@ export default {
 
           // document.getElementById("players_auction").hidden = false;
         } else {
-          alert("You can not take the card or amount should be more than 1");
+          alert("You can't take the card , may you  need more money sorry !");
         }
       } else {
         if (action === "auction") {
