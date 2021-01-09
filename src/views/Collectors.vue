@@ -203,7 +203,7 @@
               </button>
             </div>
 
-            <div>
+            <!-- <div>
               <button class="send_link" @click="sendLinkPopUp()">
                 Zoom Link
               </button>
@@ -220,8 +220,28 @@
               <button style="margin: 0.5vh" @click="closeLinkPopUp()">
                 Close
               </button>
-            </div>
+            </div> -->
           </div>
+
+          <div class="links">
+            Room Link
+            <input
+              type="text"
+              :value="publicPath + $route.path"
+              @click="selectAll"
+              readonly="readonly"
+            />
+            <br />
+            Zoom Link
+            <input
+              id="zoomLink"
+              type="text"
+              v-bind:value="zoomLink"
+              @change="updateZoomLink()"
+              @click="selectAll"
+            />
+          </div>
+
           <div class="players-block">
             <div
               v-if="players.hasOwnProperty(playerId)"
@@ -306,14 +326,6 @@
                   :src="playerBottle[players[playerId].color]"
                   alt="index"
                 />
-                <!-- <img
-                  v-bind:src="playerBoards[players[playerId].color]"
-                  alt="Player Boards"
-                /> -->
-                <!-- <img
-                  v-bind:src="playerBottle[players[playerId].color]"
-                  alt="players[playerId].color"
-                /> -->
               </div>
               <div class="player-items-skills">
                 <!-- if the active player has already buy an item -->
@@ -805,7 +817,7 @@
               </div>
               <br />
             </div>
-            <div class="invite" v-if="this.showInviteBox">
+            <!-- <div class="invite" v-if="this.showInviteBox">
               {{ labels.invite }} <br />
 
               <input
@@ -817,7 +829,7 @@
               <br />
 
               <button @click="closeInvite()">Close</button>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -899,7 +911,11 @@
       <br /><br />
 
       <div v-if="this.showFinalScore" class="final_score">
-        <p>The winner is {{ this.winnerId }}</p>
+        <h2>The winner is {{this.winnerId}} </h2>
+        <img src="/images/gold-medal-with-ribbon-psd-53059.jpg" WIDTH="349vh">
+
+
+
       </div>
 
       <!-- <p>{{ marketValues }}</p> -->
@@ -932,6 +948,7 @@ export default {
       maxSizes: { x: 0, y: 0 },
       labels: {},
       players: {},
+      zoomLink: "ASd",
 
       // playerId: {
       //   hand: [],
@@ -1040,8 +1057,9 @@ export default {
       ),
 
       auctionStartedAudio: new Audio(
-        "/sounds/PM_FN_Events_LvlUps_PowerUps_26.mp3"
-      ),
+        "/sounds/PM_FN_Events_LvlUps_PowerUps_26.mp3"),
+
+      winnerSound: new Audio("/sounds/zapsplat_human_children_x5_under_10_english_cheer_44945.mp3")
     };
   },
   computed: {
@@ -1093,7 +1111,8 @@ export default {
         this.round = d.round;
         this.playerState = d.playerState;
         this.startNextRound = d.startNextRound;
-        console.log("initialize startNextround: " + d.startNextRound);
+        this.zoomLink = d.zoomLink;
+        // console.log("initialize startNextround: " + d.startNextRound);
         if (this.playerState.action !== "") {
           this.handlePlayerState();
         }
@@ -1203,6 +1222,13 @@ export default {
     );
 
     this.$store.state.socket.on(
+      "updateZoomLink",
+      function (zoomLink) {
+        this.zoomLink = zoomLink;
+      }.bind(this)
+    );
+
+    this.$store.state.socket.on(
       "updatePlayerNameAuction",
       function (d) {
         this.placeAuctionBid.play();
@@ -1222,13 +1248,12 @@ export default {
       function (d) {
         this.showFinalScore = true;
 
-        console.log("collectorsFinalScore");
-        console.log(this.showFinalScore);
-        console.log(d);
+        this.winnerId = d;
 
-        console.log(d.winnerId);
-        this.winnerId = d.winnerId;
-        console.log(this.winnerId);
+        this.winnerSound.play();
+
+
+
       }.bind(this)
     );
 
@@ -1268,6 +1293,14 @@ export default {
     );
   },
   methods: {
+    updateZoomLink: function () {
+      let v = document.getElementById("zoomLink").value;
+      this.$store.state.socket.emit("updateZoomLink", {
+        roomId: this.$route.params.id,
+        zoomLink: v,
+      });
+    },
+
     endGame: function () {
       this.secretCardButton.play();
 
@@ -1560,11 +1593,11 @@ export default {
       this.showInviteBox = false;
     },
 
-    sendLinkPopUp: function () {
-      this.secretCardButton.play();
+    // sendLinkPopUp: function () {
+    //   this.secretCardButton.play();
 
-      this.showSendLinkPopUp = true;
-    },
+    //   this.showSendLinkPopUp = true;
+    // },
 
     closeLinkPopUp: function () {
       this.secretCardButton.play();
@@ -1620,7 +1653,6 @@ footer a:visited {
   position: relative;
   height: 7vh;
   width: 10vw;
-  left: 4rem;
   background-color: white;
   border-radius: 1vh;
   margin: 0.5vh;
@@ -1636,7 +1668,6 @@ footer a:visited {
   width: 10vw;
   background-color: white;
   border-radius: 1vh;
-  left: 4rem;
 
   font-weight: bold;
 
@@ -1978,7 +2009,7 @@ footer a:visited {
   grid-column: 2;
   grid-row: 1;
   display: grid;
-  grid-template-rows: 10% 90%;
+  grid-template-rows: 10% 10% 80%;
   /* background-color: #F7CAC9; */
 }
 
@@ -2409,31 +2440,40 @@ p {
   z-index: 20;
 }
 
-.invite {
+.choose-secret-card {
+  position: relative;
+  left: 0.5vw;
+  top: -4.5vh;
+  border: 0.4vh dashed white;
+  height: 18vh;
+  width: 6vw;
+  border-radius: 0.5vh;
+  background-color: Transparent;
+  color: white;
+  box-shadow: 0 0 5vh 3vh white;
+  animation: blink normal 2s infinite;
+  z-index: 10;
+}
+
+/* .invite {
   color: black;
   position: relative;
   z-index: 10;
   padding: 3vh;
   line-height: 5vh;
-  top: 1rem;
-  left: 8rem;
   background-color: white;
   width: 20vw;
   border: 0.4vh solid;
   border-radius: 1vh;
   text-align: center;
-  /* top: -60vh;
-  left: 150vh; */
   font-weight: bold;
-  z-index: 121;
-}
+} */
 
 .next_round {
   position: relative;
   font-weight: bold;
   height: 7vh;
   width: 8vw;
-  left: 4rem;
 
   background-color: white;
   border-radius: 1vh;
@@ -2449,7 +2489,6 @@ p {
   font-weight: bold;
   height: 7vh;
   width: 8vw;
-  left: 4rem;
   background-color: white;
   border-radius: 1vh;
   margin: 0.5vh;
@@ -2467,7 +2506,6 @@ p {
   font-weight: bold;
   height: 7vh;
   width: 10vw;
-  left: 4rem;
   background-color: white;
   border-radius: 1vh;
   margin: 0.5vh;
@@ -2480,15 +2518,18 @@ p {
   grid-row: 1;
 }
 
-.players-block {
+.links {
   grid-row: 2;
 }
-.sendLinkPopUp {
+
+.players-block {
+  grid-row: 3;
+}
+
+/* .sendLinkPopUp {
   position: relative;
   height: 60vh;
   width: 19vw;
-  /* top: -230vh;
-    left: 70vw; */
   padding: 3vh;
   line-height: 5vh;
 
@@ -2501,16 +2542,16 @@ p {
   z-index: 30;
 
   background: white;
-}
+} */
 
-.final_score {
-  position: relative;
-  height: 60vh;
-  width: 19vw;
-  top: 50vh;
-  left: 52vw;
-  padding: 3vh;
-  line-height: 5vh;
+  .final_score {
+    position: relative;
+    height: 60vh;
+    width: 60vh;
+    top: -90vh;
+    left: 35vw;
+    padding: 3vh;
+    line-height: 5vh;
 
   border: solid black;
   border-radius: 1vh;
@@ -2518,9 +2559,10 @@ p {
   text-align: center;
   font-weight: bold;
 
-  z-index: 5;
+    z-index: 5;
+    box-shadow: 0 0 100vh 30vh #ffd51a;
+    background: white;
+    color: black;
 
-  background: white;
-  color: black;
-}
+  }
 </style>
