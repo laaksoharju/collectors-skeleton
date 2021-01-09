@@ -232,9 +232,10 @@
             Zoom Link
             <input
               id="zoomLink"
-              @change="updateZoomLink()"
               type="text"
               v-bind:value="zoomLink"
+              @change="updateZoomLink()"
+              @click="selectAll"
             />
           </div>
 
@@ -322,14 +323,6 @@
                   :src="playerBottle[players[playerId].color]"
                   alt="index"
                 />
-                <!-- <img
-                  v-bind:src="playerBoards[players[playerId].color]"
-                  alt="Player Boards"
-                /> -->
-                <!-- <img
-                  v-bind:src="playerBottle[players[playerId].color]"
-                  alt="players[playerId].color"
-                /> -->
               </div>
               <div class="player-items-skills">
                 <!-- if the active player has already buy an item -->

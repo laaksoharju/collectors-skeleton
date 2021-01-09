@@ -410,8 +410,6 @@ Data.prototype.setZoomLink = function (roomId, zoomLink)
     room.zoomLink = zoomLink;
     return room.zoomLink;
   }
-
-  // console.log("From data handler, zoom link: " + room.zoomLink);
 }
 
 Data.prototype.getZoomLink = function (roomId)
