@@ -29,8 +29,8 @@
           </div>
 
           <ul class="lang_setup" v-if="lang_type === 'English'">
-            <label style="margin-left: 3.5rem"
-              >Setup game and ready to play</label
+            <label style="margin-left: 2rem"
+              >Choose number of players and start game</label
             >
 
             <button
@@ -49,8 +49,8 @@
           </ul>
 
           <ul class="lang_setup" v-if="lang_type === 'Svenska'">
-            <label style="margin-left: 3.5rem"
-              >Inställningsspel och redo att spela</label
+            <label style="margin-left: 2rem"
+              >Välj antal spelare och börja spela</label
             >
             <button
               style="
@@ -81,7 +81,7 @@
                 height: 3rem;
               "
             >
-              Rules or Learn More
+              Rules
             </button>
             <button
               v-else-if="lang_type === 'Svenska'"
@@ -95,7 +95,7 @@
                 height: 3rem;
               "
             >
-              Regler eller läs mer
+              Regler
             </button>
           </div>
 
