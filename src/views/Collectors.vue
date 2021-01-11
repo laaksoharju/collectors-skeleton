@@ -59,6 +59,10 @@
                 @buyCard="buyCard('win_auction', $event)"
               />
             </section>
+            <br />
+            <label>
+              The player with the highest bid can click and gets the card
+            </label>
 
             <br />
             <label>Other players bids:</label><br />
@@ -67,7 +71,7 @@
               :key="'Auction other players' + key"
               class="player_1_auction"
             >
-              <label>{{ val.id }}</label>
+              <label>{{ players[val.id].playerName }}</label>
 
               <input
                 style="margin-left: 1.5vh"
@@ -207,10 +211,21 @@
               <button class="link" @click="displayLinkBox('z')">
                 Zoom Link
               </button>
+
               <button class="link" @click="displayLinkBox('r')">
                 Room Link
               </button>
+
+              <button class="link" @click="displayRules()">Open Rules</button>
             </div>
+            <!-- <div>
+              <button class="link" @click="displayLinkBox('r')">
+                Room Link
+              </button>
+            </div> -->
+            <!-- <div>
+              <button class="link" @click="displayRules()">Rules</button>
+            </div> -->
             <!-- <div v-if="this.showSendLinkPopUp" class="sendLinkPopUp">
               <p>Zoom link for players:</p>
               Paste zoom link:
@@ -928,7 +943,7 @@
       <br /><br />
 
       <div v-if="this.showFinalScore" class="final_score">
-        <h2>The winner is {{ this.winnerId }}</h2>
+        <h2>The winner is {{ players[this.winnerId].playerName }}</h2>
         <img src="/images/gold-medal-with-ribbon-psd-53059.jpg" WIDTH="349vh" />
       </div>
 
@@ -956,6 +971,19 @@
           @change="updateZoomLink()"
           @click="selectAll"
         />
+        <br />
+
+        <button @click="closeInvite()">Close</button>
+      </div>
+
+      <div class="rulesBox" v-if="this.showRules">
+        <embed
+          src="/images/collectors.pdf"
+          type="application/pdf"
+          height="500px"
+          width="500px"
+        />
+
         <br />
 
         <button @click="closeInvite()">Close</button>
@@ -1082,6 +1110,7 @@ export default {
 
       showInviteBox: false,
       showZoomLinkBox: false,
+      showRules: false,
       zoomLink: "",
 
       //sounds
@@ -1347,6 +1376,12 @@ export default {
       } else if (linkType === "r") {
         this.showInviteBox = true;
       }
+    },
+
+    displayRules: function () {
+      this.showInviteBox = false;
+      this.showZoomLinkBox = false;
+      this.showRules = true;
     },
 
     updateZoomLink: function () {
@@ -1649,6 +1684,7 @@ export default {
       this.secretCardButton.play();
       this.showInviteBox = false;
       this.showZoomLinkBox = false;
+      this.showRules = false;
     },
 
     // sendLinkPopUp: function () {
@@ -2548,6 +2584,27 @@ p {
   font-weight: bold;
 
   z-index: 5;
+  background: white;
+  color: black;
+}
+
+.rulesBox {
+  position: relative;
+  height: 550px;
+  width: 500px;
+  top: -100vh;
+  left: 35vw;
+  padding: 3vh;
+  line-height: 5vh;
+
+  z-index: 5;
+
+  border: solid black;
+  border-radius: 1vh;
+
+  text-align: center;
+  font-weight: bold;
+
   background: white;
   color: black;
 }
