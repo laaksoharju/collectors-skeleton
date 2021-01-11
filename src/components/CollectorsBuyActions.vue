@@ -105,7 +105,7 @@ export default {
     // },
     buyCard: function (card) {
       if (card.available || this.deckCardAvailable === true) {
-        this.$emit("buyCard", { card: card, p: "buttonClicked" });
+        this.$emit("buyCard", { card: card, p: this.buttonClicked });
         // this.highlightAvailableCards();
       }
     },
