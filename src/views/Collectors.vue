@@ -1572,7 +1572,11 @@ export default {
       if (action === "win_auction") {
         let max_val = this.getmax();
 
-        if (max_val.id === this.playerId || max_val.auction_amount > 0) {
+        if (
+          max_val.id === this.playerId &&
+          max_val.auction_amount >= 1 &&
+          this.players[this.playerId].money >= max_val.auction_amount
+        ) {
           this.players[this.playerId].start_auction = true;
           this.players[this.playerId].deckCardAvailable = false;
           this.$store.state.socket.emit("collectorsBuyCard", {

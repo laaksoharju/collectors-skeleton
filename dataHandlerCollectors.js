@@ -1035,7 +1035,7 @@ Data.prototype.placeBottle = function (roomId, playerId, action, p)
 
     //check if next round alert should go of
     console.log('***************p.cashforcard datahandler placebottle: ' + p.cashForCard);
-    if (p.cashForCard == 0)
+    if (p.cashForCard == 0 && p.buttonId < 16 && p.buttonId > 19)
     {
       console.log('inside if place bottle datahandler')
 
