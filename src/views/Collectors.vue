@@ -2251,8 +2251,8 @@ footer a:visited {
   grid-column: 5/6;
 }
 .player-items img {
-  height: 150%;
-  width: 100%;
+  height: 70%;
+  width: 70%;
   border-radius: 0.2rem;
 
   padding-top: 0.2em;
@@ -2260,13 +2260,13 @@ footer a:visited {
   margin: 0;
 }
 .other-players .player-items img {
-  height: 150%;
-  width: 100%;
+  height: 35%;
+  width: 45%;
   padding-top: 0em;
 }
 
 .player-items img:hover {
-  height: 200%;
+  height: 150%;
   width: 100%;
   border-radius: 0.5rem;
 
@@ -2324,8 +2324,8 @@ footer a:visited {
 }
 
 .player-skills img {
-  height: 95%;
-  width: 100%;
+  height: 35%;
+  width: 45%;
   border-radius: 0.25rem;
   padding-top: 0.12rem;
 
@@ -2334,8 +2334,8 @@ footer a:visited {
 }
 
 .other-players .player-skills img {
-  height: 70%;
-  width: 100%;
+  height: 35%;
+  width: 45%;
   border-radius: 0.25rem;
   padding-top: 0.12rem;
 
@@ -2344,8 +2344,8 @@ footer a:visited {
 }
 
 .player-skills img:hover {
-  height: 125%;
-  width: 150%;
+  height: 100%;
+  width: 100%;
   border-radius: 1rem;
   outline: 1px solid rgb(139, 204, 160);
   z-index: 2;
