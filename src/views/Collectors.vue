@@ -59,6 +59,10 @@
                 @buyCard="buyCard('win_auction', $event)"
               />
             </section>
+            <br />
+            <label>
+              The player with the highest bid can click and gets the card
+            </label>
 
             <br />
             <label>Other players bids:</label><br />
@@ -67,7 +71,7 @@
               :key="'Auction other players' + key"
               class="player_1_auction"
             >
-              <label>{{ val.id }}</label>
+              <label>{{ players[val.id].playerName }}</label>
 
               <input
                 style="margin-left: 1.5vh"
@@ -203,12 +207,40 @@
               </button>
             </div>
 
-            <!-- <div>
-              <button class="send_link" @click="sendLinkPopUp()">
+            <div>
+              <button class="link" @click="displayLinkBox('z')">
                 Zoom Link
               </button>
+
+              <button class="link" @click="displayLinkBox('r')">
+                Room Link
+              </button>
+
+              <button class="link" @click="displayRules()">Open Rules</button>
             </div>
-            <div v-if="this.showSendLinkPopUp" class="sendLinkPopUp">
+            <!-- <div>
+              <button class="link" @click="displayLinkBox('r')">
+                Room Link
+              </button>
+            </div> -->
+            <!-- <div>
+              <button class="link" @click="displayRules()">Rules</button>
+            </div> -->
+            <!-- <div v-if="this.showSendLinkPopUp" class="sendLinkPopUp">
+              <p>Zoom link for players:</p>
+              Paste zoom link:
+              <input type="text" id="zoomLink" /><br />
+              <input
+                type="submit"
+                value="Paste"
+                @click="this.secretCardButton.play()"
+              />
+              <button style="margin: 0.5vh" @click="closeLinkPopUp()">
+                Close
+              </button>
+            </div> -->
+            <!-- 
+            <div class="sendLinkPopUp">
               <p>Zoom link for players:</p>
               Paste zoom link:
               <input type="text" id="zoomLink" /><br />
@@ -223,7 +255,7 @@
             </div> -->
           </div>
 
-          <div class="links">
+          <!-- <div class="links">
             Room Link
             <input
               type="text"
@@ -240,7 +272,7 @@
               @change="updateZoomLink()"
               @click="selectAll"
             />
-          </div>
+          </div> -->
 
           <div class="players-block">
             <div
@@ -911,8 +943,50 @@
       <br /><br />
 
       <div v-if="this.showFinalScore" class="final_score">
-        <h2>The winner is {{ this.winnerId }}</h2>
+        <h2>The winner is {{ players[this.winnerId].playerName }}</h2>
         <img src="/images/gold-medal-with-ribbon-psd-53059.jpg" WIDTH="349vh" />
+      </div>
+
+      <div class="linkBox" v-if="this.showInviteBox">
+        {{ labels.invite }} <br />
+
+        <input
+          type="text"
+          :value="publicPath + $route.path"
+          @click="selectAll"
+          readonly="this.linkBoxReadOnly"
+        />
+        <br />
+
+        <button @click="closeInvite()">Close</button>
+      </div>
+
+      <div class="linkBox" v-if="this.showZoomLinkBox">
+        <label>Enter Zoom link in the box</label> <br />
+
+        <input
+          id="zoomLinkInput"
+          type="text"
+          :value="zoomLink"
+          @change="updateZoomLink()"
+          @click="selectAll"
+        />
+        <br />
+
+        <button @click="closeInvite()">Close</button>
+      </div>
+
+      <div class="rulesBox" v-if="this.showRules">
+        <embed
+          src="/images/collectors.pdf"
+          type="application/pdf"
+          height="500px"
+          width="500px"
+        />
+
+        <br />
+
+        <button @click="closeInvite()">Close</button>
       </div>
 
       <!-- <p>{{ marketValues }}</p> -->
@@ -945,7 +1019,6 @@ export default {
       maxSizes: { x: 0, y: 0 },
       labels: {},
       players: {},
-      zoomLink: "ASd",
 
       // playerId: {
       //   hand: [],
@@ -1030,11 +1103,15 @@ export default {
         saleItems: [],
         action: "",
       },
+
       typeofaction: "skills",
 
       round: 0,
 
-      showInviteBox: true,
+      showInviteBox: false,
+      showZoomLinkBox: false,
+      showRules: false,
+      zoomLink: "",
 
       //sounds
       audioBottlePlaced: new Audio(
@@ -1290,8 +1367,25 @@ export default {
     );
   },
   methods: {
+    displayLinkBox: function (linkType) {
+      this.showInviteBox = false;
+      this.showZoomLinkBox = false;
+
+      if (linkType === "z") {
+        this.showZoomLinkBox = true;
+      } else if (linkType === "r") {
+        this.showInviteBox = true;
+      }
+    },
+
+    displayRules: function () {
+      this.showInviteBox = false;
+      this.showZoomLinkBox = false;
+      this.showRules = true;
+    },
+
     updateZoomLink: function () {
-      let v = document.getElementById("zoomLink").value;
+      let v = document.getElementById("zoomLinkInput").value;
       this.$store.state.socket.emit("updateZoomLink", {
         roomId: this.$route.params.id,
         zoomLink: v,
@@ -1589,6 +1683,8 @@ export default {
     closeInvite: function () {
       this.secretCardButton.play();
       this.showInviteBox = false;
+      this.showZoomLinkBox = false;
+      this.showRules = false;
     },
 
     // sendLinkPopUp: function () {
@@ -1650,7 +1746,7 @@ footer a:visited {
 .end_game {
   position: relative;
   height: 7vh;
-  width: 10vw;
+  width: 5vw;
   background-color: white;
   border-radius: 1vh;
   margin: 0.5vh;
@@ -1998,18 +2094,25 @@ footer a:visited {
   height: 88vh;
 }
 
+.link {
+  position: relative;
+  font-weight: bold;
+  height: 7vh;
+  width: 5vw;
+  background-color: white;
+  border-radius: 1vh;
+  margin: 0.5vh;
+}
+
 .player-board {
   border-radius: 5px;
   background-color: #444;
   color: #fff;
   position: relative;
-  /* top: 10vh; */
-  /* right: 1vw; */
+  grid-template-rows: 10% 10% 80%;
   grid-column: 2;
   grid-row: 1;
   display: grid;
-  grid-template-rows: 10% 10% 80%;
-  /* background-color: #F7CAC9; */
 }
 
 .current-player {
@@ -2149,8 +2252,8 @@ footer a:visited {
   grid-column: 5/6;
 }
 .player-items img {
-  height: 150%;
-  width: 100%;
+  height: 70%;
+  width: 70%;
   border-radius: 0.2rem;
 
   padding-top: 0.2em;
@@ -2158,13 +2261,13 @@ footer a:visited {
   margin: 0;
 }
 .other-players .player-items img {
-  height: 150%;
-  width: 100%;
+  height: 35%;
+  width: 45%;
   padding-top: 0em;
 }
 
 .player-items img:hover {
-  height: 200%;
+  height: 150%;
   width: 100%;
   border-radius: 0.5rem;
 
@@ -2222,8 +2325,8 @@ footer a:visited {
 }
 
 .player-skills img {
-  height: 95%;
-  width: 100%;
+  height: 35%;
+  width: 45%;
   border-radius: 0.25rem;
   padding-top: 0.12rem;
 
@@ -2232,8 +2335,8 @@ footer a:visited {
 }
 
 .other-players .player-skills img {
-  height: 70%;
-  width: 100%;
+  height: 35%;
+  width: 45%;
   border-radius: 0.25rem;
   padding-top: 0.12rem;
 
@@ -2242,8 +2345,8 @@ footer a:visited {
 }
 
 .player-skills img:hover {
-  height: 125%;
-  width: 150%;
+  height: 100%;
+  width: 100%;
   border-radius: 1rem;
   outline: 1px solid rgb(139, 204, 160);
   z-index: 2;
@@ -2454,8 +2557,8 @@ p {
   z-index: 10;
 }
 
-/* .invite {
-  color: black;
+.linkBox {
+  /* color: black;
   position: relative;
   z-index: 10;
   padding: 3vh;
@@ -2465,14 +2568,53 @@ p {
   border: 0.4vh solid;
   border-radius: 1vh;
   text-align: center;
+  font-weight: bold; */
+
+  position: relative;
+  height: 20vh;
+  width: 20vw;
+  top: -90vh;
+  left: 35vw;
+  padding: 3vh;
+  line-height: 5vh;
+
+  border: solid black;
+  border-radius: 1vh;
+
+  text-align: center;
   font-weight: bold;
-} */
+
+  z-index: 5;
+  background: white;
+  color: black;
+}
+
+.rulesBox {
+  position: relative;
+  height: 550px;
+  width: 500px;
+  top: -100vh;
+  left: 35vw;
+  padding: 3vh;
+  line-height: 5vh;
+
+  z-index: 5;
+
+  border: solid black;
+  border-radius: 1vh;
+
+  text-align: center;
+  font-weight: bold;
+
+  background: white;
+  color: black;
+}
 
 .next_round {
   position: relative;
   font-weight: bold;
   height: 7vh;
-  width: 8vw;
+  width: 5vw;
 
   background-color: white;
   border-radius: 1vh;
@@ -2500,33 +2642,16 @@ p {
   float: left;
 }
 
-.send_link {
-  position: relative;
-  font-weight: bold;
-  height: 7vh;
-  width: 10vw;
-  background-color: white;
-  border-radius: 1vh;
-  margin: 0.5vh;
-
-  /* z-index: 5; */
-  float: left;
-}
-
 .upperRightButtons {
   grid-row: 1;
 }
 
-.links {
+.players-block {
   grid-row: 2;
 }
 
-.players-block {
-  grid-row: 3;
-}
-
 /* .sendLinkPopUp {
-  position: relative;
+  position: center;
   height: 60vh;
   width: 19vw;
   padding: 3vh;
