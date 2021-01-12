@@ -2000,6 +2000,7 @@ footer a:visited {
   background-size: 100% 100%;
 }
 .work_bottle >>> .buttons {
+  position: relative;
   top: 15vh;
   left: 1vw;
   display: grid;
