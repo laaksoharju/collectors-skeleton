@@ -2549,7 +2549,7 @@ p {
 .choose-secret-card {
   position: relative;
   left: 0.5vw;
-  top: -4.5vh;
+
   border: 0.4vh dashed white;
   height: 18vh;
   width: 6vw;
