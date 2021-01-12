@@ -33,7 +33,6 @@
           <div class="auctionPopUp">
             <label class="auctionHeading">Auction</label><br />
             <label>Card on auction:</label>
-
             <section class="do_deckAuction">
               <CollectorsBuyActions
                 v-if="players[playerId]"
@@ -1738,7 +1737,7 @@ footer a:visited {
 
   /* width: 40vw; */
   display: grid;
-  grid-template-columns: 0.8fr 1.2fr 2fr;
+  grid-template-columns: 0.8fr 1.2fr 2.5fr;
   /* grid-gap: 0.5em; */
   grid-template-rows: 1fr 4fr 1.1fr;
 }
@@ -1807,7 +1806,7 @@ footer a:visited {
   width: 30rem;
   /* left: -25.5vw;
   top: -35vh; */
-  left: 3rem;
+  left: 4rem;
 
   display: grid;
   grid-template-columns: repeat(3, 10rem);
