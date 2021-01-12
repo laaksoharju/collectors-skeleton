@@ -2077,7 +2077,7 @@ footer a:visited {
   position: absolute;
   display: grid;
   grid-gap: 5px;
-  grid-template-columns: 55% 45%;
+  grid-template-columns: 50% 50%;
   background: rgb(92, 160, 170);
   background: linear-gradient(
     0deg,
