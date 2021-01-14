@@ -950,7 +950,7 @@
 
             <img
               src="/images/winner_tro.png"
-              style="transform: rotate(30deg)"
+              class="winner_img"
               WIDTH="349vh"
             />
           </div>
@@ -1044,6 +1044,7 @@ export default {
       winnerId: null,
       showSendLinkPopUp: false,
       startNextRound: null,
+      playersId: [],
       buyPlacement: [],
       skillPlacement: [],
       auctionPlacement: [],
@@ -1197,6 +1198,7 @@ export default {
         this.playerState = d.playerState;
         this.startNextRound = d.startNextRound;
         this.zoomLink = d.zoomLink;
+        this.playersId = d.playersId;
         // console.log("initialize startNextround: " + d.startNextRound);
         if (this.playerState.action !== "") {
           this.handlePlayerState();
@@ -1464,12 +1466,12 @@ export default {
     },
     getOtherPlayerIds: function () {
       var otherPlayers = [];
-      for (var id of Object.keys(this.players)) {
+      for (var id of this.playersId) {
         if (id != this.$store.state.playerId) {
           otherPlayers.push(id);
         }
       }
-      console.log("getotherplayerId");
+      // console.log("getotherplayerId");
       return otherPlayers;
     },
     getallPlayersAuction: function () {
@@ -2879,6 +2881,62 @@ p {
 
   to {
     opacity: 1;
+  }
+}
+.winner_img {
+  animation: spinne 1s infinite;
+}
+@keyframes spinne {
+  from {
+    transform: rotate(0deg);
+  }
+
+  9% {
+    transform: rotate(-10deg);
+  }
+
+  18% {
+    transform: rotate(-20deg);
+  }
+
+  27% {
+    transform: rotate(-30deg);
+  }
+
+  36% {
+    transform: rotate(-20deg);
+  }
+
+  45% {
+    transform: rotate(-10deg);
+  }
+
+  54% {
+    transform: rotate(0deg);
+  }
+
+  63% {
+    transform: rotate(10deg);
+  }
+
+  72% {
+    transform: rotate(20deg);
+  }
+
+  81% {
+    transform: rotate(30deg);
+  }
+
+  90% {
+    transform: rotate(20deg);
+  }
+
+  99% {
+    transform: rotate(10deg);
+  }
+
+  to {
+    transform: rotate(0deg);
   }
 }
 </style>
