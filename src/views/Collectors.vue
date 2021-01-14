@@ -49,7 +49,7 @@
             </section>
             <p style="padding: 0; margin: 0">
               <label style="color: red; font-size: 0.8rem">
-                Click on the card and take it,if you are with highest bid!
+                Click on the card if you have the highest bid!
               </label>
             </p>
 
