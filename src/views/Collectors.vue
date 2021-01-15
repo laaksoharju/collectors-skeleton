@@ -1199,7 +1199,7 @@ export default {
         this.startNextRound = d.startNextRound;
         this.zoomLink = d.zoomLink;
         this.playersId = d.playersId;
-        // console.log("initialize startNextround: " + d.startNextRound);
+        console.log("allplayer: " + d.playersId);
         if (this.playerState.action !== "") {
           this.handlePlayerState();
         }
