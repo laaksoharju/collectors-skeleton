@@ -2211,7 +2211,7 @@ footer a:visited {
 }
 
 .player-bottles img {
-  height: 100%;
+  height: 30%;
 }
 
 .current-player .player-bottles img:hover {
