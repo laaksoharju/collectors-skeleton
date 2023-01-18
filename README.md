@@ -1,8 +1,18 @@
+<<<<<<< HEAD
 # wavelength
+TESTAR SER NI DETTA
+=======
+# Collectors
+>>>>>>> buyaction
 
+HEJ SIRI  JAG SER
+
+HEJHOOOP
+
+TJOLAHEJ
 ## Project setup
 ```
-npm install
+npm install CHECK
 ```
 
 ### Compiles and hot-reloads for development

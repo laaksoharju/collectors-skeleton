@@ -1,5 +1,42 @@
 {
 	"draw": "Draw card",
 	"invite": "Invite other players with this link:",
-	"endTurn": "End turn"
-}
+	"endTurn": "End turn",
+	"buyCard": "Buy a card",
+	"readRules": "Click here to read the rules!",
+	"rules": "",
+	"setup": "Please choose a setup for the game.",
+	"nextStep": "In the next page you will recieve an invite link to send to the other players.",
+	"gameSetup": "Set up a game for ",
+	"players": " players",
+	"winner": "THE WINNER IS ",
+	"endPoints": "'s points: ",
+	"bottleColor": "  Choose your bottle color: ",
+	"playerHand" : "'s Hand",
+	"otherPlayerInfo": "Other players info: ",
+	"otherCoins" : "'s coins: ",
+	"otherBottles" : "'s amount of bottles: ",
+	"player": "Player ",
+	"playersBoard": "'s Board",
+	"skillcard" : "Skill Cards: ",
+	"itemcard" : "Item Cards: ",
+	"secretcard" : "Secret Card: ",
+	"incomecard" : "Income Card: ",
+	"coins" : "Coins: ",
+	"turn" : "Who's turn?",
+	"yourturn": "'s turn!",
+	"changeturn" : "Press here when you're done.",
+	"round" : "Round: ",
+	"changeround" : "Press here when round  ",
+	"changeround2" : "is over.",
+	"endgame": "Game Ended",
+	"showplayers" : "The players in this room: ",
+	"auctionwinner": "Winner: ",
+	"bid": "Highest bid: ",
+	"placebid": "Place bid",
+	"stop": "Stop!",
+	"auctionsquare" : "Auction Square"
+
+
+
+	}

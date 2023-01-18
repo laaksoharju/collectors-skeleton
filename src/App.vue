@@ -10,9 +10,10 @@ html {
 	height: 100%;
 }
 body {
+
     font-family: 'Gill Sans', Helvetica, Arial, sans-serif;
-	background: #ddd;
-	background: radial-gradient(dimgray, black);
+    background-color: #5A99A1;
+
 	color: ivory;
 	font-size: 100%;
 	margin:0;
